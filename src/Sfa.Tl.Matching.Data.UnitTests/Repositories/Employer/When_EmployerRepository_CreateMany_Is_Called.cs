@@ -16,14 +16,12 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Employer
         {
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Employer>>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                var data = new ValidEmployerListBuilder().Build();
+            using var dbContext = InMemoryDbContext.Create();
+            var data = new ValidEmployerListBuilder().Build();
 
-                var repository = new GenericRepository<Domain.Models.Employer>(logger, dbContext);
-                _result = repository.CreateManyAsync(data)
-                    .GetAwaiter().GetResult();
-            }
+            var repository = new GenericRepository<Domain.Models.Employer>(logger, dbContext);
+            _result = repository.CreateManyAsync(data)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

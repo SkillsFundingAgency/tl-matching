@@ -17,15 +17,13 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderQualification
         {
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.ProviderQualification>>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                dbContext.AddRange(new ValidProviderQualificationListBuilder().Build());
-                dbContext.SaveChanges();
+            using var dbContext = InMemoryDbContext.Create();
+            dbContext.AddRange(new ValidProviderQualificationListBuilder().Build());
+            dbContext.SaveChanges();
 
-                var repository = new GenericRepository<Domain.Models.ProviderQualification>(logger, dbContext);
-                _result = repository.GetSingleOrDefaultAsync(x => x.Id == 1)
-                    .GetAwaiter().GetResult();
-            }
+            var repository = new GenericRepository<Domain.Models.ProviderQualification>(logger, dbContext);
+            _result = repository.GetSingleOrDefaultAsync(x => x.Id == 1)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

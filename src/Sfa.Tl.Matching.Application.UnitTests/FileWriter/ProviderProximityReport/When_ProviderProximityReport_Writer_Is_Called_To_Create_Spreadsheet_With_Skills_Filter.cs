@@ -35,33 +35,25 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.ProviderProximityRepo
         [Fact]
         public void Then_Spreadsheet_Has_One_Tab()
         {
-            using (var stream = new MemoryStream(_result))
-            {
-                using (var spreadSheet = SpreadsheetDocument.Open(stream, false))
-                {
-                    var workbookPart = spreadSheet.WorkbookPart;
-                    var sheets = workbookPart.Workbook.Sheets.ChildElements.OfType<Sheet>();
-                    sheets.Count().Should().Be(1);
-                }
-            }
+            using var stream = new MemoryStream(_result);
+            using var spreadSheet = SpreadsheetDocument.Open(stream, false);
+            var workbookPart = spreadSheet.WorkbookPart;
+            var sheets = workbookPart.Workbook.Sheets.ChildElements.OfType<Sheet>();
+            sheets.Count().Should().Be(1);
         }
 
         [Fact]
         public void Then_Spreadsheet_First_Tab_Has_Providers()
         {
-            using (var stream = new MemoryStream(_result))
-            {
-                using (var spreadSheet = SpreadsheetDocument.Open(stream, false))
-                {
-                    var sheetData = _reportWriter.GetSheetData(spreadSheet, 0);
-                    sheetData.Should().NotBeNull();
+            using var stream = new MemoryStream(_result);
+            using var spreadSheet = SpreadsheetDocument.Open(stream, false);
+            var sheetData = _reportWriter.GetSheetData(spreadSheet, 0);
+            sheetData.Should().NotBeNull();
 
-                    var rows = sheetData.Descendants<Row>().ToList();
-                    rows.Count.Should().Be(2);
-                    AssertRowHeader(rows, 0);
-                    AssertRowData(rows, 1);
-                }
-            }
+            var rows = sheetData.Descendants<Row>().ToList();
+            rows.Count.Should().Be(2);
+            AssertRowHeader(rows, 0);
+            AssertRowData(rows, 1);
         }
 
         [Fact]
@@ -79,20 +71,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.ProviderProximityRepo
             var resultWithSearchFilters = reportWriterWithSearchFilters.WriteReport(dtoWithSearchFilters);
 
             // Assert
-            using (var stream = new MemoryStream(resultWithSearchFilters))
-            {
-                using (var spreadSheet = SpreadsheetDocument.Open(stream, false))
-                {
-                    var sheetData = reportWriterWithSearchFilters.GetSheetData(spreadSheet, 0);
-                    sheetData.Should().NotBeNull();
+            using var stream = new MemoryStream(resultWithSearchFilters);
+            using var spreadSheet = SpreadsheetDocument.Open(stream, false);
+            var sheetData = reportWriterWithSearchFilters.GetSheetData(spreadSheet, 0);
+            sheetData.Should().NotBeNull();
 
-                    var rows = sheetData.Descendants<Row>().ToList();
-                    rows.Count.Should().Be(3);
-                    AssertRowSearchFilter(rows, 0);
-                    AssertRowHeader(rows, 1);
-                    AssertRowData(rows, 2);
-                }
-            }
+            var rows = sheetData.Descendants<Row>().ToList();
+            rows.Count.Should().Be(3);
+            AssertRowSearchFilter(rows, 0);
+            AssertRowHeader(rows, 1);
+            AssertRowData(rows, 2);
         }
 
         private static void AssertRowSearchFilter(List<Row> rows, int rowIndex)

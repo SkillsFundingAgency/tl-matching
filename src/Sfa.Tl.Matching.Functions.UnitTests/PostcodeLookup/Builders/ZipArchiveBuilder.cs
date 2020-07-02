@@ -26,8 +26,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.PostcodeLookup.Builders
         private async Task WriteZipArchiveEntry(ZipArchive archive, string fileName, byte[] content)
         {
             var zipArchiveEntry = archive.CreateEntry(fileName, CompressionLevel.Fastest);
-            using (var zipStream = zipArchiveEntry.Open())
-                await zipStream.WriteAsync(content, 0, content.Length);
+            await using var zipStream = zipArchiveEntry.Open();
+            await zipStream.WriteAsync(content, 0, content.Length);
         }
     }
 }

@@ -29,24 +29,22 @@ namespace Sfa.Tl.Matching.Web.Tests.Common
 
                 var sp = services.BuildServiceProvider();
 
-                using (var scope = sp.CreateScope())
-                {
-                    var scopedServices = scope.ServiceProvider;
-                    var db = scopedServices.GetRequiredService<MatchingDbContext>();
-                    var logger = scopedServices
-                        .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
+                using var scope = sp.CreateScope();
+                var scopedServices = scope.ServiceProvider;
+                var db = scopedServices.GetRequiredService<MatchingDbContext>();
+                var logger = scopedServices
+                    .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
                     
-                    db.Database.EnsureCreated();
+                db.Database.EnsureCreated();
 
-                    try
-                    {
-                        StandingDataLoad.Load(db);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.LogError(ex, "An error occurred seeding the " +
-                                            $"test database. Error: {ex.Message}");
-                    }
+                try
+                {
+                    StandingDataLoad.Load(db);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "An error occurred seeding the " +
+                                        $"test database. Error: {ex.Message}");
                 }
             });
         }

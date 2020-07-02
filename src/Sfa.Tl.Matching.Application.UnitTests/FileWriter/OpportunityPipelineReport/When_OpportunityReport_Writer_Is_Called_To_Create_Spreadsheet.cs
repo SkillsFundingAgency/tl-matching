@@ -35,71 +35,62 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.OpportunityPipelineRe
         [Fact]
         public void Then_Spreadsheet_Has_Two_Tabs()
         {
-            using (var stream = new MemoryStream(_result))
-            {
-                using (var spreadSheet = SpreadsheetDocument.Open(stream, false))
-                {
-                    var workbookPart = spreadSheet.WorkbookPart;
-                    var sheets = workbookPart.Workbook.Sheets.ChildElements.OfType<Sheet>();
-                    sheets.Count().Should().Be(2);
-                }
-            }
+            using var stream = new MemoryStream(_result);
+            using var spreadSheet = SpreadsheetDocument.Open(stream, false);
+
+            var workbookPart = spreadSheet.WorkbookPart;
+            var sheets = workbookPart.Workbook.Sheets.ChildElements.OfType<Sheet>();
+            sheets.Count().Should().Be(2);
         }
 
         [Fact]
         public void Then_Spreadsheet_First_Tab_Has_Referrals()
         {
-            using (var stream = new MemoryStream(_result))
-            {
-                using (var spreadSheet = SpreadsheetDocument.Open(stream, false))
-                {
-                    var sheetData = _reportWriter.GetSheetData(spreadSheet, 0);
-                    sheetData.Should().NotBeNull();
+            using var stream = new MemoryStream(_result);
+            using var spreadSheet = SpreadsheetDocument.Open(stream, false);
 
-                    var rows = sheetData.Descendants<Row>().ToList();
-                    rows.Count.Should().Be(2);
+            var sheetData = _reportWriter.GetSheetData(spreadSheet, 0);
+            sheetData.Should().NotBeNull();
 
-                    var cells = rows[1].Descendants<Cell>().ToList();
-                    cells.Count.Should().Be(12);
+            var rows = sheetData.Descendants<Row>().ToList();
+            rows.Count.Should().Be(2);
 
-                    cells[0].InnerText.Should().Be("London SW1 1AA");
-                    cells[1].InnerText.Should().Be("Referral Role");
-                    cells[2].InnerText.Should().Be("5");
-                    cells[3].InnerText.Should().Be("ProviderVenueName (part of Provider)");
-                    cells[4].InnerText.Should().Be("London SW1 1AB");
-                    cells[5].InnerText.Should().Be("1.5 miles");
-                    cells[6].InnerText.Should().Be("Primary contact");
-                    cells[7].InnerText.Should().Be("Primary contact email");
-                    cells[8].InnerText.Should().Be("Primary contact telephone");
-                    cells[9].InnerText.Should().Be("Secondary contact");
-                    cells[10].InnerText.Should().Be("Secondary contact email");
-                    cells[11].InnerText.Should().Be("Secondary contact telephone");
-                }
-            }
+            var cells = rows[1].Descendants<Cell>().ToList();
+            cells.Count.Should().Be(12);
+
+            cells[0].InnerText.Should().Be("London SW1 1AA");
+            cells[1].InnerText.Should().Be("Referral Role");
+            cells[2].InnerText.Should().Be("5");
+            cells[3].InnerText.Should().Be("ProviderVenueName (part of Provider)");
+            cells[4].InnerText.Should().Be("London SW1 1AB");
+            cells[5].InnerText.Should().Be("1.5 miles");
+            cells[6].InnerText.Should().Be("Primary contact");
+            cells[7].InnerText.Should().Be("Primary contact email");
+            cells[8].InnerText.Should().Be("Primary contact telephone");
+            cells[9].InnerText.Should().Be("Secondary contact");
+            cells[10].InnerText.Should().Be("Secondary contact email");
+            cells[11].InnerText.Should().Be("Secondary contact telephone");
         }
 
         [Fact]
         public void Then_Spreadsheet_Second_Tab_Has_Provision_Gaps()
         {
-            using (var stream = new MemoryStream(_result))
-            {
-                using (var spreadSheet = SpreadsheetDocument.Open(stream, false))
-                {
-                    var sheetData = _reportWriter.GetSheetData(spreadSheet, 1);
-                    sheetData.Should().NotBeNull();
+            using var stream = new MemoryStream(_result);
+            using var spreadSheet = SpreadsheetDocument.Open(stream, false);
 
-                    var rows = sheetData.Descendants<Row>().ToList();
-                    rows.Count.Should().Be(2);
+            var sheetData = _reportWriter.GetSheetData(spreadSheet, 1);
+            sheetData.Should().NotBeNull();
 
-                    var cells = rows[1].Descendants<Cell>().ToList();
-                    cells.Count.Should().Be(4);
+            var rows = sheetData.Descendants<Row>().ToList();
+            rows.Count.Should().Be(2);
 
-                    cells[0].InnerText.Should().Be("London SW1 1AA");
-                    cells[1].InnerText.Should().Be("Provision Gap Role");
-                    cells[2].InnerText.Should().Be("At least 1");
-                    cells[3].InnerText.Should().Be("Reason");
-                }
-            }
+            var cells = rows[1].Descendants<Cell>().ToList();
+            cells.Count.Should().Be(4);
+
+            cells[0].InnerText.Should().Be("London SW1 1AA");
+            cells[1].InnerText.Should().Be("Provision Gap Role");
+            cells[2].InnerText.Should().Be("At least 1");
+            cells[3].InnerText.Should().Be("Reason");
         }
     }
 }

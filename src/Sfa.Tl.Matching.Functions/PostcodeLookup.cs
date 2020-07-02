@@ -39,30 +39,26 @@ namespace Sfa.Tl.Matching.Functions
 
                 var stopwatch = Stopwatch.StartNew();
 
-                using (var ms = new MemoryStream())
+                await using (var ms = new MemoryStream())
                 {
                     await stream.CopyToAsync(ms);
 
-                    using (var zipArchive = new ZipArchive(ms, ZipArchiveMode.Read))
+                    using var zipArchive = new ZipArchive(ms, ZipArchiveMode.Read);
+                    foreach (var entry in zipArchive.Entries)
                     {
-                        foreach (var entry in zipArchive.Entries)
+                        if (zipArchive.Entries.Count == 1
+                            || (entry.FullName.StartsWith("Data/ONSPD")
+                                && entry.Name.StartsWith(".csv")))
                         {
-                            if (zipArchive.Entries.Count == 1
-                                || (entry.FullName.StartsWith("Data/ONSPD")
-                                    && entry.Name.StartsWith(".csv")))
-                            {
-                                using (var entryStream = entry.Open())
+                            await using var entryStream = entry.Open();
+                            createdRecords = await fileImportService.BulkImportAsync(
+                                new PostcodeLookupStagingFileImportDto
                                 {
-                                    createdRecords = await fileImportService.BulkImportAsync(
-                                        new PostcodeLookupStagingFileImportDto
-                                        {
-                                            FileDataStream = entryStream,
-                                            CreatedBy = blockBlob.GetCreatedByMetadata()
-                                        });
+                                    FileDataStream = entryStream,
+                                    CreatedBy = blockBlob.GetCreatedByMetadata()
+                                });
 
-                                    break;
-                                }
-                            }
+                            break;
                         }
                     }
                 }

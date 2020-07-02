@@ -16,15 +16,13 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.LocalEnterprisePartnership
         {
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.LocalEnterprisePartnership>>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                dbContext.Add(new ValidLocalEnterprisePartnershipBuilder().Build());
-                dbContext.SaveChanges();
+            using var dbContext = InMemoryDbContext.Create();
+            dbContext.Add(new ValidLocalEnterprisePartnershipBuilder().Build());
+            dbContext.SaveChanges();
 
-                var repository = new GenericRepository<Domain.Models.LocalEnterprisePartnership>(logger, dbContext);
-                _result = repository.GetSingleOrDefaultAsync(x => x.Id == 2)
-                    .GetAwaiter().GetResult();
-            }
+            var repository = new GenericRepository<Domain.Models.LocalEnterprisePartnership>(logger, dbContext);
+            _result = repository.GetSingleOrDefaultAsync(x => x.Id == 2)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

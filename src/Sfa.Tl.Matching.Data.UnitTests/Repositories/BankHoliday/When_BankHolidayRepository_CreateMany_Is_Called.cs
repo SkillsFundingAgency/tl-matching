@@ -16,14 +16,12 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.BankHoliday
         {
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.BankHoliday>>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                var data = new ValidBankHolidayListBuilder().Build();
+            using var dbContext = InMemoryDbContext.Create();
+            var data = new ValidBankHolidayListBuilder().Build();
 
-                var repository = new GenericRepository<Domain.Models.BankHoliday>(logger, dbContext);
-                _result = repository.CreateManyAsync(data)
-                    .GetAwaiter().GetResult();
-            }
+            var repository = new GenericRepository<Domain.Models.BankHoliday>(logger, dbContext);
+            _result = repository.CreateManyAsync(data)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

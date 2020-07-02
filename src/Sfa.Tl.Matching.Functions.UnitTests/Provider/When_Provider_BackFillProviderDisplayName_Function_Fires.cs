@@ -23,36 +23,34 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Provider
         {
             var logger = Substitute.For<ILogger<ProviderRepository>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
+            using var dbContext = InMemoryDbContext.Create();
+            dbContext.AddRange(new List<Domain.Models.Provider>
             {
-                dbContext.AddRange(new List<Domain.Models.Provider>
+                new Domain.Models.Provider
                 {
-                    new Domain.Models.Provider
-                    {
-                        Id = 1,
-                        Name = "War and Peace College",
-                        DisplayName = null
-                    },
-                    new Domain.Models.Provider
-                    {
-                        Id = 2,
-                        Name = "Provider 2",
-                        DisplayName = "Display Name"
-                    }
-                });
+                    Id = 1,
+                    Name = "War and Peace College",
+                    DisplayName = null
+                },
+                new Domain.Models.Provider
+                {
+                    Id = 2,
+                    Name = "Provider 2",
+                    DisplayName = "Display Name"
+                }
+            });
 
-                dbContext.SaveChanges();
+            dbContext.SaveChanges();
 
-                var providerRepository = new ProviderRepository(logger, dbContext);
+            var providerRepository = new ProviderRepository(logger, dbContext);
 
-                var providerFunctions = new Functions.Provider();
+            var providerFunctions = new Functions.Provider();
 
-                providerFunctions.BackFillProviderDisplayNameAsync(new TimerInfo(new ConstantSchedule(TimeSpan.Zero), null),
-                    new ExecutionContext(), new NullLogger<Functions.Provider>(), providerRepository,
-                    Substitute.For<IRepository<FunctionLog>>()).GetAwaiter().GetResult();
+            providerFunctions.BackFillProviderDisplayNameAsync(new TimerInfo(new ConstantSchedule(TimeSpan.Zero), null),
+                new ExecutionContext(), new NullLogger<Functions.Provider>(), providerRepository,
+                Substitute.For<IRepository<FunctionLog>>()).GetAwaiter().GetResult();
 
-                _results = dbContext.Provider.ToList();
-            }
+            _results = dbContext.Provider.ToList();
         }
 
         [Fact]

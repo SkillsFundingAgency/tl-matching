@@ -16,14 +16,12 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.BackgroundProcessHistory
         {
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.BackgroundProcessHistory>>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                var data = new ValidBackgroundProcessHistoryListBuilder().Build();
+            using var dbContext = InMemoryDbContext.Create();
+            var data = new ValidBackgroundProcessHistoryListBuilder().Build();
 
-                var repository = new GenericRepository<Domain.Models.BackgroundProcessHistory>(logger, dbContext);
-                _result = repository.CreateManyAsync(data)
-                    .GetAwaiter().GetResult();
-            }
+            var repository = new GenericRepository<Domain.Models.BackgroundProcessHistory>(logger, dbContext);
+            _result = repository.CreateManyAsync(data)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

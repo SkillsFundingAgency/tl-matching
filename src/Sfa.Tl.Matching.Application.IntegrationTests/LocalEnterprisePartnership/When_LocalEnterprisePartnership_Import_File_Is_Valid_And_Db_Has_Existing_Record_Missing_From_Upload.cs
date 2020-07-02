@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.LocalEnterprisePartnershi
             localEnterprisePartnershipCount.Should().Be(2);
 
             var filePath = Path.Combine(_testExecutionDirectory, DataFilePath);
-            using (var stream = File.Open(filePath, FileMode.Open))
+            await using (var stream = File.Open(filePath, FileMode.Open))
             {
                 _createdRecordCount = await _testFixture.FileImportService.BulkImportAsync(new LocalEnterprisePartnershipStagingFileImportDto
                 {

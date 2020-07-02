@@ -45,66 +45,64 @@ namespace Sfa.Tl.Matching.Application.FileReader
                 .Select(prop => new { ColumnInfo = prop, Index = prop.GetCustomAttribute<ColumnAttribute>(false).Order })
                 .ToList();
 
-            using (var streamReader = new StreamReader(fileImportDto.FileDataStream))
-            using (var reader = new CsvReader(streamReader, CultureInfo.CurrentCulture))
+            using var streamReader = new StreamReader(fileImportDto.FileDataStream);
+            using var reader = new CsvReader(streamReader, CultureInfo.CurrentCulture);
+            //Manually skip header rows 
+            reader.Configuration.HasHeaderRecord = false;
+            if (fileImportDto.NumberOfHeaderRows.HasValue)
             {
-                //Manually skip header rows 
-                reader.Configuration.HasHeaderRecord = false;
-                if (fileImportDto.NumberOfHeaderRows.HasValue)
+                for (var i = 0; i < fileImportDto.NumberOfHeaderRows; i++)
                 {
-                    for (var i = 0; i < fileImportDto.NumberOfHeaderRows; i++)
-                    {
-                        await reader.ReadAsync();
-                    }
+                    await reader.ReadAsync();
+                }
+            }
+
+            var validationErrors = new List<FunctionLog>();
+            var startIndex = fileImportDto.NumberOfHeaderRows ?? 0;
+
+            while (await reader.ReadAsync())
+            {
+                var columnValues = reader.Context.Record;
+
+                ValidationResult validationResult;
+
+                foreach (var column in columnInfos)
+                {
+                    //if column index is greater then csv column length then either csv is in invalid format or TImportDto has invalid config
+                    //this will result in null values or column shifted data which should fail data validation
+                    if (column.Index > columnValues.Length) continue;
+
+                    var cellValue = columnValues[column.Index];
+
+                    column.ColumnInfo.SetValue(fileImportDto, cellValue.Trim());
                 }
 
-                var validationErrors = new List<FunctionLog>();
-                var startIndex = fileImportDto.NumberOfHeaderRows ?? 0;
-
-                while (await reader.ReadAsync())
+                try
                 {
-                    var columnValues = reader.Context.Record;
+                    validationResult = await _validator.ValidateAsync(fileImportDto);
+                }
+                catch (Exception exception)
+                {
+                    validationResult = new ValidationResult { Errors = { new ValidationFailure(typeof(TDto).Name, exception.ToString()) } };
+                }
 
-                    ValidationResult validationResult;
-
-                    foreach (var column in columnInfos)
-                    {
-                        //if column index is greater then csv column length then either csv is in invalid format or TImportDto has invalid config
-                        //this will result in null values or column shifted data which should fail data validation
-                        if (column.Index > columnValues.Length) continue;
-
-                        var cellValue = columnValues[column.Index];
-
-                        column.ColumnInfo.SetValue(fileImportDto, cellValue.Trim());
-                    }
-
-                    try
-                    {
-                        validationResult = await _validator.ValidateAsync(fileImportDto);
-                    }
-                    catch (Exception exception)
-                    {
-                        validationResult = new ValidationResult { Errors = { new ValidationFailure(typeof(TDto).Name, exception.ToString()) } };
-                    }
-
-                    if (!validationResult.IsValid)
-                    {
-                        LogErrorsAndWarnings(startIndex, validationResult, validationErrors);
-
-                        startIndex++;
-
-                        continue;
-                    }
-
-                    var dto = _dataParser.Parse(fileImportDto);
-
-                    dtos.AddRange(dto);
+                if (!validationResult.IsValid)
+                {
+                    LogErrorsAndWarnings(startIndex, validationResult, validationErrors);
 
                     startIndex++;
+
+                    continue;
                 }
 
-                await _functionLogRepository.CreateManyAsync(validationErrors);
+                var dto = _dataParser.Parse(fileImportDto);
+
+                dtos.AddRange(dto);
+
+                startIndex++;
             }
+
+            await _functionLogRepository.CreateManyAsync(validationErrors);
 
             return dtos;
         }

@@ -16,15 +16,13 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.OpportunityItem
         {
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.OpportunityItem>>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                dbContext.Add(new ValidOpportunityItemBuilder().Build());
-                dbContext.SaveChanges();
+            using var dbContext = InMemoryDbContext.Create();
+            dbContext.Add(new ValidOpportunityItemBuilder().Build());
+            dbContext.SaveChanges();
 
-                var repository = new GenericRepository<Domain.Models.OpportunityItem>(logger, dbContext);
-                _result = repository.GetSingleOrDefaultAsync(x => x.Id == 2)
-                    .GetAwaiter().GetResult();
-            }
+            var repository = new GenericRepository<Domain.Models.OpportunityItem>(logger, dbContext);
+            _result = repository.GetSingleOrDefaultAsync(x => x.Id == 2)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

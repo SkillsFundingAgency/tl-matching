@@ -18,36 +18,33 @@ namespace Sfa.Tl.Matching.Application.FileWriter.Opportunity
             var templateName = ApplicationConstants.PipelineOpportunitiesReportTemplate;
             var resourceName = $"{assembly.GetName().Name}.Templates.{templateName}";
 
-            using (var templateStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
-            using (var stream = new MemoryStream())
+            using var templateStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
+            using var stream = new MemoryStream();
+
+            if (templateStream == null)
             {
-                if (templateStream == null)
-                {
-                    throw new NullReferenceException(
-                        $"No stream found for template {templateName}. " +
-                        "Make sure the template has been included in the project");
-                }
-
-                templateStream.CopyTo(stream);
-
-                using (var spreadSheet = SpreadsheetDocument.Open(stream, true))
-                {
-                    var referralsSheetData = GetSheetData(spreadSheet, 0);
-                    WriteReferralsToSheet(data, referralsSheetData);
-
-                    var provisionGapsheetData = GetSheetData(spreadSheet, 1);
-                    WriteProvisionGapsToSheet(data, provisionGapsheetData);
-
-                    RemoveEmptySheets(spreadSheet, data);
-
-                    spreadSheet.WorkbookPart.Workbook.Save();
-                    spreadSheet.Close();
-
-                    templateStream.CopyTo(stream);
-
-                    return stream.ToArray();
-                }
+                throw new NullReferenceException(
+                    $"No stream found for template {templateName}. " +
+                    "Make sure the template has been included in the project");
             }
+
+            templateStream.CopyTo(stream);
+
+            using var spreadSheet = SpreadsheetDocument.Open(stream, true);
+            var referralsSheetData = GetSheetData(spreadSheet, 0);
+            WriteReferralsToSheet(data, referralsSheetData);
+
+            var provisionGapsheetData = GetSheetData(spreadSheet, 1);
+            WriteProvisionGapsToSheet(data, provisionGapsheetData);
+
+            RemoveEmptySheets(spreadSheet, data);
+
+            spreadSheet.WorkbookPart.Workbook.Save();
+            spreadSheet.Close();
+
+            templateStream.CopyTo(stream);
+
+            return stream.ToArray();
         }
 
         private void RemoveEmptySheets(SpreadsheetDocument spreadSheet, OpportunityReportDto data)

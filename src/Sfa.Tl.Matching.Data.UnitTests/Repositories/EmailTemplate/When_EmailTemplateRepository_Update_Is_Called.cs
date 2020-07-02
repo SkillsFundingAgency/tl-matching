@@ -18,25 +18,23 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailTemplate
         {
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.EmailTemplate>>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                var entity = new ValidEmailTemplateBuilder().Build();
-                dbContext.Add(entity);
-                dbContext.SaveChanges();
+            using var dbContext = InMemoryDbContext.Create();
+            var entity = new ValidEmailTemplateBuilder().Build();
+            dbContext.Add(entity);
+            dbContext.SaveChanges();
 
-                var repository = new GenericRepository<Domain.Models.EmailTemplate>(logger, dbContext);
+            var repository = new GenericRepository<Domain.Models.EmailTemplate>(logger, dbContext);
 
-                entity.TemplateId = new Guid("98706811-DCE7-4938-87D4-CD14CB6F86A4").ToString();
-                entity.TemplateName = "UpdatedTemplate";
+            entity.TemplateId = new Guid("98706811-DCE7-4938-87D4-CD14CB6F86A4").ToString();
+            entity.TemplateName = "UpdatedTemplate";
 
-                entity.ModifiedOn = new DateTime(2019, 11, 01, 12, 30, 00);
-                entity.ModifiedBy = "UpdateTestUser";
+            entity.ModifiedOn = new DateTime(2019, 11, 01, 12, 30, 00);
+            entity.ModifiedBy = "UpdateTestUser";
 
-                repository.UpdateAsync(entity).GetAwaiter().GetResult();
+            repository.UpdateAsync(entity).GetAwaiter().GetResult();
 
-                _result = repository.GetSingleOrDefaultAsync(x => x.Id == 1)
-                    .GetAwaiter().GetResult();
-            }
+            _result = repository.GetSingleOrDefaultAsync(x => x.Id == 1)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

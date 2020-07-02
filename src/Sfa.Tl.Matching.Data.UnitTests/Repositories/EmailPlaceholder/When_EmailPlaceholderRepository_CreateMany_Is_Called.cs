@@ -16,14 +16,12 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailPlaceholder
         {
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.EmailPlaceholder>>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                var data = new ValidEmailPlaceholderListBuilder().Build();
+            using var dbContext = InMemoryDbContext.Create();
+            var data = new ValidEmailPlaceholderListBuilder().Build();
 
-                var repository = new GenericRepository<Domain.Models.EmailPlaceholder>(logger, dbContext);
-                _result = repository.CreateManyAsync(data)
-                    .GetAwaiter().GetResult();
-            }
+            var repository = new GenericRepository<Domain.Models.EmailPlaceholder>(logger, dbContext);
+            _result = repository.CreateManyAsync(data)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

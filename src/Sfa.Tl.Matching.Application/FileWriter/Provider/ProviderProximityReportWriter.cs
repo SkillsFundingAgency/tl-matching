@@ -16,35 +16,31 @@ namespace Sfa.Tl.Matching.Application.FileWriter.Provider
         public override byte[] WriteReport(ProviderProximityReportDto data)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            string templateName = data.SkillAreas.Any() ? ApplicationConstants.ShowMeEverythingReportTemplateWithSearchFilters 
+            var templateName = data.SkillAreas.Any() ? ApplicationConstants.ShowMeEverythingReportTemplateWithSearchFilters 
                 : ApplicationConstants.ShowMeEverythingReportTemplate;  
             var resourceName = $"{assembly.GetName().Name}.Templates.{templateName}";
 
-            using (var templateStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
-            using (var stream = new MemoryStream())
+            using var templateStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
+            using var stream = new MemoryStream();
+            if (templateStream == null)
             {
-                if (templateStream == null)
-                {
-                    throw new NullReferenceException(
-                        $"No stream found for template {templateName}. " +
-                        "Make sure the template has been included in the project");
-                }
-
-                templateStream.CopyTo(stream);
-
-                using (var spreadSheet = SpreadsheetDocument.Open(stream, true))
-                {
-                    var referralsSheetData = GetSheetData(spreadSheet, 0);
-                    WriteProvidersToSheet(data, referralsSheetData);
-
-                    spreadSheet.WorkbookPart.Workbook.Save();
-                    spreadSheet.Close();
-
-                    templateStream.CopyTo(stream);
-
-                    return stream.ToArray();
-                }
+                throw new NullReferenceException(
+                    $"No stream found for template {templateName}. " +
+                    "Make sure the template has been included in the project");
             }
+
+            templateStream.CopyTo(stream);
+
+            using var spreadSheet = SpreadsheetDocument.Open(stream, true);
+            var referralsSheetData = GetSheetData(spreadSheet, 0);
+            WriteProvidersToSheet(data, referralsSheetData);
+
+            spreadSheet.WorkbookPart.Workbook.Save();
+            spreadSheet.Close();
+
+            templateStream.CopyTo(stream);
+
+            return stream.ToArray();
         }
 
         private void WriteProvidersToSheet(ProviderProximityReportDto dto, OpenXmlElement sheetData)

@@ -95,20 +95,18 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
             if (entities.Count == 0) return;
 
-            using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+            await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            try
             {
-                try
-                {
-                    await _dbContext.BulkUpdateAsync(entities,
-                        config => config.UseTempDB = true);
-                    transaction.Commit();
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex.Message, ex.InnerException);
-                    transaction.Rollback();
-                    throw;
-                }
+                await _dbContext.BulkUpdateAsync(entities,
+                    config => config.UseTempDB = true);
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex.InnerException);
+                transaction.Rollback();
+                throw;
             }
         }
 
@@ -167,24 +165,22 @@ namespace Sfa.Tl.Matching.Data.Repositories
                     }
                 }).ToList();
 
-                using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+                await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+                try
                 {
-                    try
-                    {
-                        await _dbContext.BulkUpdateAsync(entities,
+                    await _dbContext.BulkUpdateAsync(entities,
                         config =>
-                            {
-                                config.PropertiesToInclude = propList;
-                                config.UseTempDB = true;
-                            });
-                        transaction.Commit();
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex.Message, ex.InnerException);
-                        transaction.Rollback();
-                        throw;
-                    }
+                        {
+                            config.PropertiesToInclude = propList;
+                            config.UseTempDB = true;
+                        });
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message, ex.InnerException);
+                    transaction.Rollback();
+                    throw;
                 }
             }
             catch (DbUpdateException due)

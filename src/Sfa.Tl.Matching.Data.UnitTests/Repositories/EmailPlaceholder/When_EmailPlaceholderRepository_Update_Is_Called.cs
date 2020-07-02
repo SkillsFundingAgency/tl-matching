@@ -18,24 +18,22 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailPlaceholder
         {
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.EmailPlaceholder>>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                var entity = new ValidEmailPlaceholderBuilder().Build();
-                dbContext.Add(entity);
-                dbContext.SaveChanges();
+            using var dbContext = InMemoryDbContext.Create();
+            var entity = new ValidEmailPlaceholderBuilder().Build();
+            dbContext.Add(entity);
+            dbContext.SaveChanges();
 
-                var repository = new GenericRepository<Domain.Models.EmailPlaceholder>(logger, dbContext);
+            var repository = new GenericRepository<Domain.Models.EmailPlaceholder>(logger, dbContext);
 
-                entity.Value = "Updated Name";
+            entity.Value = "Updated Name";
 
-                entity.ModifiedOn = new DateTime(2019, 11, 01, 12, 30, 00);
-                entity.ModifiedBy = "UpdateTestUser";
+            entity.ModifiedOn = new DateTime(2019, 11, 01, 12, 30, 00);
+            entity.ModifiedBy = "UpdateTestUser";
 
-                repository.UpdateAsync(entity).GetAwaiter().GetResult();
+            repository.UpdateAsync(entity).GetAwaiter().GetResult();
 
-                _result = repository.GetSingleOrDefaultAsync(x => x.Id == 1)
-                    .GetAwaiter().GetResult();
-            }
+            _result = repository.GetSingleOrDefaultAsync(x => x.Id == 1)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

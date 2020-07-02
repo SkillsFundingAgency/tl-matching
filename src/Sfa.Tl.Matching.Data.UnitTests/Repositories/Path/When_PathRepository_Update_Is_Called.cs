@@ -18,26 +18,24 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Path
         {
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Path>>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                var entity = new ValidPathBuilder().Build();
-                dbContext.Add(entity);
-                dbContext.SaveChanges();
+            using var dbContext = InMemoryDbContext.Create();
+            var entity = new ValidPathBuilder().Build();
+            dbContext.Add(entity);
+            dbContext.SaveChanges();
 
-                var repository = new GenericRepository<Domain.Models.Path>(logger, dbContext);
+            var repository = new GenericRepository<Domain.Models.Path>(logger, dbContext);
 
-                entity.Name = "Updated Path Name";
-                entity.Keywords = "Updated Keywords";
-                entity.Summary = "Updated Summary";
+            entity.Name = "Updated Path Name";
+            entity.Keywords = "Updated Keywords";
+            entity.Summary = "Updated Summary";
 
-                entity.ModifiedOn = new DateTime(2019, 11, 01, 12, 30, 00);
-                entity.ModifiedBy = "UpdateTestUser";
+            entity.ModifiedOn = new DateTime(2019, 11, 01, 12, 30, 00);
+            entity.ModifiedBy = "UpdateTestUser";
 
-                repository.UpdateAsync(entity).GetAwaiter().GetResult();
+            repository.UpdateAsync(entity).GetAwaiter().GetResult();
 
-                _result = repository.GetSingleOrDefaultAsync(x => x.Id == 1)
-                    .GetAwaiter().GetResult();
-            }
+            _result = repository.GetSingleOrDefaultAsync(x => x.Id == 1)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

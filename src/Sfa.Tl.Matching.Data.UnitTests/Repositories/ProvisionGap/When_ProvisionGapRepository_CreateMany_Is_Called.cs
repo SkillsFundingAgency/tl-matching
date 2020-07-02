@@ -16,14 +16,12 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProvisionGap
         {
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.ProvisionGap>>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                var data = new ValidProvisionGapListBuilder().Build();
+            using var dbContext = InMemoryDbContext.Create();
+            var data = new ValidProvisionGapListBuilder().Build();
 
-                var repository = new GenericRepository<Domain.Models.ProvisionGap>(logger, dbContext);
-                _result = repository.CreateManyAsync(data)
-                    .GetAwaiter().GetResult();
-            }
+            var repository = new GenericRepository<Domain.Models.ProvisionGap>(logger, dbContext);
+            _result = repository.CreateManyAsync(data)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

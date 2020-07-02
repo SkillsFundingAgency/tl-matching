@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.PostcodeLookup
         public async Task Then_Record_Is_Saved()
         {
             var filePath = Path.Combine(_testExecutionDirectory, DataFilePath);
-            using (var stream = File.Open(filePath, FileMode.Open))
+            await using (var stream = File.Open(filePath, FileMode.Open))
             {
                 _createdRecordCount = await _testFixture.FileImportService.BulkImportAsync(new PostcodeLookupStagingFileImportDto
                 {

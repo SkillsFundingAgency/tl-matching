@@ -20,15 +20,13 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider
         {
             var logger = Substitute.For<ILogger<ProviderRepository>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                dbContext.Add(new ValidProviderWithFundingBuilder().BuildWithRemovedProviderVenue());
-                dbContext.SaveChanges();
+            using var dbContext = InMemoryDbContext.Create();
+            dbContext.Add(new ValidProviderWithFundingBuilder().BuildWithRemovedProviderVenue());
+            dbContext.SaveChanges();
 
-                var repository = new ProviderRepository(logger, dbContext);
-                _result = repository.GetProvidersWithFundingAsync()
-                    .GetAwaiter().GetResult();
-            }
+            var repository = new ProviderRepository(logger, dbContext);
+            _result = repository.GetProvidersWithFundingAsync()
+                .GetAwaiter().GetResult();
         }
 
         [Fact]
