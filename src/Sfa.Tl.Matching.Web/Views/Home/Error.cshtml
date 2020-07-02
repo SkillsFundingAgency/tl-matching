@@ -1,7 +1,8 @@
 @using Microsoft.AspNetCore.Hosting
-@using Microsoft.AspNetCore.Hosting.Internal
+@using Microsoft.Extensions.Hosting
+@inject IWebHostEnvironment WebHostingEnvironment
 @model Sfa.Tl.Matching.Models.ViewModel.ErrorViewModel
-@inject HostingEnvironment HostingEnvironment
+
 @{
     ViewData["Title"] = "Service unavailable because of a technical problem";
     var ex = ViewData["Exception"] as Exception;
@@ -10,7 +11,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
-        @if (HostingEnvironment.IsDevelopment())
+        @if (WebHostingEnvironment.IsDevelopment())
         {
             <h2 class="govuk-heading-l">An error occurred while processing your request.</h2>
             if (Model.ShowRequestId)

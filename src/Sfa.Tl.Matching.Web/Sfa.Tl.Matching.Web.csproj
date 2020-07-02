@@ -33,6 +33,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.14.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.WsFederation" Version="3.1.5" />
     <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="3.1.5" />
     <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
   </ItemGroup>

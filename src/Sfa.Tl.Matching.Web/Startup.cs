@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Notify.Client;
 using Notify.Interfaces;
@@ -40,15 +41,18 @@ namespace Sfa.Tl.Matching.Web
 {
     public class Startup
     {
+        private readonly IWebHostEnvironment _env;
+
         protected MatchingConfiguration MatchingConfiguration;
         private readonly ILoggerFactory _loggerFactory;
         protected bool IsTestAdminUser { get; set; } = true;
         
         public IConfiguration Configuration { get; }
 
-        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             Configuration = configuration;
+            _env = env;
             _loggerFactory = loggerFactory;
         }
 
@@ -103,7 +107,7 @@ namespace Sfa.Tl.Matching.Web
                     config.Filters.Add<ServiceUnavailableFilterAttribute>();
                     config.Filters.Add<BackLinkFilter>();
                 })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             if (!isConfigLocalOrDev)
                 AddAuthentication(services);
@@ -125,14 +129,14 @@ namespace Sfa.Tl.Matching.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public virtual void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public virtual void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
             var cultureInfo = new CultureInfo("en-GB");
 
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
-            if (env.IsDevelopment())
+            if (_env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
