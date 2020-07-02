@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.MatchingServiceReport
             var mockSet = Substitute.For<DbSet<Domain.Models.Employer>, IAsyncEnumerable<Domain.Models.Employer>, IQueryable<Domain.Models.Employer>>();
 
             // ReSharper disable once SuspiciousTypeConversion.Global
-            ((IAsyncEnumerable<Domain.Models.Employer>)mockSet).GetEnumerator()
+            ((IAsyncEnumerable<Domain.Models.Employer>)mockSet).GetAsyncEnumerator()
                 .Returns(new FakeAsyncEnumerator<Domain.Models.Employer>(employers.GetEnumerator()));
             ((IQueryable<Domain.Models.Employer>)mockSet).Provider.Returns(
                 new FakeAsyncQueryProvider<Domain.Models.Employer>(employers.Provider));
