@@ -61,10 +61,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
         [Fact]
         public void Then_The_Expected_Search_Results_Are_Returned()
         {
-            _searchResults.Count.Should().Be(2);
+            _searchResults.Count.Should().Be(1);
 
             _searchResults[0].ShortTitle.Should().Be("sport and enterprise in the community");
-            _searchResults[1].ShortTitle.Should().Be("sport and enterprise in the community");
         }
     }
 }
