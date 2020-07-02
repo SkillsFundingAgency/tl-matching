@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -59,12 +58,12 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 {
                     if (isSuccessful)
                     {
-                        transaction.Commit();
+                        await transaction.CommitAsync();
                     }
                     // ReSharper disable once RedundantIfElseBlock
                     else
                     {
-                        transaction.Rollback();
+                        await transaction.RollbackAsync();
                     }
                     connection.Close();
                 }
@@ -106,12 +105,12 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 {
                     if (isSuccessful)
                     {
-                        transaction.Commit();
+                        await transaction.CommitAsync();
                     }
                     // ReSharper disable once RedundantIfElseBlock
                     else
                     {
-                        transaction.Rollback();
+                        await transaction.RollbackAsync();
                     }
                     connection.Close();
                 }

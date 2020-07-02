@@ -100,12 +100,12 @@ namespace Sfa.Tl.Matching.Data.Repositories
             {
                 await _dbContext.BulkUpdateAsync(entities,
                     config => config.UseTempDB = true);
-                transaction.Commit();
+                await transaction.CommitAsync();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message, ex.InnerException);
-                transaction.Rollback();
+                await transaction.RollbackAsync();
                 throw;
             }
         }
@@ -171,12 +171,12 @@ namespace Sfa.Tl.Matching.Data.Repositories
                             config.PropertiesToInclude = propList;
                             config.UseTempDB = true;
                         });
-                    transaction.Commit();
+                    await transaction.CommitAsync();
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex.Message, ex.InnerException);
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
             }
