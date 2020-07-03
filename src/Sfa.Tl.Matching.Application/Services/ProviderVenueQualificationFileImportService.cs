@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Application.Services
             
             var updatedCount = results.Count(x => x.HasErrors == false);
 
-            _logger.LogInformation($"{updatedCount} out of {results.Count()} Providers data successfully updated.");
+            _logger.LogInformation($"{updatedCount} out of {dataDtos.Qualifications.Count()} Providers data successfully updated.");
 
             return updatedCount;
         }
