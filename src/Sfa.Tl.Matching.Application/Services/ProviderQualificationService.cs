@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -18,6 +19,25 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             _mapper = mapper;
             _providerQualificationRepository = providerQualificationRepository;
+        }
+
+        public async Task<AddQualificationViewModel> GetProviderQualificationAsync(int providerVenueId, int qualificationId)
+        {
+            var providerQualification = await _providerQualificationRepository.GetSingleOrDefaultAsync(p => p.ProviderVenueId == providerVenueId && p.QualificationId == qualificationId);
+            return _mapper.Map<ProviderQualification, AddQualificationViewModel>(providerQualification);
+        }
+
+        public async Task RemoveProviderQualificationAsync(RemoveProviderQualificationViewModel viewModel)
+        {
+            var providerQualification = _mapper.Map<RemoveProviderQualificationViewModel, ProviderQualification>(viewModel);
+            providerQualification.IsDeleted = true;
+            providerQualification.ModifiedOn = DateTime.UtcNow;
+            providerQualification.ModifiedBy = "System";
+
+            await _providerQualificationRepository.UpdateWithSpecifiedColumnsOnlyAsync(providerQualification,
+                x => x.IsDeleted,
+                x => x.ModifiedOn,
+                x => x.ModifiedBy);
         }
 
         public async Task<int> CreateProviderQualificationAsync(AddQualificationViewModel viewModel)

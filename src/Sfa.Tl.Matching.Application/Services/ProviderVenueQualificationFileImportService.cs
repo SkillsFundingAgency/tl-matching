@@ -12,12 +12,15 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly ILogger<IProviderVenueQualificationFileImportService> _logger;
         private readonly IMapper _mapper;
         private readonly IProviderVenueQualificationReader _fileReader;
+        private readonly IProviderVenueQualificationService _providerVenueQualificationService;
 
         public ProviderVenueQualificationFileImportService(ILogger<IProviderVenueQualificationFileImportService> logger,
-            IProviderVenueQualificationReader fileReader)
+            IProviderVenueQualificationReader fileReader,
+            IProviderVenueQualificationService providerVenueQualificationService)
         {
             _logger = logger;
             _fileReader = fileReader;
+            _providerVenueQualificationService = providerVenueQualificationService;
         }
 
         public async Task<int> BulkImportAsync(ProviderVenueQualificationFileImportDto fileImportDto)
@@ -32,6 +35,8 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 return 0;
             }
+
+            await _providerVenueQualificationService.Update(dataDtos.Qualifications);
 
             return await Task.FromResult(dataDtos.Qualifications.Count());
         }

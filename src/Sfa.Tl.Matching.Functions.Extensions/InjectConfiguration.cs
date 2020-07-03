@@ -79,9 +79,6 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             RegisterFileReaders(services);
 
-            services.AddTransient<IProviderVenueQualificationReader, ProviderVenueQualificationReader>();
-            services.AddTransient<IProviderVenueQualificationFileImportService, ProviderVenueQualificationFileImportService>();
-            
             RegisterRepositories(services);
 
             RegisterApplicationServices(services);
@@ -151,6 +148,17 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
+
+            services.AddTransient<IProviderService, ProviderService>();
+            services.AddTransient<IProviderVenueService, ProviderVenueService>();
+            services.AddTransient<IProviderQualificationService, ProviderQualificationService>();
+            services.AddTransient<IRoutePathService, RoutePathService>();
+            services.AddTransient<IQualificationRouteMappingService, QualificationRouteMappingService>();
+
+            services.AddTransient<IProviderVenueQualificationService, ProviderVenueQualificationService>();
+            services.AddTransient<IProviderVenueQualificationReader, ProviderVenueQualificationReader>();
+            services.AddTransient<IProviderVenueQualificationFileImportService, ProviderVenueQualificationFileImportService>();
+
         }
 
         private static void RegisterNotificationsApi(IServiceCollection services, string apiKey)

@@ -20,7 +20,7 @@
         public string VenueName { get; set; }
         public bool VenueIsEnabledForReferral { get; set; }
         public bool VenueIsRemoved { get; set; }
-        public long LarId { get; set; }
+        public string LarId { get; set; }
         public string QualificationTitle { get; set; }
         public string QualificationShortTitle { get; set; }
         public bool QualificationIsDeleted { get; set; }

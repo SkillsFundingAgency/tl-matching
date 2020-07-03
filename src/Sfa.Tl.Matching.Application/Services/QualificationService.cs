@@ -32,6 +32,13 @@ namespace Sfa.Tl.Matching.Application.Services
             _learningAimReferenceRepository = learningAimReferenceRepository;
         }
 
+        public async Task<int> CreateQualificationEntityAsync(MissingQualificationViewModel viewModel)
+        {
+            var qualification = _mapper.Map<Qualification>(viewModel);
+            var qualificationId = await _qualificationRepository.CreateAsync(qualification);
+            return qualificationId;
+        }
+
         public async Task<int> CreateQualificationAsync(MissingQualificationViewModel viewModel)
         {
             var qualification = _mapper.Map<Qualification>(viewModel);
