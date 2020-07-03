@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Functions
 
             var stopwatch = Stopwatch.StartNew();
 
-            var createdRecords = await fileImportService.BulkImportAsync(new ProviderVenueQualificationFileImportDto
+            var updatedRecords = await fileImportService.BulkImportAsync(new ProviderVenueQualificationFileImportDto
             {
                 FileDataStream = stream,
                 CreatedBy = blockBlob.GetCreatedByMetadata()
@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Functions
 
             logger.LogInformation($"Function {context.FunctionName} processed blob\n" +
                                   $"\tName:{name}\n" +
-                                  $"\tRows saved: {5}\n" +
+                                  $"\tRows updated: {updatedRecords}\n" +
                                   $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
         }
     }

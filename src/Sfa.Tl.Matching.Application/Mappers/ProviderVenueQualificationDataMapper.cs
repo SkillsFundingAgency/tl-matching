@@ -1,9 +1,10 @@
 ﻿using CsvHelper.Configuration;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace sfa.Tl.Marketing.Communication.DataLoad.Read
 {
-    internal sealed class ProviderVenueQualificationDataMapper : ClassMap<ProviderVenueQualification>
+    internal sealed class ProviderVenueQualificationDataMapper : ClassMap<ProviderVenueQualificationDto>
     {
         internal ProviderVenueQualificationDataMapper()
         {

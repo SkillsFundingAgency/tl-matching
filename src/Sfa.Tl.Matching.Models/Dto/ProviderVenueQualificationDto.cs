@@ -1,6 +1,6 @@
-﻿namespace Sfa.Tl.Matching.Domain.Models
+﻿namespace Sfa.Tl.Matching.Models.Dto
 {
-    public class ProviderVenueQualification
+    public class ProviderVenueQualificationDto
     {
         public long UkPrn { get; set; }
         public bool InMatchingService { get; set; }

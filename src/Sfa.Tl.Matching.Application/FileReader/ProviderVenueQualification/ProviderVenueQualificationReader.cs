@@ -3,6 +3,7 @@ using System.Linq;
 using CsvHelper;
 using sfa.Tl.Marketing.Communication.DataLoad.Read;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenueQualification
 {
@@ -19,7 +20,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenueQualification
                 try
                 {
                     csv.Configuration.RegisterClassMap<ProviderVenueQualificationDataMapper>();
-                    var records = csv.GetRecords<Domain.Models.ProviderVenueQualification>().ToList();
+                    var records = csv.GetRecords<ProviderVenueQualificationDto>().ToList();
                     providerVenueQualificationReadResult.Qualifications = records;
                 }
                 catch (ReaderException re)

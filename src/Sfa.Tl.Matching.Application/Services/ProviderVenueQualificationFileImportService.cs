@@ -36,9 +36,22 @@ namespace Sfa.Tl.Matching.Application.Services
                 return 0;
             }
 
-            await _providerVenueQualificationService.Update(dataDtos.Qualifications);
+            var results = await _providerVenueQualificationService.Update(dataDtos.Qualifications);
 
-            return await Task.FromResult(dataDtos.Qualifications.Count());
+            // Log errors in data updates
+            foreach (var result in results)
+            {
+                if (result.HasErrors)
+                {
+                    _logger.LogError(result.Message);
+                }
+            }
+            
+            var updatedCount = results.Count(x => x.HasErrors == false);
+
+            _logger.LogInformation($"{updatedCount} out of {results.Count()} Providers data successfully updated.");
+
+            return updatedCount;
         }
     }
 }
