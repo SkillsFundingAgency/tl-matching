@@ -20,7 +20,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.BankHolidayGenerator
     {
         private readonly ICalendarApiClient _calendarApiClient;
         private readonly IBulkInsertRepository<BankHoliday> _bankHolidayBulkInsertRepository;
-
+        private readonly IRepository<FunctionLog> _functionLogRepository;
+        
         public When_ManualGenerateBankHolidays_Function_Http_Trigger_Is_Called()
         {
             var dto = new List<BankHolidayResultDto>
@@ -46,6 +47,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.BankHolidayGenerator
 
             _bankHolidayBulkInsertRepository = Substitute.For<IBulkInsertRepository<BankHoliday>>();
 
+            _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
+
             var request = new DefaultHttpRequest(new DefaultHttpContext())
             {
                 Method = HttpMethod.Get.ToString()
@@ -57,7 +60,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.BankHolidayGenerator
                 new NullLogger<Functions.BankHolidayGenerator>(),
                 _calendarApiClient,
                 mapper,
-                _bankHolidayBulkInsertRepository).GetAwaiter().GetResult();
+                _bankHolidayBulkInsertRepository,
+                _functionLogRepository).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -74,6 +78,14 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.BankHolidayGenerator
             _bankHolidayBulkInsertRepository
                 .Received(1)
                 .BulkInsertAsync(Arg.Any<IList<BankHoliday>>());
+        }
+
+        [Fact]
+        public void FunctionLogRepository_Create_Is_Not_Called()
+        {
+            _functionLogRepository
+                .DidNotReceiveWithAnyArgs()
+                .CreateAsync(Arg.Any<FunctionLog>());
         }
     }
 }

@@ -43,60 +43,89 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task SendEmployerReferralEmailAsync(int opportunityId, IEnumerable<int> itemIds, int backgroundProcessHistoryId, string username)
         {
-            if (await GetBackgroundProcessHistoryDataAsync(backgroundProcessHistoryId) == null) return;
+            if (await GetBackgroundProcessHistoryDataAsync(backgroundProcessHistoryId) == null)
+            {
+                await _functionLogRepository.CreateAsync(new FunctionLog
+                {
+                    ErrorMessage = $"Background Processing History not found or not pending for id {backgroundProcessHistoryId} for employer referral emails",
+                    FunctionName = nameof(ReferralEmailService),
+                    RowNumber = -1
+                });
+                return;
+            }
 
             try
             {
-                var employerReferral = await _opportunityRepository.GetEmployerReferralsAsync(opportunityId, itemIds);
-                var sb = new StringBuilder();
+                var itemIdList = itemIds.ToList();
+                var employerReferral = await _opportunityRepository.GetEmployerReferralsAsync(opportunityId, itemIdList);
 
-                if (employerReferral == null) return;
-
-                var tokens = new Dictionary<string, string>
+                if (employerReferral == null || !itemIdList.Any())
                 {
-                    { "employer_contact_name", employerReferral.PrimaryContact.ToTitleCase() },
-                    { "employer_business_name", employerReferral.CompanyName.ToTitleCase() },
-                    { "employer_contact_number", employerReferral.Phone },
-                    { "employer_contact_email", employerReferral.Email }
-                };
-
-                foreach (var data in employerReferral.WorkplaceDetails.OrderBy(dto => dto.WorkplaceTown))
-                {
-                    var placements = GetNumberOfPlacements(data.PlacementsKnown, data.Placements);
-
-                    sb.AppendLine($"# {data.WorkplaceTown} {data.WorkplacePostcode}");
-                    sb.AppendLine($"* Job role: {data.JobRole}");
-                    sb.AppendLine($"* Students wanted: {placements}");
-
-                    var count = 1;
-                    foreach (var providerAndVenue in data.ProviderAndVenueDetails)
+                    await _functionLogRepository.CreateAsync(new FunctionLog
                     {
-                        sb.AppendLine($"* {count.ToOrdinalWords().ToTitleCase()} provider selected: {providerAndVenue.CustomisedProviderDisplayName}");
-                        sb.Append("Primary contact: ");
-                        sb.AppendLine(FormatContactDetails(providerAndVenue.PrimaryContact, providerAndVenue.PrimaryContactPhone, providerAndVenue.PrimaryContactEmail));
+                        ErrorMessage = $"No referral found or no opportunity item ids when retrieving employer referral for opportunity id {opportunityId} with {itemIdList.Count} items",
+                        FunctionName = nameof(ReferralEmailService),
+                        RowNumber = -1
+                    });
+                }
+                else
+                {
+                    var sb = new StringBuilder();
+                    var tokens = new Dictionary<string, string>
+                    {
+                        {"employer_contact_name", employerReferral.PrimaryContact.ToTitleCase()},
+                        {"employer_business_name", employerReferral.CompanyName.ToTitleCase()},
+                        {"employer_contact_number", employerReferral.Phone},
+                        {"employer_contact_email", employerReferral.Email}
+                    };
 
-                        if (!string.IsNullOrWhiteSpace(providerAndVenue.SecondaryContact))
+                    foreach (var data in employerReferral.WorkplaceDetails.OrderBy(dto => dto.WorkplaceTown))
+                    {
+                        var placements = GetNumberOfPlacements(data.PlacementsKnown, data.Placements);
+
+                        sb.AppendLine($"# {data.WorkplaceTown} {data.WorkplacePostcode}");
+                        sb.AppendLine($"* Job role: {data.JobRole}");
+                        sb.AppendLine($"* Students wanted: {placements}");
+
+                        var count = 1;
+                        foreach (var providerAndVenue in data.ProviderAndVenueDetails)
                         {
-                            sb.AppendLine($"Secondary contact: {FormatContactDetails(providerAndVenue.SecondaryContact, providerAndVenue.SecondaryContactPhone, providerAndVenue.SecondaryContactEmail)}");
+                            sb.AppendLine(
+                                $"* {count.ToOrdinalWords().ToTitleCase()} provider selected: {providerAndVenue.CustomisedProviderDisplayName}");
+                            sb.Append("Primary contact: ");
+                            sb.AppendLine(FormatContactDetails(providerAndVenue.PrimaryContact,
+                                providerAndVenue.PrimaryContactPhone, providerAndVenue.PrimaryContactEmail));
+
+                            if (!string.IsNullOrWhiteSpace(providerAndVenue.SecondaryContact))
+                            {
+                                sb.AppendLine(
+                                    $"Secondary contact: {FormatContactDetails(providerAndVenue.SecondaryContact, providerAndVenue.SecondaryContactPhone, providerAndVenue.SecondaryContactEmail)}");
+                            }
+
+                            count++;
                         }
 
-                        count++;
+                        sb.AppendLine("");
                     }
-                    sb.AppendLine("");
+
+                    tokens.Add("placements_list", sb.ToString());
+
+                    await SendEmailAsync(EmailTemplateName.EmployerReferralV5, opportunityId, employerReferral.Email,
+                        tokens, employerReferral.CreatedBy);
                 }
 
-                tokens.Add("placements_list", sb.ToString());
-
-                await SendEmailAsync(EmailTemplateName.EmployerReferralV5, opportunityId, employerReferral.Email, tokens, employerReferral.CreatedBy);
-
-                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId, 1, BackgroundProcessHistoryStatus.Complete, username);
+                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId, 
+                    employerReferral != null && itemIdList.Any() ? 1 : 0, 
+                    BackgroundProcessHistoryStatus.Complete, username);
             }
             catch (Exception ex)
             {
                 var errorMessage = $"Error sending employer referral emails. {ex.Message} " +
                                    $"Opportunity id {opportunityId}";
 
-                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId, 1, BackgroundProcessHistoryStatus.Error, username, errorMessage);
+                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId, 
+                    1, 
+                    BackgroundProcessHistoryStatus.Error, username, errorMessage);
             }
         }
 
@@ -106,85 +135,93 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 await _functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = $"Background Processing History not found or not pending for id {backgroundProcessHistoryId}",
+                    ErrorMessage = $"Background Processing History not found or not pending for id {backgroundProcessHistoryId} for provider referral emails",
                     FunctionName = nameof(ReferralEmailService),
                     RowNumber = -1
                 });
                 return;
             }
 
-            var referrals = await _opportunityRepository.GetIncompleteProviderOpportunitiesAsync(opportunityId, itemIds);
+            var itemIdList = itemIds.ToList();
 
-            if (referrals == null || referrals.Count == 0)
-            {
-                await _functionLogRepository.CreateAsync(new FunctionLog
-                {
-                    // ReSharper disable once PossibleMultipleEnumeration
-                    ErrorMessage = $"No provider referrals found for opportunity id {opportunityId} with {itemIds?.Count()} items",
-                    FunctionName = nameof(ReferralEmailService),
-                    RowNumber = -1
-                });
-            }
+            var referrals = await _opportunityRepository.GetProviderReferralsAsync(opportunityId, itemIdList);
 
             try
             {
-                //Group by opportunity item, then loop over that with referrals onside
-                var opportunityItemGroups = (
-                    from p in referrals
-                    orderby p.OpportunityItemId
-                    group p by p.OpportunityItemId into g
-                    select new
-                    {
-                        OpportunityItemId = g.Key,
-                        Referrals = g.Select(c => c).ToList()
-                    }
-                ).ToList();
-
-                foreach (var opportunityItem in opportunityItemGroups)
+                if (referrals == null || referrals.Count == 0)
                 {
-                    foreach (var referral in opportunityItem.Referrals)
+                    await _functionLogRepository.CreateAsync(new FunctionLog
                     {
-                        var placements = GetNumberOfPlacements(referral.PlacementsKnown, referral.Placements);
-
-                        var tokens = new Dictionary<string, string>
+                        ErrorMessage = $"No provider referrals found for opportunity id {opportunityId} with {itemIdList.Count} items",
+                        FunctionName = nameof(ReferralEmailService),
+                        RowNumber = -1
+                    });
+                }
+                else
+                {
+                    //Group by opportunity item, then loop over that with referrals onside
+                    var opportunityItemGroups = (
+                        from p in referrals
+                        orderby p.OpportunityItemId
+                        group p by p.OpportunityItemId
+                        into g
+                        select new
                         {
-                            {"contact_name", referral.ProviderPrimaryContact},
-                            {"provider_name", referral.ProviderDisplayName},
-                            {"route", referral.RouteName.ToLowerInvariant()},
-                            {"venue_text", referral.VenueText},
-                            {"search_radius", referral.DistanceFromEmployer},
-                            {
-                                "job_role_list", string.IsNullOrEmpty(referral.JobRole) || referral.JobRole == "None given"
-                                    ? $"* looking for students in courses related to {referral.RouteName.ToLowerInvariant()}"
-                                    : $"* looking for this job role: {referral.JobRole}"
-                            },
-                            {"employer_business_name", referral.CompanyName.ToTitleCase()},
-                            {"employer_contact_name", referral.EmployerContact.ToTitleCase()},
-                            {"employer_contact_number", referral.EmployerContactPhone},
-                            {"employer_contact_email", referral.EmployerContactEmail},
-                            {"employer_town_postcode", $"{referral.Town} {referral.Postcode}"},
-                            {"number_of_placements", placements}
-                        };
-
-                        const EmailTemplateName template = EmailTemplateName.ProviderReferralV5;
-                        await SendEmailAsync(template, opportunityId, referral.ProviderPrimaryContactEmail, tokens,
-                            referral.CreatedBy, referral.OpportunityItemId);
-
-                        if (!string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactEmail) &&
-                            !string.IsNullOrWhiteSpace(referral.ProviderSecondaryContact))
-                        {
-                            tokens["contact_name"] = referral.ProviderSecondaryContact;
-                            await SendEmailAsync(template, opportunityId, referral.ProviderSecondaryContactEmail, tokens,
-                                referral.CreatedBy, referral.OpportunityItemId);
+                            OpportunityItemId = g.Key,
+                            Referrals = g.Select(c => c).ToList()
                         }
-                    }
+                    ).ToList();
 
-                    await CompleteSelectedReferralsAsync(opportunityId, opportunityItem.OpportunityItemId, username);
+                    foreach (var opportunityItem in opportunityItemGroups)
+                    {
+                        foreach (var referral in opportunityItem.Referrals)
+                        {
+                            var placements = GetNumberOfPlacements(referral.PlacementsKnown, referral.Placements);
+
+                            var tokens = new Dictionary<string, string>
+                            {
+                                {"contact_name", referral.ProviderPrimaryContact},
+                                {"provider_name", referral.ProviderDisplayName},
+                                {"route", referral.RouteName.ToLowerInvariant()},
+                                {"venue_text", referral.VenueText},
+                                {"search_radius", referral.DistanceFromEmployer},
+                                {
+                                    "job_role_list",
+                                    string.IsNullOrEmpty(referral.JobRole) || referral.JobRole == "None given"
+                                        ? $"* looking for students in courses related to {referral.RouteName.ToLowerInvariant()}"
+                                        : $"* looking for this job role: {referral.JobRole}"
+                                },
+                                {"employer_business_name", referral.CompanyName.ToTitleCase()},
+                                {"employer_contact_name", referral.EmployerContact.ToTitleCase()},
+                                {"employer_contact_number", referral.EmployerContactPhone},
+                                {"employer_contact_email", referral.EmployerContactEmail},
+                                {"employer_town_postcode", $"{referral.Town} {referral.Postcode}"},
+                                {"number_of_placements", placements}
+                            };
+
+                            const EmailTemplateName template = EmailTemplateName.ProviderReferralV5;
+                            await SendEmailAsync(template, opportunityId, referral.ProviderPrimaryContactEmail, tokens,
+                                referral.CreatedBy, referral.OpportunityItemId);
+
+                            if (!string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactEmail) &&
+                                !string.IsNullOrWhiteSpace(referral.ProviderSecondaryContact))
+                            {
+                                tokens["contact_name"] = referral.ProviderSecondaryContact;
+                                await SendEmailAsync(template, opportunityId, referral.ProviderSecondaryContactEmail,
+                                    tokens,
+                                    referral.CreatedBy, referral.OpportunityItemId);
+                            }
+                        }
+
+                        await SetOpportunityItemsAsCompletedAsync(new[] { opportunityItem.OpportunityItemId }, username);
+                    }
                 }
 
-                await CompleteRemainingItemsAsync(opportunityId, username);
+                await CompleteRemainingProvisionGapsAsync(opportunityId, username);
 
-                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId, referrals?.Count ?? 0, BackgroundProcessHistoryStatus.Complete, username);
+                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId, 
+                    referrals?.Count ?? 0, 
+                    BackgroundProcessHistoryStatus.Complete, username);
             }
             catch (Exception ex)
             {
@@ -200,7 +237,9 @@ namespace Sfa.Tl.Matching.Application.Services
                     RowNumber = -1
                 });
 
-                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId, referrals.Count, BackgroundProcessHistoryStatus.Error, username, errorMessage);
+                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId, 
+                    referrals?.Count ?? 0, 
+                    BackgroundProcessHistoryStatus.Error, username, errorMessage);
             }
         }
 
@@ -233,38 +272,21 @@ namespace Sfa.Tl.Matching.Application.Services
             return sb.ToString();
         }
 
-        private async Task CompleteSelectedReferralsAsync(int opportunityId, int itemId, string username)
-        {
-            var selectedOpportunityItemIds = _opportunityItemRepository
-                .GetManyAsync(oi => oi.Opportunity.Id == opportunityId
-                                    && oi.Id == itemId
-                                    && oi.IsSaved
-                                    && oi.IsSelectedForReferral
-                                    && !oi.IsCompleted).Select(oi => oi.Id).ToList();
-
-            if (selectedOpportunityItemIds.Count > 0)
-            {
-                await SetOpportunityItemsAsCompletedAsync(selectedOpportunityItemIds, username);
-            }
-        }
-
-        private async Task CompleteRemainingItemsAsync(int opportunityId, string username)
+        private async Task CompleteRemainingProvisionGapsAsync(int opportunityId, string username)
         {
             var remainingOpportunities = _opportunityItemRepository.GetManyAsync(oi => oi.Opportunity.Id == opportunityId
                                                                                   && oi.IsSaved
-                                                                                  && !oi.IsSelectedForReferral
                                                                                   && !oi.IsCompleted);
 
-            var referralItems = remainingOpportunities.Where(oi => oi.OpportunityType == OpportunityType.Referral.ToString()).ToList();
-            var provisionGapItems = remainingOpportunities.Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString()).ToList();
-
-            if (provisionGapItems.Count > 0 && referralItems.Count == 0)
+            if (!remainingOpportunities.Any(oi => oi.OpportunityType == OpportunityType.Referral.ToString()))
             {
-                var provisionGapIds = provisionGapItems.Select(oi => oi.Id).ToList();
-
-                if (provisionGapIds.Count > 0)
+                var provisionGapItemIds = remainingOpportunities
+                    .Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString())
+                    .Select(oi => oi.Id)
+                    .ToList();
+                if (provisionGapItemIds.Count > 0)
                 {
-                    await SetOpportunityItemsAsCompletedAsync(provisionGapIds, username);
+                    await SetOpportunityItemsAsCompletedAsync(provisionGapItemIds, username);
                 }
             }
         }
