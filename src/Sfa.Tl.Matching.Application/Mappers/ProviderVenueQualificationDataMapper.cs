@@ -1,8 +1,7 @@
 ﻿using CsvHelper.Configuration;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 
-namespace sfa.Tl.Marketing.Communication.DataLoad.Read
+namespace Sfa.Tl.Matching.Application.Mappers
 {
     internal sealed class ProviderVenueQualificationDataMapper : ClassMap<ProviderVenueQualificationDto>
     {
@@ -15,7 +14,7 @@ namespace sfa.Tl.Marketing.Communication.DataLoad.Read
             Map(m => m.ProviderName).Name("Provider Name");
             Map(m => m.Name).Name("Name");
             Map(m => m.DisplayName).Name("DisplayName");
-            Map(m => m.IsCDFProvider).Name("IsCDFProvider")
+            Map(m => m.IsCdfProvider).Name("IsCDFProvider")
                 .TypeConverterOption.BooleanValues(true, true, "TRUE")
                 .TypeConverterOption.BooleanValues(false, true, "FALSE", "-");
             Map(m => m.IsEnabledForReferral).Name("IsEnabledForReferral")

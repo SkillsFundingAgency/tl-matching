@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿
 namespace Sfa.Tl.Matching.Models.ViewModel
 {
     public class RemoveProviderQualificationViewModel

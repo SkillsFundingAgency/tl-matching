@@ -20,6 +20,7 @@ namespace Sfa.Tl.Matching.Models.Enums
         Postcodes,
 
         [Description("Provider Venue Qualification")]
+        [DisplayName("CDF Provider Update")]
         [FileExtensions(Extensions = FileImportTypeExtensions.Csv)]
         ProviderVenueQualification
     }

@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using System.Linq;
 using CsvHelper;
-using sfa.Tl.Marketing.Communication.DataLoad.Read;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenueQualification

@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<IDictionary<int, string>> GetRouteDictionaryAsync();
         Task<IList<int>> GetRouteIdsAsync();
         Task<IList<SelectListItem>> GetRouteSelectListItemsAsync();
-        Task<IList<Models.ViewModel.RouteSummaryViewModel>> GetRouteSummaryAsync();
+        Task<IList<RouteSummaryViewModel>> GetRouteSummaryAsync();
         Task<RouteSummaryViewModel> GetRouteSummaryByNameAsync(string name);
     }
 }

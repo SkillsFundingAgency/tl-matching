@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using System.Linq;
@@ -10,7 +9,6 @@ namespace Sfa.Tl.Matching.Application.Services
     public class ProviderVenueQualificationFileImportService : IProviderVenueQualificationFileImportService
     {
         private readonly ILogger<IProviderVenueQualificationFileImportService> _logger;
-        private readonly IMapper _mapper;
         private readonly IProviderVenueQualificationReader _fileReader;
         private readonly IProviderVenueQualificationService _providerVenueQualificationService;
 
@@ -25,14 +23,13 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<int> BulkImportAsync(ProviderVenueQualificationFileImportDto fileImportDto)
         {
-            _logger.LogInformation($"Processing {typeof(ProviderVenueQualificationFileImportDto).Name}.");
+            _logger.LogInformation($"Processing {nameof(ProviderVenueQualificationFileImportDto)}.");
 
             var dataDtos = _fileReader.ReadData(fileImportDto.FileDataStream);
 
-            if (dataDtos == null && !dataDtos.Qualifications.Any())
+            if (dataDtos == null || !dataDtos.Qualifications.Any())
             {
                 _logger.LogInformation("No Data Imported.");
-
                 return 0;
             }
 

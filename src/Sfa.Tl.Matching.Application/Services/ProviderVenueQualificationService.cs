@@ -101,7 +101,7 @@ namespace Sfa.Tl.Matching.Application.Services
                             {
                                 var qualification = await _qualificationService.GetQualificationAsync(providerVenueQualification.LarId);
 
-                                int qualificationId = 0;
+                                int qualificationId;
 
                                 if (qualification == null)
                                 {
@@ -200,7 +200,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private (bool IsUpdated, ProviderDetailViewModel ProviderDetailViewModel) ValidateProviderToUpdate(ProviderDetailViewModel providerDetailViewModel, ProviderVenueQualificationDto providerVenueQualification)
         {
-            bool isUpdated = false;
+            var isUpdated = false;
 
             if (ValidateToUpdate(providerDetailViewModel.Name, providerVenueQualification.Name))
             {

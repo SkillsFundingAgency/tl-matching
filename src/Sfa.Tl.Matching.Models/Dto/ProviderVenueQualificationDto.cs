@@ -7,7 +7,7 @@
         public string ProviderName { get; set; }
         public string Name { get; set; }
         public string DisplayName { get; set; }
-        public bool IsCDFProvider { get; set; }
+        public bool IsCdfProvider { get; set; }
         public bool IsEnabledForReferral { get; set; }
         public string PrimaryContact { get; set; }
         public string PrimaryContactEmail { get; set; }
