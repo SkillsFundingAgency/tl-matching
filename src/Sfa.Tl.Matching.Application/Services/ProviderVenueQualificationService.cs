@@ -39,14 +39,18 @@ namespace Sfa.Tl.Matching.Application.Services
 
             foreach (var providerVenueQualification in data)
             {
-                var result = new ProviderVenueQualificationUpdateResultsDto()
+                var result = new ProviderVenueQualificationUpdateResultsDto
                 {
                     Message = $"UkPrn: {providerVenueQualification.UkPrn} - Data import successfull for Provider Name: {providerVenueQualification.ProviderName}"
                 };
 
                 try
                 {
-                    if (providerVenueQualification.InMatchingService)
+                    if (!providerVenueQualification.InMatchingService)
+                    {
+                        //TODO: Create the provider?
+                    }
+                    else
                     {
                         var provider = await _providerService.SearchAsync(providerVenueQualification.UkPrn);
 
@@ -73,7 +77,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                             if (venueViewModel == null)
                             {
-                                var addProviderVenue = new AddProviderVenueViewModel()
+                                var addProviderVenue = new AddProviderVenueViewModel
                                 {
                                     ProviderId = provider.Id,
                                     Postcode = providerVenueQualification.VenuePostcode,
@@ -81,12 +85,13 @@ namespace Sfa.Tl.Matching.Application.Services
                                 };
 
                                 var venueId = await _providerVenueService.CreateVenueAsync(addProviderVenue);
+                                //TODO: Test what happens below if a venue is created - will it still add the qualifications?
                             }
 
                             // Provider Venue Delete
                             if (providerVenueQualification.VenueIsRemoved && venueViewModel != null)
                             {
-                                var removeProviderVenueViewModel = new RemoveProviderVenueViewModel()
+                                var removeProviderVenueViewModel = new RemoveProviderVenueViewModel
                                 {
                                     Postcode = venueViewModel.Postcode,
                                     ProviderId = venueViewModel.ProviderId,
@@ -105,7 +110,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                                 if (qualification == null)
                                 {
-                                    var missingQualificationViewModel = new MissingQualificationViewModel()
+                                    var missingQualificationViewModel = new MissingQualificationViewModel
                                     {
                                         LarId = providerVenueQualification.LarId,
                                         ProviderVenueId = venueViewModel.Id,
@@ -126,7 +131,7 @@ namespace Sfa.Tl.Matching.Application.Services
                                 // Delete Provider Venue Qualification
                                 if (providerVenueQualification.QualificationIsDeleted && providerQualificationViewModel != null)
                                 {
-                                    var removeProviderQualificationViewModel = new RemoveProviderQualificationViewModel()
+                                    var removeProviderQualificationViewModel = new RemoveProviderQualificationViewModel
                                     {
                                         LarId = providerVenueQualification.LarId,
                                         QualificationId = qualificationId,
@@ -140,7 +145,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                                 if (providerQualificationViewModel == null)
                                 {
-                                    var addQualificationViewModel = new AddQualificationViewModel()
+                                    var addQualificationViewModel = new AddQualificationViewModel
                                     {
                                         LarId = providerVenueQualification.LarId,
                                         QualificationId = qualification.Id,
@@ -166,7 +171,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                                 if (routeMapping == null)
                                 {
-                                    var qualificationRouteMappingViewModel = new QualificationRouteMappingViewModel()
+                                    var qualificationRouteMappingViewModel = new QualificationRouteMappingViewModel
                                     {
                                         RouteId = route.Id,
                                         QualificationId = qualificationId
