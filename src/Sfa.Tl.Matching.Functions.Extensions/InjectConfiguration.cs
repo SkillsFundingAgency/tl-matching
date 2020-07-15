@@ -64,6 +64,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                     level >= (category == "Microsoft" ? LogLevel.Error : LogLevel.Information));
             });
 
+            services.AddHttpContextAccessor();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddDbContext<MatchingDbContext>(options =>
@@ -156,9 +157,8 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IQualificationRouteMappingService, QualificationRouteMappingService>();
 
             services.AddTransient<IProviderVenueQualificationService, ProviderVenueQualificationService>();
-            services.AddTransient<IProviderVenueQualificationReader, ProviderVenueQualificationReader>();
+            services.AddTransient<IProviderVenueQualificationReader, ProviderVenueQualificationExcelReader>();
             services.AddTransient<IProviderVenueQualificationFileImportService, ProviderVenueQualificationFileImportService>();
-
         }
 
         private static void RegisterNotificationsApi(IServiceCollection services, string apiKey)

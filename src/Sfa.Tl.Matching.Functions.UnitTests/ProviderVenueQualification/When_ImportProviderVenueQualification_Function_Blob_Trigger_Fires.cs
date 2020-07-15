@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage.Blob;
@@ -22,6 +23,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderVenueQualification
             blobStream.OpenReadAsync(null, null, null).Returns(new MemoryStream());
             var context = new ExecutionContext();
             var logger = Substitute.For<ILogger>();
+            var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
 
             _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
@@ -35,7 +37,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderVenueQualification
                 context,
                 logger,
                 _fileImportService,
-                _functionLogRepository).GetAwaiter().GetResult();
+                _functionLogRepository,
+                httpContextAccessor).GetAwaiter().GetResult();
         }
 
         [Fact]

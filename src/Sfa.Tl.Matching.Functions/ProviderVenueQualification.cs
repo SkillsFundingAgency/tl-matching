@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage.Blob;
@@ -22,7 +24,8 @@ namespace Sfa.Tl.Matching.Functions
             ExecutionContext context,
             ILogger logger,
             [Inject] IProviderVenueQualificationFileImportService fileImportService,
-            [Inject] IRepository<FunctionLog> functionLogRepository
+            [Inject] IRepository<FunctionLog> functionLogRepository,
+            [Inject] IHttpContextAccessor httpContextAccessor
         )
         {
             try
@@ -32,6 +35,17 @@ namespace Sfa.Tl.Matching.Functions
                 logger.LogInformation($"Function {context.FunctionName} processing blob\n" +
                                       $"\tName:{name}\n" +
                                       $"\tSize: {stream.Length} Bytes");
+
+                if (httpContextAccessor != null && httpContextAccessor.HttpContext == null)
+                {
+                    httpContextAccessor.HttpContext = new DefaultHttpContext
+                    {
+                        User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                        {
+                            new Claim(ClaimTypes.GivenName, "System")
+                        }))
+                    };
+                }
 
                 var stopwatch = Stopwatch.StartNew();
 
