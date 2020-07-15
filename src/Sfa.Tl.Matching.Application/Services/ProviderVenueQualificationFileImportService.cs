@@ -25,15 +25,15 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             _logger.LogInformation($"Processing {nameof(ProviderVenueQualificationFileImportDto)}.");
 
-            var dataDtos = _fileReader.ReadData(fileImportDto.FileDataStream);
+            var dataDtos = _fileReader.ReadData(fileImportDto);
 
-            if (dataDtos == null || !dataDtos.Qualifications.Any())
+            if (dataDtos == null || !dataDtos.ProviderVenueQualifications.Any())
             {
                 _logger.LogInformation("No Data Imported.");
                 return 0;
             }
 
-            var results = await _providerVenueQualificationService.Update(dataDtos.Qualifications);
+            var results = await _providerVenueQualificationService.Update(dataDtos.ProviderVenueQualifications);
 
             // Log errors in data updates
             foreach (var result in results)
@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Application.Services
             
             var updatedCount = results.Count(x => x.HasErrors == false);
 
-            _logger.LogInformation($"{updatedCount} out of {dataDtos.Qualifications.Count()} Providers data successfully updated.");
+            _logger.LogInformation($"{updatedCount} out of {dataDtos.ProviderVenueQualifications.Count()} Providers data successfully updated.");
 
             return updatedCount;
         }

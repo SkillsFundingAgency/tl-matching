@@ -7,21 +7,21 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenueQualification
 {
-    public class ProviderVenueQualificationReader : IProviderVenueQualificationReader
+    public class ProviderVenueQualificationCsvReader : IProviderVenueQualificationReader
     {
         private const string FailedToImportMessage = "Failed to load CSV file. Please check the format.";
 
-        public ProviderVenueQualificationReadResult ReadData(Stream fileStream)
+        public ProviderVenueQualificationReadResult ReadData(ProviderVenueQualificationFileImportDto fileImportDto)
         {
             var providerVenueQualificationReadResult = new ProviderVenueQualificationReadResult();
-            using (var reader = new StreamReader(fileStream))
+            using (var reader = new StreamReader(fileImportDto.FileDataStream))
             using (var csv = new CsvReader(reader))
             {
                 try
                 {
                     csv.Configuration.RegisterClassMap<ProviderVenueQualificationDataMapper>();
                     var records = csv.GetRecords<ProviderVenueQualificationDto>().ToList();
-                    providerVenueQualificationReadResult.Qualifications = records;
+                    providerVenueQualificationReadResult.ProviderVenueQualifications = records;
                 }
                 catch (ReaderException re)
                 {

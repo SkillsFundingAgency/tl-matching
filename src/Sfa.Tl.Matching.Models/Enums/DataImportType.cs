@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Models.Enums
 
         [Description("Provider Venue Qualification")]
         [DisplayName("CDF Provider Update")]
-        [FileExtensions(Extensions = FileImportTypeExtensions.Csv)]
+        [FileExtensions(Extensions = FileImportTypeExtensions.Excel)]
         ProviderVenueQualification
     }
 }
