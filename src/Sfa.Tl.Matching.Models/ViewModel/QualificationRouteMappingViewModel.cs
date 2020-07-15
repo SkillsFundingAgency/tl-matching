@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace Sfa.Tl.Matching.Models.ViewModel
 {
     public class QualificationRouteMappingViewModel
