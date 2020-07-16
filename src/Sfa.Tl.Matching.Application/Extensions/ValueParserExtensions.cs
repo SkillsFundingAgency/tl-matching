@@ -12,9 +12,6 @@ namespace Sfa.Tl.Matching.Application.Extensions
 {
     public static class ValueParserExtensions
     {
-        private const string Yes = "yes";
-        private const string No = "no";
-
         /// <summary>
         /// The TextInfo.ToTitleCase ignores ALL CAPS as special case because of that ToLowerInvariant is required
         /// </summary>
@@ -25,7 +22,7 @@ namespace Sfa.Tl.Matching.Application.Extensions
             if (string.IsNullOrWhiteSpace(value))
                 return string.Empty;
 
-            var artsAndPreps = new List<string>()
+            var artsAndPreps = new List<string>
                 { "a", "an", "and", "any", "at", "for", "from", "into", "of", "on",
                     "or", "some", "the", "to", };
 
@@ -85,31 +82,15 @@ namespace Sfa.Tl.Matching.Application.Extensions
         {
             return value.ToLower() switch
             {
-                Yes => true,
-                case "true":
-                No => false,
-                case "false":
-                case "-":
-                case "":
+                "yes" => true,
+                "true" => true,
+                "no" => false,
+                "false" => false,
+                "-" => false,
+                "" => false,
                 _ => throw new ArgumentOutOfRangeException(nameof(value),
                     $"{nameof(value)} cannot be parsed ({nameof(ToBool)})")
             };
-        }
- public static bool ToBool_OLD(this string value)
-        {
-            switch (value.ToLower())
-            {
-                case Yes:
-                case "true":
-                    return true;
-                case No:
-                case "false":
-                case "-":
-                case "":
-                    return false;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(value), $"{nameof(value)} cannot be parsed ({nameof(ToBool)})");
-            }
         }
 
         public static AupaStatus ToAupaStatus(this int value)

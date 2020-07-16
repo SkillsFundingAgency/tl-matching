@@ -50,7 +50,11 @@ namespace Sfa.Tl.Matching.Application.FileReader
 
                 var columnProperties = fileImportDto.GetType().GetProperties()
                     .Where(pr => pr.GetCustomAttribute<ColumnAttribute>(false) != null)
-                    .Select(prop => new { ColumnInfo = prop, Index = prop.GetCustomAttribute<ColumnAttribute>(false).Order })
+                    .Select(prop => new
+                    {
+                        ColumnInfo = prop, 
+                        Index = prop.GetCustomAttribute<ColumnAttribute>(false).Order
+                    })
                     .ToList();
 
                 foreach (var row in rows)

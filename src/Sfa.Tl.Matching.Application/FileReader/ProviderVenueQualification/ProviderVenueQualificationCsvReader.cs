@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Globalization;
+using System.IO;
 using System.Linq;
 using CsvHelper;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -14,27 +15,26 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenueQualification
         public ProviderVenueQualificationReadResult ReadData(ProviderVenueQualificationFileImportDto fileImportDto)
         {
             var providerVenueQualificationReadResult = new ProviderVenueQualificationReadResult();
-            using (var reader = new StreamReader(fileImportDto.FileDataStream))
-            using (var csv = new CsvReader(reader))
+            using var reader = new StreamReader(fileImportDto.FileDataStream);
+            using var csv = new CsvReader(reader, CultureInfo.CurrentCulture);
+
+            try
             {
-                try
-                {
-                    csv.Configuration.RegisterClassMap<ProviderVenueQualificationDataMapper>();
-                    var records = csv.GetRecords<ProviderVenueQualificationDto>().ToList();
-                    providerVenueQualificationReadResult.ProviderVenueQualifications = records;
-                }
-                catch (ReaderException re)
-                {
-                    providerVenueQualificationReadResult.Error = $"{FailedToImportMessage} {re.Message} {re.InnerException?.Message}";
-                }
-                catch (ValidationException ve)
-                {
-                    providerVenueQualificationReadResult.Error = $"{FailedToImportMessage} {ve.Message} {ve.InnerException?.Message}";
-                }
-                catch (BadDataException bde)
-                {
-                    providerVenueQualificationReadResult.Error = $"{FailedToImportMessage} {bde.Message} {bde.InnerException?.Message}";
-                }
+                csv.Configuration.RegisterClassMap<ProviderVenueQualificationDataMapper>();
+                var records = csv.GetRecords<ProviderVenueQualificationDto>().ToList();
+                providerVenueQualificationReadResult.ProviderVenueQualifications = records;
+            }
+            catch (ReaderException re)
+            {
+                providerVenueQualificationReadResult.Error = $"{FailedToImportMessage} {re.Message} {re.InnerException?.Message}";
+            }
+            catch (ValidationException ve)
+            {
+                providerVenueQualificationReadResult.Error = $"{FailedToImportMessage} {ve.Message} {ve.InnerException?.Message}";
+            }
+            catch (BadDataException bde)
+            {
+                providerVenueQualificationReadResult.Error = $"{FailedToImportMessage} {bde.Message} {bde.InnerException?.Message}";
             }
 
             return providerVenueQualificationReadResult;

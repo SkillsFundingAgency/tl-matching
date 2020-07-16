@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.OpportunityPipelineRe
             using var stream = new MemoryStream(_result);
             using var spreadSheet = SpreadsheetDocument.Open(stream, false);
 
-                    var sheetData = spreadSheet.GetSheetData(0);
+            var sheetData = spreadSheet.GetSheetData(0);
             sheetData.Should().NotBeNull();
 
             var rows = sheetData.Descendants<Row>().ToList();
@@ -78,7 +78,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.OpportunityPipelineRe
             using var stream = new MemoryStream(_result);
             using var spreadSheet = SpreadsheetDocument.Open(stream, false);
 
-                    var sheetData = spreadSheet.GetSheetData(1);
+            var sheetData = spreadSheet.GetSheetData(1);
             sheetData.Should().NotBeNull();
 
             var rows = sheetData.Descendants<Row>().ToList();

@@ -17,8 +17,7 @@ namespace Sfa.Tl.Matching.Models.Enums
         [FileExtensions(Extensions = FileImportTypeExtensions.Zip)]
         Postcodes,
 
-        [Description("Provider Venue Qualification")]
-        [DisplayName("CDF Provider Update")]
+        [Display(Name = "CDF Provider Update", Description = "Provider Venue Qualification")]
         [FileExtensions(Extensions = FileImportTypeExtensions.Excel)]
         ProviderVenueQualification
     }

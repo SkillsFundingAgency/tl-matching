@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using AutoMapper;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Notify.Interfaces;
 using NSubstitute;

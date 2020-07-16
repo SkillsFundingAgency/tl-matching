@@ -30,36 +30,38 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenueQualification
 
             try
             {
-                using (var document = SpreadsheetDocument.Open(fileImportDto.FileDataStream, false))
-                {
-                    var rows = document.GetAllRows(fileImportDto.NumberOfHeaderRows).ToList();
+                using var document = SpreadsheetDocument.Open(fileImportDto.FileDataStream, false);
 
-                    var stringTablePart = document.WorkbookPart.SharedStringTablePart;
+                var rows = document.GetAllRows(fileImportDto.NumberOfHeaderRows).ToList();
 
-                    var startIndex = fileImportDto.NumberOfHeaderRows ?? 0;
+                var stringTablePart = document.WorkbookPart.SharedStringTablePart;
 
-                    var columnProperties = fileImportDto.GetType().GetProperties()
-                        .Where(pr => pr.GetCustomAttribute<ColumnAttribute>(false) != null)
-                        .Select(prop => new
-                        { ColumnInfo = prop, Index = prop.GetCustomAttribute<ColumnAttribute>(false).Order })
-                        .ToList();
+                var startIndex = fileImportDto.NumberOfHeaderRows ?? 0;
 
-                    foreach (var row in rows)
+                var columnProperties = fileImportDto.GetType().GetProperties()
+                    .Where(pr => pr.GetCustomAttribute<ColumnAttribute>(false) != null)
+                    .Select(prop => new
                     {
-                        foreach (var column in columnProperties)
-                        {
-                            var cell = row.GetCellByIndex(column.Index, startIndex);
+                        ColumnInfo = prop, 
+                        Index = prop.GetCustomAttribute<ColumnAttribute>(false).Order
+                    })
+                    .ToList();
 
-                            var cellValue = stringTablePart.GetCellValue(cell);
+                foreach (var row in rows)
+                {
+                    foreach (var column in columnProperties)
+                    {
+                        var cell = row.GetCellByIndex(column.Index, startIndex);
 
-                            column.ColumnInfo.SetValue(fileImportDto, cellValue.Trim());
-                        }
+                        var cellValue = stringTablePart.GetCellValue(cell);
 
-                        var dto = _mapper.Map<ProviderVenueQualificationDto>(fileImportDto);
-                        providerVenueQualificationReadResult.ProviderVenueQualifications.Add(dto);
-
-                        startIndex++;
+                        column.ColumnInfo.SetValue(fileImportDto, cellValue.Trim());
                     }
+
+                    var dto = _mapper.Map<ProviderVenueQualificationDto>(fileImportDto);
+                    providerVenueQualificationReadResult.ProviderVenueQualifications.Add(dto);
+
+                    startIndex++;
                 }
             }
             catch (Exception ex)

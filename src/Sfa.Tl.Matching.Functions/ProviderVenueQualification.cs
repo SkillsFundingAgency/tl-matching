@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.Azure.Storage.Blob;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -19,7 +19,8 @@ namespace Sfa.Tl.Matching.Functions
     {
         [FunctionName("ImportProviderVenueQualification")]
         public async Task ImportProviderVenueQualification(
-            [BlobTrigger("providervenuequalification/{name}", Connection = "BlobStorageConnectionString")] ICloudBlob blockBlob,
+            [BlobTrigger("providervenuequalification/{name}", Connection = "BlobStorageConnectionString")] 
+            ICloudBlob blockBlob,
             string name,
             ExecutionContext context,
             ILogger logger,
