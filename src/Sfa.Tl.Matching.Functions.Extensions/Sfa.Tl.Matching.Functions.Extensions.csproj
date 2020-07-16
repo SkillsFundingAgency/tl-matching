@@ -6,15 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.16" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="4.0.2" />
-    <PackageReference Include="FluentValidation" Version="8.6.2" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.5" />
+    <PackageReference Include="FluentValidation" Version="9.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.6" />
     <PackageReference Include="Microsoft.Extensions.Logging.ApplicationInsights" Version="2.14.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="3.1.5" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.5" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.5" />
+    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.6" />
     <PackageReference Include="Notify" Version="2.7.0" />
 
   </ItemGroup>
