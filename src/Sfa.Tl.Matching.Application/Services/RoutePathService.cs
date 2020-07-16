@@ -46,5 +46,12 @@ namespace Sfa.Tl.Matching.Application.Services
                 .ProjectTo<RouteSummaryViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
+
+        public async Task<RouteSummaryViewModel> GetRouteSummaryByNameAsync(string name)
+        {
+            var route = await _routeRepository.GetSingleOrDefaultAsync(r => r.Name == name);
+            var routeSummaryViewModel = _mapper.Map<Route, RouteSummaryViewModel>(route);
+            return routeSummaryViewModel;
+        }
     }
 }

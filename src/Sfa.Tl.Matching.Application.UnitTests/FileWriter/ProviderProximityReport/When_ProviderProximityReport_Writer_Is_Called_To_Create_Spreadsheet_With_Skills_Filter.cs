@@ -4,6 +4,7 @@ using System.Linq;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using FluentAssertions;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.FileWriter.Provider;
 using Sfa.Tl.Matching.Application.UnitTests.FileWriter.ProviderProximityReport.Builders;
 using Xunit;
@@ -13,7 +14,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.ProviderProximityRepo
     public class When_ProviderProximityReport_Writer_Is_Called_To_Create_Spreadsheet_With_Skills_Filter
     {
         private readonly byte[] _result;
-        private readonly ProviderProximityReportWriter _reportWriter;
 
         public When_ProviderProximityReport_Writer_Is_Called_To_Create_Spreadsheet_With_Skills_Filter()
         {
@@ -21,8 +21,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.ProviderProximityRepo
                     .AddProvider()
                     .Build();
 
-            _reportWriter = new ProviderProximityReportWriter();
-            _result = _reportWriter.WriteReport(dto);
+            var reportWriter = new ProviderProximityReportWriter();
+            _result = reportWriter.WriteReport(dto);
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.ProviderProximityRepo
         {
             using var stream = new MemoryStream(_result);
             using var spreadSheet = SpreadsheetDocument.Open(stream, false);
-            var sheetData = _reportWriter.GetSheetData(spreadSheet, 0);
+                    var sheetData = spreadSheet.GetSheetData(0);
             sheetData.Should().NotBeNull();
 
             var rows = sheetData.Descendants<Row>().ToList();
@@ -73,7 +73,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.ProviderProximityRepo
             // Assert
             using var stream = new MemoryStream(resultWithSearchFilters);
             using var spreadSheet = SpreadsheetDocument.Open(stream, false);
-            var sheetData = reportWriterWithSearchFilters.GetSheetData(spreadSheet, 0);
+                    var sheetData = spreadSheet.GetSheetData(0);
             sheetData.Should().NotBeNull();
 
             var rows = sheetData.Descendants<Row>().ToList();

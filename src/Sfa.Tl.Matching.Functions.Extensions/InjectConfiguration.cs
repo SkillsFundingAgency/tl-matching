@@ -19,6 +19,7 @@ using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.FileReader.LearningAimReferenceStaging;
 using Sfa.Tl.Matching.Application.FileReader.LocalEnterprisePartnershipStaging;
 using Sfa.Tl.Matching.Application.FileReader.PostcodeLookupStaging;
+using Sfa.Tl.Matching.Application.FileReader.ProviderVenueQualification;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
@@ -63,6 +64,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                     level >= (category == "Microsoft" ? LogLevel.Error : LogLevel.Information));
             });
 
+            services.AddHttpContextAccessor();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddDbContext<MatchingDbContext>(options =>
@@ -147,6 +149,16 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
+
+            services.AddTransient<IProviderService, ProviderService>();
+            services.AddTransient<IProviderVenueService, ProviderVenueService>();
+            services.AddTransient<IProviderQualificationService, ProviderQualificationService>();
+            services.AddTransient<IRoutePathService, RoutePathService>();
+            services.AddTransient<IQualificationRouteMappingService, QualificationRouteMappingService>();
+
+            services.AddTransient<IProviderVenueQualificationService, ProviderVenueQualificationService>();
+            services.AddTransient<IProviderVenueQualificationReader, ProviderVenueQualificationExcelReader>();
+            services.AddTransient<IProviderVenueQualificationFileImportService, ProviderVenueQualificationFileImportService>();
         }
 
         private static void RegisterNotificationsApi(IServiceCollection services, string apiKey)

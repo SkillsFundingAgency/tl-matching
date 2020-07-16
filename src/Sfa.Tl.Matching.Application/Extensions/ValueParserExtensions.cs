@@ -70,6 +70,7 @@ namespace Sfa.Tl.Matching.Application.Extensions
         {
             return long.Parse(value);
         }
+
         public static decimal ToDecimal(this string value)
         {
             return decimal.Parse(value);
@@ -85,10 +86,30 @@ namespace Sfa.Tl.Matching.Application.Extensions
             return value.ToLower() switch
             {
                 Yes => true,
+                case "true":
                 No => false,
+                case "false":
+                case "-":
+                case "":
                 _ => throw new ArgumentOutOfRangeException(nameof(value),
                     $"{nameof(value)} cannot be parsed ({nameof(ToBool)})")
             };
+        }
+ public static bool ToBool_OLD(this string value)
+        {
+            switch (value.ToLower())
+            {
+                case Yes:
+                case "true":
+                    return true;
+                case No:
+                case "false":
+                case "-":
+                case "":
+                    return false;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(value), $"{nameof(value)} cannot be parsed ({nameof(ToBool)})");
+            }
         }
 
         public static AupaStatus ToAupaStatus(this int value)
@@ -96,6 +117,7 @@ namespace Sfa.Tl.Matching.Application.Extensions
             Enum.TryParse<AupaStatus>(value.ToString(), out var aupaStatus);
             return aupaStatus;
         }
+
         public static AupaStatus ToAupaStatus(this SfaAupa value)
         {
             return value.Value switch
