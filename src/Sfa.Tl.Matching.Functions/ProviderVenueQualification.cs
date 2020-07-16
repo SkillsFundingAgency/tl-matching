@@ -36,13 +36,15 @@ namespace Sfa.Tl.Matching.Functions
                                       $"\tName:{name}\n" +
                                       $"\tSize: {stream.Length} Bytes");
 
+                var createdByUser = blockBlob.GetCreatedByMetadata();
+
                 if (httpContextAccessor != null && httpContextAccessor.HttpContext == null)
                 {
                     httpContextAccessor.HttpContext = new DefaultHttpContext
                     {
                         User = new ClaimsPrincipal(new ClaimsIdentity(new[]
                         {
-                            new Claim(ClaimTypes.GivenName, "System")
+                            new Claim(ClaimTypes.GivenName, createdByUser)
                         }))
                     };
                 }
@@ -52,7 +54,7 @@ namespace Sfa.Tl.Matching.Functions
                 var updatedRecords = await fileImportService.BulkImportAsync(new ProviderVenueQualificationFileImportDto
                 {
                     FileDataStream = stream,
-                    CreatedBy = blockBlob.GetCreatedByMetadata()
+                    CreatedBy = createdByUser
                 });
 
                 stopwatch.Stop();
