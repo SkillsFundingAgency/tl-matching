@@ -33,20 +33,19 @@ namespace Sfa.Tl.Matching.Application.Services
                 return 0;
             }
 
-            var results = await _providerVenueQualificationService.Update(dataDtos.ProviderVenueQualifications);
+            var results = 
+                (await _providerVenueQualificationService.Update(dataDtos.ProviderVenueQualifications))
+                .ToList();
 
             // Log errors in data updates
-            foreach (var result in results)
+            foreach (var result in results.Where(result => result.HasErrors))
             {
-                if (result.HasErrors)
-                {
-                    _logger.LogError(result.Message);
-                }
+                _logger.LogError(result.Message);
             }
             
             var updatedCount = results.Count(x => x.HasErrors == false);
 
-            _logger.LogInformation($"{updatedCount} out of {dataDtos.ProviderVenueQualifications.Count()} Providers data successfully updated.");
+            _logger.LogInformation($"{updatedCount} out of {dataDtos.ProviderVenueQualifications.Count} Providers data successfully updated.");
 
             return updatedCount;
         }
