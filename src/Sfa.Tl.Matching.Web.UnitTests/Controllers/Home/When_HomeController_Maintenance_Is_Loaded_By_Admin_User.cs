@@ -32,8 +32,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Home
                 .AddAdminUser()
                 .Build();
 
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
-            httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
+            var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
+            httpContextAccessor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
             _result = homeController.MaintenanceAsync().GetAwaiter().GetResult();
         }

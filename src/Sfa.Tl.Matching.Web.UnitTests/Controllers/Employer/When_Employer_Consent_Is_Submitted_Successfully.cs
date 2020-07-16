@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         {
             var opportunityService = Substitute.For<IOpportunityService>();
 
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
+            var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
 
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));
             _referralService = Substitute.For<IReferralService>();
@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 .AddUserName("username")
                 .Build();
 
-            httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
+            httpContextAccessor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
             _result = controllerWithClaims.SaveEmployerConsentAsync(new EmployerConsentViewModel
             {

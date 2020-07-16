@@ -30,16 +30,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 Placements = 3
             };
 
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
+            var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
 
             var config = new MapperConfiguration(c =>
             {
                 c.AddMaps(typeof(PlacementInformationSaveDtoMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<PlacementInformationSaveViewModel, PlacementInformationSaveDto>(httpcontextAccesor) :
+                        new LoggedInUserEmailResolver<PlacementInformationSaveViewModel, PlacementInformationSaveDto>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<PlacementInformationSaveViewModel, PlacementInformationSaveDto>(httpcontextAccesor) :
+                            (object)new LoggedInUserNameResolver<PlacementInformationSaveViewModel, PlacementInformationSaveDto>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<PlacementInformationSaveViewModel, PlacementInformationSaveDto>(new DateTimeProvider()) :
                                 null);
@@ -54,7 +54,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddUserName("username")
                 .Build();
 
-            httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
+            httpContextAccessor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
             _result = controllerWithClaims.SavePlacementInformationAsync(viewModel).GetAwaiter().GetResult();
         }

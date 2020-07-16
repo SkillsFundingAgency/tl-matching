@@ -25,8 +25,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
 
         public When_ReferralEmailService_Is_Called_To_Send_Multiple_Provider_Emails_And_No_Remaining_Referrals_With_ProvisionGaps()
         {
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
-            httpcontextAccesor.HttpContext.Returns(new DefaultHttpContext
+            var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
+            httpContextAccessor.HttpContext.Returns(new DefaultHttpContext
             {
                 User = new ClaimsPrincipal(new ClaimsIdentity(new[]
                 {
@@ -48,11 +48,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
                     type.Name.Contains("LoggedInUserEmailResolver")
                         ?
                         new LoggedInUserEmailResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
-                            httpcontextAccesor)
+                            httpContextAccessor)
                         : type.Name.Contains("LoggedInUserNameResolver")
                             ? (object)new
                                 LoggedInUserNameResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
-                                    httpcontextAccesor)
+                                    httpContextAccessor)
                             : type.Name.Contains("UtcNowResolver")
                                 ? new UtcNowResolver<OpportunityItemIsSelectedWithUsernameForCompleteDto, OpportunityItem>(
                                     dateTimeProvider)
@@ -195,7 +195,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
             var referralService = new ReferralEmailService(mapper, dateTimeProvider, emailService,
                 opportunityRepo, _opportunityItemRepository, backgroundProcessHistoryRepo, functionLogRepository);
 
-            referralService.SendProviderReferralEmailAsync(1, itemIds, 1, httpcontextAccesor.HttpContext.User.GetUserName()).GetAwaiter().GetResult();
+            referralService.SendProviderReferralEmailAsync(1, itemIds, 1, httpContextAccessor.HttpContext.User.GetUserName()).GetAwaiter().GetResult();
         }
 
         [Fact]

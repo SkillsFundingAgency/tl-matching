@@ -29,16 +29,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .IsNewProvisionGapAsync(Arg.Any<int>())
                 .Returns(true);
 
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
+            var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
 
             var config = new MapperConfiguration(c =>
             {
                 c.AddMaps(typeof(EmployerDtoMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<SaveProvisionGapViewModel, OpportunityDto>(httpcontextAccesor) :
+                        new LoggedInUserEmailResolver<SaveProvisionGapViewModel, OpportunityDto>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<SaveProvisionGapViewModel, OpportunityDto>(httpcontextAccesor) :
+                            (object)new LoggedInUserNameResolver<SaveProvisionGapViewModel, OpportunityDto>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<SaveProvisionGapViewModel, OpportunityDto>(new DateTimeProvider()) :
                                 null);
@@ -51,7 +51,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddEmail(Email)
                 .Build();
 
-            httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
+            httpContextAccessor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
             _result = controllerWithClaims.SaveProvisionGapAsync(new SaveProvisionGapViewModel
             {

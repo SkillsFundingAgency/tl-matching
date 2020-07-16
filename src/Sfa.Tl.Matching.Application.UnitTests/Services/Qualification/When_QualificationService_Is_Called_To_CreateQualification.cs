@@ -23,16 +23,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
 
         public When_QualificationService_Is_Called_To_CreateQualification()
         {
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
+            var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
 
             var config = new MapperConfiguration(c =>
             {
                 c.AddMaps(typeof(QualificationMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<MissingQualificationViewModel, Domain.Models.Qualification>(httpcontextAccesor) :
+                        new LoggedInUserEmailResolver<MissingQualificationViewModel, Domain.Models.Qualification>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<MissingQualificationViewModel, Domain.Models.Qualification>(httpcontextAccesor) :
+                            (object)new LoggedInUserNameResolver<MissingQualificationViewModel, Domain.Models.Qualification>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<MissingQualificationViewModel, Domain.Models.Qualification>(new DateTimeProvider()) :
                                 null);

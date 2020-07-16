@@ -24,8 +24,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 
         public When_ProviderVenueService_Is_Called_To_UpdateVenue()
         {
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
-            httpcontextAccesor.HttpContext.Returns(new DefaultHttpContext
+            var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
+            httpContextAccessor.HttpContext.Returns(new DefaultHttpContext
             {
                 User = new ClaimsPrincipal(new ClaimsIdentity(new[]
                 {
@@ -47,9 +47,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
                 c.AddMaps(typeof(ProviderVenueMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<ProviderVenueDetailViewModel, Domain.Models.ProviderVenue>(httpcontextAccesor) :
+                        new LoggedInUserEmailResolver<ProviderVenueDetailViewModel, Domain.Models.ProviderVenue>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<ProviderVenueDetailViewModel, Domain.Models.ProviderVenue>(httpcontextAccesor) :
+                            (object)new LoggedInUserNameResolver<ProviderVenueDetailViewModel, Domain.Models.ProviderVenue>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<ProviderVenueDetailViewModel, Domain.Models.ProviderVenue>(dateTimeProvider) :
                                 type.Name.Contains("VenueNameResolver") ?

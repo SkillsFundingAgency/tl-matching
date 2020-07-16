@@ -43,16 +43,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             _opportunityService = Substitute.For<IOpportunityService>();
             var referralService = Substitute.For<IReferralService>();
 
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
+            var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
 
             var config = new MapperConfiguration(c =>
             {
                 c.AddMaps(typeof(EmployerDtoMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<FindEmployerViewModel, CompanyNameDto>(httpcontextAccesor) :
+                        new LoggedInUserEmailResolver<FindEmployerViewModel, CompanyNameDto>(httpContextAccessor) :
                             type.Name.Contains("LoggedInUserNameResolver") ?
-                                (object)new LoggedInUserNameResolver<FindEmployerViewModel, CompanyNameDto>(httpcontextAccesor) :
+                                (object)new LoggedInUserNameResolver<FindEmployerViewModel, CompanyNameDto>(httpContextAccessor) :
                                     type.Name.Contains("UtcNowResolver") ?
                                         new UtcNowResolver<FindEmployerViewModel, CompanyNameDto>(new DateTimeProvider()) :
                                             null);
@@ -65,7 +65,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 .AddUserName(ModifiedBy)
                 .Build();
 
-            httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
+            httpContextAccessor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
             _result = controllerWithClaims.SaveOpportunityCompanyNameAsync(_viewModel).GetAwaiter().GetResult();
         }
