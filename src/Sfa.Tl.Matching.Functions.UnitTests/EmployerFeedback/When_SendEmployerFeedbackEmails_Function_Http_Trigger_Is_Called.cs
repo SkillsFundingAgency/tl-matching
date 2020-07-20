@@ -1,6 +1,5 @@
 ﻿using System.Net.Http;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
@@ -16,11 +15,10 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmployerFeedback
         public When_SendEmployerFeedbackEmails_Function_Http_Trigger_Is_Called()
         {
             _employerFeedbackService = Substitute.For<IEmployerFeedbackService>();
-            
-            var request = new DefaultHttpRequest(new DefaultHttpContext())
-            {
-                Method = HttpMethod.Get.ToString()
-            };
+
+            var httpContext = new DefaultHttpContext();
+            var request = httpContext.Request;
+            request.Method = HttpMethod.Get.ToString();
 
             var employerFeedback = new Functions.EmployerFeedback();
             employerFeedback.ManualSendEmployerFeedbackEmails(

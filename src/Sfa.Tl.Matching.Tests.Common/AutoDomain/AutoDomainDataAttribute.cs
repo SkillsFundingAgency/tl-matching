@@ -8,7 +8,6 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
     {
         public AutoDomainDataAttribute() : base(GetDefaultFixture)
         {
-
         }
 
         public static IFixture GetDefaultFixture()
@@ -29,9 +28,9 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
                 .Customize(new EmailHistoryCustomization())
                 .Customize(new ControllerBaseCustomization())
                 .Customize(autoNSubstituteCustomization);
-
         }
     }
+
     public class InlineAutoDomainDataAttribute : InlineAutoDataAttribute
     {
         public InlineAutoDomainDataAttribute(params object[] objects) : base(new AutoDomainDataAttribute(), objects)

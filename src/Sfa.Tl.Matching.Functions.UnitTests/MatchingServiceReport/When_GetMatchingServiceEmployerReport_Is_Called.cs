@@ -1,18 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Net.Http;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
-using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Functions.UnitTests.MatchingServiceReport.Builders;
 using Sfa.Tl.Matching.Tests.Common.Extensions;
@@ -29,31 +23,18 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.MatchingServiceReport
         {
             var logger = Substitute.For<ILogger>();
             var context = new ExecutionContext();
-            
-            var employers = new EmployerBuilder().BuildList().AsQueryable();
-            var mockSet = Substitute.For<DbSet<Domain.Models.Employer>, IAsyncEnumerable<Domain.Models.Employer>, IQueryable<Domain.Models.Employer>>();
 
-            // ReSharper disable once SuspiciousTypeConversion.Global
-            ((IAsyncEnumerable<Domain.Models.Employer>)mockSet).GetAsyncEnumerator()
-                .Returns(new FakeAsyncEnumerator<Domain.Models.Employer>(employers.GetEnumerator()));
-            ((IQueryable<Domain.Models.Employer>)mockSet).Provider.Returns(
-                new FakeAsyncQueryProvider<Domain.Models.Employer>(employers.Provider));
-            ((IQueryable<Domain.Models.Employer>)mockSet).Expression.Returns(employers.Expression);
-            ((IQueryable<Domain.Models.Employer>)mockSet).ElementType.Returns(employers.ElementType);
-            ((IQueryable<Domain.Models.Employer>)mockSet).GetEnumerator().Returns(employers.GetEnumerator());
+            var list = new EmployerBuilder().BuildList().ToList();
+            var mock = list.AsQueryable().BuildMockDbSet();
 
-            var contextOptions = new DbContextOptions<MatchingDbContext>();
-            var mockContext = Substitute.For<MatchingDbContext>(contextOptions, false);
-            mockContext.Set<Domain.Models.Employer>().Returns(mockSet);
-
-            IRepository<Domain.Models.Employer> employerRepository = new GenericRepository<Domain.Models.Employer>(NullLogger<GenericRepository<Domain.Models.Employer>>.Instance, mockContext);
+            var employerRepository = Substitute.For<IRepository<Domain.Models.Employer>>();
+            employerRepository.GetManyAsync().Returns(mock);
 
             _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
-            var request = new DefaultHttpRequest(new DefaultHttpContext())
-            {
-                Method = HttpMethod.Get.ToString()
-            };
+            var httpContext = new DefaultHttpContext();
+            var request = httpContext.Request;
+            request.Method = HttpMethod.Get.ToString();
 
             _result = Functions.MatchingServiceReport.GetMatchingServiceEmployerReportAsync(
                 request,

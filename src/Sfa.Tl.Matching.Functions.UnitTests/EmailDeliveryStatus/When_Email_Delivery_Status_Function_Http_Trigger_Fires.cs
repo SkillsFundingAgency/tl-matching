@@ -5,7 +5,6 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
@@ -211,8 +210,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
         {
             var reqMock = Substitute.For<HttpRequest>();
             var headers = new Dictionary<string, StringValues> { { "Authorization", "Bearer 72b561ed-a7f3-4c0c-82a9-aae800a51de7" } };
-
-
+            
             reqMock.Query.Returns(new QueryCollection(query));
             reqMock.Headers.Returns(new HeaderDictionary(headers));
 
