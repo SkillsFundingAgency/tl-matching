@@ -1,5 +1,4 @@
-﻿@using Microsoft.AspNetCore.Http
-<div class="govuk-width-container">
+﻿<div class="govuk-width-container">
     <div class="govuk-phase-banner">
         <p class="govuk-phase-banner__content">
             <strong class="govuk-tag govuk-phase-banner__content__tag ">
@@ -11,8 +10,7 @@
                 @{
                     if (Context.Items.ContainsKey("IsOnline"))
                     {
-                        bool isOnline = true;
-                        if (bool.TryParse(Context.Items["IsOnline"].ToString(), out isOnline) && !isOnline)
+                        if (bool.TryParse(Context.Items["IsOnline"].ToString(), out var isOnline) && !isOnline)
                         {
                             <span class="tl-maintenance">The service is currently offline.</span>
                         }
