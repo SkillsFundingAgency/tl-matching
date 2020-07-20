@@ -2,7 +2,6 @@
 using AutoFixture.AutoNSubstitute;
 using AutoFixture.Xunit2;
 
-
 namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
 {
     public class AutoDomainDataAttribute : AutoDataAttribute
@@ -28,6 +27,7 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
                 .Customize(new MapperCustomization())
                 .Customize(new FactoryServiceCustomizations())
                 .Customize(new EmailHistoryCustomization())
+                .Customize(new ControllerBaseCustomization())
                 .Customize(autoNSubstituteCustomization);
 
         }
@@ -36,7 +36,6 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
     {
         public InlineAutoDomainDataAttribute(params object[] objects) : base(new AutoDomainDataAttribute(), objects)
         {
-
         }
     }
 }

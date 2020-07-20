@@ -8,7 +8,12 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
         public void Customize(IFixture fixture)
         {
             var httpContext = fixture.Create<HttpContext>();
-            fixture.Customize<HttpContextAccessor>(composer => composer.With(accessor => accessor.HttpContext , httpContext));
+            fixture.Customize<HttpContextAccessor>(composer => 
+                composer
+                    .With(accessor => 
+                        accessor.HttpContext, httpContext)
+                    )
+                ;
         }
     }
 }
