@@ -45,22 +45,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
             _opportunityRepository.GetReferralsForEmployerFeedbackAsync(Arg.Any<DateTime>())
                 .Returns(new EmployerFeedbackDtoListBuilder().Build());
 
-            var bankHolidays = new BankHolidayListBuilder().Build().AsQueryable();
-
-            var mockSet = Substitute.For<DbSet<BankHoliday>, IAsyncEnumerable<BankHoliday>, IQueryable<BankHoliday>>();
-
-            // ReSharper disable once SuspiciousTypeConversion.Global
-            ((IAsyncEnumerable<BankHoliday>)mockSet).GetAsyncEnumerator()
-                .Returns(new FakeAsyncEnumerator<BankHoliday>(bankHolidays.GetEnumerator()));
-            ((IQueryable<BankHoliday>)mockSet).Provider.Returns(
-                new FakeAsyncQueryProvider<BankHoliday>(bankHolidays.Provider));
-            ((IQueryable<BankHoliday>)mockSet).Expression.Returns(bankHolidays.Expression);
-            ((IQueryable<BankHoliday>)mockSet).ElementType.Returns(bankHolidays.ElementType);
-            ((IQueryable<BankHoliday>)mockSet).GetEnumerator().Returns(bankHolidays.GetEnumerator());
+            var mockDbSet = new BankHolidayListBuilder()
+                .Build()
+                .AsQueryable()
+                .BuildMockDbSet();
 
             var contextOptions = new DbContextOptions<MatchingDbContext>();
             var mockContext = Substitute.For<MatchingDbContext>(contextOptions, false);
-            mockContext.Set<BankHoliday>().Returns(mockSet);
+            mockContext.Set<BankHoliday>().Returns(mockDbSet);
 
             IRepository<BankHoliday> bankHolidayRepository =
                 new GenericRepository<BankHoliday>(NullLogger<GenericRepository<BankHoliday>>.Instance, mockContext);
