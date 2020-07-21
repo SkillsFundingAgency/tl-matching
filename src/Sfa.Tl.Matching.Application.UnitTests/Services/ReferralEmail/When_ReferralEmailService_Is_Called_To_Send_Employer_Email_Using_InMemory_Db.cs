@@ -141,11 +141,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
             
             var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo, functionLogRepository);
 
-            var itemIds = itemRepo.GetManyAsync(oi => oi.Opportunity.Id == opportunity.Id
-                                                 && oi.IsSaved
-                                                 && oi.IsSelectedForReferral
-                                                 && !oi.IsCompleted).Select(oi => oi.Id);
-
             //Act
             await sut.SendEmployerReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
@@ -302,11 +297,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
             var functionLogRepository = new GenericRepository<FunctionLog>(functionLogLogger, dbContext);
 
             var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo, functionLogRepository);
-
-            var itemIds = itemRepo.GetManyAsync(oi => oi.Opportunity.Id == opportunity.Id
-                                                 && oi.IsSaved
-                                                 && oi.IsSelectedForReferral
-                                                 && !oi.IsCompleted).Select(oi => oi.Id);
 
             //Act
             await sut.SendEmployerReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");

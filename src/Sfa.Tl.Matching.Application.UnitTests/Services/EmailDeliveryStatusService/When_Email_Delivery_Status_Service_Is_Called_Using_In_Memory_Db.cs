@@ -50,6 +50,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
 
             dbContext.Add(emailHistory);
             await dbContext.SaveChangesAsync();
+            dbContext.DetachAllEntities();
 
             payload.Id = emailHistory.NotificationId.GetValueOrDefault();
 
@@ -101,6 +102,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
 
             dbContext.Add(emailHistory);
             await dbContext.SaveChangesAsync();
+            dbContext.DetachAllEntities();
 
             payload.Status = status;
             payload.Id = emailHistory.NotificationId.GetValueOrDefault();
@@ -152,6 +154,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
 
             dbContext.Add(emailHistory);
             await dbContext.SaveChangesAsync();
+            dbContext.DetachAllEntities();
 
             payload.Status = status;
             payload.Id = emailHistory.NotificationId.GetValueOrDefault();
@@ -334,6 +337,5 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             return new Application.Services.EmailDeliveryStatusService(configuration,
                 emailService, opportunityRepository, messageQueueService, emailDeliveryServiceStatusLogger);
         }
-
     }
 }

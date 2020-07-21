@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoFixture.Xunit2;
 using AutoMapper;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Notify.Interfaces;
 using Notify.Models.Responses;
@@ -24,7 +25,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 {
     public class When_Email_Service_Is_Called_Using_InMemory_Db
     {
-
         [Theory, AutoDomainData]
         public async Task Then_Send_Email_And_Save_Email_History(
             MatchingConfiguration configuration,
@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             var (templateRepository, emailHistoryRepository, functionLogRepository, mapper)
                 = SetUp(dbContext, emailTemplateLogger, emailHistoryLogger, functionLogLogger);
 
-            var sut = new EmailService(configuration, notificationClient, templateRepository, emailHistoryRepository, 
+            var sut = new EmailService(configuration, notificationClient, templateRepository, emailHistoryRepository,
                 functionLogRepository, mapper, emailServiceLogger);
 
             var tokens = new Dictionary<string, string>
@@ -66,7 +66,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
             //Assert
             Guid.TryParse(emailNotificationResponse.id, out var notificationId);
-            var data = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == notificationId);
+            var data = dbContext.EmailHistory.AsNoTracking().FirstOrDefault(x => x.NotificationId == notificationId);
 
             data.Should().NotBeNull();
             data?.EmailTemplateId.Should().Be(emailHistory.EmailTemplateId);
@@ -95,10 +95,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
         )
         {
             //Arrange
-            var (templateRepository, emailHistoryRepository, functionLogRepository, mapper) 
+            var (templateRepository, emailHistoryRepository, functionLogRepository, mapper)
                 = SetUp(dbContext, emailTemplateLogger, emailHistoryLogger, functionLogLogger);
 
-            var sut = new EmailService(configuration, notificationClient, templateRepository, emailHistoryRepository, 
+            var sut = new EmailService(configuration, notificationClient, templateRepository, emailHistoryRepository,
                 functionLogRepository, mapper, emailServiceLogger);
 
             var tokens = new Dictionary<string, string>
@@ -117,10 +117,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
             //Assert
             Guid.TryParse(emailNotificationResponse.id, out var notificationId);
-            var emailHistory = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == notificationId);
+            var emailHistory = dbContext.EmailHistory.AsNoTracking().FirstOrDefault(x => x.NotificationId == notificationId);
 
             emailHistory.Should().BeNull();
-
         }
 
         [Theory, AutoDomainData]
@@ -141,10 +140,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
         )
         {
             //Arrange
-            var (templatetemplateRepositoryLogger, emailHistoryRepository, functionLogRepository, mapper) 
+            var (templateRepositoryLogger, emailHistoryRepository, functionLogRepository, mapper)
                 = SetUp(dbContext, emailTemplateLogger, emailHistoryLogger, functionLogLogger);
 
-            var sut = new EmailService(configuration, notificationClient, templatetemplateRepositoryLogger, emailHistoryRepository, 
+            var sut = new EmailService(configuration, notificationClient, templateRepositoryLogger, emailHistoryRepository,
                 functionLogRepository, mapper, emailServiceLogger);
 
             emailHistory.NotificationId = payLoad.Id;
@@ -155,7 +154,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             await sut.UpdateEmailStatus(payLoad);
 
             //Assert
-            var data = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == payLoad.Id);
+            var data = dbContext.EmailHistory.AsNoTracking().FirstOrDefault(x => x.NotificationId == payLoad.Id);
 
             data.Should().NotBeNull();
             data?.Status.Should().Be(payLoad.Status);
@@ -193,10 +192,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             payLoad.Status = status;
             payLoad.Id = notificationId;
 
-            var (templateRepository, emailHistoryRepository, functionLogRepository, mapper) 
+            var (templateRepository, emailHistoryRepository, functionLogRepository, mapper)
                 = SetUp(dbContext, emailTemplateLogger, emailHistoryLogger, functionLogLogger);
 
-            var sut = new EmailService(configuration, notificationClient, templateRepository, emailHistoryRepository, 
+            var sut = new EmailService(configuration, notificationClient, templateRepository, emailHistoryRepository,
                 functionLogRepository, mapper, emailServiceLogger);
 
             var tokens = new Dictionary<string, string>
@@ -212,9 +211,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
             //Act
             await sut.SendEmailAsync(emailTemplate.TemplateName, "test@test.com", opportunity.Id, opportunityItem.Id, tokens, "System");
-            
+
             //Assert
-            var data = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == notificationId);
+            var data = dbContext.EmailHistory.AsNoTracking().FirstOrDefault(x => x.NotificationId == notificationId);
 
             data.Should().NotBeNull();
             data?.EmailTemplateId.Should().Be(emailHistory.EmailTemplateId);
@@ -224,10 +223,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             data?.ModifiedBy.Should().BeNullOrEmpty();
             data?.ModifiedOn.Should().BeNull();
 
+            dbContext.DetachAllEntities();
+
             //Act - Update Email With Status
             await sut.UpdateEmailStatus(payLoad);
 
-            data = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == notificationId);
+            data = dbContext.EmailHistory.AsNoTracking().FirstOrDefault(x => x.NotificationId == notificationId);
 
             data.Should().NotBeNull();
             data?.EmailTemplateId.Should().Be(emailHistory.EmailTemplateId);
@@ -268,10 +269,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             payLoad.Status = status;
             payLoad.Id = notificationId;
 
-            var (templateRepository, emailHistoryRepository, functionLogRepository, mapper) 
+            var (templateRepository, emailHistoryRepository, functionLogRepository, mapper)
                 = SetUp(dbContext, emailTemplateLogger, emailHistoryLogger, functionLogLogger);
 
-            var sut = new EmailService(configuration, notificationClient, templateRepository, emailHistoryRepository, 
+            var sut = new EmailService(configuration, notificationClient, templateRepository, emailHistoryRepository,
                 functionLogRepository, mapper, emailServiceLogger);
 
             var tokens = new Dictionary<string, string>
@@ -289,7 +290,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             await sut.SendEmailAsync(emailTemplate.TemplateName, "test@test.com", opportunity.Id, opportunityItem.Id, tokens, "System");
 
             //Assert
-            var data = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == notificationId);
+            var data = dbContext.EmailHistory.AsNoTracking().FirstOrDefault(x => x.NotificationId == notificationId);
 
             data.Should().NotBeNull();
             data?.EmailTemplateId.Should().Be(emailHistory.EmailTemplateId);
@@ -299,10 +300,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             data?.ModifiedBy.Should().BeNullOrEmpty();
             data?.ModifiedOn.Should().BeNull();
 
+            dbContext.DetachAllEntities();
+
             //Act - Update Email With Status
             await sut.UpdateEmailStatus(payLoad);
 
-            data = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == notificationId);
+            data = dbContext.EmailHistory.AsNoTracking().FirstOrDefault(x => x.NotificationId == notificationId);
 
             data.Should().NotBeNull();
             data?.EmailTemplateId.Should().Be(emailHistory.EmailTemplateId);
