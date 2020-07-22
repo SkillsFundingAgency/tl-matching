@@ -45,6 +45,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.Postcode, config => config.MapFrom(s => s.Postcode))
                 .ForMember(m => m.Source, config => config.MapFrom(s => s.Source))
                 .ForMember(m => m.IsEnabledForReferral, config => config.MapFrom(s => true))
+                .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<AddProviderVenueViewModel, ProviderVenue>>())
                 .ForAllOtherMembers(config => config.Ignore())
                 ;
         }
