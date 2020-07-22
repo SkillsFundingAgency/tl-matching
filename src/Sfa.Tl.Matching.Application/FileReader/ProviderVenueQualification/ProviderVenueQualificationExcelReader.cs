@@ -55,8 +55,11 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenueQualification
                             column.ColumnInfo.SetValue(fileImportDto, cellValue.Trim());
                         }
 
-                        var dto = _mapper.Map<ProviderVenueQualificationDto>(fileImportDto);
-                        providerVenueQualificationReadResult.ProviderVenueQualifications.Add(dto);
+                        if (!string.IsNullOrWhiteSpace(fileImportDto.UkPrn))
+                        {
+                            var dto = _mapper.Map<ProviderVenueQualificationDto>(fileImportDto);
+                            providerVenueQualificationReadResult.ProviderVenueQualifications.Add(dto);
+                        }
 
                         startIndex++;
                     }
@@ -66,10 +69,8 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenueQualification
             {
                 providerVenueQualificationReadResult.Error = $"{FailedToImportMessage} {ex.Message} {ex.InnerException?.Message}";
             }
-            
+
             return providerVenueQualificationReadResult;
         }
-
-
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.Services
@@ -21,10 +22,10 @@ namespace Sfa.Tl.Matching.Application.Services
             _providerQualificationRepository = providerQualificationRepository;
         }
 
-        public async Task<AddQualificationViewModel> GetProviderQualificationAsync(int providerVenueId, int qualificationId)
+        public async Task<ProviderQualificationDto> GetProviderQualificationAsync(int providerVenueId, int qualificationId)
         {
             var providerQualification = await _providerQualificationRepository.GetSingleOrDefaultAsync(p => p.ProviderVenueId == providerVenueId && p.QualificationId == qualificationId);
-            return _mapper.Map<ProviderQualification, AddQualificationViewModel>(providerQualification);
+            return _mapper.Map<ProviderQualificationDto>(providerQualification);
         }
 
         public async Task RemoveProviderQualificationAsync(RemoveProviderQualificationViewModel viewModel)
