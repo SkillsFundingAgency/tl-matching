@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Application.UnitTests.InMemoryDb;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
@@ -166,8 +167,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             await dbContext.OpportunityItem.AddAsync(opportunityItem);
             await dbContext.SaveChangesAsync();
 
+            dbContext.DetachAllEntities();
+
             //Set up the provision gap record
-            var provisionGap = await dbContext.ProvisionGap.FirstOrDefaultAsync();
+            var provisionGap = await dbContext.ProvisionGap.AsNoTracking().FirstOrDefaultAsync();
 
             provisionGap.HadBadExperience = hasBadExperience;
             provisionGap.NoSuitableStudent = hasNoSuitableStudent;
@@ -178,6 +181,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             dbContext.Entry(provisionGap).Property("ProvidersTooFarAway").IsModified = true;
 
             await dbContext.SaveChangesAsync();
+            dbContext.DetachAllEntities();
         }
     }
 }
