@@ -30,11 +30,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
 
         public ValidProviderBuilder AddProviderVenuesWithQualifications()
         {
-            if (_provider.ProviderVenue == null)
-            {
-                _provider.ProviderVenue = new List<Domain.Models.ProviderVenue>();
-            }
-
+            _provider.ProviderVenue ??= new List<Domain.Models.ProviderVenue>();
             _provider.ProviderVenue.Add(new Domain.Models.ProviderVenue
             {
                 Id = 10,

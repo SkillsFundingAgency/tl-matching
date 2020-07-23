@@ -6,6 +6,6 @@ namespace Sfa.Tl.Matching.Tests.Common.Extensions
     /// Adapted from https://github.com/romantitov/MockQueryable/
     /// </remarks>>
 	public class TestExpressionVisitor : ExpressionVisitor
-	{
-	}
+    {
+    }
 }

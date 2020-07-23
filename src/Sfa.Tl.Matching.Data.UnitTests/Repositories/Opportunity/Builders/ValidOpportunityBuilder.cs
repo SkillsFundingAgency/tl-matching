@@ -40,11 +40,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
 
         public ValidOpportunityBuilder AddReferrals(bool isCompleted = false, bool isSelectedForReferral = false)
         {
-            if (_opportunity.OpportunityItem == null)
-            {
-                _opportunity.OpportunityItem = new List<Domain.Models.OpportunityItem>();
-            }
-
+            _opportunity.OpportunityItem ??= new List<Domain.Models.OpportunityItem>();
             _opportunity.OpportunityItem.Add(
                 new Domain.Models.OpportunityItem
                 {
@@ -121,11 +117,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
 
         public ValidOpportunityBuilder AddProvisionGaps()
         {
-            if (_opportunity.OpportunityItem == null)
-            {
-                _opportunity.OpportunityItem = new List<Domain.Models.OpportunityItem>();
-            }
-
+            _opportunity.OpportunityItem ??= new List<Domain.Models.OpportunityItem>();
             _opportunity.OpportunityItem.Add(
                 new Domain.Models.OpportunityItem
                 {
@@ -159,11 +151,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
 
         public ValidOpportunityBuilder AddAbandonedOpportunityItem()
         {
-            if (_opportunity.OpportunityItem == null)
-            {
-                _opportunity.OpportunityItem = new List<Domain.Models.OpportunityItem>();
-            }
-
+            _opportunity.OpportunityItem ??= new List<Domain.Models.OpportunityItem>();
             _opportunity.OpportunityItem.Add(
                 new Domain.Models.OpportunityItem
                 {
@@ -187,11 +175,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
 
         public ValidOpportunityBuilder AddSavedOpportunityItem()
         {
-            if (_opportunity.OpportunityItem == null)
-            {
-                _opportunity.OpportunityItem = new List<Domain.Models.OpportunityItem>();
-            }
-
+            _opportunity.OpportunityItem ??= new List<Domain.Models.OpportunityItem>();
             _opportunity.OpportunityItem.Add(
                 new Domain.Models.OpportunityItem
                 {
