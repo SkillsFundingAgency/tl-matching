@@ -97,8 +97,14 @@ namespace Sfa.Tl.Matching.Application.Services
                     HasTooManyResults = true
                 };
 
-            var results = await _qualificationRepository.GetManyAsync(q => EF.Functions.Like(q.QualificationSearch, $"%{qualificationSearch}%"))
-                .Join(_qualificationRouteMappingRepository.GetManyAsync(), qualification => qualification.Id, qualificationRouteMapping => qualificationRouteMapping.QualificationId, (qualification, qualificationRouteMapping) => new { qualification, qualificationRouteMapping })
+            var qualifications = await _qualificationRepository
+                .GetManyAsync(q => EF.Functions.Like(q.QualificationSearch, $"%{qualificationSearch}%"))
+                .ToListAsync(); //Force results back to the client; needed due to EF Core 3.0 breaking change
+
+            var results = qualifications
+                .Join(_qualificationRouteMappingRepository.GetManyAsync(), qualification => qualification.Id,
+                    qualificationRouteMapping => qualificationRouteMapping.QualificationId,
+                    (qualification, qualificationRouteMapping) => new { qualification, qualificationRouteMapping })
                 .Select(q => new
                 {
                     q.qualification.Id,
@@ -107,8 +113,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     q.qualification.LarId,
                     q.qualificationRouteMapping.RouteId
                 })
-                .OrderBy(q => q.Id)
-                .ToListAsync();
+                .OrderBy(q => q.Id);
 
             var searchResult = results
                 .GroupBy(grp => new { grp.Id, grp.LarId, grp.ShortTitle, grp.Title })
