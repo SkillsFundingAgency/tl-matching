@@ -17,8 +17,9 @@ namespace Sfa.Tl.Matching.Functions
     {
         [FunctionName("SendProviderFeedbackEmails")]
         public async Task SendProviderFeedbackEmails(
-            [TimerTrigger("%ProviderFeedbackTrigger%")]
-            TimerInfo timer,
+#pragma warning disable IDE0060 // Remove unused parameter
+            [TimerTrigger("%ProviderFeedbackTrigger%")] TimerInfo timer,
+#pragma warning restore IDE0060 // Remove unused parameter
             ExecutionContext context,
             ILogger logger,
             [Inject] IProviderFeedbackService providerFeedbackService,
@@ -37,13 +38,13 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error sending provider feedback emails. Internal Error Message {e}";
+                var errorMessage = $"Error sending provider feedback emails. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
                 await functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
                     RowNumber = -1
                 });
@@ -53,7 +54,9 @@ namespace Sfa.Tl.Matching.Functions
         // ReSharper disable once UnusedMember.Global
         [FunctionName("ManualSendProviderFeedbackEmails")]
         public async Task<IActionResult> ManualSendProviderFeedbackEmails(
+#pragma warning disable IDE0060 // Remove unused parameter
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+#pragma warning restore IDE0060 // Remove unused parameter
             ExecutionContext context,
             ILogger logger,
             [Inject] IProviderFeedbackService providerFeedbackService)

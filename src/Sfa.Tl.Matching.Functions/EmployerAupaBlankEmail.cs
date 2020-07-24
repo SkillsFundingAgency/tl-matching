@@ -46,13 +46,13 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error sending employer Aupa email for crm id, {crmId}. Internal Error Message {e}";
+                var errorMessage = $"Error sending employer Aupa email for crm id, {crmId}. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
                 await functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
                     RowNumber = -1
                 });

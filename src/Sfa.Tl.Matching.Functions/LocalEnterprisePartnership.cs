@@ -50,13 +50,13 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error importing LocalEnterprisePartnership data. Internal Error Message {e}";
+                var errorMessage = $"Error importing LocalEnterprisePartnership data. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
                 await functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
                     RowNumber = -1
                 });

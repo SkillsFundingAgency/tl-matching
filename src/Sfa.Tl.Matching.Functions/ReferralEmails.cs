@@ -33,13 +33,13 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error sending employer referral email for opportunity id, {opportunityId}. Internal Error Message {e}";
+                var errorMessage = $"Error sending employer referral email for opportunity id, {opportunityId}. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
                 await functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
                     RowNumber = -1
                 });
@@ -49,7 +49,6 @@ namespace Sfa.Tl.Matching.Functions
 
             logger.LogInformation($"Function {context.FunctionName} sent emails\n" +
                                   $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
-
         }
 
         [FunctionName("SendProviderReferralEmails")]
@@ -71,13 +70,13 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error sending provider referral email for opportunity id, {opportunityId}. Internal Error Message {e}";
+                var errorMessage = $"Error sending provider referral email for opportunity id, {opportunityId}. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
                 await functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
                     RowNumber = -1
                 });
@@ -87,7 +86,6 @@ namespace Sfa.Tl.Matching.Functions
 
             logger.LogInformation($"Function {context.FunctionName} sent emails\n" +
                                   $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
-
         }
     }
 }

@@ -56,15 +56,15 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (AuthenticationException exception)
             {
-                var errormessage = $"Invalid Authorization Token {exception}";
+                var errorMessage = $"Invalid Authorization Token {exception}";
 
-                return await LogError(functionLogRepository, logger, errormessage);
+                return await LogError(functionLogRepository, logger, errorMessage);
             }
             catch (Exception e)
             {
-                var errormessage = $"Error updating email status. Internal Error Message {e}";
+                var errorMessage = $"Error updating email status. Internal Error Message {e}";
 
-                return await LogError(functionLogRepository, logger, errormessage);
+                return await LogError(functionLogRepository, logger, errorMessage);
             }
         }
 
@@ -88,14 +88,14 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage =
+                var errorMessage =
                     $"Error sending failed email notification for Notification Id: {emailDeliveryStatusData.NotificationId}. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
                 await functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
                     RowNumber = -1
                 });
@@ -116,18 +116,18 @@ namespace Sfa.Tl.Matching.Functions
             return token == $"Bearer {emailDeliveryStatusToken}";
         }
 
-        private static async Task<BadRequestObjectResult> LogError(IRepository<FunctionLog> functionLogRepository, ILogger logger, string errormessage)
+        private static async Task<BadRequestObjectResult> LogError(IRepository<FunctionLog> functionLogRepository, ILogger logger, string errorMessage)
         {
-            logger.LogError(errormessage);
+            logger.LogError(errorMessage);
 
             await functionLogRepository.CreateAsync(new FunctionLog
             {
-                ErrorMessage = errormessage,
+                ErrorMessage = errorMessage,
                 FunctionName = nameof(EmailDeliveryStatus),
                 RowNumber = -1
             });
 
-            return new BadRequestObjectResult(errormessage);
+            return new BadRequestObjectResult(errorMessage);
         }
     }
 }

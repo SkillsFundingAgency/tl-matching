@@ -22,8 +22,7 @@ namespace Sfa.Tl.Matching.Functions
     {
         [FunctionName("GenerateBankHolidays")]
         public async Task GenerateBankHolidaysAsync(
-            [TimerTrigger("%BankHolidayGeneratorTrigger%")]
-            TimerInfo timer,
+            [TimerTrigger("%BankHolidayGeneratorTrigger%")] TimerInfo timer,
             ExecutionContext context,
             ILogger logger,
             [Inject] ICalendarApiClient calendarApiClient,
@@ -31,6 +30,7 @@ namespace Sfa.Tl.Matching.Functions
             [Inject] IBulkInsertRepository<BankHoliday> bankHolidayBulkInsertRepository,
             [Inject] IRepository<FunctionLog> functionLogRepository)
         {
+            if (timer == null) throw new ArgumentNullException(nameof(timer));
             try
             {
                 logger.LogInformation($"Function {context.FunctionName} triggered");
@@ -46,13 +46,13 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error loading Bank Holiday Data. Internal Error Message {e}";
+                var errorMessage = $"Error loading Bank Holiday Data. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
                 await functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
                     RowNumber = -1
                 });
@@ -63,7 +63,9 @@ namespace Sfa.Tl.Matching.Functions
         // ReSharper disable once UnusedMember.Global
         [FunctionName("ManualGenerateBankHolidays")]
         public async Task<IActionResult> ManualGenerateBankHolidaysAsync(
+#pragma warning disable IDE0060 // Remove unused parameter
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+#pragma warning restore IDE0060 // Remove unused parameter
             ExecutionContext context,
             ILogger logger,
             [Inject] ICalendarApiClient calendarApiClient,
@@ -88,13 +90,13 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error loading Bank Holiday Data. Internal Error Message {e}";
+                var errorMessage = $"Error loading Bank Holiday Data. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
                 await functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
                     RowNumber = -1
                 });

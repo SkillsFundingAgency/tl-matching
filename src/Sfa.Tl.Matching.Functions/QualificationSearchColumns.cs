@@ -18,7 +18,9 @@ namespace Sfa.Tl.Matching.Functions
         // ReSharper disable once UnusedMember.Global
         [FunctionName("ManualUpdateQualificationSearchColumns")]
         public async Task<IActionResult> ManualUpdateQualificationSearchColumnsAsync(
+#pragma warning disable IDE0060 // Remove unused parameter
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+#pragma warning restore IDE0060 // Remove unused parameter
             ExecutionContext context,
             ILogger logger,
             [Inject] IQualificationService qualificationService,
@@ -40,14 +42,14 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error importing QualificationSearchColumns Data. Internal Error Message {e}";
+                var errorMessage = $"Error importing QualificationSearchColumns Data. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
                 await functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
-                    FunctionName = nameof(QualificationSearchColumns),
+                    ErrorMessage = errorMessage,
+                    FunctionName = context.FunctionName,
                     RowNumber = -1
                 });
                 throw;

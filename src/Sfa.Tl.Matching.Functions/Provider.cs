@@ -16,8 +16,9 @@ namespace Sfa.Tl.Matching.Functions
     {
         [FunctionName("BackFillProviderDisplayName")]
         public async Task BackFillProviderDisplayNameAsync(
-            [TimerTrigger("0 0 0 1 1 *", RunOnStartup = true)]
-            TimerInfo timer,
+#pragma warning disable IDE0060 // Remove unused parameter
+            [TimerTrigger("0 0 0 1 1 *", RunOnStartup = true)] TimerInfo timer,
+#pragma warning restore IDE0060 // Remove unused parameter
             ExecutionContext context,
             ILogger logger,
             [Inject] IRepository<Domain.Models.Provider> providerRepository,
@@ -60,14 +61,14 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error Back Filling Provider Post Town Data. Internal Error Message {e}";
+                var errorMessage = $"Error Back Filling Provider Post Town Data. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
                 await functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
-                    FunctionName = nameof(BackFillProviderDisplayNameAsync),
+                    ErrorMessage = errorMessage,
+                    FunctionName = context.FunctionName,
                     RowNumber = -1
                 });
                 throw;

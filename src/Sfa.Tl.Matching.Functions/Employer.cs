@@ -50,13 +50,13 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error importing Employer Data. Internal Error Message {e}";
+                var errorMessage = $"Error importing Employer Data. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
                 await functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = nameof(QualificationSearchColumns),
                     RowNumber = -1
                 });
@@ -96,13 +96,13 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error importing Employer Data. Internal Error Message {e}";
+                var errorMessage = $"Error importing Employer Data. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
                 await functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = nameof(QualificationSearchColumns),
                     RowNumber = -1
                 });
@@ -142,13 +142,13 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error importing Employer Data. Internal Error Message {e}";
+                var errorMessage = $"Error importing Employer Data. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
                 await functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = nameof(QualificationSearchColumns),
                     RowNumber = -1
                 });

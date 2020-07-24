@@ -18,7 +18,9 @@ namespace Sfa.Tl.Matching.Functions
     {
         [FunctionName("GetMatchingServiceOpportunityReport")]
         public static async Task<IActionResult> GetMatchingServiceOpportunityReportAsync(
+#pragma warning disable IDE0060 // Remove unused parameter
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
+#pragma warning restore IDE0060 // Remove unused parameter
         ExecutionContext context,
         ILogger logger,
         [Inject] IOpportunityRepository opportunityRepository,
@@ -43,13 +45,13 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error Executing {context.FunctionName}. Internal Error Message {e}";
+                var errorMessage = $"Error Executing {context.FunctionName}. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
                 await functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
                     RowNumber = -1
                 });
@@ -59,7 +61,9 @@ namespace Sfa.Tl.Matching.Functions
 
         [FunctionName("GetMatchingServiceProviderOpportunityReport")]
         public static async Task<IActionResult> GetMatchingServiceProviderOpportunityReportAsync(
+#pragma warning disable IDE0060 // Remove unused parameter
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
+#pragma warning restore IDE0060 // Remove unused parameter
         ExecutionContext context,
         ILogger logger,
         [Inject] IOpportunityRepository opportunityRepository,
@@ -84,13 +88,13 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error Executing {context.FunctionName}. Internal Error Message {e}";
+                var errorMessage = $"Error Executing {context.FunctionName}. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
                 await functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
                     RowNumber = -1
                 });
@@ -100,7 +104,9 @@ namespace Sfa.Tl.Matching.Functions
 
         [FunctionName("GetMatchingServiceEmployerReport")]
         public static async Task<IActionResult> GetMatchingServiceEmployerReportAsync(
+#pragma warning disable IDE0060 // Remove unused parameter
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
+#pragma warning restore IDE0060 // Remove unused parameter
             ExecutionContext context,
             ILogger logger,
             [Inject] IRepository<Domain.Models.Employer> employerRepository,
@@ -125,13 +131,13 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error Executing {context.FunctionName}. Internal Error Message {e}";
+                var errorMessage = $"Error Executing {context.FunctionName}. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
                 await functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
                     RowNumber = -1
                 });
@@ -141,7 +147,9 @@ namespace Sfa.Tl.Matching.Functions
 
         [FunctionName("GetMatchingServiceProviderEmployerReport")]
         public static async Task<IActionResult> GetMatchingServiceProviderEmployerReportAsync(
+#pragma warning disable IDE0060 // Remove unused parameter
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
+#pragma warning restore IDE0060 // Remove unused parameter
             ExecutionContext context,
             ILogger logger,
             [Inject] IOpportunityRepository opportunityRepository,
@@ -166,13 +174,13 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error Executing {context.FunctionName}. Internal Error Message {e}";
+                var errorMessage = $"Error Executing {context.FunctionName}. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
                 await functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
                     RowNumber = -1
                 });

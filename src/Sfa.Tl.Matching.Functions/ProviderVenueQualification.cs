@@ -67,12 +67,12 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception ex)
             {
-                var errormessage = $"Error importing ProviderVenueQualification data. Internal Error Message {ex}";
+                var errorMessage = $"Error importing ProviderVenueQualification data. Internal Error Message {ex}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
                 await functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
                     RowNumber = -1
                 });

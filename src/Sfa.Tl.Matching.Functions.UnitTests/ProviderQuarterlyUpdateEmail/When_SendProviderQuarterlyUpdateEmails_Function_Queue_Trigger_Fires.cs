@@ -11,19 +11,22 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderQuarterlyUpdateEmail
 {
     public class When_SendProviderQuarterlyUpdateEmails_Function_Queue_Trigger_Fires
     {
+        private readonly IRepository<FunctionLog> _functionLogRepository;
         private readonly IProviderQuarterlyUpdateEmailService _providerQuarterlyUpdateService;
 
         public When_SendProviderQuarterlyUpdateEmails_Function_Queue_Trigger_Fires()
         {
             _providerQuarterlyUpdateService = Substitute.For<IProviderQuarterlyUpdateEmailService>();
 
+            _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
+
             var providerQuarterlyUpdateEmailFunctions = new Functions.ProviderQuarterlyUpdateEmail();
             providerQuarterlyUpdateEmailFunctions.SendProviderQuarterlyUpdateEmailsAsync(
                 new SendProviderQuarterlyUpdateEmail { BackgroundProcessHistoryId = 1 }, 
                 new ExecutionContext(), 
                 new NullLogger<Functions.Proximity>(), 
-                _providerQuarterlyUpdateService, 
-                Substitute.For<IRepository<FunctionLog>>()).GetAwaiter().GetResult();
+                _providerQuarterlyUpdateService,
+                _functionLogRepository).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -34,6 +37,14 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderQuarterlyUpdateEmail
                 .SendProviderQuarterlyUpdateEmailsAsync(
                     Arg.Is<int>(id => id == 1), 
                     Arg.Is<string>(u => u == "System"));
+        }
+
+        [Fact]
+        public void FunctionLogRepository_Create_Is_Not_Called()
+        {
+            _functionLogRepository
+                .DidNotReceiveWithAnyArgs()
+                .CreateAsync(Arg.Any<FunctionLog>());
         }
     }
 }
