@@ -4,11 +4,14 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Extensions;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Application.UnitTests.InMemoryDb;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
@@ -20,7 +23,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
 {
     public class When_NavigationService_Is_Called_To_Add_Current_Link
     {
-
         [Theory, AutoDomainData]
         public async Task Then_Add_Current_Link(
             MatchingDbContext dbContext,
@@ -57,9 +59,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
             var sut = new Application.Services.NavigationService(mapper, repo);
 
             //Act
-            await sut.AddCurrentUrlAsync("/Start", username);
-            await sut.AddCurrentUrlAsync("/find-providers", username);
-            await sut.AddCurrentUrlAsync("/test-url", username);
+            await AddTestUrls(sut, dbContext, username, new List<string> { "/Start", "/find-providers", "/test-url" });
 
             var addedItem = await repo.GetFirstOrDefaultAsync(x => x.CreatedBy == username);
 
@@ -98,8 +98,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
             var sut = new Application.Services.NavigationService(mapper, repo);
 
             //Act
-            await sut.AddCurrentUrlAsync("/Account/PostSignIn", username);
-            await sut.AddCurrentUrlAsync("referral-create", username);
+            await AddTestUrls(sut, dbContext, username, new List<string> { "/Account/PostSignIn", "referral-create" });
 
             var addedItem = await repo.GetFirstOrDefaultAsync(x => x.CreatedBy == username);
 
@@ -145,15 +144,18 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
             var sut = new Application.Services.NavigationService(mapper, repo);
 
             //Act
-            await sut.AddCurrentUrlAsync("/Start", username);
-            await sut.AddCurrentUrlAsync("/find-providers", username);
-            await sut.AddCurrentUrlAsync("/test-url", username);
-            await sut.AddCurrentUrlAsync("/any-url", username);
-            await sut.AddCurrentUrlAsync("/provider-results-for-opportunity-0-item", username);
-            await sut.AddCurrentUrlAsync("/provider-results-for-opportunity-1-item", username);
-            await sut.AddCurrentUrlAsync("/provider-results-for-opportunity-2-item", username);
-            await sut.AddCurrentUrlAsync("/provider-results-for-opportunity-0-item-0-within-30-miles-of-MK9%203XS-for-route-5", username);
-            await sut.AddCurrentUrlAsync("/provider-results-for-opportunity-0-item-0-within-30-miles-of-MK9%203XS-for-route-1", username);
+            await AddTestUrls(sut, dbContext, username, new List<string>
+            {
+                "/Start", 
+                "/find-providers",
+                "/test-url",
+                "/any-url",
+                "/provider-results-for-opportunity-0-item",
+                "/provider-results-for-opportunity-1-item",
+                "/provider-results-for-opportunity-2-item",
+                "/provider-results-for-opportunity-0-item-0-within-30-miles-of-MK9%203XS-for-route-5",
+                "/provider-results-for-opportunity-0-item-0-within-30-miles-of-MK9%203XS-for-route-1"
+            });
 
             var addedItem = await repo.GetFirstOrDefaultAsync(x => x.CreatedBy == username);
 
@@ -200,12 +202,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
             var sut = new Application.Services.NavigationService(mapper, repo);
 
             //Act
-            await sut.AddCurrentUrlAsync("/Start", username);
-            await sut.AddCurrentUrlAsync("/find-providers", username);
-            await sut.AddCurrentUrlAsync("/find-providers", username);
-            await sut.AddCurrentUrlAsync("/test-url", username);
-            await sut.AddCurrentUrlAsync("/test-url", username);
-            await sut.AddCurrentUrlAsync("/provider-results-for-opportunity-0-item", username);
+            await AddTestUrls(sut, dbContext, username, new List<string>
+            {
+                "/Start",
+                "/find-providers",
+                "/find-providers",
+                "/test-url",
+                "/test-url",
+                "/provider-results-for-opportunity-0-item"
+            });
 
             var addedItem = await repo.GetFirstOrDefaultAsync(x => x.CreatedBy == username);
 
@@ -217,6 +222,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
             addedItem.Value.Should().Contain(url => url.Id == 2).Which.Url.Should().Contain("/find-providers");
             addedItem.Value.Should().Contain(url => url.Id == 3).Which.Url.Should().Contain("/test-url");
             addedItem.Value.Should().Contain(url => url.Id == 4).Which.Url.Should().Contain("/provider-results-for-opportunity-0-item");
+        }
+
+        private static async Task AddTestUrls(INavigationService navigationService, DbContext dbContext, string username, IEnumerable<string> urls)
+        {
+            foreach (var url in urls)
+            {
+                await navigationService.AddCurrentUrlAsync(url, username);
+                dbContext.DetachAllEntities();
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.InMemoryDb
 {
@@ -8,7 +9,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.InMemoryDb
         {
             foreach (var entity in context.ChangeTracker.Entries())
             {
-                entity.State = EntityState.Detached;
+                if (entity.State != EntityState.Detached)
+                {
+                    entity.State = EntityState.Detached;
+                }
             }
         }
     }
