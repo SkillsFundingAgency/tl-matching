@@ -11,6 +11,7 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
@@ -61,37 +62,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
             });
             var mapper = new Mapper(config);
 
-            var opportunityItems = new List<OpportunityItem>
-            {
-                new OpportunityItem
-                {
-                    Id = 1,
-                    IsSaved = true,
-                    IsSelectedForReferral = true,
-                    OpportunityType = OpportunityType.Referral.ToString()
-                },
-                new OpportunityItem
-                {
-                    Id = 2,
-                    IsSaved = true,
-                    IsSelectedForReferral = true,
-                    OpportunityType = OpportunityType.Referral.ToString()
-                },
-                new OpportunityItem
-                {
-                    Id = 3,
-                    IsSaved = true,
-                    IsSelectedForReferral = true,
-                    OpportunityType = OpportunityType.Referral.ToString()
-                },
-                new OpportunityItem
-                {
-                    Id = 4,
-                    IsSaved = true,
-                    IsSelectedForReferral = true,
-                    OpportunityType = OpportunityType.ProvisionGap.ToString()
-                }
-            };
+            var opportunityItems = new ValidOpportunityItemListBuilder().Build();
 
             _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             _opportunityItemRepository.GetManyAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
@@ -99,85 +70,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
                     .AsQueryable());
 
             opportunityRepo.GetProviderReferralsAsync(Arg.Any<int>(), Arg.Any<IEnumerable<int>>())
-                .Returns(new List<OpportunityReferralDto>
-                {
-                    new OpportunityReferralDto
-                    {
-                        OpportunityId = 1,
-                        OpportunityItemId = 1,
-                        ProviderPrimaryContact = "contact",
-                        ProviderName = "Name",
-                        RouteName = "Routename",
-                        ProviderVenueTown = "Provider town",
-                        ProviderVenuePostcode = "Provider postcode",
-                        DistanceFromEmployer = "3.5",
-                        JobRole = "Job role",
-                        CompanyName = "Companyname",
-                        EmployerContact = "Employer contact",
-                        EmployerContactPhone = "Employer phone",
-                        EmployerContactEmail = "Employer email",
-                        Town = "Town",
-                        Postcode =  "Postcode",
-                        Placements =  1
-                    },
-                    new OpportunityReferralDto
-                    {
-                        OpportunityId = 1,
-                        OpportunityItemId = 2,
-                        ProviderPrimaryContact = "contact",
-                        ProviderName = "Name",
-                        RouteName = "Routename",
-                        ProviderVenueTown = "Provider town",
-                        ProviderVenuePostcode = "Provider postcode",
-                        DistanceFromEmployer = "3.5",
-                        JobRole = "Job role",
-                        CompanyName = "Companyname",
-                        EmployerContact = "Employer contact",
-                        EmployerContactPhone = "Employer phone",
-                        EmployerContactEmail = "Employer email",
-                        Town = "Town",
-                        Postcode =  "Postcode",
-                        Placements =  1
-                    },
-                    new OpportunityReferralDto
-                    {
-                        OpportunityId = 1,
-                        OpportunityItemId = 3,
-                        ProviderPrimaryContact = "contact",
-                        ProviderName = "Name",
-                        RouteName = "Routename",
-                        ProviderVenueTown = "Provider town",
-                        ProviderVenuePostcode = "Provider postcode",
-                        DistanceFromEmployer = "3.5",
-                        JobRole = "Job role",
-                        CompanyName = "Companyname",
-                        EmployerContact = "Employer contact",
-                        EmployerContactPhone = "Employer phone",
-                        EmployerContactEmail = "Employer email",
-                        Town = "Town",
-                        Postcode =  "Postcode",
-                        Placements =  1
-                    },
-                    new OpportunityReferralDto
-                    {
-                        OpportunityId = 1,
-                        OpportunityItemId = 4,
-                        ProviderPrimaryContact = "contact",
-                        ProviderName = "Name",
-                        RouteName = "Routename",
-                        ProviderVenueTown = "Provider town",
-                        ProviderVenuePostcode = "Provider postcode",
-                        DistanceFromEmployer = "3.5",
-                        JobRole = "Job role",
-                        CompanyName = "Companyname",
-                        EmployerContact = "Employer contact",
-                        EmployerContactPhone = "Employer phone",
-                        EmployerContactEmail = "Employer email",
-                        Town = "Town",
-                        Postcode =  "Postcode",
-                        Placements =  1
-                    }
-                });
+                .Returns(new ValidOpportunityReferralDtoListBuilder()
+                    .BuildWithMultipleReferrals());
 
             backgroundProcessHistoryRepo.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>()).Returns(new BackgroundProcessHistory
             {

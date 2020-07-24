@@ -2,7 +2,7 @@
 using System.Linq;
 using Sfa.Tl.Matching.Models.Dto;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail.Builders
 {
     public class ValidEmployerReferralDtoBuilder
     {
