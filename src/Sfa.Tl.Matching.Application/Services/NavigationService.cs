@@ -67,7 +67,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
             if (currentUrl.Contains("Start"))
                 await DeleteOrphanedUrlsAsync(userCache);
-
         }
 
         private async Task CreateBackLinkDataAsync(UserCache data, List<CurrentUrl> urlList, string currentUrl)
@@ -144,7 +143,8 @@ namespace Sfa.Tl.Matching.Application.Services
             "download-opportunity",
             "remove-opportunityItem",
             "provisiongap-opportunities",
-            "get-admin-back-link"
+            "get-admin-back-link",
+            "/search-short-title"
         };
     }
 }
