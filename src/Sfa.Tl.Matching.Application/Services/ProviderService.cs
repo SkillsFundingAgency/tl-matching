@@ -83,7 +83,8 @@ namespace Sfa.Tl.Matching.Application.Services
                                             Postcode = venue.Postcode,
                                             IsRemoved = venue.IsRemoved,
                                             IsEnabledForReferral = venue.IsEnabledForReferral,
-                                            QualificationCount = venue.ProviderQualification.Count
+                                            QualificationCount = venue.ProviderQualification.Count(pq => !pq.IsDeleted && 
+                                                                                                         !pq.Qualification.IsDeleted)
                                         })
                                         .OrderBy(v => v.Postcode).ToList()
                     });
