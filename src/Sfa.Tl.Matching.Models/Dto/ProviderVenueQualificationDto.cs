@@ -1,4 +1,7 @@
-﻿namespace Sfa.Tl.Matching.Models.Dto
+﻿using System.Collections;
+using System.Collections.Generic;
+
+namespace Sfa.Tl.Matching.Models.Dto
 {
     public class ProviderVenueQualificationDto
     {
@@ -23,7 +26,7 @@
         public string LarId { get; set; }
         public string QualificationTitle { get; set; }
         public string QualificationShortTitle { get; set; }
-        public bool QualificationIsDeleted { get; set; }
-        public string Route { get; set; }
+        public bool QualificationIsOffered { get; set; }
+        public IList<string> Routes { get; set; }
     }
 }

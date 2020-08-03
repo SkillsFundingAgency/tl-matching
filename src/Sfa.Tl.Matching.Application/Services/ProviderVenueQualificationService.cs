@@ -57,8 +57,8 @@ namespace Sfa.Tl.Matching.Application.Services
                         {
                             UkPrn = providerVenueQualification.UkPrn,
                             Name = providerVenueQualification.Name,
-                            DisplayName = !string.IsNullOrWhiteSpace(providerVenueQualification.DisplayName) 
-                                ? providerVenueQualification.DisplayName 
+                            DisplayName = !string.IsNullOrWhiteSpace(providerVenueQualification.DisplayName)
+                                ? providerVenueQualification.DisplayName
                                 : providerVenueQualification.Name,
                             PrimaryContact = providerVenueQualification.PrimaryContact,
                             PrimaryContactEmail = providerVenueQualification.PrimaryContactEmail,
@@ -113,7 +113,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     }
 
                     // Provider Venue Delete
-                    if (providerVenueQualification.VenueIsRemoved && venueViewModel != null)
+                    if (venueViewModel != null && venueViewModel.IsRemoved != providerVenueQualification.VenueIsRemoved)
                     {
                         var removeProviderVenueViewModel = new RemoveProviderVenueViewModel
                         {
@@ -122,11 +122,14 @@ namespace Sfa.Tl.Matching.Application.Services
                             ProviderVenueId = venueViewModel.Id
                         };
 
-                        await _providerVenueService.UpdateVenueAsync(removeProviderVenueViewModel);
+                        if (providerVenueQualification.VenueIsRemoved)
+                            await _providerVenueService.UpdateVenueAsync(removeProviderVenueViewModel);
+                        else
+                            await _providerVenueService.UpdateVenueToNotRemovedAsync(removeProviderVenueViewModel);
                     }
 
                     // Qualification
-                    if (!providerVenueQualification.VenueIsRemoved)
+                    if (venueViewModel != null && !providerVenueQualification.VenueIsRemoved)
                     {
                         var qualification = await _qualificationService.GetQualificationAsync(providerVenueQualification.LarId);
 
@@ -153,7 +156,7 @@ namespace Sfa.Tl.Matching.Application.Services
                         var providerQualificationViewModel = await _providerQualificationService.GetProviderQualificationAsync(venueViewModel.Id, qualificationId);
 
                         // Delete Provider Venue Qualification
-                        if (providerVenueQualification.QualificationIsDeleted && providerQualificationViewModel != null)
+                        if (!providerVenueQualification.QualificationIsOffered && providerQualificationViewModel != null)
                         {
                             var removeProviderQualificationViewModel = new RemoveProviderQualificationViewModel
                             {
@@ -182,26 +185,34 @@ namespace Sfa.Tl.Matching.Application.Services
                         }
 
                         // Route Mapping
-                        var route = await _routePathService.GetRouteSummaryByNameAsync(providerVenueQualification.Route);
-
-                        if (route == null)
+                        foreach (var routeName in providerVenueQualification.Routes)
                         {
-                            result.HasErrors = true;
-                            result.Message = $"Data Error: Route {providerVenueQualification.Route} not found in existing Routes.";
-                            continue;
-                        }
 
-                        var routeMapping = await _qualificationRouteMappingService.GetQualificationRouteMappingAsync(route.Id, qualificationId);
+                            var route = await _routePathService.GetRouteSummaryByNameAsync(routeName);
 
-                        if (routeMapping == null)
-                        {
-                            var qualificationRouteMappingViewModel = new QualificationRouteMappingViewModel
+                            if (route == null)
                             {
-                                RouteId = route.Id,
-                                QualificationId = qualificationId
-                            };
+                                result.HasErrors = true;
+                                result.Message =
+                                    $"Data Error: Route {routeName} not found in existing Routes.";
+                                continue;
+                            }
 
-                            await _qualificationRouteMappingService.CreateQualificationRouteMappingAsync(qualificationRouteMappingViewModel);
+                            var routeMapping =
+                                await _qualificationRouteMappingService.GetQualificationRouteMappingAsync(route.Id,
+                                    qualificationId);
+
+                            if (routeMapping == null)
+                            {
+                                var qualificationRouteMappingViewModel = new QualificationRouteMappingViewModel
+                                {
+                                    RouteId = route.Id,
+                                    QualificationId = qualificationId
+                                };
+
+                                await _qualificationRouteMappingService.CreateQualificationRouteMappingAsync(
+                                    qualificationRouteMappingViewModel);
+                            }
                         }
                     }
                 }
@@ -278,15 +289,9 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return (isUpdated, providerDetailViewModel);
         }
-
-        private bool ValidateToUpdate(string valueToUpdate, string value)
+        private bool ValidateToUpdate(string oldValueToUpdate, string newValue)
         {
-            if (!string.IsNullOrEmpty(valueToUpdate) && valueToUpdate != value)
-            {
-                return true;
-            }
-
-            return false;
+            return !string.IsNullOrEmpty(newValue) && oldValueToUpdate != newValue;
         }
     }
 }

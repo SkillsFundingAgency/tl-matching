@@ -15,11 +15,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 {
-    public class When_ProviderVenueService_Is_Called_To_Remove_Venue
+    public class When_ProviderVenueService_Is_Called_To_Unremove_Venue
     {
         private readonly IProviderVenueRepository _providerVenueRepository;
 
-        public When_ProviderVenueService_Is_Called_To_Remove_Venue()
+        public When_ProviderVenueService_Is_Called_To_Unremove_Venue()
         {
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
 
@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
                 ProviderId = 1,
                 ProviderVenueId = 1
             };
-            service.UpdateVenueAsync(viewModel).GetAwaiter().GetResult();
+            service.UpdateVenueToNotRemovedAsync(viewModel).GetAwaiter().GetResult();
         }
         
         [Fact]
@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
                 .UpdateWithSpecifiedColumnsOnlyAsync(Arg.Is<Domain.Models.ProviderVenue>(
                     pv =>
                         pv.Id == 1 &&
-                        pv.IsRemoved
+                        !pv.IsRemoved
                         ),
                     Arg.Any<Expression<Func<Domain.Models.ProviderVenue, object>>[]>());
         }

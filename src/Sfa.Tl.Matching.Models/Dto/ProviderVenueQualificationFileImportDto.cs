@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Models.Dto
         [Column(Order = 18)] public string LarId { get; set; }
         [Column(Order = 19)] public string QualificationTitle { get; set; }
         [Column(Order = 20)] public string QualificationShortTitle { get; set; }
-        [Column(Order = 21)] public string QualificationIsDeleted { get; set; }
-        [Column(Order = 22)] public string Route { get; set; }
+        [Column(Order = 21)] public string QualificationIsOffered { get; set; }
+        [Column(Order = 22)] public string Routes { get; set; }
     }
 }

@@ -109,6 +109,18 @@ namespace Sfa.Tl.Matching.Application.Services
                 x => x.ModifiedBy);
         }
 
+
+        public async Task UpdateVenueToNotRemovedAsync(RemoveProviderVenueViewModel viewModel)
+        {
+            var providerVenue = _mapper.Map<RemoveProviderVenueViewModel, ProviderVenue>(viewModel);
+            providerVenue.IsRemoved = false;
+
+            await _providerVenueRepository.UpdateWithSpecifiedColumnsOnlyAsync(providerVenue,
+                x => x.IsRemoved,
+                x => x.ModifiedOn,
+                x => x.ModifiedBy);
+        }
+
         public async Task<RemoveProviderVenueViewModel> GetRemoveProviderVenueViewModelAsync(int providerVenueId)
         {
             var providerVenue = await _providerVenueRepository.GetSingleOrDefaultAsync(p => p.Id == providerVenueId);

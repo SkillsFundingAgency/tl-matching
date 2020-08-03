@@ -47,11 +47,11 @@ namespace Sfa.Tl.Matching.Application.Mappers
 
             Map(m => m.QualificationShortTitle).Name("Qualification Short Title");
 
-            Map(m => m.QualificationIsDeleted).Name("Qualification IsDeleted")
+            Map(m => m.QualificationIsOffered).Name("'Is this course offering a CDF Industry Placement in 20/21?")
                 .TypeConverterOption.BooleanValues(true, true, "TRUE", "Yes")
                 .TypeConverterOption.BooleanValues(false, true, "FALSE", "No", "-", "");
 
-            Map(m => m.Route).Name("Route");
+            Map(m => m.Routes).Name("Route");
         }
     }
 }
