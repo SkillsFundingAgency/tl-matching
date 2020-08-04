@@ -27,19 +27,19 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                     SecondaryContact = "test secondary contact",
                     SecondaryContactEmail = "testsecondary@test.com",
                     SecondaryContactPhone = "01234567891"
-                    }
+                }
             };
         }
 
-        public ValidProviderVenueQualificationFileImportDtoListBuilder AddVenue()
+        public ValidProviderVenueQualificationFileImportDtoListBuilder AddVenue(bool isEnabledForReferral = false, bool isRemoved = false)
         {
             var providerVenueQualificationDto = _providerVenueQualificationDtoList.First();
 
             providerVenueQualificationDto.VenueName = "Test Provider Venue";
             providerVenueQualificationDto.VenuePostcode = "CV1 2WT";
             providerVenueQualificationDto.Town = "Coventry";
-            providerVenueQualificationDto.VenueIsEnabledForReferral = true;
-            providerVenueQualificationDto.VenueIsRemoved = false;
+            providerVenueQualificationDto.VenueIsEnabledForReferral = isEnabledForReferral;
+            providerVenueQualificationDto.VenueIsRemoved = isRemoved;
 
             return this;
         }

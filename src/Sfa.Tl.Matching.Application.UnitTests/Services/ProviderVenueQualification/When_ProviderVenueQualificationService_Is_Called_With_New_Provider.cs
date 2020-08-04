@@ -14,22 +14,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
     public class When_ProviderVenueQualificationService_Is_Called_With_New_Provider
     {
         private readonly IProviderService _providerService;
-        private readonly IProviderVenueService _providerVenueService;
-        private readonly IProviderQualificationService _providerQualificationService;
-        private readonly IQualificationService _qualificationService;
-        private readonly IRoutePathService _routePathService;
-        private readonly IQualificationRouteMappingService _qualificationRouteMappingService;
-
         private readonly IEnumerable<ProviderVenueQualificationUpdateResultsDto> _results;
 
         public When_ProviderVenueQualificationService_Is_Called_With_New_Provider()
         {
             _providerService = Substitute.For<IProviderService>();
-            _providerVenueService = Substitute.For<IProviderVenueService>();
-            _providerQualificationService = Substitute.For<IProviderQualificationService>();
-            _qualificationService = Substitute.For<IQualificationService>();
-            _routePathService = Substitute.For<IRoutePathService>();
-            _qualificationRouteMappingService = Substitute.For<IQualificationRouteMappingService>();
+            var providerVenueService = Substitute.For<IProviderVenueService>();
+            var providerQualificationService = Substitute.For<IProviderQualificationService>();
+            var qualificationService = Substitute.For<IQualificationService>();
+            var routePathService = Substitute.For<IRoutePathService>();
+            var qualificationRouteMappingService = Substitute.For<IQualificationRouteMappingService>();
 
             _providerService.SearchAsync(10000001)
                 .Returns((ProviderSearchResultDto) null);
@@ -39,16 +33,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
             var providerVenueQualificationService = new ProviderVenueQualificationService
                 (
                    _providerService,
-                   _providerVenueService,
-                   _providerQualificationService,
-                   _qualificationService,
-                    _routePathService,
-                   _qualificationRouteMappingService
+                   providerVenueService,
+                   providerQualificationService,
+                   qualificationService,
+                   routePathService,
+                   qualificationRouteMappingService
                 );
 
-            var dto = new ValidProviderVenueQualificationFileImportDtoListBuilder().Build();
+            var dtoList = new ValidProviderVenueQualificationFileImportDtoListBuilder().Build();
 
-            _results = providerVenueQualificationService.Update(dto).GetAwaiter().GetResult();
+            _results = providerVenueQualificationService.Update(dtoList).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -97,7 +91,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                          p.PrimaryContactPhone == "01234567890" &&
                          p.SecondaryContact == "test secondary contact" &&
                          p.SecondaryContactEmail == "testsecondary@test.com" &&
-                         p.SecondaryContactPhone == "01234567891"));
+                         p.SecondaryContactPhone == "01234567891" &&
+                         p.Source == "Import"));
         }
     }
 }

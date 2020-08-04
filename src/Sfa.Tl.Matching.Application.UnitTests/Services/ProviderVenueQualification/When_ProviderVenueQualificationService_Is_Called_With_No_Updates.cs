@@ -11,54 +11,71 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualification
 {
-    public class When_ProviderVenueQualificationService_Is_Called_To_Update_Provider
+    public class When_ProviderVenueQualificationService_Is_Called_With_No_Updates
     {
         private readonly IProviderService _providerService;
+        private readonly IProviderVenueService _providerVenueService;
         private readonly IEnumerable<ProviderVenueQualificationUpdateResultsDto> _results;
 
-        public When_ProviderVenueQualificationService_Is_Called_To_Update_Provider()
+        public When_ProviderVenueQualificationService_Is_Called_With_No_Updates()
         {
             _providerService = Substitute.For<IProviderService>();
-            var providerVenueService = Substitute.For<IProviderVenueService>();
+            _providerVenueService = Substitute.For<IProviderVenueService>();
             var providerQualificationService = Substitute.For<IProviderQualificationService>();
             var qualificationService = Substitute.For<IQualificationService>();
             var routePathService = Substitute.For<IRoutePathService>();
             var qualificationRouteMappingService = Substitute.For<IQualificationRouteMappingService>();
 
+            var dtoList = new ValidProviderVenueQualificationFileImportDtoListBuilder()
+                .AddVenue()
+                .Build();
+            var dto = dtoList.First();
+
             _providerService.SearchAsync(10000001)
                 .Returns(new ProviderSearchResultDto
                 {
                     Id = 1,
-                    UkPrn = 10000001,
-                    Name = "ProviderName"
+                    UkPrn = dto.UkPrn,
+                    Name = dto.ProviderName
                 });
 
             _providerService.GetProviderDetailByIdAsync(1)
                 .Returns(new ProviderDetailViewModel
                 {
+                    UkPrn = dto.UkPrn,
+                    Name = dto.ProviderName,
+                    DisplayName = dto.DisplayName,
+                    IsCdfProvider = dto.IsCdfProvider,
+                    IsEnabledForReferral = dto.IsEnabledForReferral,
+                    PrimaryContact = dto.PrimaryContact,
+                    PrimaryContactEmail = dto.PrimaryContactEmail,
+                    PrimaryContactPhone = dto.PrimaryContactPhone,
+                    SecondaryContact = dto.SecondaryContact,
+                    SecondaryContactEmail = dto.SecondaryContactEmail,
+                    SecondaryContactPhone = dto.SecondaryContactPhone
+                });
+
+            _providerVenueService
+                .GetVenueAsync(1, "CV1 2WT")
+                .Returns(new ProviderVenueDetailViewModel
+                {
                     Id = 1,
-                    UkPrn = 10000001,
-                    Name = "Old Name",
-                    DisplayName = "Old Display Name",
-                    PrimaryContact = "Old Primary Contact",
-                    PrimaryContactEmail = "oldtestprimary@test.com",
-                    PrimaryContactPhone = "0771234567",
-                    SecondaryContact = "Old Secondary Contact",
-                    SecondaryContactEmail = "oldtestsecondary@test.com",
-                    SecondaryContactPhone = "08812345678"
+                    ProviderId = 1,
+                    Postcode = dto.VenuePostcode,
+                    Name = dto.VenueName,
+                    IsEnabledForReferral = dto.VenueIsEnabledForReferral,
+                    Qualifications = new List<QualificationDetailViewModel>()
                 });
 
             var providerVenueQualificationService = new ProviderVenueQualificationService
                 (
                    _providerService,
-                   providerVenueService,
+                   _providerVenueService,
                    providerQualificationService,
                    qualificationService,
                    routePathService,
                    qualificationRouteMappingService
                 );
-
-            var dtoList = new ValidProviderVenueQualificationFileImportDtoListBuilder().Build();
 
             _results = providerVenueQualificationService.Update(dtoList).GetAwaiter().GetResult();
         }
@@ -86,29 +103,36 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
         }
 
         [Fact]
-        public void Then_ProviderService_UpdateProviderDetailAsync_Is_Called_Exactly_Once()
+        public void Then_ProviderService_UpdateProviderDetailAsync_Is_Not_Called()
         {
-            _providerService.Received(1)
+            _providerService
+                .DidNotReceive()
                 .UpdateProviderDetailAsync(Arg.Any<ProviderDetailViewModel>());
+        }
+        
+        [Fact]
+        public void Then_ProviderVenueService_UpdateVenueAsync_Is_Not_Called()
+        {
+            _providerVenueService
+                .DidNotReceive()
+                .UpdateVenueAsync(Arg.Any<ProviderVenueDetailViewModel>());
         }
 
         [Fact]
-        public void Then_ProviderService_UpdateProviderDetailAsync_Is_Called_Exactly_Once_With_Expected_Values()
+        public void Then_ProviderVenueService_UpdateVenueAsync_Is_Not_Called_To_Remove_Venue()
         {
-            _providerService.Received(1)
-                .UpdateProviderDetailAsync(Arg.Is<ProviderDetailViewModel>(p =>
-                    p.Id == 1 &&
-                    p.UkPrn == 10000001 &&
-                    p.Name == "Test Provider Name" &&
-                    p.DisplayName == "Test Provider Display Name" &&
-                    p.IsCdfProvider &&
-                    p.IsEnabledForReferral.HasValue && p.IsEnabledForReferral.Value &&
-                    p.PrimaryContact == "test primary contact" &&
-                    p.PrimaryContactEmail == "testprimary@test.com" &&
-                    p.PrimaryContactPhone == "01234567890" &&
-                    p.SecondaryContact == "test secondary contact" &&
-                    p.SecondaryContactEmail == "testsecondary@test.com" &&
-                    p.SecondaryContactPhone == "01234567891"));
+            _providerVenueService
+                .DidNotReceive()
+                .UpdateVenueAsync(Arg.Any<RemoveProviderVenueViewModel>());
         }
+
+        [Fact]
+        public void Then_ProviderVenueService_UpdateVenueToNotRemovedAsync_Is_Not_Called()
+        {
+            _providerVenueService
+                .DidNotReceive()
+                .UpdateVenueToNotRemovedAsync(Arg.Any<RemoveProviderVenueViewModel>());
+        }
+
     }
 }
