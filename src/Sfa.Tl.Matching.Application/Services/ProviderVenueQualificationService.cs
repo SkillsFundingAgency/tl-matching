@@ -166,16 +166,7 @@ namespace Sfa.Tl.Matching.Application.Services
                             // Delete Provider Venue Qualification
                             if (!providerVenueQualification.QualificationIsOffered && providerQualificationViewModel != null)
                             {
-                                var removeProviderQualificationViewModel = new RemoveProviderQualificationViewModel
-                                {
-                                    LarId = providerVenueQualification.LarId,
-                                    QualificationId = qualificationId,
-                                    Source = Source,
-                                    ProviderVenueId = venueViewModel.Id,
-                                    Postcode = venueViewModel.Postcode
-                                };
-
-                                await _providerQualificationService.RemoveProviderQualificationAsync(removeProviderQualificationViewModel);
+                                await _providerQualificationService.RemoveProviderQualificationAsync(venueViewModel.Id, qualificationId);
                             }
 
                             if (providerQualificationViewModel == null)
@@ -227,7 +218,6 @@ namespace Sfa.Tl.Matching.Application.Services
                 {
                     result.HasErrors = true;
                     result.Message = $"UkPrn: {providerVenueQualification.UkPrn} Import failed \n Error Message: {ex.Message}\n StackTrace: {ex.StackTrace}";
-                    continue;
                 }
 
                 results.Add(result);

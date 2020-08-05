@@ -44,7 +44,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
             return this;
         }
 
-        public ValidProviderVenueQualificationFileImportDtoListBuilder AddQualificationWithRoutes()
+        public ValidProviderVenueQualificationFileImportDtoListBuilder AddQualificationWithRoutes(bool qualificationIsOffered = true)
         {
             var providerVenueQualificationDto = _providerVenueQualificationDtoList.First();
 
@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
             providerVenueQualificationDto.VenuePostcode = "CV1 2WT";
             providerVenueQualificationDto.QualificationTitle = "Full qualification title";
             providerVenueQualificationDto.QualificationShortTitle = "Short qualification title";
-            providerVenueQualificationDto.QualificationIsOffered = true;
+            providerVenueQualificationDto.QualificationIsOffered = qualificationIsOffered;
             providerVenueQualificationDto.Routes = new List<string>
             {
                 "Agriculture, environmental and animal care",

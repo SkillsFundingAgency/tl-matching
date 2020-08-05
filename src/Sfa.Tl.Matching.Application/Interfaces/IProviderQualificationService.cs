@@ -9,6 +9,5 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<int> CreateProviderQualificationAsync(AddQualificationViewModel viewModel);
         Task RemoveProviderQualificationAsync(int providerVenueId, int qualificationId);
         Task<ProviderQualificationDto> GetProviderQualificationAsync(int providerVenueId, int qualificationId);
-        Task RemoveProviderQualificationAsync(RemoveProviderQualificationViewModel viewModel);
     }
 }

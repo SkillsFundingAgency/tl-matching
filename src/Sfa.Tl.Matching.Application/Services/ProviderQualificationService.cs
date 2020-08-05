@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -24,23 +23,15 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<ProviderQualificationDto> GetProviderQualificationAsync(int providerVenueId, int qualificationId)
         {
-            var providerQualification = await _providerQualificationRepository.GetSingleOrDefaultAsync(p => p.ProviderVenueId == providerVenueId && p.QualificationId == qualificationId);
-            return _mapper.Map<ProviderQualificationDto>(providerQualification);
+            var providerQualification = await _providerQualificationRepository
+                .GetSingleOrDefaultAsync(p => p.ProviderVenueId == providerVenueId && 
+                                              p.QualificationId == qualificationId);
+
+            return providerQualification != null && !providerQualification.IsDeleted 
+                ? _mapper.Map<ProviderQualificationDto>(providerQualification)
+                : null;
         }
-
-        public async Task RemoveProviderQualificationAsync(RemoveProviderQualificationViewModel viewModel)
-        {
-            var providerQualification = _mapper.Map<RemoveProviderQualificationViewModel, ProviderQualification>(viewModel);
-            providerQualification.IsDeleted = true;
-            providerQualification.ModifiedOn = DateTime.UtcNow;
-            providerQualification.ModifiedBy = "System";
-
-            await _providerQualificationRepository.UpdateWithSpecifiedColumnsOnlyAsync(providerQualification,
-                x => x.IsDeleted,
-                x => x.ModifiedOn,
-                x => x.ModifiedBy);
-        }
-
+        
         public async Task<int> CreateProviderQualificationAsync(AddQualificationViewModel viewModel)
         {
             var providerQualification = await _providerQualificationRepository.GetSingleOrDefaultAsync(
