@@ -13,25 +13,24 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
 {
     public class When_ProviderVenueQualificationService_Is_Called_To_Update_ProviderVenue
     {
-        private readonly IProviderService _providerService;
         private readonly IProviderVenueService _providerVenueService;
         private readonly IProviderQualificationService _providerQualificationService;
+        private readonly IQualificationRouteMappingService _qualificationRouteMappingService;
         private readonly IQualificationService _qualificationService;
         private readonly IRoutePathService _routePathService;
-        private readonly IQualificationRouteMappingService _qualificationRouteMappingService;
 
         private readonly IEnumerable<ProviderVenueQualificationUpdateResultsDto> _results;
 
         public When_ProviderVenueQualificationService_Is_Called_To_Update_ProviderVenue()
         {
-            _providerService = Substitute.For<IProviderService>();
+            var providerService = Substitute.For<IProviderService>();
             _providerVenueService = Substitute.For<IProviderVenueService>();
             _providerQualificationService = Substitute.For<IProviderQualificationService>();
+            _qualificationRouteMappingService = Substitute.For<IQualificationRouteMappingService>();
             _qualificationService = Substitute.For<IQualificationService>();
             _routePathService = Substitute.For<IRoutePathService>();
-            _qualificationRouteMappingService = Substitute.For<IQualificationRouteMappingService>();
 
-            _providerService.SearchAsync(10000001)
+            providerService.SearchAsync(10000001)
                 .Returns(new ProviderSearchResultDto
                 {
                     Id = 1,
@@ -39,7 +38,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                     Name = "ProviderName"
                 });
 
-            _providerService.GetProviderDetailByIdAsync(1)
+            providerService.GetProviderDetailByIdAsync(1)
                 .Returns(new ProviderDetailViewModel
                 {
                     Id = 1,
@@ -66,7 +65,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
 
             var providerVenueQualificationService = new ProviderVenueQualificationService
                 (
-                   _providerService,
+                   providerService,
                    _providerVenueService,
                    _providerQualificationService,
                    _qualificationService,
@@ -156,7 +155,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
         [Fact]
         public void Then_ProviderVenueService_CreateVenueAsync_Is_Not_Called()
         {
-            _providerVenueService.Received(1)
+            _providerVenueService
+                .Received(1)
                 .DidNotReceive()
                 .CreateVenueAsync(Arg.Any<AddProviderVenueViewModel>());
         }

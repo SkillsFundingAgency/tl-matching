@@ -50,8 +50,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
 
             providerVenueQualificationDto.LarId = "1234567X";
             providerVenueQualificationDto.VenuePostcode = "CV1 2WT";
-            providerVenueQualificationDto.QualificationTitle = "full qualification title";
-            providerVenueQualificationDto.QualificationShortTitle = "short qualification title";
+            providerVenueQualificationDto.QualificationTitle = "Full qualification title";
+            providerVenueQualificationDto.QualificationShortTitle = "Short qualification title";
             providerVenueQualificationDto.QualificationIsOffered = true;
             providerVenueQualificationDto.Routes = new List<string>
             {

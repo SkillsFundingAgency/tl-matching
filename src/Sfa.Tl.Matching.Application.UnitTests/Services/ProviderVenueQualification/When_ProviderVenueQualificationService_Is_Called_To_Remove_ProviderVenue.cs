@@ -13,30 +13,29 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
 {
     public class When_ProviderVenueQualificationService_Is_Called_To_Remove_ProviderVenue
     {
-        private readonly IProviderService _providerService;
         private readonly IProviderVenueService _providerVenueService;
         private readonly IProviderQualificationService _providerQualificationService;
+        private readonly IQualificationRouteMappingService _qualificationRouteMappingService;
         private readonly IQualificationService _qualificationService;
         private readonly IRoutePathService _routePathService;
-        private readonly IQualificationRouteMappingService _qualificationRouteMappingService;
 
         private readonly IEnumerable<ProviderVenueQualificationUpdateResultsDto> _results;
 
         public When_ProviderVenueQualificationService_Is_Called_To_Remove_ProviderVenue()
         {
-            _providerService = Substitute.For<IProviderService>();
+            var providerService = Substitute.For<IProviderService>();
             _providerVenueService = Substitute.For<IProviderVenueService>();
             _providerQualificationService = Substitute.For<IProviderQualificationService>();
+            _qualificationRouteMappingService = Substitute.For<IQualificationRouteMappingService>();
             _qualificationService = Substitute.For<IQualificationService>();
             _routePathService = Substitute.For<IRoutePathService>();
-            _qualificationRouteMappingService = Substitute.For<IQualificationRouteMappingService>();
 
             var dtoList = new ValidProviderVenueQualificationFileImportDtoListBuilder()
                 .AddVenue(isRemoved: true)
                 .Build();
             var dto = dtoList.First();
 
-            _providerService.SearchAsync(10000001)
+            providerService.SearchAsync(10000001)
                 .Returns(new ProviderSearchResultDto
                 {
                     Id = 1,
@@ -44,7 +43,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                     Name = dto.ProviderName
                 });
 
-            _providerService.GetProviderDetailByIdAsync(1)
+            providerService.GetProviderDetailByIdAsync(1)
                 .Returns(new ProviderDetailViewModel
                 {
                     UkPrn = dto.UkPrn,
@@ -64,21 +63,21 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                 .GetVenueAsync(1, "CV1 2WT")
                 .Returns(new ProviderVenueDetailViewModel
                 {
-                        Id = 1,
-                        ProviderId = 1,
-                        Postcode = dto.VenuePostcode,
-                        Name = dto.VenueName,
-                        IsEnabledForReferral = dto.VenueIsEnabledForReferral,
-                        Qualifications = new List<QualificationDetailViewModel>()
-                    });
+                    Id = 1,
+                    ProviderId = 1,
+                    Postcode = dto.VenuePostcode,
+                    Name = dto.VenueName,
+                    IsEnabledForReferral = dto.VenueIsEnabledForReferral,
+                    Qualifications = new List<QualificationDetailViewModel>()
+                });
 
-            _qualificationService.GetQualificationAsync(Arg.Any<string>()).Returns((QualificationDetailViewModel) null);
+            _qualificationService.GetQualificationAsync(Arg.Any<string>()).Returns((QualificationDetailViewModel)null);
             _providerQualificationService.GetProviderQualificationAsync(Arg.Any<int>(), Arg.Any<int>()).Returns((ProviderQualificationDto)null);
-            _routePathService.GetRouteSummaryByNameAsync(Arg.Any<string>()).Returns((RouteSummaryViewModel) null);
+            _routePathService.GetRouteSummaryByNameAsync(Arg.Any<string>()).Returns((RouteSummaryViewModel)null);
 
             var providerVenueQualificationService = new ProviderVenueQualificationService
                 (
-                   _providerService,
+                   providerService,
                    _providerVenueService,
                    _providerQualificationService,
                    _qualificationService,
@@ -112,7 +111,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                 .Received(1)
                 .UpdateVenueAsync(Arg.Any<RemoveProviderVenueViewModel>());
         }
-        
+
         [Fact]
         public void Then_ProviderVenueService_UpdateVenueAsync_Is_Called_To_Remove_Venue_With_Expected_Values()
         {
@@ -140,8 +139,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                 .DidNotReceive()
                 .GetRemoveProviderVenueViewModelAsync(Arg.Any<int>());
         }
-        
-       [Fact]
+
+        [Fact]
         public void Then_ProviderQualificationService_GetProviderQualificationAsync_Is_Not_Called()
         {
             _providerQualificationService
@@ -176,7 +175,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
         [Fact]
         public void Then_ProviderVenueService_CreateVenueAsync_Is_Not_Called()
         {
-            _providerVenueService.Received(1)
+            _providerVenueService
+                .Received(1)
                 .DidNotReceive()
                 .CreateVenueAsync(Arg.Any<AddProviderVenueViewModel>());
         }

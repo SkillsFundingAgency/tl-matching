@@ -13,28 +13,27 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
 {
     public class When_ProviderVenueQualificationService_Is_Called_With_New_ProviderVenue
     {
-        private readonly IProviderService _providerService;
         private readonly IProviderVenueService _providerVenueService;
         private readonly IProviderQualificationService _providerQualificationService;
+        private readonly IQualificationRouteMappingService _qualificationRouteMappingService;
         private readonly IQualificationService _qualificationService;
         private readonly IRoutePathService _routePathService;
-        private readonly IQualificationRouteMappingService _qualificationRouteMappingService;
 
         private readonly IEnumerable<ProviderVenueQualificationUpdateResultsDto> _results;
 
         public When_ProviderVenueQualificationService_Is_Called_With_New_ProviderVenue()
         {
-            _providerService = Substitute.For<IProviderService>();
+            var providerService = Substitute.For<IProviderService>();
             _providerVenueService = Substitute.For<IProviderVenueService>();
             _providerQualificationService = Substitute.For<IProviderQualificationService>();
+            _qualificationRouteMappingService = Substitute.For<IQualificationRouteMappingService>();
             _qualificationService = Substitute.For<IQualificationService>();
             _routePathService = Substitute.For<IRoutePathService>();
-            _qualificationRouteMappingService = Substitute.For<IQualificationRouteMappingService>();
 
-            _providerService.SearchAsync(10000001)
+            providerService.SearchAsync(10000001)
                 .Returns((ProviderSearchResultDto)null);
 
-            _providerService.CreateProviderAsync(Arg.Any<CreateProviderDetailViewModel>()).Returns(1);
+            providerService.CreateProviderAsync(Arg.Any<CreateProviderDetailViewModel>()).Returns(1);
 
             _providerVenueService
                 .GetVenueAsync(1, "CV1 2WT")
@@ -55,7 +54,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
 
             var providerVenueQualificationService = new ProviderVenueQualificationService
                 (
-                   _providerService,
+                   providerService,
                    _providerVenueService,
                    _providerQualificationService,
                    _qualificationService,
@@ -153,11 +152,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
         [Fact]
         public void Then_ProviderVenueService_CreateVenueAsync_Is_Called_Exactly_Once_With_Expected_Values()
         {
-            _providerVenueService.Received(1)
+            _providerVenueService
+                .Received(1)
                 .CreateVenueAsync(Arg.Is<AddProviderVenueViewModel>(
-                    p => p.ProviderId == 1 &&
-                         p.Postcode == "CV1 2WT" &&
-                         p.Source == "Import"));
+                    p => 
+                        p.ProviderId == 1 &&
+                        p.Postcode == "CV1 2WT" &&
+                        p.Source == "Import"));
         }
     }
 }

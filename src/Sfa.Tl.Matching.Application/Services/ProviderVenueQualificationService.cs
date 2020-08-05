@@ -137,7 +137,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     if (!string.IsNullOrWhiteSpace(providerVenueQualification.LarId))
                     {
                         //TODO: Not sure we should check VenueIsRemoved
-                        if (venueViewModel != null && !providerVenueQualification.VenueIsRemoved)
+                        if (venueViewModel != null) // && !providerVenueQualification.VenueIsRemoved)
                         {
                             var qualification = await _qualificationService.GetQualificationAsync(providerVenueQualification.LarId);
 
@@ -183,7 +183,7 @@ namespace Sfa.Tl.Matching.Application.Services
                                 var addQualificationViewModel = new AddQualificationViewModel
                                 {
                                     LarId = providerVenueQualification.LarId,
-                                    QualificationId = qualification.Id,
+                                    QualificationId = qualificationId,
                                     Source = Source,
                                     ProviderVenueId = venueViewModel.Id,
                                     Postcode = venueViewModel.Postcode
@@ -200,8 +200,7 @@ namespace Sfa.Tl.Matching.Application.Services
                                 if (route == null)
                                 {
                                     result.HasErrors = true;
-                                    result.Message =
-                                        $"Data Error: Route {routeName} not found in existing Routes.";
+                                    result.Message = $"Data Error: Route {routeName} not found in existing Routes.";
                                     continue;
                                 }
 

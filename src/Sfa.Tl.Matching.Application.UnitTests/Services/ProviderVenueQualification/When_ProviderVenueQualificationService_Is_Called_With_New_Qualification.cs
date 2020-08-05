@@ -16,9 +16,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
         private readonly IProviderService _providerService;
         private readonly IProviderVenueService _providerVenueService;
         private readonly IProviderQualificationService _providerQualificationService;
+        private readonly IQualificationRouteMappingService _qualificationRouteMappingService;
         private readonly IQualificationService _qualificationService;
         private readonly IRoutePathService _routePathService;
-        private readonly IQualificationRouteMappingService _qualificationRouteMappingService;
 
         private readonly IEnumerable<ProviderVenueQualificationUpdateResultsDto> _results;
 
@@ -27,14 +27,83 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
             _providerService = Substitute.For<IProviderService>();
             _providerVenueService = Substitute.For<IProviderVenueService>();
             _providerQualificationService = Substitute.For<IProviderQualificationService>();
+            _qualificationRouteMappingService = Substitute.For<IQualificationRouteMappingService>();
             _qualificationService = Substitute.For<IQualificationService>();
             _routePathService = Substitute.For<IRoutePathService>();
-            _qualificationRouteMappingService = Substitute.For<IQualificationRouteMappingService>();
+
+            var dtoList = new ValidProviderVenueQualificationFileImportDtoListBuilder()
+                .AddVenue()
+                .AddQualificationWithRoutes()
+                .Build();
+            var dto = dtoList.First();
 
             _providerService.SearchAsync(10000001)
-                .Returns((ProviderSearchResultDto) null);
+                .Returns(new ProviderSearchResultDto
+                {
+                    Id = 1,
+                    UkPrn = dto.UkPrn,
+                    Name = dto.ProviderName
+                });
 
-            _providerService.CreateProviderAsync(Arg.Any<CreateProviderDetailViewModel>()).Returns(1);
+            _providerService.GetProviderDetailByIdAsync(1)
+                .Returns(new ProviderDetailViewModel
+                {
+                    UkPrn = dto.UkPrn,
+                    Name = dto.ProviderName,
+                    DisplayName = dto.DisplayName,
+                    IsCdfProvider = dto.IsCdfProvider,
+                    IsEnabledForReferral = dto.IsEnabledForReferral,
+                    PrimaryContact = dto.PrimaryContact,
+                    PrimaryContactEmail = dto.PrimaryContactEmail,
+                    PrimaryContactPhone = dto.PrimaryContactPhone,
+                    SecondaryContact = dto.SecondaryContact,
+                    SecondaryContactEmail = dto.SecondaryContactEmail,
+                    SecondaryContactPhone = dto.SecondaryContactPhone
+                });
+
+            _providerVenueService
+                .GetVenueAsync(1, "CV1 2WT")
+                .Returns(new ProviderVenueDetailViewModel
+                {
+                    Id = 1,
+                    ProviderId = 1,
+                    Postcode = dto.VenuePostcode,
+                    Name = dto.VenueName,
+                    IsEnabledForReferral = dto.VenueIsEnabledForReferral,
+                    Qualifications = new List<QualificationDetailViewModel>()
+                });
+
+            _qualificationService
+                .GetQualificationAsync("1234567X")
+                .Returns((QualificationDetailViewModel)null);
+
+            _qualificationService
+                .CreateQualificationEntityAsync(Arg.Is<MissingQualificationViewModel>(
+                        p => p.LarId == "1234567X"))
+                    .Returns(10); //Qualification id
+
+            _providerQualificationService
+                .GetProviderQualificationAsync(Arg.Any<int>(), Arg.Any<int>())
+                .Returns((ProviderQualificationDto)null);
+
+            _routePathService
+                .GetRouteSummaryByNameAsync("Agriculture, environmental and animal care")
+                .Returns(new RouteSummaryViewModel
+                {
+                    Id = 1,
+                    Name = "Agriculture, environmental and animal care"
+                });
+            _routePathService
+                .GetRouteSummaryByNameAsync("Digital")
+                .Returns(new RouteSummaryViewModel
+                {
+                    Id = 3,
+                    Name = "Digital"
+                });
+
+            _qualificationRouteMappingService
+                .GetQualificationRouteMappingAsync(Arg.Any<int>(), Arg.Any<int>())
+                .Returns((QualificationRouteMappingViewModel)null);
 
             var providerVenueQualificationService = new ProviderVenueQualificationService
                 (
@@ -45,11 +114,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                    _routePathService,
                    _qualificationRouteMappingService
                 );
-
-            var dtoList = new ValidProviderVenueQualificationFileImportDtoListBuilder()
-                .AddVenue()
-                .AddQualificationWithRoutes()
-                .Build();
 
             _results = providerVenueQualificationService.Update(dtoList).GetAwaiter().GetResult();
         }
@@ -71,38 +135,20 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
         }
 
         [Fact]
-        public void Then_ProviderService_GetProviderDetailByIdAsync_Is_Not_Called()
+        public void Then_ProviderService_GetProviderDetailByIdAsync_Is_Called_Exactly_Once()
         {
             _providerService
-                .DidNotReceive()
+                .Received(1)
                 .GetProviderDetailByIdAsync(Arg.Any<int>());
         }
 
         [Fact]
-        public void Then_ProviderService_CreateProviderAsync_Is_Called_Exactly_Once()
+        public void Then_ProviderService_CreateProviderAsync_Is_Not_Called()
         {
-            _providerService.Received(1)
+            _providerService
+                .DidNotReceive()
                 .CreateProviderAsync(Arg.Any<CreateProviderDetailViewModel>());
         }
-
-        [Fact]
-        public void Then_ProviderService_CreateProviderAsync_Is_Called_Exactly_Once_With_Expected_Values()
-        {
-            _providerService.Received(1)
-                .CreateProviderAsync(Arg.Is<CreateProviderDetailViewModel>(
-                    p => p.UkPrn == 10000001 &&
-                         p.Name == "Test Provider Name" &&
-                         p.DisplayName == "Test Provider Display Name" &&
-                         p.IsCdfProvider &&
-                         p.IsEnabledForReferral.HasValue && p.IsEnabledForReferral.Value &&
-                         p.PrimaryContact == "test primary contact" &&
-                         p.PrimaryContactEmail == "testprimary@test.com" &&
-                         p.PrimaryContactPhone == "01234567890" &&
-                         p.SecondaryContact == "test secondary contact" &&
-                         p.SecondaryContactEmail == "testsecondary@test.com" &&
-                         p.SecondaryContactPhone == "01234567891"));
-        }
-
 
         [Fact]
         public void Then_ProviderVenueService_UpdateVenueAsync_Is_Not_Called_To_Remove_Venue()
@@ -129,36 +175,151 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
         }
 
         [Fact]
-        public void Then_ProviderQualificationService_GetProviderQualificationAsync_Is_Not_Called()
+        public void Then_ProviderQualificationService_GetProviderQualificationAsync_Is_Called_Exactly_Once()
         {
             _providerQualificationService
-                .DidNotReceive()
+                .Received(1)
                 .GetProviderQualificationAsync(Arg.Any<int>(), Arg.Any<int>());
         }
 
+
         [Fact]
-        public void Then_QualificationService_GetQualificationAsync_Is_Not_Called()
+        public void Then_ProviderQualificationService_GetProviderQualificationAsync_Is_Called_With_Expected_Values()
         {
-            _qualificationService.
-                DidNotReceive()
-                .GetQualificationAsync(Arg.Any<string>());
+            _providerQualificationService
+                .Received(1)
+                .GetProviderQualificationAsync(1, 10);
         }
 
         [Fact]
-        public void Then_RoutePathService_GetRouteSummaryByNameAsync_Is_Not_Called()
+        public void Then_QualificationService_GetQualificationAsync_Is_Called_With_Expected_Values()
+        {
+            _qualificationService.
+                Received(1)
+                .GetQualificationAsync("1234567X");
+        }
+
+        [Fact]
+        public void Then_RoutePathService_GetRouteSummaryByNameAsync_Is_Called_Exactly_Twice()
         {
             _routePathService
-                .DidNotReceive()
+                .Received(2)
                 .GetRouteSummaryByNameAsync(Arg.Any<string>());
         }
 
         [Fact]
-        public void Then_QualificationRouteMappingService_GetQualificationRouteMappingAsync_Is_Not_Called()
+        public void Then_RoutePathService_GetRouteSummaryByNameAsync_Is_Called_Exactly_Once_With_Agriculture_Route()
+        {
+            _routePathService
+                .Received(1)
+                .GetRouteSummaryByNameAsync("Agriculture, environmental and animal care");
+        }
+
+        [Fact]
+        public void Then_RoutePathService_GetRouteSummaryByNameAsync_Is__Exactly_Once_With_Digital_Route()
+        {
+            _routePathService
+                .Received(1)
+                .GetRouteSummaryByNameAsync("Digital");
+        }
+
+        [Fact]
+        public void Then_QualificationRouteMappingService_GetQualificationRouteMappingAsync_Is_Called_Exactly_Twice()
         {
             _qualificationRouteMappingService
-                .DidNotReceive()
+                .Received(2)
                 .GetQualificationRouteMappingAsync(Arg.Any<int>(), Arg.Any<int>());
         }
 
+
+        [Fact]
+        public void Then_QualificationRouteMappingService_GetQualificationRouteMappingAsync_Is_Called_Exactly_Once_With_Agriculture_Route()
+        {
+            _qualificationRouteMappingService
+                .Received(1)
+                .GetQualificationRouteMappingAsync(1, 10);
+        }
+
+        [Fact]
+        public void Then_QualificationRouteMappingService_GetQualificationRouteMappingAsync_Is_Called_Exactly_Once_With_Digital_Route()
+        {
+            _qualificationRouteMappingService
+                .Received(1)
+                .GetQualificationRouteMappingAsync(3, 10);
+        }
+
+        [Fact]
+        public void Then_QualificationService_CreateQualificationEntityAsync_Is_Called_Exactly_Once()
+        {
+            _qualificationService
+                .Received(1)
+                .CreateQualificationEntityAsync(Arg.Any<MissingQualificationViewModel>());
+        }
+
+        [Fact]
+        public void Then_QualificationService_CreateQualificationEntityAsync_Is_Called_Exactly_Once_With_Expected_Values()
+        {
+            _qualificationService
+                .Received(1)
+                .CreateQualificationEntityAsync(Arg.Is<MissingQualificationViewModel>(
+                    p =>
+                        p.ProviderVenueId == 1 &&
+                        p.LarId == "1234567X" &&
+                        p.ProviderVenueId == 1 &&
+                        p.Title == "Full qualification title" &&
+                        p.ShortTitle == "Short qualification title" &&
+                        p.Source == "Import"));
+        }
+
+        [Fact]
+        public void Then_ProviderQualificationService_CreateProviderQualificationAsync_Is_Called_Exactly_Once()
+        {
+            _providerQualificationService
+                .Received(1)
+                .CreateProviderQualificationAsync(Arg.Any<AddQualificationViewModel>());
+        }
+
+        [Fact]
+        public void Then_ProviderQualificationService_CreateProviderQualificationAsync_Is_Called_Exactly_Once_With_Expected_Values()
+        {
+            _providerQualificationService
+                .Received(1)
+                .CreateProviderQualificationAsync(Arg.Is<AddQualificationViewModel>(
+                    p =>
+                        p.ProviderVenueId == 1 &&
+                        p.QualificationId == 10 &&
+                        p.Postcode == "CV1 2WT" &&
+                        p.LarId == "1234567X" &&
+                        p.Source == "Import"));
+        }
+
+        [Fact]
+        public void Then_QualificationRouteMappingService_CreateQualificationRouteMappingAsync_Is_Called_Exactly_Twice()
+        {
+            _qualificationRouteMappingService
+                .Received(2)
+                .CreateQualificationRouteMappingAsync(Arg.Any<QualificationRouteMappingViewModel>());
+        }
+
+        [Fact]
+        public void Then_QualificationRouteMappingService_CreateQualificationRouteMappingAsync_Is_Called_Exactly_Once_With_Agriculture_Route()
+        {
+            _qualificationRouteMappingService
+                .Received(1)
+                .CreateQualificationRouteMappingAsync(Arg.Is<QualificationRouteMappingViewModel>(p =>
+                    p.QualificationId == 10 &&
+                    p.RouteId == 1));
+        }
+
+        [Fact]
+        public void Then_QualificationRouteMappingService_CreateQualificationRouteMappingAsync_Is_Called_Exactly_Once_With_Digital_Route()
+        {
+            _qualificationRouteMappingService
+                .Received(1)
+                .CreateQualificationRouteMappingAsync(Arg.Is<QualificationRouteMappingViewModel>(p =>
+                    p.QualificationId == 10 &&
+                    p.RouteId == 3
+                    ));
+        }
     }
 }
