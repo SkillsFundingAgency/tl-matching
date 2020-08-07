@@ -111,10 +111,15 @@ namespace Sfa.Tl.Matching.Application.Services
 
                         venueViewModel = await _providerVenueService.GetVenueAsync(providerId, providerVenueQualification.VenuePostcode);
                     }
-                    else if(venueViewModel.Name != providerVenueQualification.VenueName)
+                    else
                     {
-                        venueViewModel.Name = providerVenueQualification.VenueName;
-                        await _providerVenueService.UpdateVenueAsync(venueViewModel);
+                        var providerVenueValidator =
+                            ValidateProviderVenueToUpdate(venueViewModel, providerVenueQualification);
+
+                        if (providerVenueValidator.IsUpdated)
+                        {
+                            await _providerVenueService.UpdateVenueAsync(providerVenueValidator.ProviderVenueDetailViewModel);
+                        }
                     }
 
                     // Provider Venue Delete
@@ -226,7 +231,7 @@ namespace Sfa.Tl.Matching.Application.Services
             return results;
         }
 
-        private (bool IsUpdated, ProviderDetailViewModel ProviderDetailViewModel) ValidateProviderToUpdate(ProviderDetailViewModel providerDetailViewModel, ProviderVenueQualificationDto providerVenueQualification)
+        private static (bool IsUpdated, ProviderDetailViewModel ProviderDetailViewModel) ValidateProviderToUpdate(ProviderDetailViewModel providerDetailViewModel, ProviderVenueQualificationDto providerVenueQualification)
         {
             var isUpdated = false;
 
@@ -278,17 +283,44 @@ namespace Sfa.Tl.Matching.Application.Services
                 isUpdated = true;
             }
 
-            if (ValidateToUpdate(providerDetailViewModel.SecondaryContact, providerVenueQualification.SecondaryContact))
+            if (!providerDetailViewModel.IsEnabledForReferral.HasValue
+                || providerDetailViewModel.IsEnabledForReferral.Value != providerVenueQualification.IsEnabledForReferral)
             {
-                providerDetailViewModel.SecondaryContact = providerVenueQualification.SecondaryContact;
+                providerDetailViewModel.IsEnabledForReferral = providerVenueQualification.IsEnabledForReferral;
+                isUpdated = true;
+            }
+
+            if (providerDetailViewModel.IsCdfProvider != providerVenueQualification.IsCdfProvider)
+            {
+                providerDetailViewModel.IsCdfProvider = providerVenueQualification.IsCdfProvider;
                 isUpdated = true;
             }
 
             return (isUpdated, providerDetailViewModel);
         }
-        private bool ValidateToUpdate(string oldValueToUpdate, string newValue)
+
+        private static (bool IsUpdated, ProviderVenueDetailViewModel ProviderVenueDetailViewModel) ValidateProviderVenueToUpdate(ProviderVenueDetailViewModel providerVenueDetailViewModel, ProviderVenueQualificationDto providerVenueQualification)
         {
-            return !string.IsNullOrEmpty(newValue) && oldValueToUpdate != newValue;
+            var isUpdated = false;
+
+            if (ValidateToUpdate(providerVenueDetailViewModel.Name, providerVenueQualification.VenueName))
+            {
+                providerVenueDetailViewModel.Name = providerVenueQualification.VenueName;
+                isUpdated = true;
+            }
+
+            if (providerVenueDetailViewModel.IsEnabledForReferral != providerVenueQualification.VenueIsEnabledForReferral)
+            {
+                providerVenueDetailViewModel.IsEnabledForReferral = providerVenueQualification.VenueIsEnabledForReferral;
+                isUpdated = true;
+            }
+
+            return (isUpdated, providerVenueDetailViewModel);
+        }
+
+        private static bool ValidateToUpdate(string oldValue, string newValue)
+        {
+            return !string.IsNullOrEmpty(newValue) && oldValue != newValue;
         }
     }
 }

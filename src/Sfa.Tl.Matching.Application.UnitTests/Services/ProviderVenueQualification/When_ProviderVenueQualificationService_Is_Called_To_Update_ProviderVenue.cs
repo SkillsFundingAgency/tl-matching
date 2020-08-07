@@ -73,7 +73,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                    _qualificationRouteMappingService
                 );
 
-            var dtoList = new ValidProviderVenueQualificationFileImportDtoListBuilder()
+            var dtoList = new ValidProviderVenueQualificationDtoListBuilder()
                 .AddVenue()
                 .Build();
 

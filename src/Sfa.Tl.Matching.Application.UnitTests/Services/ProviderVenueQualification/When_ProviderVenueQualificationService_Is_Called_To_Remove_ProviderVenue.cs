@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
             _qualificationService = Substitute.For<IQualificationService>();
             _routePathService = Substitute.For<IRoutePathService>();
 
-            var dtoList = new ValidProviderVenueQualificationFileImportDtoListBuilder()
+            var dtoList = new ValidProviderVenueQualificationDtoListBuilder()
                 .AddVenue(isRemoved: true)
                 .Build();
             var dto = dtoList.First();

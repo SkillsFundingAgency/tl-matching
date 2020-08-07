@@ -64,6 +64,8 @@ namespace Sfa.Tl.Matching.Application.Extensions
                         cellValue = cell.InnerText;
                         break;
                     case CellValues.Boolean:
+                        switch (cell.InnerText)
+                        {
                             case "0":
                                 cellValue = "FALSE";
                                 break;

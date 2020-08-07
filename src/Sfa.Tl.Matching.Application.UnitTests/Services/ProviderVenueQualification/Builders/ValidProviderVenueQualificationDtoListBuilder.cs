@@ -4,11 +4,11 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualification.Builders
 {
-    public class ValidProviderVenueQualificationFileImportDtoListBuilder
+    public class ValidProviderVenueQualificationDtoListBuilder
     {
         private readonly IList<ProviderVenueQualificationDto> _providerVenueQualificationDtoList;
 
-        public ValidProviderVenueQualificationFileImportDtoListBuilder()
+        public ValidProviderVenueQualificationDtoListBuilder()
         {
             _providerVenueQualificationDtoList = new List<ProviderVenueQualificationDto>
             {
@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
             };
         }
 
-        public ValidProviderVenueQualificationFileImportDtoListBuilder AddVenue(bool isEnabledForReferral = false, bool isRemoved = false)
+        public ValidProviderVenueQualificationDtoListBuilder AddVenue(bool isEnabledForReferral = true, bool isRemoved = false)
         {
             var providerVenueQualificationDto = _providerVenueQualificationDtoList.First();
 
@@ -44,12 +44,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
             return this;
         }
 
-        public ValidProviderVenueQualificationFileImportDtoListBuilder AddQualificationWithRoutes(bool qualificationIsOffered = true)
+        public ValidProviderVenueQualificationDtoListBuilder AddQualificationWithRoutes(bool qualificationIsOffered = true)
         {
             var providerVenueQualificationDto = _providerVenueQualificationDtoList.First();
 
             providerVenueQualificationDto.LarId = "1234567X";
-            providerVenueQualificationDto.VenuePostcode = "CV1 2WT";
             providerVenueQualificationDto.QualificationTitle = "Full qualification title";
             providerVenueQualificationDto.QualificationShortTitle = "Short qualification title";
             providerVenueQualificationDto.QualificationIsOffered = qualificationIsOffered;

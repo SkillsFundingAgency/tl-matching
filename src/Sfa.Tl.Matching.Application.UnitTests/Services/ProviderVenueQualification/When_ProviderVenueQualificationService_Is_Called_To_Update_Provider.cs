@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                    qualificationRouteMappingService
                 );
 
-            var dtoList = new ValidProviderVenueQualificationFileImportDtoListBuilder().Build();
+            var dtoList = new ValidProviderVenueQualificationDtoListBuilder().Build();
 
             _results = providerVenueQualificationService.Update(dtoList).GetAwaiter().GetResult();
         }
