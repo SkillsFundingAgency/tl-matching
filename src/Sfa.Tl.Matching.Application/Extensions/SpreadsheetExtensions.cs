@@ -10,14 +10,14 @@ namespace Sfa.Tl.Matching.Application.Extensions
 {
     public static class SpreadsheetExtensions
     {
-        public static IEnumerable<Row> GetAllRows(this SpreadsheetDocument document, int? headerRowIndex)
+        public static IEnumerable<Row> GetAllRows(this SpreadsheetDocument spreadSheet, int? headerRowIndex)
         {
-            var workbookPart = document.WorkbookPart;
-            var sheets = workbookPart.Workbook.GetFirstChild<Sheets>().Elements<Sheet>();
-            var relationshipId = sheets.First().Id.Value;
-            var worksheetPart = (WorksheetPart)document.WorkbookPart.GetPartById(relationshipId);
-            var workSheet = worksheetPart.Worksheet;
-            var sheetData = workSheet.GetFirstChild<SheetData>();
+            var sheetData = spreadSheet.GetSheetData(0);
+            return GetAllRows(sheetData, headerRowIndex);
+        }
+
+        public static IEnumerable<Row> GetAllRows(this SheetData sheetData, int? headerRowIndex)
+        {
             var rows = sheetData.Descendants<Row>();
 
             if (headerRowIndex.HasValue)
@@ -47,23 +47,31 @@ namespace Sfa.Tl.Matching.Application.Extensions
             return sb.ToString();
         }
 
-        public static string GetCellValue(this SharedStringTablePart stringTablePart, CellType cellType)
+        public static string GetCellValue(this SharedStringTablePart stringTablePart, CellType cell)
         {
             var cellValue = string.Empty;
 
-            if (cellType == null) return cellValue;
+            if (cell == null) return cellValue;
 
-            if (cellType.DataType != null)
-                switch (cellType.DataType.Value)
+            if (cell.DataType != null)
+                switch (cell.DataType.Value)
                 {
                     case CellValues.SharedString:
-                        cellValue = stringTablePart.SharedStringTable.ChildElements[int.Parse(cellType.CellValue.InnerXml)]
+                        cellValue = stringTablePart.SharedStringTable.ChildElements[int.Parse(cell.CellValue.InnerXml)]
                             .InnerText;
                         break;
                     case CellValues.InlineString:
-                        cellValue = cellType.InnerText;
+                        cellValue = cell.InnerText;
                         break;
                     case CellValues.Boolean:
+                            case "0":
+                                cellValue = "FALSE";
+                                break;
+                            default:
+                                cellValue = "TRUE";
+                                break;
+                        }
+                        break;
                     case CellValues.Number:
                     case CellValues.Error:
                     case CellValues.String:
@@ -72,7 +80,7 @@ namespace Sfa.Tl.Matching.Application.Extensions
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-            else if (cellType.CellValue != null) cellValue = cellType.CellValue.InnerXml;
+            else if (cell.CellValue != null) cellValue = cell.CellValue.InnerXml;
 
             return cellValue;
         }
@@ -90,6 +98,22 @@ namespace Sfa.Tl.Matching.Application.Extensions
             }
 
             return columnName;
+        }
+
+        public static IEnumerable<SheetData> GetAllSheetData(this SpreadsheetDocument spreadSheet)
+        {
+            var sheetDataList = new List<SheetData>();
+
+            var workbookPart = spreadSheet.WorkbookPart;
+            foreach (var sheet in workbookPart.Workbook.Sheets.ChildElements.OfType<Sheet>())
+            {
+                var worksheetPart = workbookPart.GetPartById(sheet.Id.Value) as WorksheetPart;
+                var worksheet = worksheetPart?.Worksheet;
+                var sheetData = worksheet?.GetFirstChild<SheetData>();
+                sheetDataList.Add(sheetData);
+            }
+
+            return sheetDataList;
         }
 
         public static SheetData GetSheetData(this SpreadsheetDocument spreadSheet, int index)

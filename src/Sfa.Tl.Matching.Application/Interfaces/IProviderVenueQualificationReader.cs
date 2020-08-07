@@ -5,6 +5,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IProviderVenueQualificationReader
     {
-        ProviderVenueQualificationReadResult ReadData(ProviderVenueQualificationFileImportDto fileImportDto);
+        ProviderVenueQualificationReadResultDto ReadData(ProviderVenueQualificationFileImportDto fileImportDto);
     }
 }
