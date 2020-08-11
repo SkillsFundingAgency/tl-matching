@@ -7,9 +7,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
     {
         public IList<ProviderVenueQualificationUpdateResultsDto> Build() => new List<ProviderVenueQualificationUpdateResultsDto>
         {
-            new ProviderVenueQualificationUpdateResultsDto
-            {
-            }
+            new ProviderVenueQualificationUpdateResultsDto()
         };
     }
 }

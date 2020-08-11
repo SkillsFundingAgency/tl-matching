@@ -4,9 +4,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
 {
     public class ValidProviderVenueQualificationFileImportDtoBuilder
     {
-        public ProviderVenueQualificationFileImportDto Build() => new ProviderVenueQualificationFileImportDto
-        {
-
-        };
+        public ProviderVenueQualificationFileImportDto Build() => new ProviderVenueQualificationFileImportDto();
     }
 }
