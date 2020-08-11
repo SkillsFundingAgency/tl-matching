@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
 using FluentAssertions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -69,18 +66,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                 Postcode = dto.VenuePostcode,
                 Name = dto.VenueName,
                 IsEnabledForReferral = dto.VenueIsEnabledForReferral,
+                IsRemoved = true,
                 Qualifications = new List<QualificationDetailViewModel>()
             };
-
-            //Use reflection to hack into the IsRemoved property and set it
-            var writeableIsRemovedField = typeof(ProviderVenueDetailViewModel)
-                            .GetRuntimeFields().FirstOrDefault(a => Regex.IsMatch(a.Name, $"\\A<{nameof(ProviderVenueDetailViewModel.IsRemoved)}>k__BackingField\\Z"));
-            if (writeableIsRemovedField == null)
-            {
-                throw new TypeAccessException("Failed to get write access field for ProviderVenueDetailViewModel.IsRemoved");
-            }
-
-            writeableIsRemovedField.SetValue(providerVenueDetailViewModel, true);
 
             _providerVenueService
                 .GetVenueAsync(1, "CV1 2WT")
