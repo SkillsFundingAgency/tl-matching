@@ -4,14 +4,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification.B
 {
     public class ProviderQualificationBuilder
     {
-        public IList<Domain.Models.ProviderQualification> Build() => new List<Domain.Models.ProviderQualification>
+        public Domain.Models.ProviderQualification Build(bool isDeleted = false) => new Domain.Models.ProviderQualification
         {
-            new Domain.Models.ProviderQualification
-            {
-                Id = 1,
-                ProviderVenueId = 1,
-                QualificationId = 2
-            }
+            Id = 101,
+            ProviderVenueId = 1,
+            QualificationId = 100,
+            IsDeleted = isDeleted,
+            CreatedBy = "CreatedBy",
+            ModifiedBy = "ModifiedBy"
         };
     }
 }

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using AutoMapper;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -20,7 +21,10 @@ namespace Sfa.Tl.Matching.Application.Mappers
 
             CreateMap<ProviderVenue, ProviderVenueViewModel>()
                 .ForMember(m => m.ProviderVenueId, config => config.MapFrom(s => s.Id))
-                .ForMember(m => m.QualificationCount, config => config.MapFrom(s => s.ProviderQualification.Count))
+                .ForMember(m => m.QualificationCount, config
+                    => config.MapFrom(s
+                        => s.ProviderQualification.Count(pq => !pq.IsDeleted &&
+                                                                                           !pq.Qualification.IsDeleted)))
                 ;
 
             CreateMap<ProviderVenue, ProviderVenueDetailViewModel>()
@@ -45,6 +49,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.Postcode, config => config.MapFrom(s => s.Postcode))
                 .ForMember(m => m.Source, config => config.MapFrom(s => s.Source))
                 .ForMember(m => m.IsEnabledForReferral, config => config.MapFrom(s => true))
+                .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<AddProviderVenueViewModel, ProviderVenue>>())
                 .ForAllOtherMembers(config => config.Ignore())
                 ;
         }

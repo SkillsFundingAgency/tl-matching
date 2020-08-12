@@ -28,6 +28,8 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedBy, config => config.Ignore());
+
+            CreateMap<QualificationRouteMapping, QualificationRouteMappingViewModel>();
         }
     }
 }

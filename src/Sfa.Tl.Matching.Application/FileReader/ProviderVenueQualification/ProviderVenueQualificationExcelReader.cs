@@ -21,57 +21,60 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenueQualification
             _mapper = mapper;
         }
 
-        public ProviderVenueQualificationReadResult ReadData(ProviderVenueQualificationFileImportDto fileImportDto)
+        public ProviderVenueQualificationReadResultDto ReadData(ProviderVenueQualificationFileImportDto fileImportDto)
         {
-            var providerVenueQualificationReadResult = new ProviderVenueQualificationReadResult
+            var providerVenueQualificationReadResult = new ProviderVenueQualificationReadResultDto
             {
                 ProviderVenueQualifications = new List<ProviderVenueQualificationDto>()
             };
 
             try
             {
-                using var document = SpreadsheetDocument.Open(fileImportDto.FileDataStream, false);
-
-                var rows = document.GetAllRows(fileImportDto.NumberOfHeaderRows).ToList();
-
-                var stringTablePart = document.WorkbookPart.SharedStringTablePart;
-
-                var startIndex = fileImportDto.NumberOfHeaderRows ?? 0;
-
                 var columnProperties = fileImportDto.GetType().GetProperties()
                     .Where(pr => pr.GetCustomAttribute<ColumnAttribute>(false) != null)
                     .Select(prop => new
-                    {
-                        ColumnInfo = prop, 
-                        Index = prop.GetCustomAttribute<ColumnAttribute>(false).Order
-                    })
+                        { ColumnInfo = prop, Index = prop.GetCustomAttribute<ColumnAttribute>(false).Order })
                     .ToList();
 
-                foreach (var row in rows)
+                using (var document = SpreadsheetDocument.Open(fileImportDto.FileDataStream, false))
                 {
-                    foreach (var column in columnProperties)
+                    var stringTablePart = document.WorkbookPart.SharedStringTablePart;
+
+                    var sheetDatas = document.GetAllSheetData();
+                    foreach (var sheetData in sheetDatas)
                     {
-                        var cell = row.GetCellByIndex(column.Index, startIndex);
+                        var rows = sheetData.GetAllRows(fileImportDto.NumberOfHeaderRows).ToList();
+                        
+                        var startIndex = fileImportDto.NumberOfHeaderRows ?? 0;
 
-                        var cellValue = stringTablePart.GetCellValue(cell);
+                        foreach (var row in rows)
+                        {
+                            foreach (var column in columnProperties)
+                            {
+                                var cell = row.GetCellByIndex(column.Index, startIndex);
 
-                        column.ColumnInfo.SetValue(fileImportDto, cellValue.Trim());
+                                var cellValue = stringTablePart.GetCellValue(cell);
+
+                                column.ColumnInfo.SetValue(fileImportDto, cellValue.Trim());
+                            }
+
+                            if (!string.IsNullOrWhiteSpace(fileImportDto.UkPrn))
+                            {
+                                var dto = _mapper.Map<ProviderVenueQualificationDto>(fileImportDto);
+                                providerVenueQualificationReadResult.ProviderVenueQualifications.Add(dto);
+                            }
+
+                            startIndex++;
+                        }
                     }
-
-                    var dto = _mapper.Map<ProviderVenueQualificationDto>(fileImportDto);
-                    providerVenueQualificationReadResult.ProviderVenueQualifications.Add(dto);
-
-                    startIndex++;
                 }
             }
             catch (Exception ex)
             {
                 providerVenueQualificationReadResult.Error = $"{FailedToImportMessage} {ex.Message} {ex.InnerException?.Message}";
             }
-            
+
             return providerVenueQualificationReadResult;
         }
-
-
     }
 }
