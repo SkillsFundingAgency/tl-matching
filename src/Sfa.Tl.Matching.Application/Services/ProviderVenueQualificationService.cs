@@ -209,7 +209,8 @@ namespace Sfa.Tl.Matching.Application.Services
                                     var qualificationRouteMappingViewModel = new QualificationRouteMappingViewModel
                                     {
                                         RouteId = route.Id,
-                                        QualificationId = qualificationId
+                                        QualificationId = qualificationId,
+                                        Source = Source
                                     };
 
                                     await _qualificationRouteMappingService.CreateQualificationRouteMappingAsync(

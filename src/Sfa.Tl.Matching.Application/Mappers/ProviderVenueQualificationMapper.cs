@@ -18,7 +18,11 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.VenueIsEnabledForReferral, o => o.MapFrom(s => s.VenueIsEnabledForReferral.ToBool()))
                 .ForMember(m => m.VenueIsRemoved, o => o.MapFrom(s => s.VenueIsRemoved.ToBool()))
                 .ForMember(m => m.QualificationIsOffered, o => o.MapFrom(s => s.QualificationIsOffered.ToBool()))
-                .ForMember(m => m.Routes, o => o.MapFrom(s => s.Routes.Split(';', StringSplitOptions.RemoveEmptyEntries).ToList()))
+                .ForMember(m => m.Routes, o => 
+                    o.MapFrom(s => 
+                        s.Routes.Split(';', StringSplitOptions.RemoveEmptyEntries)
+                            .Select(r => r.Trim())
+                            .ToList()))
                 ;
         }
     }

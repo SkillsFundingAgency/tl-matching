@@ -5,5 +5,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
     {
         public int RouteId { get; set; }
         public int QualificationId { get; set; }
+        public string Source { get; set; }
     }
 }
