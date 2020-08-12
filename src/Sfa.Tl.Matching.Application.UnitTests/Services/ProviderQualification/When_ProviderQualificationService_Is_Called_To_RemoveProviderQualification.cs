@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification
             var config = new MapperConfiguration(c => c.AddMaps(typeof(QualificationMapper).Assembly));
             var mapper = new Mapper(config);
 
-            var mockDbSet = new ProviderQualificationBuilder()
+            var mockDbSet = new ProviderQualificationListBuilder()
                 .Build()
                 .AsQueryable()
                 .BuildMockDbSet();

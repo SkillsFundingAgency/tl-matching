@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-
+﻿
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification.Builders
 {
     public class ProviderQualificationBuilder
