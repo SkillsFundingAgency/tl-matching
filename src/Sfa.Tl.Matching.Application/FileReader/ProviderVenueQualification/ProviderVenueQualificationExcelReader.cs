@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using AutoMapper;
@@ -33,39 +34,41 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenueQualification
                 var columnProperties = fileImportDto.GetType().GetProperties()
                     .Where(pr => pr.GetCustomAttribute<ColumnAttribute>(false) != null)
                     .Select(prop => new
-                        { ColumnInfo = prop, Index = prop.GetCustomAttribute<ColumnAttribute>(false).Order })
+                    {
+                        ColumnInfo = prop,
+                        Index = prop.GetCustomAttribute<ColumnAttribute>(false)?.Order
+                    })
                     .ToList();
 
-                using (var document = SpreadsheetDocument.Open(fileImportDto.FileDataStream, false))
+                using var document = SpreadsheetDocument.Open(fileImportDto.FileDataStream, false);
+                var stringTablePart = document.WorkbookPart.SharedStringTablePart;
+
+                var sheetDatas = document.GetAllSheetData();
+                foreach (var sheetData in sheetDatas)
                 {
-                    var stringTablePart = document.WorkbookPart.SharedStringTablePart;
+                    var rows = sheetData.GetAllRows(fileImportDto.NumberOfHeaderRows).ToList();
 
-                    var sheetDatas = document.GetAllSheetData();
-                    foreach (var sheetData in sheetDatas)
+                    var startIndex = fileImportDto.NumberOfHeaderRows ?? 0;
+
+                    foreach (var row in rows)
                     {
-                        var rows = sheetData.GetAllRows(fileImportDto.NumberOfHeaderRows).ToList();
-                        
-                        var startIndex = fileImportDto.NumberOfHeaderRows ?? 0;
-
-                        foreach (var row in rows)
+                        foreach (var column in columnProperties)
                         {
-                            foreach (var column in columnProperties)
-                            {
-                                var cell = row.GetCellByIndex(column.Index, startIndex);
+                            Debug.Assert(column.Index != null, "column.Index != null");
+                            var cell = row.GetCellByIndex(column.Index.Value, startIndex);
 
-                                var cellValue = stringTablePart.GetCellValue(cell);
+                            var cellValue = stringTablePart.GetCellValue(cell);
 
-                                column.ColumnInfo.SetValue(fileImportDto, cellValue.Trim());
-                            }
-
-                            if (!string.IsNullOrWhiteSpace(fileImportDto.UkPrn))
-                            {
-                                var dto = _mapper.Map<ProviderVenueQualificationDto>(fileImportDto);
-                                providerVenueQualificationReadResult.ProviderVenueQualifications.Add(dto);
-                            }
-
-                            startIndex++;
+                            column.ColumnInfo.SetValue(fileImportDto, cellValue.Trim());
                         }
+
+                        if (!string.IsNullOrWhiteSpace(fileImportDto.UkPrn))
+                        {
+                            var dto = _mapper.Map<ProviderVenueQualificationDto>(fileImportDto);
+                            providerVenueQualificationReadResult.ProviderVenueQualifications.Add(dto);
+                        }
+
+                        startIndex++;
                     }
                 }
             }
