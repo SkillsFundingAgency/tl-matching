@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.Employer
     {
         public CrmEmployerEventDataValidator()
         {
-            CascadeMode = CascadeMode.StopOnFirstFailure;
+            CascadeMode = CascadeMode.Stop;
 
             RuleFor(dto => dto.AccountId)
                 .NotEmpty()
