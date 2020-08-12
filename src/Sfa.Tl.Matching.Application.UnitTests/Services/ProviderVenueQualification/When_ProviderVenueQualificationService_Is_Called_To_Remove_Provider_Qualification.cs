@@ -111,14 +111,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                 .Returns(new QualificationRouteMappingViewModel
                 {
                     QualificationId= 10,
-                    RouteId = 1
+                    RouteId = 1,
+                    Source = "Test"
                 });
             _qualificationRouteMappingService
                 .GetQualificationRouteMappingAsync(3, 10)
                 .Returns(new QualificationRouteMappingViewModel
                 {
                     QualificationId = 10,
-                    RouteId = 3
+                    RouteId = 3,
+                    Source = "Test"
                 });
 
             var providerVenueQualificationService = new ProviderVenueQualificationService

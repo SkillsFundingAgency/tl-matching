@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using DocumentFormat.OpenXml.Bibliography;
 using FluentAssertions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -308,7 +309,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                 .Received(1)
                 .CreateQualificationRouteMappingAsync(Arg.Is<QualificationRouteMappingViewModel>(p =>
                     p.QualificationId == 10 &&
-                    p.RouteId == 1));
+                    p.RouteId == 1 &&
+                    p.Source == "Import"));
         }
 
         [Fact]
@@ -318,8 +320,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                 .Received(1)
                 .CreateQualificationRouteMappingAsync(Arg.Is<QualificationRouteMappingViewModel>(p =>
                     p.QualificationId == 10 &&
-                    p.RouteId == 3
-                    ));
+                    p.RouteId == 3 &&
+                    p.Source == "Import"));
         }
     }
 }
