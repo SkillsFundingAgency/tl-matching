@@ -27,19 +27,19 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
             var routePathService = Substitute.For<IRoutePathService>();
 
             _providerService.SearchAsync(10000001)
-                .Returns((ProviderSearchResultDto) null);
+                .Returns((ProviderSearchResultDto)null);
 
             _providerService.CreateProviderAsync(Arg.Any<CreateProviderDetailViewModel>()).Returns(1);
 
             var providerVenueQualificationService = new ProviderVenueQualificationService
-                (
-                   _providerService,
-                   providerVenueService,
-                   providerQualificationService,
-                   qualificationService,
-                   routePathService,
-                   qualificationRouteMappingService
-                );
+            (
+                _providerService,
+                providerVenueService,
+                providerQualificationService,
+                qualificationService,
+                routePathService,
+                qualificationRouteMappingService
+            );
 
             var dtoList = new ValidProviderVenueQualificationDtoListBuilder().Build();
 
@@ -52,6 +52,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
             _results.Should().NotBeNull();
             var resultsList = _results.ToList();
             resultsList.Count.Should().Be(1);
+        }
+
+        [Fact]
+        public void Then_Results_Has_Expected_Values()
+        {
+            _results.First().UkPrn.Should().Be(10000001);
+            _results.First().VenuePostcode.Should().BeNull();
+            _results.First().LarId.Should().BeNull();
         }
 
         [Fact]
@@ -84,7 +92,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
             _providerService
                 .Received(1)
                 .CreateProviderAsync(Arg.Is<CreateProviderDetailViewModel>(
-                    p => 
+                    p =>
                         p.UkPrn == 10000001 &&
                         p.Name == "Test Provider Name" &&
                         p.DisplayName == "Test Provider Display Name" &&

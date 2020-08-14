@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                 });
 
             _providerVenueService
-                .GetVenueAsync(1, "CV1 2WT")
+                .GetVenueWithTrimmedPostcodeAsync(1, "CV1 2WT")
                 .Returns(new ProviderVenueDetailViewModel
                 {
                     Id = 1,
@@ -76,14 +76,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
             _routePathService.GetRouteSummaryByNameAsync(Arg.Any<string>()).Returns((RouteSummaryViewModel)null);
 
             var providerVenueQualificationService = new ProviderVenueQualificationService
-                (
-                   providerService,
-                   _providerVenueService,
-                   _providerQualificationService,
-                   _qualificationService,
-                   _routePathService,
-                   _qualificationRouteMappingService
-                );
+            (
+                providerService,
+                _providerVenueService,
+                _providerQualificationService,
+                _qualificationService,
+                _routePathService,
+                _qualificationRouteMappingService
+            );
 
             _results = providerVenueQualificationService.Update(dtoList).GetAwaiter().GetResult();
         }
@@ -97,11 +97,27 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
         }
 
         [Fact]
-        public void Then_ProviderVenueService_GetVenueAsync_Is_Called_Exactly_Once()
+        public void Then_Results_Has_Expected_Values()
+        {
+            _results.First().UkPrn.Should().Be(10000001);
+            _results.First().VenuePostcode.Should().Be("CV1 2WT");
+            _results.First().LarId.Should().BeNull();
+        }
+
+        [Fact]
+        public void Then_ProviderVenueService_GetVenueWithTrimmedPostcodeAsync_Is_Called_Exactly_Once()
         {
             _providerVenueService
                 .Received(1)
-                .GetVenueAsync(1, "CV1 2WT");
+                .GetVenueWithTrimmedPostcodeAsync(1, "CV1 2WT");
+        }
+
+        [Fact]
+        public void Then_ProviderVenueService_GetVenueAsync_Is_Not_Called()
+        {
+            _providerVenueService
+                .DidNotReceive()
+                .GetVenueAsync(1);
         }
 
         [Fact]
