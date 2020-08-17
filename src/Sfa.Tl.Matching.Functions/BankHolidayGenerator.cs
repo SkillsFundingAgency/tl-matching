@@ -19,15 +19,28 @@ namespace Sfa.Tl.Matching.Functions
 {
     public class BankHolidayGenerator
     {
+        private readonly ICalendarApiClient _calendarApiClient;
+        private readonly IMapper _mapper;
+        private readonly IBulkInsertRepository<BankHoliday> _bankHolidayBulkInsertRepository;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
+
+        public BankHolidayGenerator(
+                ICalendarApiClient calendarApiClient,
+                IMapper mapper,
+                IBulkInsertRepository<BankHoliday> bankHolidayBulkInsertRepository,
+                IRepository<FunctionLog> functionLogRepository)
+        {
+            _calendarApiClient = calendarApiClient;
+            _mapper = mapper;
+            _bankHolidayBulkInsertRepository = bankHolidayBulkInsertRepository;
+            _functionLogRepository = functionLogRepository;
+        }
+
         [FunctionName("GenerateBankHolidays")]
         public async Task GenerateBankHolidaysAsync(
             [TimerTrigger("%BankHolidayGeneratorTrigger%")] TimerInfo timer,
             ExecutionContext context,
-            ILogger logger,
-            [Inject] ICalendarApiClient calendarApiClient,
-            [Inject] IMapper mapper,
-            [Inject] IBulkInsertRepository<BankHoliday> bankHolidayBulkInsertRepository,
-            [Inject] IRepository<FunctionLog> functionLogRepository)
+            ILogger logger)
         {
             if (timer == null) throw new ArgumentNullException(nameof(timer));
             try
@@ -35,8 +48,8 @@ namespace Sfa.Tl.Matching.Functions
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
                 var stopwatch = Stopwatch.StartNew();
-                var holidays = await calendarApiClient.GetBankHolidaysAsync();
-                var createdRecords = await SaveHolidaysAsync(holidays, bankHolidayBulkInsertRepository, mapper);
+                var holidays = await _calendarApiClient.GetBankHolidaysAsync();
+                var createdRecords = await SaveHolidaysAsync(holidays);
                 stopwatch.Stop();
 
                 logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
@@ -49,7 +62,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
@@ -59,26 +72,21 @@ namespace Sfa.Tl.Matching.Functions
             }
         }
 
-        // ReSharper disable once UnusedMember.Global
         [FunctionName("ManualGenerateBankHolidays")]
         public async Task<IActionResult> ManualGenerateBankHolidaysAsync(
 #pragma warning disable IDE0060 // Remove unused parameter
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
 #pragma warning restore IDE0060 // Remove unused parameter
             ExecutionContext context,
-            ILogger logger,
-            [Inject] ICalendarApiClient calendarApiClient,
-            [Inject] IMapper mapper,
-            [Inject] IBulkInsertRepository<BankHoliday> bankHolidayBulkInsertRepository,
-            [Inject] IRepository<FunctionLog> functionLogRepository)
+            ILogger logger)
         {
             try
             {
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
                 var stopwatch = Stopwatch.StartNew();
-                var holidays = await calendarApiClient.GetBankHolidaysAsync();
-                var createdRecords = await SaveHolidaysAsync(holidays, bankHolidayBulkInsertRepository, mapper);
+                var holidays = await _calendarApiClient.GetBankHolidaysAsync();
+                var createdRecords = await SaveHolidaysAsync(holidays);
                 stopwatch.Stop();
 
                 logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
@@ -93,7 +101,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
@@ -104,13 +112,11 @@ namespace Sfa.Tl.Matching.Functions
             }
         }
 
-        private async Task<int> SaveHolidaysAsync(IList<BankHolidayResultDto> holidays,
-            IBulkInsertRepository<BankHoliday> bankHolidayBulkInsertRepository,
-            IMapper mapper)
+        private async Task<int> SaveHolidaysAsync(IList<BankHolidayResultDto> holidays)
         {
-            var entities = mapper.Map<IList<BankHoliday>>(holidays).ToList();
+            var entities = _mapper.Map<IList<BankHoliday>>(holidays).ToList();
 
-            await bankHolidayBulkInsertRepository.BulkInsertAsync(entities);
+            await _bankHolidayBulkInsertRepository.BulkInsertAsync(entities);
 
             return entities.Count;
         }
