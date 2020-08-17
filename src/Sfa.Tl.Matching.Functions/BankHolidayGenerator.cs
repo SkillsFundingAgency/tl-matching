@@ -13,7 +13,6 @@ using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Api.Clients.Calendar;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Functions.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Functions
