@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using DocumentFormat.OpenXml.Bibliography;
 using FluentAssertions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;

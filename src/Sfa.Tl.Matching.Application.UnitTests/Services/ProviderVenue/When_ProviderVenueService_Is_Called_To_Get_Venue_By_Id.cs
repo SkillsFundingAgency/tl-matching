@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
 using AutoMapper;
-using DocumentFormat.OpenXml.Bibliography;
 using FluentAssertions;
 using NSubstitute;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
