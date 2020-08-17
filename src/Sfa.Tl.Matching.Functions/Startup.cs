@@ -53,9 +53,7 @@ namespace Sfa.Tl.Matching.Functions
             var webJobsBuilder = services.AddWebJobs(x => { });
             webJobsBuilder
                 .AddAzureStorage()
-                .AddAzureStorageCoreServices()
-                //.AddHttp()
-                .AddTimers();
+                .AddAzureStorageCoreServices();
         }
 
         private void RegisterServices(IServiceCollection services)
