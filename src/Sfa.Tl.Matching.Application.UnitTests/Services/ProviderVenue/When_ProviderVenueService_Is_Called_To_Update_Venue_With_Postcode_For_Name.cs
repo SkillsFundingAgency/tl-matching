@@ -17,12 +17,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 {
-    public class When_ProviderVenueService_Is_Called_To_UpdateVenue_With_Postcode_For_Name
+    public class When_ProviderVenueService_Is_Called_To_Update_Venue_With_Postcode_For_Name
     {
         private readonly ILocationApiClient _locationApiClient;
         private readonly IProviderVenueRepository _providerVenueRepository;
 
-        public When_ProviderVenueService_Is_Called_To_UpdateVenue_With_Postcode_For_Name()
+        public When_ProviderVenueService_Is_Called_To_Update_Venue_With_Postcode_For_Name()
         {
             var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
             httpContextAccessor.HttpContext.Returns(new DefaultHttpContext

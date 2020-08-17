@@ -63,7 +63,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                 });
 
             _providerVenueService
-                .GetVenueAsync(1, "CV1 2WT")
+                .GetVenueWithTrimmedPostcodeAsync(1, "CV1 2WT")
                 .Returns(new ProviderVenueDetailViewModel
                 {
                     Id = 1,
@@ -107,14 +107,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                 .Returns((QualificationRouteMappingViewModel)null);
 
             var providerVenueQualificationService = new ProviderVenueQualificationService
-                (
-                   _providerService,
-                   _providerVenueService,
-                   _providerQualificationService,
-                   _qualificationService,
-                   _routePathService,
-                   _qualificationRouteMappingService
-                );
+            (
+                _providerService,
+                _providerVenueService,
+                _providerQualificationService,
+                _qualificationService,
+                _routePathService,
+                _qualificationRouteMappingService
+            );
 
             _results = providerVenueQualificationService.Update(dtoList).GetAwaiter().GetResult();
         }
@@ -125,6 +125,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
             _results.Should().NotBeNull();
             var resultsList = _results.ToList();
             resultsList.Count.Should().Be(1);
+        }
+
+        [Fact]
+        public void Then_Results_Has_Expected_Values()
+        {
+            _results.First().UkPrn.Should().Be(10000001);
+            _results.First().VenuePostcode.Should().Be("CV1 2WT");
+            _results.First().LarId.Should().Be("1234567X");
         }
 
         [Fact]

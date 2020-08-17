@@ -13,15 +13,19 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 {
-    public class When_ProviderVenueService_Is_Called_To_GetVenue
+    public class When_ProviderVenueService_Is_Called_To_Get_Venue_With_Trimmed_Postcode
     {
         private readonly IProviderVenueRepository _providerVenueRepository;
         private readonly ProviderVenueDetailViewModel _result;
         private const int ProviderId = 1;
+        private const int ProviderVenueId = 10;
         private const string Name = "Name";
-        private const string Postcode = "CV1 2WT";
+        private const string Postcode = "CV12WT";
+        private const bool IsEnabledForReferral = true;
+        private const bool IsRemoved = true;
+        private const string DataSource = "TEST";
 
-        public When_ProviderVenueService_Is_Called_To_GetVenue()
+        public When_ProviderVenueService_Is_Called_To_Get_Venue_With_Trimmed_Postcode()
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(ProviderVenueMapper).Assembly));
             var mapper = new Mapper(config);
@@ -30,9 +34,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
             _providerVenueRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())
                 .Returns(new Domain.Models.ProviderVenue
                 {
+                    Id = ProviderVenueId,
                     ProviderId = ProviderId,
                     Name = Name,
-                    Postcode = Postcode
+                    Postcode = Postcode,
+                    IsRemoved = IsRemoved,
+                    IsEnabledForReferral = IsEnabledForReferral,
+                    Source = DataSource
                 });
             
             var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
@@ -40,7 +48,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 
             var providerVenueService = new ProviderVenueService(mapper, _providerVenueRepository, locationService, googleMapApiClient);
 
-            _result = providerVenueService.GetVenueAsync(ProviderId, Postcode).GetAwaiter().GetResult();
+            _result = providerVenueService.GetVenueWithTrimmedPostcodeAsync(ProviderId, Postcode).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -52,8 +60,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         [Fact]
         public void Then_The_Fields_Are_As_Expected()
         {
+            _result.Id.Should().Be(ProviderVenueId);
             _result.ProviderId.Should().Be(ProviderId);
+            _result.Postcode.Should().Be(Postcode);
             _result.Name.Should().Be(Name);
+            _result.IsEnabledForReferral.Should().Be(IsEnabledForReferral);
+            _result.IsRemoved.Should().Be(IsRemoved);
+            _result.Source.Should().Be(DataSource);
         }
     }
 }

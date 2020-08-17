@@ -40,9 +40,29 @@ namespace Sfa.Tl.Matching.Application.Services
             return (valid, postcodeResult);
         }
 
+        public async Task<ProviderVenueDetailViewModel> GetVenueAsync(int providerVenueId)
+        {
+            var venue = await _providerVenueRepository.GetSingleOrDefaultAsync(pv => pv.Id == providerVenueId);
+
+            var dto = venue == null ? null : _mapper.Map<ProviderVenue, ProviderVenueDetailViewModel>(venue);
+
+            return dto;
+        }
+
         public async Task<ProviderVenueDetailViewModel> GetVenueAsync(int providerId, string postcode)
         {
             var venue = await _providerVenueRepository.GetSingleOrDefaultAsync(pv => pv.ProviderId == providerId && pv.Postcode == postcode);
+
+            var dto = venue == null ? null : _mapper.Map<ProviderVenue, ProviderVenueDetailViewModel>(venue);
+
+            return dto;
+        }
+
+        public async Task<ProviderVenueDetailViewModel> GetVenueWithTrimmedPostcodeAsync(int providerId, string postcode)
+        {
+            var venue = await _providerVenueRepository.GetSingleOrDefaultAsync(pv => 
+                pv.ProviderId == providerId && 
+                pv.Postcode.Replace(" ", "") == postcode.Replace(" ", ""));
 
             var dto = venue == null ? null : _mapper.Map<ProviderVenue, ProviderVenueDetailViewModel>(venue);
 

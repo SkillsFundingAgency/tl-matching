@@ -50,14 +50,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                 });
 
             var providerVenueQualificationService = new ProviderVenueQualificationService
-                (
-                   _providerService,
-                   providerVenueService,
-                   providerQualificationService,
-                   qualificationService,
-                   routePathService,
-                   qualificationRouteMappingService
-                );
+            (
+                _providerService,
+                providerVenueService,
+                providerQualificationService,
+                qualificationService,
+                routePathService,
+                qualificationRouteMappingService
+            );
 
             var dtoList = new ValidProviderVenueQualificationDtoListBuilder().Build();
 
@@ -70,6 +70,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
             _results.Should().NotBeNull();
             var resultsList = _results.ToList();
             resultsList.Count.Should().Be(1);
+        }
+
+        [Fact]
+        public void Then_Results_Has_Expected_Values()
+        {
+            _results.First().UkPrn.Should().Be(10000001);
+            _results.First().VenuePostcode.Should().BeNull();
+            _results.First().LarId.Should().BeNull();
         }
 
         [Fact]

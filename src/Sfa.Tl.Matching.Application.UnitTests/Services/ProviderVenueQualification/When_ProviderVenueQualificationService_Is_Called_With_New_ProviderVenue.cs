@@ -34,33 +34,37 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                 .Returns((ProviderSearchResultDto)null);
 
             providerService.CreateProviderAsync(Arg.Any<CreateProviderDetailViewModel>()).Returns(1);
+            _providerVenueService.CreateVenueAsync(Arg.Any<AddProviderVenueViewModel>()).Returns(1);
 
             _providerVenueService
-                .GetVenueAsync(1, "CV1 2WT")
-                .Returns(null, //First call - null because venue does not exist
-                    new ProviderVenueDetailViewModel //Second call - returns the newly created item
-                    {
-                        Id = 1,
-                        ProviderId = 1,
-                        Postcode = "CV1 2WT",
-                        IsEnabledForReferral = true,
-                        Source = "Import",
-                        Qualifications = new List<QualificationDetailViewModel>()
-                    });
+                .GetVenueWithTrimmedPostcodeAsync(1, "CV1 2WT")
+                .Returns((ProviderVenueDetailViewModel) null);
+
+            _providerVenueService
+                .GetVenueAsync(1)
+                .Returns(new ProviderVenueDetailViewModel
+                {
+                    Id = 1,
+                    ProviderId = 1,
+                    Postcode = "CV1 2WT",
+                    IsEnabledForReferral = true,
+                    Source = "Import",
+                    Qualifications = new List<QualificationDetailViewModel>()
+                });
 
             _qualificationService.GetQualificationAsync(Arg.Any<string>()).Returns((QualificationDetailViewModel) null);
             _providerQualificationService.GetProviderQualificationAsync(Arg.Any<int>(), Arg.Any<int>()).Returns((ProviderQualificationDto)null);
             _routePathService.GetRouteSummaryByNameAsync(Arg.Any<string>()).Returns((RouteSummaryViewModel) null);
 
             var providerVenueQualificationService = new ProviderVenueQualificationService
-                (
-                   providerService,
-                   _providerVenueService,
-                   _providerQualificationService,
-                   _qualificationService,
-                   _routePathService,
-                   _qualificationRouteMappingService
-                );
+            (
+                providerService,
+                _providerVenueService,
+                _providerQualificationService,
+                _qualificationService,
+                _routePathService,
+                _qualificationRouteMappingService
+            );
 
             var dtoList = new ValidProviderVenueQualificationDtoListBuilder()
                 .AddVenue()
@@ -78,13 +82,29 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
         }
 
         [Fact]
-        public void Then_ProviderVenueService_GetVenueAsync_Is_Called_Exactly_Twice()
+        public void Then_Results_Has_Expected_Values()
+        {
+            _results.First().UkPrn.Should().Be(10000001);
+            _results.First().VenuePostcode.Should().Be("CV1 2WT");
+            _results.First().LarId.Should().BeNull();
+        }
+
+        [Fact]
+        public void Then_ProviderVenueService_GetVenueWithTrimmedPostcodeAsync_Is_Called_Exactly_Once()
         {
             _providerVenueService
-                .Received(2)
-                .GetVenueAsync(1, "CV1 2WT");
+                .Received(1)
+                .GetVenueWithTrimmedPostcodeAsync(1, "CV1 2WT");
         }
-        
+
+        [Fact]
+        public void Then_ProviderVenueService_GetVenueAsync_Is_Called_Exactly_Once()
+        {
+            _providerVenueService
+                .Received(1)
+                .GetVenueAsync(1);
+        }
+
         [Fact]
         public void Then_ProviderVenueService_UpdateVenueAsync_Is_Not_Called()
         {

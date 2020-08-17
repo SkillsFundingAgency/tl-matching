@@ -42,6 +42,9 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 var result = new ProviderVenueQualificationUpdateResultsDto
                 {
+                    UkPrn = providerVenueQualification.UkPrn,
+                    VenuePostcode = providerVenueQualification.VenuePostcode,
+                    LarId = providerVenueQualification.LarId,
                     Message = $"UkPrn: {providerVenueQualification.UkPrn} - Data import successful for Provider Name: {providerVenueQualification.ProviderName}"
                 };
 
@@ -95,7 +98,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     }
 
                     // Provider Venue Update
-                    var venueViewModel = await _providerVenueService.GetVenueAsync(providerId, providerVenueQualification.VenuePostcode);
+                    var venueViewModel = await _providerVenueService.GetVenueWithTrimmedPostcodeAsync(providerId, providerVenueQualification.VenuePostcode);
 
                     if (venueViewModel == null)
                     {
@@ -109,7 +112,7 @@ namespace Sfa.Tl.Matching.Application.Services
                         var venueId = await _providerVenueService.CreateVenueAsync(addProviderVenue);
                         Debug.WriteLine($"Created venue with id {venueId} for provider {providerId} and postcode {providerVenueQualification.VenuePostcode}");
 
-                        venueViewModel = await _providerVenueService.GetVenueAsync(providerId, providerVenueQualification.VenuePostcode);
+                        venueViewModel = await _providerVenueService.GetVenueAsync(venueId);
                     }
                     else
                     {
@@ -160,6 +163,7 @@ namespace Sfa.Tl.Matching.Application.Services
                                 };
 
                                 qualificationId = await _qualificationService.CreateQualificationEntityAsync(missingQualificationViewModel);
+                                Debug.WriteLine($">>>> Created Removing Qualification {qualificationId}");
                             }
                             else
                             {
@@ -168,13 +172,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                             var providerQualificationViewModel = await _providerQualificationService.GetProviderQualificationAsync(venueViewModel.Id, qualificationId);
 
-                            // Delete Provider Venue Qualification
-                            if (!providerVenueQualification.QualificationIsOffered && providerQualificationViewModel != null)
-                            {
-                                await _providerQualificationService.RemoveProviderQualificationAsync(venueViewModel.Id, qualificationId);
-                            }
-
-                            if (providerQualificationViewModel == null)
+                            if (providerQualificationViewModel == null && providerVenueQualification.QualificationIsOffered)
                             {
                                 var addQualificationViewModel = new AddQualificationViewModel
                                 {
@@ -185,9 +183,16 @@ namespace Sfa.Tl.Matching.Application.Services
                                     Postcode = venueViewModel.Postcode
                                 };
 
+                                Debug.WriteLine($">>>> Creating ProviderQualification {addQualificationViewModel.LarId} - {addQualificationViewModel.QualificationId} - {addQualificationViewModel.ProviderVenueId}");
                                 await _providerQualificationService.CreateProviderQualificationAsync(addQualificationViewModel);
                             }
-
+                            // Delete Provider Venue Qualification
+                            else if (providerQualificationViewModel != null && !providerVenueQualification.QualificationIsOffered)
+                            {
+                                Debug.WriteLine($">>>> Removing ProviderQualification {venueViewModel.Id} - {qualificationId} ({providerQualificationViewModel.ProviderVenueId} - {providerQualificationViewModel.QualificationId})");
+                                await _providerQualificationService.RemoveProviderQualificationAsync(venueViewModel.Id, qualificationId);
+                            }
+                            
                             // Route Mapping
                             foreach (var routeName in providerVenueQualification.Routes)
                             {
@@ -196,7 +201,7 @@ namespace Sfa.Tl.Matching.Application.Services
                                 if (route == null)
                                 {
                                     result.HasErrors = true;
-                                    result.Message = $"Data Error: Route {routeName} not found in existing Routes.";
+                                    result.Message = $"Data Error: Route {routeName} not found in existing Routes. UkPrn: {providerVenueQualification.UkPrn}, postcode: {providerVenueQualification.VenuePostcode}, LAR Id: {providerVenueQualification.LarId}";
                                     continue;
                                 }
 
@@ -223,7 +228,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 catch (Exception ex)
                 {
                     result.HasErrors = true;
-                    result.Message = $"UkPrn: {providerVenueQualification.UkPrn} Import failed \n Error Message: {ex.Message}\n StackTrace: {ex.StackTrace}";
+                    result.Message = $"Import failed for UkPrn: {providerVenueQualification.UkPrn}, postcode: {providerVenueQualification.VenuePostcode}, LAR Id: {providerVenueQualification.LarId} \n Error Message: {ex.Message}\n StackTrace: {ex.StackTrace}";
                 }
 
                 results.Add(result);
