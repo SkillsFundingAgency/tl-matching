@@ -62,7 +62,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var venue = await _providerVenueRepository.GetSingleOrDefaultAsync(pv => 
                 pv.ProviderId == providerId && 
-                pv.Postcode.Replace(" ", "") == postcode.Replace(" ", ""));
+                pv.Postcode.ToLetterOrDigit() == postcode.ToLetterOrDigit());
 
             var dto = venue == null ? null : _mapper.Map<ProviderVenue, ProviderVenueDetailViewModel>(venue);
 
