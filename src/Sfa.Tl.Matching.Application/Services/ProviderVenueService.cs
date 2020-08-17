@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
@@ -62,7 +63,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var venue = await _providerVenueRepository.GetSingleOrDefaultAsync(pv => 
                 pv.ProviderId == providerId && 
-                pv.Postcode.ToLetterOrDigit() == postcode.ToLetterOrDigit());
+                string.Compare(pv.Postcode.ToLetterOrDigit(), postcode.ToLetterOrDigit(), StringComparison.OrdinalIgnoreCase) == 0);
 
             var dto = venue == null ? null : _mapper.Map<ProviderVenue, ProviderVenueDetailViewModel>(venue);
 
