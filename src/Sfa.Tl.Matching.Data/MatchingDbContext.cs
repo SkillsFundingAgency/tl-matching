@@ -8,7 +8,11 @@ namespace Sfa.Tl.Matching.Data
     {
         private readonly bool _applyQueryFilters;
 
-        public MatchingDbContext(DbContextOptions options, bool applyQueryFilters = true) : base(options)
+        public MatchingDbContext(DbContextOptions options) : this(options, true)
+        {
+        }
+
+        public MatchingDbContext(DbContextOptions options, bool applyQueryFilters) : base(options)
         {
             _applyQueryFilters = applyQueryFilters;
         }

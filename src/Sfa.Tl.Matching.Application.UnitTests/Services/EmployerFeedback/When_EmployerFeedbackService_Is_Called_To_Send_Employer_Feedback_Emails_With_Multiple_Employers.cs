@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 .BuildMockDbSet();
             
             var contextOptions = new DbContextOptions<MatchingDbContext>();
-            var mockContext = Substitute.For<MatchingDbContext>(contextOptions, false);
+            var mockContext = Substitute.For<MatchingDbContext>(contextOptions);
             mockContext.Set<BankHoliday>().Returns(mockDbSet);
 
             IRepository<BankHoliday> bankHolidayRepository =

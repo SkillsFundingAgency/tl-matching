@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 .BuildMockDbSet();
 
             var contextOptions = new DbContextOptions<MatchingDbContext>();
-            var mockContext = Substitute.For<MatchingDbContext>(contextOptions, false);
+            var mockContext = Substitute.For<MatchingDbContext>(contextOptions);
             mockContext.Set<BankHoliday>().Returns(mockDbSet);
 
             BankHolidayRepository =
