@@ -11,41 +11,39 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderFeedback
 {
     public class When_SendProviderFeedbackEmails_Function_Timer_Trigger_Fires
     {
-            private readonly IProviderFeedbackService _providerFeedbackService;
-            private readonly IRepository<FunctionLog> _functionLogRepository;
+        private readonly IProviderFeedbackService _providerFeedbackService;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
 
-            public When_SendProviderFeedbackEmails_Function_Timer_Trigger_Fires()
-            {
-                var timerSchedule = Substitute.For<TimerSchedule>();
+        public When_SendProviderFeedbackEmails_Function_Timer_Trigger_Fires()
+        {
+            var timerSchedule = Substitute.For<TimerSchedule>();
 
-                _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
+            _providerFeedbackService = Substitute.For<IProviderFeedbackService>();
+            _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
-                _providerFeedbackService = Substitute.For<IProviderFeedbackService>();
-
-                var providerFeedback = new Functions.ProviderFeedback();
-                providerFeedback.SendProviderFeedbackEmails(
+            var providerFeedbackFunctions = new Functions.ProviderFeedback(_providerFeedbackService, _functionLogRepository);
+            providerFeedbackFunctions.SendProviderFeedbackEmails(
                     new TimerInfo(timerSchedule, new ScheduleStatus()),
                     new ExecutionContext(),
-                    new NullLogger<Functions.ProviderFeedback>(),
-                    _providerFeedbackService,
-                    _functionLogRepository).GetAwaiter().GetResult();
-            }
+                    new NullLogger<Functions.ProviderFeedback>()
+                    ).GetAwaiter().GetResult();
+        }
 
-            [Fact]
-            public void SendProviderFeedbackEmailsAsync_Is_Called_Exactly_Once()
-            {
-                _providerFeedbackService
-                    .Received(1)
-                    .SendProviderFeedbackEmailsAsync(
-                        Arg.Is<string>(x => x == "System"));
-            }
+        [Fact]
+        public void SendProviderFeedbackEmailsAsync_Is_Called_Exactly_Once()
+        {
+            _providerFeedbackService
+                .Received(1)
+                .SendProviderFeedbackEmailsAsync(
+                    Arg.Is<string>(x => x == "System"));
+        }
 
-            [Fact]
-            public void FunctionLogRepository_Create_Is_Not_Called()
-            {
-                _functionLogRepository
-                    .DidNotReceiveWithAnyArgs()
-                    .CreateAsync(Arg.Any<FunctionLog>());
-            }
+        [Fact]
+        public void FunctionLogRepository_Create_Is_Not_Called()
+        {
+            _functionLogRepository
+                .DidNotReceiveWithAnyArgs()
+                .CreateAsync(Arg.Any<FunctionLog>());
         }
     }
+}

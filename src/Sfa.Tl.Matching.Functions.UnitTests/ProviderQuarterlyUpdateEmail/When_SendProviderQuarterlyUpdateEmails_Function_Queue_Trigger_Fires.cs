@@ -20,13 +20,14 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderQuarterlyUpdateEmail
 
             _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
-            var providerQuarterlyUpdateEmailFunctions = new Functions.ProviderQuarterlyUpdateEmail();
+            var providerQuarterlyUpdateEmailFunctions = new Functions.ProviderQuarterlyUpdateEmail(_providerQuarterlyUpdateService,
+                _functionLogRepository);
+
             providerQuarterlyUpdateEmailFunctions.SendProviderQuarterlyUpdateEmailsAsync(
                 new SendProviderQuarterlyUpdateEmail { BackgroundProcessHistoryId = 1 }, 
                 new ExecutionContext(), 
-                new NullLogger<Functions.Proximity>(), 
-                _providerQuarterlyUpdateService,
-                _functionLogRepository).GetAwaiter().GetResult();
+                new NullLogger<Functions.Proximity>() 
+                ).GetAwaiter().GetResult();
         }
 
         [Fact]

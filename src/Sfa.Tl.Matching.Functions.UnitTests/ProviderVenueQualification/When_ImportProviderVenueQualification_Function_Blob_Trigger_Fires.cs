@@ -29,16 +29,15 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderVenueQualification
 
             _fileImportService = Substitute.For<IProviderVenueQualificationFileImportService>();
 
-            var providerVenueQualification = new Functions.ProviderVenueQualification();
+            var providerVenueQualification = new Functions.ProviderVenueQualification(_fileImportService,
+                _functionLogRepository, httpContextAccessor);
 
             providerVenueQualification.ImportProviderVenueQualification(
                 blobStream,
                 "test",
                 context,
-                logger,
-                _fileImportService,
-                _functionLogRepository,
-                httpContextAccessor).GetAwaiter().GetResult();
+                logger
+                ).GetAwaiter().GetResult();
         }
 
         [Fact]

@@ -16,15 +16,24 @@ namespace Sfa.Tl.Matching.Functions
 {
     public class PostcodeLookup
     {
+        private readonly IFileImportService<PostcodeLookupStagingFileImportDto> _fileImportService;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
+
+        public PostcodeLookup(
+            IFileImportService<PostcodeLookupStagingFileImportDto> fileImportService,
+            IRepository<FunctionLog> functionLogRepository)
+        {
+            _fileImportService = fileImportService;
+            _functionLogRepository = functionLogRepository;
+        }
+
         [FunctionName("ImportPostcodeLookup")]
         public async Task ImportPostcodeLookupAsync(
             [BlobTrigger("postcodes/{name}", Connection = "BlobStorageConnectionString")]
             ICloudBlob blockBlob,
             string name,
             ExecutionContext context,
-            ILogger logger,
-            [Inject] IFileImportService<PostcodeLookupStagingFileImportDto> fileImportService,
-            [Inject] IRepository<FunctionLog> functionLogRepository)
+            ILogger logger)
         {
             try
             {
@@ -50,7 +59,7 @@ namespace Sfa.Tl.Matching.Functions
                                 && entry.Name.StartsWith(".csv")))
                         {
                             await using var entryStream = entry.Open();
-                            createdRecords = await fileImportService.BulkImportAsync(
+                            createdRecords = await _fileImportService.BulkImportAsync(
                                 new PostcodeLookupStagingFileImportDto
                                 {
                                     FileDataStream = entryStream,
@@ -75,7 +84,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,

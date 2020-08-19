@@ -15,23 +15,34 @@ namespace Sfa.Tl.Matching.Functions
 {
     public class ProviderReference
     {
+        private readonly IReferenceDataService _referenceDataService;
+        private readonly IDateTimeProvider _dateTimeProvider;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
+
+        public ProviderReference(
+            IReferenceDataService referenceDataService,
+            IDateTimeProvider dateTimeProvider,
+            IRepository<FunctionLog> functionLogRepository)
+        {
+            _referenceDataService = referenceDataService;
+            _dateTimeProvider = dateTimeProvider;
+            _functionLogRepository = functionLogRepository;
+        }
+
         [FunctionName("ImportProviderReference")]
         public async Task ImportProviderReferenceAsync(
 #pragma warning disable IDE0060 // Remove unused parameter
             [TimerTrigger("%ProviderReferenceTrigger%")] TimerInfo timer,
 #pragma warning restore IDE0060 // Remove unused parameter
             ExecutionContext context,
-            ILogger logger,
-            [Inject] IReferenceDataService referenceDataService,
-            [Inject] IDateTimeProvider dateTimeProvider,
-            [Inject] IRepository<FunctionLog> functionLogRepository)
+            ILogger logger)
         {
             try
             {
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
                 var stopwatch = Stopwatch.StartNew();
-                var createdRecords = await referenceDataService.SynchronizeProviderReferenceAsync(dateTimeProvider.MinValue());
+                var createdRecords = await _referenceDataService.SynchronizeProviderReferenceAsync(_dateTimeProvider.MinValue());
                 stopwatch.Stop();
 
                 logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
@@ -44,7 +55,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
@@ -61,17 +72,14 @@ namespace Sfa.Tl.Matching.Functions
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
 #pragma warning restore IDE0060 // Remove unused parameter
             ExecutionContext context,
-            ILogger logger,
-            [Inject] IReferenceDataService referenceDataService,
-            [Inject] IDateTimeProvider dateTimeProvider,
-            [Inject] IRepository<FunctionLog> functionLogRepository)
+            ILogger logger)
         {
             try
             {
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
                 var stopwatch = Stopwatch.StartNew();
-                var createdRecords = await referenceDataService.SynchronizeProviderReferenceAsync(dateTimeProvider.MinValue());
+                var createdRecords = await _referenceDataService.SynchronizeProviderReferenceAsync(_dateTimeProvider.MinValue());
                 stopwatch.Stop();
 
                 logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
@@ -86,7 +94,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,

@@ -33,18 +33,18 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.PostcodeLookup
             var context = new ExecutionContext();
             var logger = Substitute.For<ILogger>();
 
+            _fileImportService = Substitute.For<IFileImportService<PostcodeLookupStagingFileImportDto>>();
             _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
-            _fileImportService = Substitute.For<IFileImportService<PostcodeLookupStagingFileImportDto>>();
+            var postcodeLookupFunctions = new Functions.PostcodeLookup(_fileImportService,
+                _functionLogRepository);
 
-            var postcodeLookup = new Functions.PostcodeLookup();
-            postcodeLookup.ImportPostcodeLookupAsync(
+            postcodeLookupFunctions.ImportPostcodeLookupAsync(
                 blobStream,
                 "test",
                 context,
-                logger,
-                _fileImportService,
-                _functionLogRepository).GetAwaiter().GetResult();
+                logger
+                ).GetAwaiter().GetResult();
         }
 
         [Fact]

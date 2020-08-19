@@ -30,14 +30,14 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderReference
             var request = httpContext.Request;
             request.Method = HttpMethod.Get.ToString();
 
-            var providerReference = new Functions.ProviderReference();
+            var providerReference = new Functions.ProviderReference(_referenceDataService,
+                dateTimeProvider, _functionLogRepository);
+
             providerReference.ManualImportProviderReferenceAsync(
                 request,
                 new ExecutionContext(),
-                new NullLogger<Functions.ProviderReference>(),
-                _referenceDataService,
-                dateTimeProvider,
-                _functionLogRepository).GetAwaiter().GetResult();
+                new NullLogger<Functions.ProviderReference>()
+               ).GetAwaiter().GetResult();
         }
 
         [Fact]

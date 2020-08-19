@@ -49,8 +49,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.BankHolidayGenerator
 
             _bankHolidayBulkInsertRepository = Substitute.For<IBulkInsertRepository<BankHoliday>>();
 
-            var bankHolidayGenerator = new Functions.BankHolidayGenerator(_calendarApiClient, mapper, _bankHolidayBulkInsertRepository, _functionLogRepository);
-            bankHolidayGenerator.GenerateBankHolidaysAsync(
+            var bankHolidayGeneratorFunctions = new Functions.BankHolidayGenerator(_calendarApiClient, mapper, _bankHolidayBulkInsertRepository, _functionLogRepository);
+            bankHolidayGeneratorFunctions.GenerateBankHolidaysAsync(
                     new TimerInfo(timerSchedule, new ScheduleStatus()),
                     new ExecutionContext(),
                     new NullLogger<Functions.BankHolidayGenerator>())

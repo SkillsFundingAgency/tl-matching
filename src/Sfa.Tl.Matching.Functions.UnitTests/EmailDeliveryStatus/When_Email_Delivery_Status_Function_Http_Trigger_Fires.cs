@@ -51,10 +51,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             var httpRequest = HttpRequestSetup(query, serializedPayLoad);
 
             //Act
-            var functions = new Functions.EmailDeliveryStatus();
-            var result = await functions.EmailDeliveryStatusHandlerAsync(httpRequest, context, logger,
-                matchingConfiguration,
-                notificationService, functionLogRepository) as OkObjectResult;
+            var emailDeliveryStatusFunctions = new Functions.EmailDeliveryStatus(matchingConfiguration, notificationService, functionLogRepository);
+            var result = await emailDeliveryStatusFunctions.EmailDeliveryStatusHandlerAsync(httpRequest, context, logger) as OkObjectResult;
 
             //Assert
             httpRequest.Headers.TryGetValue("Authorization", out var token);
@@ -94,10 +92,10 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
                 .Returns(Task.FromResult<EmailHistory>(null));
 
             //Act
-            var functions = new Functions.EmailDeliveryStatus();
-            var result = await functions.EmailDeliveryStatusHandlerAsync(
-                HttpRequestSetup(query, serializedPayLoad), context, logger, matchingConfiguration,
-                notificationService, functionLogRepository) as OkObjectResult;
+            var emailDeliveryStatusFunctions = new Functions.EmailDeliveryStatus(matchingConfiguration, notificationService, functionLogRepository);
+            var result = await emailDeliveryStatusFunctions.EmailDeliveryStatusHandlerAsync(
+                HttpRequestSetup(query, serializedPayLoad), 
+                context, logger) as OkObjectResult;
 
             //Arrange
             result.Should().NotBeNull();
@@ -139,10 +137,10 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
                 .Returns(emailHistory);
 
             //Act
-            var functions = new Functions.EmailDeliveryStatus();
-            var result = await functions.EmailDeliveryStatusHandlerAsync(
-                HttpRequestSetup(query, serializedPayLoad), context, logger, matchingConfiguration,
-                notificationService, functionLogRepository) as BadRequestObjectResult;
+            var emailDeliveryStatusFunctions = new Functions.EmailDeliveryStatus(matchingConfiguration, notificationService, functionLogRepository);
+            var result = await emailDeliveryStatusFunctions.EmailDeliveryStatusHandlerAsync(
+                HttpRequestSetup(query, serializedPayLoad), 
+                context, logger) as BadRequestObjectResult;
 
             //Assert
             result.Should().NotBeNull();
@@ -194,10 +192,10 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
                 .Returns(emailHistory);
 
             //Act
-            var functions = new Functions.EmailDeliveryStatus();
-            var result = await functions.EmailDeliveryStatusHandlerAsync(
-                HttpRequestSetup(query, serializedPayLoad), context, logger, matchingConfiguration,
-                notificationService, functionLogRepository) as OkObjectResult;
+            var emailDeliveryStatusFunctions = new Functions.EmailDeliveryStatus(matchingConfiguration, notificationService, functionLogRepository);
+            var result = await emailDeliveryStatusFunctions.EmailDeliveryStatusHandlerAsync(
+                HttpRequestSetup(query, serializedPayLoad), 
+                context, logger) as OkObjectResult;
 
             //Assert
             result.Should().NotBeNull();

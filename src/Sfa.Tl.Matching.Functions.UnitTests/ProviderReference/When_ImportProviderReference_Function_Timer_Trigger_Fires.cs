@@ -25,14 +25,14 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderReference
 
             _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
-            var providerReference = new Functions.ProviderReference();
+            var providerReference = new Functions.ProviderReference(_referenceDataService,
+                dateTimeProvider, _functionLogRepository);
+
             providerReference.ImportProviderReferenceAsync(
                 new TimerInfo(timerSchedule, new ScheduleStatus()),
                 new ExecutionContext(),
-                new NullLogger<Functions.ProviderReference>(),
-                _referenceDataService,
-                dateTimeProvider,
-                _functionLogRepository).GetAwaiter().GetResult();
+                new NullLogger<Functions.ProviderReference>()
+                ).GetAwaiter().GetResult();
         }
 
         [Fact]

@@ -6,23 +6,33 @@ using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Extensions;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Functions
 {
     public class Provider
     {
+        private readonly IRepository<Domain.Models.Provider> _providerRepository;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
+
+        public Provider(
+            IRepository<Domain.Models.Provider> providerRepository,
+            IRepository<FunctionLog> functionLogRepository)
+        {
+            _providerRepository = providerRepository;
+            _functionLogRepository = functionLogRepository;
+        }
+
         [FunctionName("BackFillProviderDisplayName")]
         public async Task BackFillProviderDisplayNameAsync(
 #pragma warning disable IDE0060 // Remove unused parameter
             [TimerTrigger("0 0 0 1 1 *", RunOnStartup = true)] TimerInfo timer,
 #pragma warning restore IDE0060 // Remove unused parameter
             ExecutionContext context,
-            ILogger logger,
-            [Inject] IRepository<Domain.Models.Provider> providerRepository,
-            [Inject] IRepository<FunctionLog> functionLogRepository
-        )
+            ILogger logger)
         {
             try
             {
@@ -32,9 +42,9 @@ namespace Sfa.Tl.Matching.Functions
 
                 var providers = new List<Domain.Models.Provider>();
 
-                if (providerRepository.GetManyAsync(p => string.IsNullOrWhiteSpace(p.DisplayName)).Any())
+                if (_providerRepository.GetManyAsync(p => string.IsNullOrWhiteSpace(p.DisplayName)).Any())
                 {
-                    foreach (var provider in providerRepository.GetManyAsync(p => true))
+                    foreach (var provider in _providerRepository.GetManyAsync(p => true))
                     {
                         var displayName =
                             string.IsNullOrWhiteSpace(provider.DisplayName)
@@ -49,7 +59,7 @@ namespace Sfa.Tl.Matching.Functions
                         }
                     }
 
-                    await providerRepository.UpdateManyAsync(providers);
+                    await _providerRepository.UpdateManyAsync(providers);
                 }
 
                 stopwatch.Stop();
@@ -64,7 +74,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,

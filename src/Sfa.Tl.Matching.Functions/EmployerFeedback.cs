@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Web.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -14,21 +15,30 @@ namespace Sfa.Tl.Matching.Functions
 {
     public class EmployerFeedback
     {
+        private readonly IEmployerFeedbackService _employerFeedbackService;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
+
+        public EmployerFeedback(
+            IEmployerFeedbackService employerFeedbackService,
+            IRepository<FunctionLog> functionLogRepository)
+        {
+            _employerFeedbackService = employerFeedbackService;
+            _functionLogRepository = functionLogRepository;
+        }
+
         [FunctionName("SendEmployerFeedbackEmails")]
         public async Task SendEmployerFeedbackEmails(
 #pragma warning disable IDE0060 // Remove unused parameter
             [TimerTrigger("%EmployerFeedbackTrigger%")] TimerInfo timer,
 #pragma warning restore IDE0060 // Remove unused parameter
             ExecutionContext context,
-            ILogger logger,
-            [Inject] IEmployerFeedbackService employerFeedbackService,
-            [Inject] IRepository<FunctionLog> functionLogRepository)
+            ILogger logger)
         {
             try
             {
                 var stopwatch = Stopwatch.StartNew();
 
-                var emailsSent = await employerFeedbackService.SendEmployerFeedbackEmailsAsync("System");
+                var emailsSent = await _employerFeedbackService.SendEmployerFeedbackEmailsAsync("System");
 
                 stopwatch.Stop();
 
@@ -41,7 +51,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
@@ -57,21 +67,38 @@ namespace Sfa.Tl.Matching.Functions
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
 #pragma warning restore IDE0060 // Remove unused parameter
             ExecutionContext context,
-            ILogger logger,
-            [Inject] IEmployerFeedbackService employerFeedbackService)
+            ILogger logger)
         {
-            logger.LogInformation($"Function {context.FunctionName} triggered");
+            try
+            {
+                logger.LogInformation($"Function {context.FunctionName} triggered");
 
-            var stopwatch = Stopwatch.StartNew();
+                var stopwatch = Stopwatch.StartNew();
 
-            var emailsSent = await employerFeedbackService.SendEmployerFeedbackEmailsAsync("System");
+                var emailsSent = await _employerFeedbackService.SendEmployerFeedbackEmailsAsync("System");
 
-            stopwatch.Stop();
+                stopwatch.Stop();
 
-            logger.LogInformation($"Function {context.FunctionName} sent {emailsSent} emails\n" +
-                                  $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
+                logger.LogInformation($"Function {context.FunctionName} sent {emailsSent} emails\n" +
+                                      $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
 
-            return new OkObjectResult($"{emailsSent} emails sent.");
+                return new OkObjectResult($"{emailsSent} emails sent.");
+            }
+            catch (Exception e)
+            {
+                var errorMessage = $"Error sending employer feedback emails. Internal Error Message {e}";
+
+                logger.LogError(errorMessage);
+
+                await _functionLogRepository.CreateAsync(new FunctionLog
+                {
+                    ErrorMessage = errorMessage,
+                    FunctionName = context.FunctionName,
+                    RowNumber = -1
+                });
+
+                return new InternalServerErrorResult();
+            }
         }
     }
 }

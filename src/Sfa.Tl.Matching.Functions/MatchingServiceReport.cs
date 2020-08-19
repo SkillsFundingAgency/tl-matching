@@ -9,22 +9,34 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+
 // ReSharper disable UnusedMember.Global
 
 namespace Sfa.Tl.Matching.Functions
 {
-    public static class MatchingServiceReport
+    public class MatchingServiceReport
     {
+        private readonly IRepository<Domain.Models.Employer> _employerRepository;
+        private readonly IOpportunityRepository _opportunityRepository;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
+
+        public MatchingServiceReport(
+            IRepository<Domain.Models.Employer> employerRepository,
+            IOpportunityRepository opportunityRepository,
+            IRepository<FunctionLog> functionLogRepository)
+        {
+            _employerRepository = employerRepository;
+            _opportunityRepository = opportunityRepository;
+            _functionLogRepository = functionLogRepository;
+        }
+        
         [FunctionName("GetMatchingServiceOpportunityReport")]
-        public static async Task<IActionResult> GetMatchingServiceOpportunityReportAsync(
+        public async Task<IActionResult> GetMatchingServiceOpportunityReportAsync(
 #pragma warning disable IDE0060 // Remove unused parameter
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
 #pragma warning restore IDE0060 // Remove unused parameter
         ExecutionContext context,
-        ILogger logger,
-        [Inject] IOpportunityRepository opportunityRepository,
-        [Inject] IRepository<FunctionLog> functionLogRepository
-        )
+        ILogger logger)
         {
             try
             {
@@ -32,7 +44,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
-                var result = await opportunityRepository.GetMatchingServiceOpportunityReportAsync();
+                var result = await _opportunityRepository.GetMatchingServiceOpportunityReportAsync();
 
                 stopwatch.Stop();
 
@@ -48,7 +60,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
@@ -59,15 +71,12 @@ namespace Sfa.Tl.Matching.Functions
         }
 
         [FunctionName("GetMatchingServiceProviderOpportunityReport")]
-        public static async Task<IActionResult> GetMatchingServiceProviderOpportunityReportAsync(
+        public async Task<IActionResult> GetMatchingServiceProviderOpportunityReportAsync(
 #pragma warning disable IDE0060 // Remove unused parameter
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
 #pragma warning restore IDE0060 // Remove unused parameter
         ExecutionContext context,
-        ILogger logger,
-        [Inject] IOpportunityRepository opportunityRepository,
-        [Inject] IRepository<FunctionLog> functionLogRepository
-        )
+        ILogger logger)
         {
             try
             {
@@ -75,7 +84,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
-                var result = await opportunityRepository.GetMatchingServiceProviderOpportunityReportAsync();
+                var result = await _opportunityRepository.GetMatchingServiceProviderOpportunityReportAsync();
 
                 stopwatch.Stop();
 
@@ -91,7 +100,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
@@ -102,15 +111,12 @@ namespace Sfa.Tl.Matching.Functions
         }
 
         [FunctionName("GetMatchingServiceEmployerReport")]
-        public static async Task<IActionResult> GetMatchingServiceEmployerReportAsync(
+        public async Task<IActionResult> GetMatchingServiceEmployerReportAsync(
 #pragma warning disable IDE0060 // Remove unused parameter
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
 #pragma warning restore IDE0060 // Remove unused parameter
             ExecutionContext context,
-            ILogger logger,
-            [Inject] IRepository<Domain.Models.Employer> employerRepository,
-            [Inject] IRepository<FunctionLog> functionLogRepository
-        )
+            ILogger logger)
         {
             try
             {
@@ -118,7 +124,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
-                var result = await employerRepository.GetManyAsync().CountAsync();
+                var result = await _employerRepository.GetManyAsync().CountAsync();
 
                 stopwatch.Stop();
 
@@ -134,7 +140,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
@@ -145,15 +151,12 @@ namespace Sfa.Tl.Matching.Functions
         }
 
         [FunctionName("GetMatchingServiceProviderEmployerReport")]
-        public static async Task<IActionResult> GetMatchingServiceProviderEmployerReportAsync(
+        public async Task<IActionResult> GetMatchingServiceProviderEmployerReportAsync(
 #pragma warning disable IDE0060 // Remove unused parameter
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
 #pragma warning restore IDE0060 // Remove unused parameter
             ExecutionContext context,
-            ILogger logger,
-            [Inject] IOpportunityRepository opportunityRepository,
-            [Inject] IRepository<FunctionLog> functionLogRepository
-        )
+            ILogger logger)
         {
             try
             {
@@ -161,7 +164,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
-                var result = await opportunityRepository.GetMatchingServiceProviderEmployerReportAsync();
+                var result = await _opportunityRepository.GetMatchingServiceProviderEmployerReportAsync();
 
                 stopwatch.Stop();
 
@@ -177,7 +180,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,

@@ -41,15 +41,12 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmployerAupaBlankEmail
                 Owner = EmployerOwner
             };
 
-            var employerAupaBlankEmailFunctions = new Functions.EmployerAupaBlankEmail();
+            var employerAupaBlankEmailFunctions = new Functions.EmployerAupaBlankEmail(configuration, _emailService, _functionLogRepository);
             employerAupaBlankEmailFunctions.SendEmployerAupaBlankEmailAsync(
                 employerAupaBlankEmail,
                 new ExecutionContext(),
-                new NullLogger<Functions.EmployerAupaBlankEmail>(),
-                configuration,
-                _emailService,
-                _functionLogRepository
-                ).GetAwaiter().GetResult();
+                new NullLogger<Functions.EmployerAupaBlankEmail>()
+            ).GetAwaiter().GetResult();
         }
         
         [Fact]

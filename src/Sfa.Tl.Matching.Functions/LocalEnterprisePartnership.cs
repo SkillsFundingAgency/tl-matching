@@ -14,15 +14,24 @@ namespace Sfa.Tl.Matching.Functions
 {
     public class LocalEnterprisePartnership
     {
+        private readonly IFileImportService<LocalEnterprisePartnershipStagingFileImportDto> _fileImportService;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
+
+        public LocalEnterprisePartnership(
+            IFileImportService<LocalEnterprisePartnershipStagingFileImportDto> fileImportService,
+            IRepository<FunctionLog> functionLogRepository)
+        {
+            _fileImportService = fileImportService;
+            _functionLogRepository = functionLogRepository;
+        }
+
         [FunctionName("ImportLocalEnterprisePartnership")]
         public async Task ImportLocalEnterprisePartnershipAsync(
             [BlobTrigger("localenterprisepartnership/{name}", Connection = "BlobStorageConnectionString")]
             ICloudBlob blockBlob,
             string name,
             ExecutionContext context,
-            ILogger logger,
-            [Inject] IFileImportService<LocalEnterprisePartnershipStagingFileImportDto> fileImportService,
-            [Inject] IRepository<FunctionLog> functionLogRepository)
+            ILogger logger)
         {
             try
             {
@@ -34,7 +43,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 var stopwatch = Stopwatch.StartNew();
 
-                var createdRecords = await fileImportService.BulkImportAsync(new LocalEnterprisePartnershipStagingFileImportDto
+                var createdRecords = await _fileImportService.BulkImportAsync(new LocalEnterprisePartnershipStagingFileImportDto
                 {
                     FileDataStream = stream,
                     CreatedBy = blockBlob.GetCreatedByMetadata()
@@ -53,7 +62,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,

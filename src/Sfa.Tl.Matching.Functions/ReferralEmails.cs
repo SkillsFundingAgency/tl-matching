@@ -13,12 +13,21 @@ namespace Sfa.Tl.Matching.Functions
 {
     public class ReferralEmails
     {
+        private readonly IReferralEmailService _referralEmailService;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
+
+        public ReferralEmails(
+            IReferralEmailService referralEmailService,
+            IRepository<FunctionLog> functionLogRepository)
+        {
+            _referralEmailService = referralEmailService;
+            _functionLogRepository = functionLogRepository;
+        }
+
         [FunctionName("SendEmployerReferralEmails")]
         public async Task SendEmployerReferralEmailsAsync([QueueTrigger(QueueName.EmployerReferralEmailQueue, Connection = "BlobStorageConnectionString")]SendEmployerReferralEmail employerReferralEmailData, 
             ExecutionContext context,
-            ILogger logger,
-            [Inject] IReferralEmailService referralEmailService,
-            [Inject] IRepository<FunctionLog> functionLogRepository)
+            ILogger logger)
         {
             var stopwatch = Stopwatch.StartNew();
 
@@ -28,7 +37,7 @@ namespace Sfa.Tl.Matching.Functions
 
             try
             {
-                await referralEmailService.SendEmployerReferralEmailAsync(opportunityId, itemIds, backgroundProcessHistoryId, "System");
+                await _referralEmailService.SendEmployerReferralEmailAsync(opportunityId, itemIds, backgroundProcessHistoryId, "System");
             }
             catch (Exception e)
             {
@@ -36,7 +45,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
@@ -53,9 +62,7 @@ namespace Sfa.Tl.Matching.Functions
         [FunctionName("SendProviderReferralEmails")]
         public async Task SendProviderReferralEmailsAsync([QueueTrigger(QueueName.ProviderReferralEmailQueue, Connection = "BlobStorageConnectionString")]SendProviderReferralEmail providerReferralEmailData,
             ExecutionContext context,
-            ILogger logger,
-            [Inject] IReferralEmailService referralEmailService,
-            [Inject] IRepository<FunctionLog> functionLogRepository)
+            ILogger logger)
         {
             var stopwatch = Stopwatch.StartNew();
 
@@ -65,7 +72,7 @@ namespace Sfa.Tl.Matching.Functions
 
             try
             {
-                await referralEmailService.SendProviderReferralEmailAsync(opportunityId, itemIds, backgroundProcessHistoryId, "System");
+                await _referralEmailService.SendProviderReferralEmailAsync(opportunityId, itemIds, backgroundProcessHistoryId, "System");
             }
             catch (Exception e)
             {
@@ -73,7 +80,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,

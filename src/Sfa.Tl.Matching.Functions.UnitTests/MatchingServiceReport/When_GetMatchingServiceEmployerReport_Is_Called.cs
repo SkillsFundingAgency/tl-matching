@@ -24,13 +24,15 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.MatchingServiceReport
             var logger = Substitute.For<ILogger>();
             var context = new ExecutionContext();
 
-            var mockDbSet = new EmployerBuilder()
+            var mockEmployerDbSet = new EmployerBuilder()
                 .BuildList()
                 .AsQueryable()
                 .BuildMockDbSet();
 
             var employerRepository = Substitute.For<IRepository<Domain.Models.Employer>>();
-            employerRepository.GetManyAsync().Returns(mockDbSet);
+            employerRepository.GetManyAsync().Returns(mockEmployerDbSet);
+
+            var opportunityRepository = Substitute.For< IOpportunityRepository > ();
 
             _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
@@ -38,12 +40,13 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.MatchingServiceReport
             var request = httpContext.Request;
             request.Method = HttpMethod.Get.ToString();
 
-            _result = Functions.MatchingServiceReport.GetMatchingServiceEmployerReportAsync(
+            var matchingFunctions = new Functions.MatchingServiceReport(employerRepository, 
+                opportunityRepository, _functionLogRepository);
+
+            _result = matchingFunctions.GetMatchingServiceEmployerReportAsync(
                 request,
                 context,
-                logger,
-                employerRepository,
-                _functionLogRepository)
+                logger)
                 .GetAwaiter().GetResult();
         }
 

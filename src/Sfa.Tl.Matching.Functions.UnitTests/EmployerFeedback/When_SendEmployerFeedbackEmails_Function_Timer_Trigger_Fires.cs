@@ -11,41 +11,39 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmployerFeedback
 {
     public class When_SendEmployerFeedbackEmails_Function_Timer_Trigger_Fires
     {
-            private readonly IEmployerFeedbackService _employerFeedbackService;
-            private readonly IRepository<FunctionLog> _functionLogRepository;
+        private readonly IEmployerFeedbackService _employerFeedbackService;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
 
-            public When_SendEmployerFeedbackEmails_Function_Timer_Trigger_Fires()
-            {
-                var timerSchedule = Substitute.For<TimerSchedule>();
+        public When_SendEmployerFeedbackEmails_Function_Timer_Trigger_Fires()
+        {
+            var timerSchedule = Substitute.For<TimerSchedule>();
 
-                _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
+            _employerFeedbackService = Substitute.For<IEmployerFeedbackService>();
+            _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
-                _employerFeedbackService = Substitute.For<IEmployerFeedbackService>();
+            var employerFeedbackFunctions = new Functions.EmployerFeedback(_employerFeedbackService, _functionLogRepository);
+            employerFeedbackFunctions.SendEmployerFeedbackEmails(
+                new TimerInfo(timerSchedule, new ScheduleStatus()),
+                new ExecutionContext(),
+                new NullLogger<Functions.EmployerFeedback>()
+                ).GetAwaiter().GetResult();
+        }
 
-                var employerFeedback = new Functions.EmployerFeedback();
-                employerFeedback.SendEmployerFeedbackEmails(
-                    new TimerInfo(timerSchedule, new ScheduleStatus()),
-                    new ExecutionContext(),
-                    new NullLogger<Functions.EmployerFeedback>(),
-                    _employerFeedbackService,
-                    _functionLogRepository).GetAwaiter().GetResult();
-            }
+        [Fact]
+        public void SendEmployerFeedbackEmailsAsync_Is_Called_Exactly_Once()
+        {
+            _employerFeedbackService
+                .Received(1)
+                .SendEmployerFeedbackEmailsAsync(
+                    Arg.Is<string>(x => x == "System"));
+        }
 
-            [Fact]
-            public void SendEmployerFeedbackEmailsAsync_Is_Called_Exactly_Once()
-            {
-                _employerFeedbackService
-                    .Received(1)
-                    .SendEmployerFeedbackEmailsAsync(
-                        Arg.Is<string>(x => x == "System"));
-            }
-
-            [Fact]
-            public void FunctionLogRepository_Create_Is_Not_Called()
-            {
-                _functionLogRepository
-                    .DidNotReceiveWithAnyArgs()
-                    .CreateAsync(Arg.Any<FunctionLog>());
-            }
+        [Fact]
+        public void FunctionLogRepository_Create_Is_Not_Called()
+        {
+            _functionLogRepository
+                .DidNotReceiveWithAnyArgs()
+                .CreateAsync(Arg.Any<FunctionLog>());
         }
     }
+}

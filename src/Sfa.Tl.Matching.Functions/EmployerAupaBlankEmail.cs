@@ -15,15 +15,26 @@ namespace Sfa.Tl.Matching.Functions
 {
     public class EmployerAupaBlankEmail
     {
+        private readonly MatchingConfiguration _matchingConfiguration;
+        private readonly IEmailService _emailService;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
+
+        public EmployerAupaBlankEmail(
+            MatchingConfiguration matchingConfiguration,
+            IEmailService emailService,
+            IRepository<FunctionLog> functionLogRepository)
+        {
+            _matchingConfiguration = matchingConfiguration;
+            _emailService = emailService;
+            _functionLogRepository = functionLogRepository;
+        }
+
         [FunctionName("SendEmployerAupaBlankEmail")]
         public async Task SendEmployerAupaBlankEmailAsync([QueueTrigger(QueueName.EmployerAupaBlankEmailQueue, Connection = "BlobStorageConnectionString")]SendEmployerAupaBlankEmail employerAupaBlankEmail,
             ExecutionContext context,
-            ILogger logger,
-            [Inject] MatchingConfiguration matchingConfiguration,
-            [Inject] IEmailService emailService,
-            [Inject] IRepository<FunctionLog> functionLogRepository)
+            ILogger logger)
         {
-            if (!matchingConfiguration.SendEmailEnabled) return;
+            if (!_matchingConfiguration.SendEmailEnabled) return;
 
             var stopwatch = Stopwatch.StartNew();
 
@@ -38,9 +49,9 @@ namespace Sfa.Tl.Matching.Functions
                     { "crm_id", crmId.ToString() }
                 };
 
-                var matchingServiceSupportEmailAddress = matchingConfiguration.MatchingServiceSupportEmailAddress;
+                var matchingServiceSupportEmailAddress = _matchingConfiguration.MatchingServiceSupportEmailAddress;
 
-                await emailService.SendEmailAsync(EmailTemplateName.EmployerAupaBlank.ToString(), matchingServiceSupportEmailAddress, null, null, tokens, "System");
+                await _emailService.SendEmailAsync(EmailTemplateName.EmployerAupaBlank.ToString(), matchingServiceSupportEmailAddress, null, null, tokens, "System");
 
             }
             catch (Exception e)
@@ -49,7 +60,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,

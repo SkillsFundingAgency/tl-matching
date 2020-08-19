@@ -52,8 +52,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.BankHolidayGenerator
             var request = httpContext.Request;
             request.Method = HttpMethod.Get.ToString();
 
-            var bankHolidayGenerator = new Functions.BankHolidayGenerator(_calendarApiClient, mapper, _bankHolidayBulkInsertRepository, _functionLogRepository);
-            bankHolidayGenerator.ManualGenerateBankHolidaysAsync(
+            var bankHolidayGeneratorFunctions = new Functions.BankHolidayGenerator(_calendarApiClient, mapper, _bankHolidayBulkInsertRepository, _functionLogRepository);
+            bankHolidayGeneratorFunctions.ManualGenerateBankHolidaysAsync(
                     request,
                     new ExecutionContext(),
                     new NullLogger<Functions.BankHolidayGenerator>())

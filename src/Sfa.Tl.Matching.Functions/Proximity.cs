@@ -20,16 +20,32 @@ namespace Sfa.Tl.Matching.Functions
 {
     public class Proximity
     {
+        private readonly IGoogleMapApiClient _googleMapApiClient;
+        private readonly ILocationApiClient _locationApiClient;
+        private readonly IRepository<OpportunityItem> _opportunityItemRepository;
+        private readonly IRepository<ProviderVenue> _providerVenueRepository;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
+
+        public Proximity(
+            ILocationApiClient locationApiClient,
+            IGoogleMapApiClient googleMapApiClient,
+            IRepository<OpportunityItem> opportunityItemRepository,
+            IRepository<ProviderVenue> providerVenueRepository,
+            IRepository<FunctionLog> functionLogRepository)
+        {
+            _googleMapApiClient = googleMapApiClient;
+            _locationApiClient = locationApiClient;
+            _opportunityItemRepository = opportunityItemRepository;
+            _providerVenueRepository = providerVenueRepository;
+            _functionLogRepository = functionLogRepository;
+        }
+
         [FunctionName("BackFillProviderPostTown")]
         public async Task BackFillProviderPostTownAsync(
             [TimerTrigger("0 0 0 1 1 *", RunOnStartup = true)]
             TimerInfo timer,
             ExecutionContext context,
-            ILogger logger,
-            [Inject] IGoogleMapApiClient googleMapApiClient,
-            [Inject] IRepository<ProviderVenue> providerVenueRepository,
-            [Inject] IRepository<FunctionLog> functionLogRepository
-        )
+            ILogger logger)
         {
             try
             {
@@ -39,16 +55,18 @@ namespace Sfa.Tl.Matching.Functions
 
                 var providerVenues = new List<ProviderVenue>();
 
-                foreach (var providerVenue in providerVenueRepository.GetManyAsync(pv => pv.Town == null || pv.Town == "" || pv.Town == " "))
+                foreach (var providerVenue in _providerVenueRepository.GetManyAsync(pv => pv.Town == null ||
+                                                                                                               pv.Town == "" || 
+                                                                                                               pv.Town == " "))
                 {
-                    var googleAddressDetail = await googleMapApiClient.GetAddressDetailsAsync(providerVenue.Postcode);
+                    var googleAddressDetail = await _googleMapApiClient.GetAddressDetailsAsync(providerVenue.Postcode);
 
                     providerVenue.Town = googleAddressDetail;
 
                     providerVenues.Add(providerVenue);
                 }
 
-                await providerVenueRepository.UpdateManyAsync(providerVenues);
+                await _providerVenueRepository.UpdateManyAsync(providerVenues);
 
                 stopwatch.Stop();
 
@@ -62,7 +80,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errorMessage,
                     FunctionName = nameof(BackFillProviderPostTownAsync),
@@ -78,11 +96,7 @@ namespace Sfa.Tl.Matching.Functions
             [TimerTrigger("0 0 0 1 1 *", RunOnStartup = true)] TimerInfo timer,
 #pragma warning restore IDE0060 // Remove unused parameter
             ExecutionContext context,
-            ILogger logger,
-            [Inject] ILocationApiClient locationApiClient,
-            [Inject] IGoogleMapApiClient googleMapApiClient,
-            [Inject] IRepository<OpportunityItem> opportunityItemRepository,
-            [Inject] IRepository<FunctionLog> functionLogRepository
+            ILogger logger
         )
         {
             try
@@ -93,9 +107,11 @@ namespace Sfa.Tl.Matching.Functions
 
                 var opportunityItems = new List<OpportunityItem>();
 
-                foreach (var opportunityItem in opportunityItemRepository.GetManyAsync(io => io.Town == null || io.Town == "" || io.Town == " "))
+                foreach (var opportunityItem in _opportunityItemRepository.GetManyAsync(io => io.Town == null || 
+                                                                                                                     io.Town == "" || 
+                                                                                                                     io.Town == " "))
                 {
-                    var (isValidPostcode, postcode) = await locationApiClient.IsValidPostcodeAsync(opportunityItem.Postcode, true);
+                    var (isValidPostcode, postcode) = await _locationApiClient.IsValidPostcodeAsync(opportunityItem.Postcode, true);
 
                     if (!isValidPostcode)
                     {
@@ -103,14 +119,14 @@ namespace Sfa.Tl.Matching.Functions
 
                         logger.LogError(errorMessage);
 
-                        await functionLogRepository.CreateAsync(new FunctionLog
+                        await _functionLogRepository.CreateAsync(new FunctionLog
                         {
                             ErrorMessage = errorMessage,
                             FunctionName = context.FunctionName,
                             RowNumber = opportunityItem.Id
                         });
                     }
-                    var googleAddressDetail = await googleMapApiClient.GetAddressDetailsAsync(postcode);
+                    var googleAddressDetail = await _googleMapApiClient.GetAddressDetailsAsync(postcode);
 
                     opportunityItem.Town = googleAddressDetail;
                     opportunityItem.Postcode = postcode;
@@ -119,7 +135,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 }
 
-                await opportunityItemRepository.UpdateManyAsync(opportunityItems);
+                await _opportunityItemRepository.UpdateManyAsync(opportunityItems);
 
                 stopwatch.Stop();
 
@@ -133,7 +149,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
@@ -149,18 +165,14 @@ namespace Sfa.Tl.Matching.Functions
             [TimerTrigger("0 0 0 1 1 *", RunOnStartup = true)] TimerInfo timer,
 #pragma warning restore IDE0060 // Remove unused parameter
             ExecutionContext context,
-            ILogger logger,
-            [Inject] ILocationApiClient locationApiClient,
-            [Inject] IRepository<ProviderVenue> providerVenueRepository,
-            [Inject] IRepository<FunctionLog> functionLogRepository
-        )
+            ILogger logger)
         {
             try
             {
                 var stopwatch = Stopwatch.StartNew();
 
                 logger.LogInformation($"Function {context.FunctionName} triggered");
-                var providerVenues = await providerVenueRepository.GetManyAsync(venue => venue.Location == null ||
+                var providerVenues = await _providerVenueRepository.GetManyAsync(venue => venue.Location == null ||
                                                                                     venue.Longitude == null ||
                                                                                     venue.Latitude == null ||
                                                                                     !EF.Functions.Like(venue.Postcode, "% %") ||
@@ -173,7 +185,7 @@ namespace Sfa.Tl.Matching.Functions
                 {
                     try
                     {
-                        var geoLocationData = await locationApiClient.GetGeoLocationDataAsync(venue.Postcode, true);
+                        var geoLocationData = await _locationApiClient.GetGeoLocationDataAsync(venue.Postcode, true);
 
                         venue.Postcode = geoLocationData.Postcode;
                         venue.Latitude = geoLocationData.Latitude.ToDecimal();
@@ -188,7 +200,7 @@ namespace Sfa.Tl.Matching.Functions
 
                         logger.LogError(errorMessage);
 
-                        await functionLogRepository.CreateAsync(new FunctionLog
+                        await _functionLogRepository.CreateAsync(new FunctionLog
                         {
                             ErrorMessage = errorMessage,
                             FunctionName = context.FunctionName,
@@ -197,7 +209,7 @@ namespace Sfa.Tl.Matching.Functions
                     }
                 }
 
-                await providerVenueRepository.UpdateManyAsync(providerVenues);
+                await _providerVenueRepository.UpdateManyAsync(providerVenues);
                 stopwatch.Stop();
 
                 logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
@@ -210,7 +222,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
