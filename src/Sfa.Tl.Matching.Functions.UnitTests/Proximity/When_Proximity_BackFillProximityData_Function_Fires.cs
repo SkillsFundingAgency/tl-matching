@@ -18,15 +18,13 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
 {
     public class When_Proximity_BackFillProximityData_Function_Fires
     {
-        private readonly IGoogleMapApiClient _googleMapsApiClient;
         private readonly ILocationApiClient _locationApiClient;
-        private readonly IRepository<OpportunityItem> _opportunityItemRepository;
         private readonly IRepository<ProviderVenue> _providerVenueRepository;
         private readonly IRepository<FunctionLog> _functionLogRepository;
 
         public When_Proximity_BackFillProximityData_Function_Fires()
         {
-            _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
+            var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
 
             _providerVenueRepository = Substitute.For<IRepository<ProviderVenue>>();
             var mockProviderVenueDbSet = new List<ProviderVenue>
@@ -45,8 +43,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
 
             _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
-            _googleMapsApiClient = Substitute.For<IGoogleMapApiClient>();
-            _googleMapsApiClient.GetAddressDetailsAsync("CV1 2WT").Returns("Coventry");
+            var googleMapsApiClient = Substitute.For<IGoogleMapApiClient>();
+            googleMapsApiClient.GetAddressDetailsAsync("CV1 2WT").Returns("Coventry");
 
             _locationApiClient = Substitute.For<ILocationApiClient>();
             _locationApiClient.GetGeoLocationDataAsync(Arg.Any<string>(), Arg.Any<bool>())
@@ -59,8 +57,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
 
             var proximityFunctions = new Functions.Proximity(
                 _locationApiClient,
-                _googleMapsApiClient,
-                _opportunityItemRepository,
+                googleMapsApiClient,
+                opportunityItemRepository,
                 _providerVenueRepository,
                 _functionLogRepository);
 
@@ -81,27 +79,15 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
         }
 
         [Fact]
-        public void ProviderVenueRepository_UpdateMany_Is_Called_Exactly_Once()
+        public void ProviderVenueRepository_UpdateMany_Is_Called_Exactly_Once_With_Expected_Values()
         {
             _providerVenueRepository
                 .Received(1)
-                .UpdateManyAsync(Arg.Is<IList<ProviderVenue>>(pv => pv.Count == 1 && pv.First().Postcode == "CV1 2WT"));
-        }
-
-        [Fact]
-        public void ProviderVenueRepository_UpdateMany_Is_Called_Exactly_Once_2()
-        {
-            _providerVenueRepository
-                .Received(1)
-                .UpdateManyAsync(Arg.Is<IList<ProviderVenue>>(pv => pv.Count == 1 && pv.First().Latitude == 52.400997M));
-        }
-
-        [Fact]
-        public void ProviderVenueRepository_UpdateMany_Is_Called_Exactly_Once_3()
-        {
-            _providerVenueRepository
-                .Received(1)
-                .UpdateManyAsync(Arg.Is<IList<ProviderVenue>>(pv => pv.Count == 1 && pv.First().Longitude == -1.508122M));
+                .UpdateManyAsync(Arg.Is<IList<ProviderVenue>>(pv => 
+                    pv.Count == 1 && 
+                    pv.First().Postcode == "CV1 2WT" &&
+                    pv.First().Latitude == 52.400997M &&
+                    pv.First().Longitude == -1.508122M));
         }
 
         [Fact]
