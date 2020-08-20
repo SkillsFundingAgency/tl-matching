@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
@@ -61,9 +63,17 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<ProviderVenueDetailViewModel> GetVenueWithTrimmedPostcodeAsync(int providerId, string postcode)
         {
-            var venue = await _providerVenueRepository.GetSingleOrDefaultAsync(pv => 
-                pv.ProviderId == providerId && 
-                string.Compare(pv.Postcode.ToLetterOrDigit(), postcode.ToLetterOrDigit(), StringComparison.OrdinalIgnoreCase) == 0);
+            //Query split because it uses client-side evaluation
+            var venues = await _providerVenueRepository.GetManyAsync(pv =>
+                    pv.ProviderId == providerId)
+                .AsNoTracking()
+                .ToListAsync();
+
+            var venue = venues
+                .SingleOrDefault(pv =>
+                    string.Compare(pv.Postcode.ToLetterOrDigit(), 
+                                   postcode.ToLetterOrDigit(), 
+                                   StringComparison.OrdinalIgnoreCase) == 0);
 
             var dto = venue == null ? null : _mapper.Map<ProviderVenue, ProviderVenueDetailViewModel>(venue);
 
