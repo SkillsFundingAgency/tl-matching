@@ -114,19 +114,16 @@ namespace Sfa.Tl.Matching.Application.Services
 
                         venueViewModel = await _providerVenueService.GetVenueAsync(venueId);
                     }
-                    else
-                    {
-                        var providerVenueValidator =
-                            ValidateProviderVenueToUpdate(venueViewModel, providerVenueQualification);
 
-                        if (providerVenueValidator.IsUpdated)
-                        {
-                            await _providerVenueService.UpdateVenueAsync(providerVenueValidator.ProviderVenueDetailViewModel);
-                        }
+                    var providerVenueValidator = ValidateProviderVenueToUpdate(venueViewModel, providerVenueQualification);
+
+                    if (providerVenueValidator.IsUpdated)
+                    {
+                        await _providerVenueService.UpdateVenueAsync(providerVenueValidator.ProviderVenueDetailViewModel);
                     }
 
                     // Provider Venue Delete
-                    if (venueViewModel != null && venueViewModel.IsRemoved != providerVenueQualification.VenueIsRemoved)
+                    if (venueViewModel.IsRemoved != providerVenueQualification.VenueIsRemoved)
                     {
                         var removeProviderVenueViewModel = new RemoveProviderVenueViewModel
                         {

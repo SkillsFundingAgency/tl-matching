@@ -97,14 +97,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
         }
 
         [Fact]
-        public void Then_ProviderService_UpdateProviderDetailAsync_Is_Called_Exactly_Once()
-        {
-            _providerService
-                .Received(1)
-                .UpdateProviderDetailAsync(Arg.Any<ProviderDetailViewModel>());
-        }
-
-        [Fact]
         public void Then_ProviderService_UpdateProviderDetailAsync_Is_Called_Exactly_Once_With_Expected_Values()
         {
             _providerService

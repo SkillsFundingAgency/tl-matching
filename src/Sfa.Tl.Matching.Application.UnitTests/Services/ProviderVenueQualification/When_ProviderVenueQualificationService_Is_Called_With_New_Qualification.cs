@@ -255,15 +255,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                 .Received(1)
                 .GetQualificationRouteMappingAsync(3, 10);
         }
-
-        [Fact]
-        public void Then_QualificationService_CreateQualificationEntityAsync_Is_Called_Exactly_Once()
-        {
-            _qualificationService
-                .Received(1)
-                .CreateQualificationEntityAsync(Arg.Any<MissingQualificationViewModel>());
-        }
-
+        
         [Fact]
         public void Then_QualificationService_CreateQualificationEntityAsync_Is_Called_Exactly_Once_With_Expected_Values()
         {

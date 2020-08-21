@@ -176,15 +176,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                 .DidNotReceive()
                 .CreateVenueAsync(Arg.Any<AddProviderVenueViewModel>());
         }
-
-        [Fact]
-        public void Then_ProviderVenueService_UpdateVenueAsync_Is_Called_Exactly_Once()
-        {
-            _providerVenueService
-                .Received(1)
-                .UpdateVenueAsync(Arg.Any<ProviderVenueDetailViewModel>());
-        }
-
+        
         [Fact]
         public void Then_ProviderVenueService_UpdateVenueAsync_Is_Called_Exactly_Once_With_Expected_Values()
         {

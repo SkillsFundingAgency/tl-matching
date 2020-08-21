@@ -303,15 +303,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                 .DidNotReceive()
                 .CreateProviderQualificationAsync(Arg.Any<AddQualificationViewModel>());
         }
-
-        [Fact]
-        public void Then_ProviderQualificationService_RemoveProviderQualificationAsync_Is_Called_Exactly_Once()
-        {
-            _providerQualificationService
-                .Received(1)
-                .RemoveProviderQualificationAsync(Arg.Any<int>(), Arg.Any<int>());
-        }
-
+        
         [Fact]
         public void Then_ProviderQualificationService_RemoveProviderQualificationAsync_Is_Called_With_Expected_Values()
         {

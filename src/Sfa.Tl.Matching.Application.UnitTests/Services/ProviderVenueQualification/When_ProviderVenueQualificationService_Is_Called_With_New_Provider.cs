@@ -77,15 +77,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                 .DidNotReceive()
                 .GetProviderDetailByIdAsync(Arg.Any<int>());
         }
-
-        [Fact]
-        public void Then_ProviderService_CreateProviderAsync_Is_Called_Exactly_Once()
-        {
-            _providerService
-                .Received(1)
-                .CreateProviderAsync(Arg.Any<CreateProviderDetailViewModel>());
-        }
-
+        
         [Fact]
         public void Then_ProviderService_CreateProviderAsync_Is_Called_Exactly_Once_With_Expected_Values()
         {
