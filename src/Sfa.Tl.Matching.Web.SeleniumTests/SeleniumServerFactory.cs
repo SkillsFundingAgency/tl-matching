@@ -55,7 +55,9 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
 
         public class FakeStartup
         {
+#pragma warning disable IDE0060 // Remove unused parameter
             public void ConfigureServices(IServiceCollection services)
+#pragma warning restore IDE0060 // Remove unused parameter
             {
             }
 

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Sfa.Tl.Matching.Application.Extensions;
 
-namespace Sfa.Tl.Matching.Web.Authorisation
+namespace Sfa.Tl.Matching.Web.Authentication
 {
     public class TestAuthenticationOptions : AuthenticationSchemeOptions
     {
@@ -16,6 +16,5 @@ namespace Sfa.Tl.Matching.Web.Authorisation
             new Claim(ClaimTypes.Role,
                 IsAdminUser ? RolesExtensions.AdminUser : RolesExtensions.StandardUser)
         }, "test");
-
     }
 }

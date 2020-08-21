@@ -1,6 +1,6 @@
 ﻿using System;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace Sfa.Tl.Matching.Web
@@ -11,7 +11,9 @@ namespace Sfa.Tl.Matching.Web
         {
             try
             {
-                CreateWebHostBuilder(args).Build().Run();
+                CreateHostBuilder(args)
+                    .Build()
+                    .Run();
             }
             catch (Exception exception)
             {
@@ -19,13 +21,8 @@ namespace Sfa.Tl.Matching.Web
             }
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .ConfigureKestrel(webBuilder =>
-                {
-                    webBuilder.Limits.MaxRequestBodySize = null;
-                })
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
                 .ConfigureLogging(logging =>
                 {
                     logging.AddConsole();
@@ -33,7 +30,15 @@ namespace Sfa.Tl.Matching.Web
                     logging.AddAzureWebAppDiagnostics();
                     logging.AddFilter((category, level) =>
                         level >= (category == "Microsoft" ? LogLevel.Error : LogLevel.Information));
-
+                })
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder
+                        .ConfigureKestrel(serverOptions =>
+                        {
+                            serverOptions.Limits.MaxRequestBodySize = null;
+                        })
+                        .UseStartup<Startup>();
                 });
     }
 }
