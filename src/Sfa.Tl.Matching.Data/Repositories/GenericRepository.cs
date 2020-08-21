@@ -264,17 +264,16 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return await queryable.FirstOrDefaultAsync();
         }
 
-        public async Task<TDto> GetSingleOrDefaultAsync<TDto>(Expression<Func<T, bool>> predicate, Expression<Func<T, TDto>> selector, Expression<Func<T, object>> orderBy, bool asendingorder = true, params Expression<Func<T, object>>[] navigationPropertyPath)
+        public async Task<TDto> GetSingleOrDefaultAsync<TDto>(Expression<Func<T, bool>> predicate, Expression<Func<T, TDto>> selector, Expression<Func<T, object>> orderBy, bool ascendingOrder = true, params Expression<Func<T, object>>[] navigationPropertyPath)
         {
-            var queryable = GetQueryableWithIncludes(predicate, orderBy, asendingorder, navigationPropertyPath);
+            var queryable = GetQueryableWithIncludes(predicate, orderBy, ascendingOrder, navigationPropertyPath);
 
             return await queryable.Select(selector).SingleOrDefaultAsync();
-
         }
 
-        public async Task<TDto> GetFirstOrDefaultAsync<TDto>(Expression<Func<T, bool>> predicate, Expression<Func<T, TDto>> selector, Expression<Func<T, object>> orderBy, bool asendingorder = true, params Expression<Func<T, object>>[] navigationPropertyPath)
+        public async Task<TDto> GetFirstOrDefaultAsync<TDto>(Expression<Func<T, bool>> predicate, Expression<Func<T, TDto>> selector, Expression<Func<T, object>> orderBy, bool ascendingOrder = true, params Expression<Func<T, object>>[] navigationPropertyPath)
         {
-            var queryable = GetQueryableWithIncludes(predicate, orderBy, asendingorder, navigationPropertyPath);
+            var queryable = GetQueryableWithIncludes(predicate, orderBy, ascendingOrder, navigationPropertyPath);
 
             return await queryable.Select(selector).FirstOrDefaultAsync();
         }
@@ -285,7 +284,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 await _dbContext.Set<T>().CountAsync();
         }
 
-        private IQueryable<T> GetQueryableWithIncludes(Expression<Func<T, bool>> predicate, Expression<Func<T, object>> orderBy, bool asendingorder = true, params Expression<Func<T, object>>[] navigationPropertyPath)
+        private IQueryable<T> GetQueryableWithIncludes(Expression<Func<T, bool>> predicate, Expression<Func<T, object>> orderBy, bool ascendingOrder = true, params Expression<Func<T, object>>[] navigationPropertyPath)
         {
             var queryable = _dbContext.Set<T>().AsQueryable();
 
@@ -298,7 +297,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 queryable = queryable.Where(predicate);
 
             if (orderBy != null)
-                queryable = asendingorder ? queryable.OrderBy(orderBy) : queryable.OrderByDescending(orderBy);
+                queryable = ascendingOrder ? queryable.OrderBy(orderBy) : queryable.OrderByDescending(orderBy);
 
             return queryable;
         }
