@@ -15,11 +15,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 {
-    public class When_ProviderVenueService_Is_Called_To_Hide_Venue
+    public class When_ProviderVenueService_Is_Called_To_Remove_Venue
     {
         private readonly IProviderVenueRepository _providerVenueRepository;
 
-        public When_ProviderVenueService_Is_Called_To_Hide_Venue()
+        public When_ProviderVenueService_Is_Called_To_Remove_Venue()
         {
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
 

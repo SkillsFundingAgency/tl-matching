@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.Mappers
 {
@@ -16,6 +18,17 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.ModifiedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedBy, config => config.Ignore())
                 ;
+
+            CreateMap<QualificationRouteMappingViewModel, QualificationRouteMapping>()
+                .ForMember(m => m.Id, config => config.Ignore())
+                .ForMember(m => m.Route, config => config.Ignore())
+                .ForMember(m => m.Qualification, config => config.Ignore())
+                .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<QualificationRouteMappingViewModel, QualificationRouteMapping>>())
+                .ForMember(m => m.CreatedOn, config => config.Ignore())
+                .ForMember(m => m.ModifiedOn, config => config.Ignore())
+                .ForMember(m => m.ModifiedBy, config => config.Ignore());
+
+            CreateMap<QualificationRouteMapping, QualificationRouteMappingViewModel>();
         }
     }
 }

@@ -15,7 +15,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 {
-    public class When_ProviderVenueService_Is_Called_To_CreateVenue
+    public class When_ProviderVenueService_Is_Called_To_Create_Venue
     {
         private const string UnFormattedPostcode = "CV12WT";
         private const string FormattedPostcode = "CV1 2WT";
@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         private readonly ILocationApiClient _locationApiClient;
         private readonly IGoogleMapApiClient _googleMapApiClient;
 
-        public When_ProviderVenueService_Is_Called_To_CreateVenue()
+        public When_ProviderVenueService_Is_Called_To_Create_Venue()
         {
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
 

@@ -7,16 +7,18 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Sfa.Tl.Matching.Application.Constants;
+using Sfa.Tl.Matching.Application.Extensions;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.FileWriter.Provider
 {
-    public class ProviderProximityReportWriter : ExcelFileWriter<ProviderProximityReportDto>
+    public class ProviderProximityReportWriter : IFileWriter<ProviderProximityReportDto>
     {
-        public override byte[] WriteReport(ProviderProximityReportDto data)
+        public byte[] WriteReport(ProviderProximityReportDto data)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            string templateName = data.SkillAreas.Any() ? ApplicationConstants.ShowMeEverythingReportTemplateWithSearchFilters 
+            var templateName = data.SkillAreas.Any() ? ApplicationConstants.ShowMeEverythingReportTemplateWithSearchFilters 
                 : ApplicationConstants.ShowMeEverythingReportTemplate;  
             var resourceName = $"{assembly.GetName().Name}.Templates.{templateName}";
 
@@ -34,7 +36,7 @@ namespace Sfa.Tl.Matching.Application.FileWriter.Provider
 
                 using (var spreadSheet = SpreadsheetDocument.Open(stream, true))
                 {
-                    var referralsSheetData = GetSheetData(spreadSheet, 0);
+                    var referralsSheetData = spreadSheet.GetSheetData(0);
                     WriteProvidersToSheet(data, referralsSheetData);
 
                     spreadSheet.WorkbookPart.Workbook.Save();
@@ -65,13 +67,13 @@ namespace Sfa.Tl.Matching.Application.FileWriter.Provider
                         skillsHeaderBuilder.Append("; ");
                 }
 
-                UpdateTextCell(cells[2], skillsHeaderBuilder.ToString());
+                cells[2].UpdateTextCell(skillsHeaderBuilder.ToString());
 
                 rowIndex = 5;
                 cells = rows[1].Descendants<Cell>().ToList();
             }
-                        
-            UpdateTextCell(cells[2], $"Distance from {dto.Postcode}");
+
+            cells[2].UpdateTextCell($"Distance from {dto.Postcode}");
 
             foreach (var provider in dto.Providers)
             {
@@ -81,18 +83,18 @@ namespace Sfa.Tl.Matching.Application.FileWriter.Provider
                     {
                         var row = new Row { RowIndex = (uint)rowIndex };
 
-                        row.AppendChild(CreateTextCell(1, rowIndex, provider.ProviderName));
-                        row.AppendChild(CreateTextCell(2, rowIndex,
+                        row.AppendChild(SpreadsheetExtensions.CreateTextCell(1, rowIndex, provider.ProviderName));
+                        row.AppendChild(SpreadsheetExtensions.CreateTextCell(2, rowIndex,
                             $"{provider.ProviderVenueTown} {provider.ProviderVenuePostcode}"));
-                        row.AppendChild(CreateTextCell(3, rowIndex, $"{provider.Distance:#0.0} miles"));
-                        row.AppendChild(CreateTextCell(4, rowIndex, route.RouteName));
-                        row.AppendChild(CreateTextCell(5, rowIndex, qualification));
-                        row.AppendChild(CreateTextCell(6, rowIndex, provider.PrimaryContact));
-                        row.AppendChild(CreateTextCell(7, rowIndex, provider.PrimaryContactEmail));
-                        row.AppendChild(CreateTextCell(8, rowIndex, provider.PrimaryContactPhone));
-                        row.AppendChild(CreateTextCell(9, rowIndex, provider.SecondaryContact));
-                        row.AppendChild(CreateTextCell(10, rowIndex, provider.SecondaryContactEmail));
-                        row.AppendChild(CreateTextCell(11, rowIndex, provider.SecondaryContactPhone));
+                        row.AppendChild(SpreadsheetExtensions.CreateTextCell(3, rowIndex, $"{provider.Distance:#0.0} miles"));
+                        row.AppendChild(SpreadsheetExtensions.CreateTextCell(4, rowIndex, route.RouteName));
+                        row.AppendChild(SpreadsheetExtensions.CreateTextCell(5, rowIndex, qualification));
+                        row.AppendChild(SpreadsheetExtensions.CreateTextCell(6, rowIndex, provider.PrimaryContact));
+                        row.AppendChild(SpreadsheetExtensions.CreateTextCell(7, rowIndex, provider.PrimaryContactEmail));
+                        row.AppendChild(SpreadsheetExtensions.CreateTextCell(8, rowIndex, provider.PrimaryContactPhone));
+                        row.AppendChild(SpreadsheetExtensions.CreateTextCell(9, rowIndex, provider.SecondaryContact));
+                        row.AppendChild(SpreadsheetExtensions.CreateTextCell(10, rowIndex, provider.SecondaryContactEmail));
+                        row.AppendChild(SpreadsheetExtensions.CreateTextCell(11, rowIndex, provider.SecondaryContactPhone));
 
                         sheetData.AppendChild(row);
                         rowIndex++;

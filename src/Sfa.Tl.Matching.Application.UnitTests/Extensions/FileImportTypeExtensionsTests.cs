@@ -12,6 +12,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
         [InlineData(DataImportType.LearningAimReference, FileImportTypeExtensions.Csv)]
         [InlineData(DataImportType.LocalEnterprisePartnership, FileImportTypeExtensions.Csv)]
         [InlineData(DataImportType.Postcodes, FileImportTypeExtensions.Zip)]
+        [InlineData(DataImportType.ProviderVenueQualification, FileImportTypeExtensions.Excel)]
         public void GetFileExtensionTypeDataTests(DataImportType importType, string result)
         {
             var extensionType = importType.GetFileExtensionType();

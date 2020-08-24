@@ -3,6 +3,7 @@ using System.Linq;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using FluentAssertions;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.FileWriter.Opportunity;
 using Sfa.Tl.Matching.Application.UnitTests.FileWriter.OpportunityPipelineReport.Builders;
 using Xunit;
@@ -12,7 +13,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.OpportunityPipelineRe
     public class When_OpportunityReport_Writer_Is_Called_To_Create_Spreadsheet
     {
         private readonly byte[] _result;
-        private readonly OpportunityPipelineReportWriter _reportWriter;
 
         public When_OpportunityReport_Writer_Is_Called_To_Create_Spreadsheet()
         {
@@ -21,8 +21,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.OpportunityPipelineRe
                     .AddProvisionGapItem()
                     .Build();
 
-            _reportWriter = new OpportunityPipelineReportWriter();
-            _result = _reportWriter.WriteReport(dto);
+            var reportWriter = new OpportunityPipelineReportWriter();
+            _result = reportWriter.WriteReport(dto);
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.OpportunityPipelineRe
             {
                 using (var spreadSheet = SpreadsheetDocument.Open(stream, false))
                 {
-                    var sheetData = _reportWriter.GetSheetData(spreadSheet, 0);
+                    var sheetData = spreadSheet.GetSheetData(0);
                     sheetData.Should().NotBeNull();
 
                     var rows = sheetData.Descendants<Row>().ToList();
@@ -85,7 +85,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.OpportunityPipelineRe
             {
                 using (var spreadSheet = SpreadsheetDocument.Open(stream, false))
                 {
-                    var sheetData = _reportWriter.GetSheetData(spreadSheet, 1);
+                    var sheetData = spreadSheet.GetSheetData(1);
                     sheetData.Should().NotBeNull();
 
                     var rows = sheetData.Descendants<Row>().ToList();
