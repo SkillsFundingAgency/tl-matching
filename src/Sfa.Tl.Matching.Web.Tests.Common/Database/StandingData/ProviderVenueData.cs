@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
 using Sfa.Tl.Matching.Domain.Models;
@@ -14,13 +15,15 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
         {
             var location = CreatePointLocation((double)Latitude, (double)Longitude);
 
+            var qualifications = BuildQualifications();
+
             return new List<ProviderVenue>
             {
                 new ProviderVenue
                 {
                     Id = 1,
                     Name = "Venue 1 Name",
-                    Provider = BuildProvider(true),
+                    Provider = BuildProvider(1, true),
                     Postcode = "CV1 2WT",
                     Town = "Coventry",
                     Latitude = Latitude,
@@ -29,13 +32,13 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                     IsEnabledForReferral = true,
                     IsRemoved = false,
                     Source = "Test",
-                    ProviderQualification = BuildProviderQualifications()
+                    ProviderQualification = BuildProviderQualifications(qualifications.First())
                 },
                 new ProviderVenue
                 {
                     Id = 2,
                     Name = "Venue 2 Name",
-                    Provider = BuildProvider(true),
+                    Provider = BuildProvider(2, true),
                     Postcode = "CV1 1EE",
                     Town = "Coventry",
                     Latitude = Latitude,
@@ -44,16 +47,16 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                     IsEnabledForReferral = true,
                     IsRemoved = false,
                     Source = "Test",
-                    ProviderQualification = BuildProviderQualifications()
+                    ProviderQualification = BuildProviderQualifications(qualifications.First())
                 }
             };
         }
 
-        private static Provider BuildProvider(bool isCdfProvider)
+        private static Provider BuildProvider(int id, bool isCdfProvider)
         {
             return new Provider
             {
-                Id = 1,
+                Id = id,
                 UkPrn = 10203040,
                 Name = "SQL Search Provider",
                 DisplayName = "SQL Search Provider Display Name",
@@ -70,27 +73,35 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
             };
         }
 
-        private static ICollection<ProviderQualification> BuildProviderQualifications()
+        private static ICollection<Qualification> BuildQualifications()
+        {
+            return new List<Qualification>
+            {
+                new Qualification
+                {
+                    Id = 1,
+                    LarId = "12345678",
+                    Title = "Qualification Title",
+                    ShortTitle = "Short Title",
+                    QualificationRouteMapping = new List<QualificationRouteMapping>
+                    {
+                        new QualificationRouteMapping
+                        {
+                            RouteId = 1,
+                            Source = "Test"
+                        }
+                    }
+                }
+            };
+        }
+
+        private static ICollection<ProviderQualification> BuildProviderQualifications(Qualification qualification)
         {
             return new List<ProviderQualification>
             {
                 new ProviderQualification
                 {
-                    Qualification = new Qualification
-                    {
-                        Id = 1,
-                        LarId = "12345678",
-                        Title = "Qualification Title",
-                        ShortTitle = "Short Title",
-                        QualificationRouteMapping = new List<QualificationRouteMapping>
-                        {
-                            new QualificationRouteMapping
-                            {
-                                RouteId = 1,
-                                Source = "Test"
-                            }
-                        }
-                    },
+                    Qualification = qualification,
                     Source = "Test"
                 }
             };
