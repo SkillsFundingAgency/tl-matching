@@ -83,7 +83,8 @@ namespace Sfa.Tl.Matching.Web
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
 
-            //services.AddRazorPages()
+            //services.AddRazorPages();
+
             services.AddControllersWithViews()
                 .AddMvcOptions(config =>
                 {
@@ -105,9 +106,7 @@ namespace Sfa.Tl.Matching.Web
                     config.Filters.Add<CustomExceptionFilterAttribute>();
                     config.Filters.Add<ServiceUnavailableFilterAttribute>();
                     config.Filters.Add<BackLinkFilter>();
-                })
-                //.AddRazorRuntimeCompilation()
-                ;
+                });
 
             if (!isConfigLocalOrDev)
                 AddAuthentication(services);
@@ -176,8 +175,6 @@ namespace Sfa.Tl.Matching.Web
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
-                //endpoints.MapControllers();
-                //endpoints.MapRazorPages();
             });
         }
 
@@ -238,8 +235,6 @@ namespace Sfa.Tl.Matching.Web
                     .EnableSensitiveDataLogging()
 #endif
                     ,
-                    //Default to non-tracking - we use dtos for updates so this should fix a number of issues with EF Core 3.x
-                    //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking),
                     ServiceLifetime.Transient)
                 ;
 
