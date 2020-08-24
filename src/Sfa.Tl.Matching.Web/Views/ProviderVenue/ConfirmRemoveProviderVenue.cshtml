@@ -22,7 +22,7 @@
             <button id="tl-remove" type="submit" class="govuk-button">Remove venue</button>
         </form>
         <p class="govuk-body">
-            <a asp-controller="ProviderVenue" asp-action="GetProviderVenueDetailAsync" asp-route-providerVenueId="@Model.ProviderVenueId" class="govuk-link" id="tl-cancel">Cancel and return to venue overview</a>
+            <a asp-route="GetProviderVenueDetail" asp-route-providerVenueId="@Model.ProviderVenueId" class="govuk-link" id="tl-cancel">Cancel and return to venue overview</a>
         </p>
     </div>
 </div>

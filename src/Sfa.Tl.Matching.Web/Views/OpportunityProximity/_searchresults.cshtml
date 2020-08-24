@@ -8,7 +8,7 @@
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 <p class="govuk-hint">Choose one or more providers for this opportunity</p>
 
-<form id="tl-result-form" asp-controller="OpportunityProximity" asp-action="ValidateProviderSearchResultAsync">
+<form id="tl-result-form" asp-controller="OpportunityProximity" asp-action="ValidateProviderSearchResult">
     <input asp-for="SearchParameters.Postcode" name="Postcode" type="hidden" />
     <input asp-for="SearchParameters.SelectedRouteId" name="SelectedRouteId" type="hidden" />
     <input asp-for="SearchResults.SearchResultProviderCount" name="SearchResultProviderCount" type="hidden" />

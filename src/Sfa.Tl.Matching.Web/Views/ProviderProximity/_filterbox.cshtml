@@ -1,6 +1,6 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.ProviderProximitySearchParametersViewModel
 
-<form id="tl-provider-filter-form" class="form" asp-action="FilterResultsAsync" novalidate>
+<form id="tl-provider-filter-form" class="form" asp-controller="ProviderProximity" asp-action="FilterResults" novalidate>
     <input type="hidden" asp-for=" @Model.Postcode" />
 
     <div class="tl-pane">
