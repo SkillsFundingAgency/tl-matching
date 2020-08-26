@@ -14,9 +14,12 @@ namespace Sfa.Tl.Matching.Web.Tests.Common
     public class CustomWebApplicationFactory<TStartup>
         : WebApplicationFactory<TStartup> where TStartup : class
     {
+        private readonly string _instanceDatabaseName;
+
         public CustomWebApplicationFactory()
         {
             ClientOptions.BaseAddress = new Uri("https://localhost");
+            _instanceDatabaseName = $"MatchingTestDb-{Guid.NewGuid()}";
         }
 
         protected override IHostBuilder CreateHostBuilder()
@@ -37,7 +40,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common
 
                 services.AddDbContext<MatchingDbContext>(options =>
                 {
-                    options.UseInMemoryDatabase("MatchingTestDb");
+                    options.UseInMemoryDatabase(_instanceDatabaseName);
                 });
 
                 var sp = services.BuildServiceProvider();
