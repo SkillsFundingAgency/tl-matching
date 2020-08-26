@@ -25,8 +25,8 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
                 {
                     FileName = "selenium-standalone",
                     Arguments = "start",
-                    UseShellExecute = true,
-                },
+                    UseShellExecute = true
+                }
             };
             _process.Start();
         }
@@ -48,8 +48,8 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
             base.Dispose(disposing);
             if (disposing)
             {
-                _host.Dispose();
-                _process.CloseMainWindow();
+                _host?.Dispose();
+                _process?.CloseMainWindow();
             }
         }
 
