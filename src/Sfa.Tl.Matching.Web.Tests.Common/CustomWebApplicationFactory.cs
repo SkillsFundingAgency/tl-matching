@@ -1,7 +1,10 @@
 using System;
+using System.Linq;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Web.Tests.Common.Database;
@@ -9,22 +12,32 @@ using Sfa.Tl.Matching.Web.Tests.Common.Database;
 namespace Sfa.Tl.Matching.Web.Tests.Common
 {
     public class CustomWebApplicationFactory<TStartup>
-        : CustomWebApplicationFactoryBase<TStartup> where TStartup : class
+        : WebApplicationFactory<TStartup> where TStartup : class
     {
+        public CustomWebApplicationFactory()
+        {
+            ClientOptions.BaseAddress = new Uri("https://localhost");
+        }
+
+        protected override IHostBuilder CreateHostBuilder()
+        {
+            return Host.CreateDefaultBuilder().ConfigureWebHostDefaults(builder =>
+                builder.UseStartup<TStartup>());
+        }
+
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.ConfigureServices(services =>
             {
-                var serviceProvider = new ServiceCollection()
-                    .AddEntityFrameworkInMemoryDatabase()
-                    .BuildServiceProvider();
+                var descriptor = services.SingleOrDefault(
+                    d => d.ServiceType ==
+                         typeof(DbContextOptions<MatchingDbContext>));
 
-                services.AddApplicationInsightsTelemetry();
+                services.Remove(descriptor);
 
                 services.AddDbContext<MatchingDbContext>(options =>
                 {
                     options.UseInMemoryDatabase("MatchingTestDb");
-                    options.UseInternalServiceProvider(serviceProvider);
                 });
 
                 var sp = services.BuildServiceProvider();
@@ -34,7 +47,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common
                 var db = scopedServices.GetRequiredService<MatchingDbContext>();
                 var logger = scopedServices
                     .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
-                    
+
                 db.Database.EnsureCreated();
 
                 try
@@ -45,6 +58,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common
                 {
                     logger.LogError(ex, "An error occurred seeding the " +
                                         $"test database. Error: {ex.Message}");
+                    //throw;
                 }
             });
         }
