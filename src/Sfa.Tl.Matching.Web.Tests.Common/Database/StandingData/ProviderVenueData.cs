@@ -15,6 +15,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
         {
             var location = CreatePointLocation((double)Latitude, (double)Longitude);
 
+            var provider = BuildProvider(true);
             var qualifications = BuildQualifications();
 
             return new List<ProviderVenue>
@@ -23,7 +24,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                 {
                     Id = 1,
                     Name = "Venue 1 Name",
-                    Provider = BuildProvider(1, true),
+                    Provider = provider,
                     Postcode = "CV1 2WT",
                     Town = "Coventry",
                     Latitude = Latitude,
@@ -38,7 +39,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                 {
                     Id = 2,
                     Name = "Venue 2 Name",
-                    Provider = BuildProvider(2, true),
+                    Provider = provider,
                     Postcode = "CV1 1EE",
                     Town = "Coventry",
                     Latitude = Latitude,
@@ -52,11 +53,11 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
             };
         }
 
-        private static Provider BuildProvider(int id, bool isCdfProvider)
+        private static Provider BuildProvider(bool isCdfProvider)
         {
             return new Provider
             {
-                Id = id,
+                Id = 1,
                 UkPrn = 10203040,
                 Name = "SQL Search Provider",
                 DisplayName = "SQL Search Provider Display Name",
