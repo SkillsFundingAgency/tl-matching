@@ -66,7 +66,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> SaveReferralAsync()
         {
             var selectedProviders = TempData["SelectedProviders"] as string;
-            var saveReferralViewModel = JsonConvert.DeserializeObject<SaveReferralViewModel>(selectedProviders);
+            var saveReferralViewModel = JsonConvert.DeserializeObject<SaveReferralViewModel>(selectedProviders!);
 
             var opportunityDto = _mapper.Map<OpportunityDto>(saveReferralViewModel);
             var opportunityItemDto = _mapper.Map<OpportunityItemDto>(saveReferralViewModel);

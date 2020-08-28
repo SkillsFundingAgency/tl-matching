@@ -22,6 +22,11 @@ namespace Sfa.Tl.Matching.Application.Configuration
                 var dynResult = result.Result as DynamicTableEntity;
                 var data = dynResult?.Properties["Data"].StringValue;
 
+                if (data == null)
+                {
+                    throw new NullReferenceException("Configuration data was null.");
+                }
+
                 return JsonConvert.DeserializeObject<MatchingConfiguration>(data);
             }
             catch (Exception ex)

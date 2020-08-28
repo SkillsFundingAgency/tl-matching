@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Models.Extensions
         {
             var type = value.GetType();
             var name = Enum.GetName(type, value);
-            return type.GetField(name)
+            return type.GetField(name!)!
                 .GetCustomAttribute<TAttribute>();
         }
     }

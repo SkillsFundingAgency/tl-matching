@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -23,23 +24,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
             Logger = Substitute.For<ILogger<Application.Services.ProviderQuarterlyUpdateEmailService>>();
         }
 
-        public bool DoTokensContainExpectedValues(IDictionary<string, string> tokens, IDictionary<string, string> expectedResults)
+        public bool DoTokensContainExpectedValues(IDictionary<string, string> tokens, IDictionary<string, string> values)
         {
-            if (tokens == null)
-            {
-                return false;
-            }
-
-            foreach (var expectedResult in expectedResults)
-            {
-                if (!(tokens.ContainsKey(expectedResult.Key) &&
-                    tokens[expectedResult.Key] == expectedResult.Value))
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return tokens != null && 
+                   values.All(value => tokens.ContainsKey(value.Key) && tokens[value.Key] == value.Value);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Models.Extensions
 
             if (IsRequired && string.IsNullOrWhiteSpace(phoneNumber))
                 return new ValidationResult($"You must enter a telephone number for the {FieldName} number");
-            if (!phoneNumber.Any(char.IsDigit))
+            if (!phoneNumber!.Any(char.IsDigit))
                 return new ValidationResult("You must enter a telephone number using numbers");
             if (!Regex.IsMatch(phoneNumber, @"^(?:.*\d.*){7,}$"))
                 return new ValidationResult("You must enter a telephone number that has 7 or more numbers");
