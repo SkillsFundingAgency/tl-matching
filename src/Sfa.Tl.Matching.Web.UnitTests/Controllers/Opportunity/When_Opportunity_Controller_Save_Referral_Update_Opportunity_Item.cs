@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 c.AddMaps(typeof(EmployerDtoMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                 {
-                    if (type.FullName.Contains("LoggedInUserEmailResolver"))
+                    if (type.FullName != null && type.FullName.Contains("LoggedInUserEmailResolver"))
                         return new LoggedInUserEmailResolver<SaveReferralViewModel, OpportunityDto>(httpContextAccessor);
                     if (type.FullName.Contains("LoggedInUserNameResolver") && type.FullName.Contains("SaveReferralViewModel"))
                         return new LoggedInUserNameResolver<SaveReferralViewModel, OpportunityDto>(httpContextAccessor);

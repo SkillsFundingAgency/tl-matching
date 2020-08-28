@@ -10,13 +10,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 {
-    public class When_Qualification_Add_Qualification_Doesnt_Exist
+    public class When_Qualification_Add_Qualification_Does_Not_Exist
     {
         private readonly IActionResult _result;
         private readonly IQualificationService _qualificationService;
         private readonly IProviderQualificationService _providerQualificationService;
 
-        public When_Qualification_Add_Qualification_Doesnt_Exist()
+        public When_Qualification_Add_Qualification_Does_Not_Exist()
         {
             var providerVenueService = Substitute.For<IProviderVenueService>();
 

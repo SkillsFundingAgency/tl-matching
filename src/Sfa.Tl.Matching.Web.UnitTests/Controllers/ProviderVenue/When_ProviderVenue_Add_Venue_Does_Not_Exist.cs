@@ -10,12 +10,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 {
-    public class When_ProviderVenue_Add_Venue_Doesnt_Exist
+    public class When_ProviderVenue_Add_Venue_Does_Not_Exist
     {
         private readonly IActionResult _result;
         private readonly IProviderVenueService _providerVenueService;
 
-        public When_ProviderVenue_Add_Venue_Doesnt_Exist()
+        public When_ProviderVenue_Add_Venue_Does_Not_Exist()
         {
             _providerVenueService = Substitute.For<IProviderVenueService>();
             _providerVenueService.IsValidPostcodeAsync("CV1 2WT").Returns((true, "CV1 2WT"));

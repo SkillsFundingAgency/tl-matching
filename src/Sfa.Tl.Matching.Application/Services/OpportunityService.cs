@@ -284,11 +284,11 @@ namespace Sfa.Tl.Matching.Application.Services
                     .Where(item => item.IsSaved == false)
                     .ToList();
 
-                foreach (var opitem in items)
+                foreach (var opportunityItem in items)
                 {
-                    await _referralRepository.DeleteManyAsync(_referralRepository.GetManyAsync(rf => rf.OpportunityItemId == opitem.Id).ToList());
-                    await _provisionGapRepository.DeleteManyAsync(_provisionGapRepository.GetManyAsync(gap => gap.OpportunityItemId == opitem.Id).ToList());
-                    await _opportunityItemRepository.DeleteAsync(opitem);
+                    await _referralRepository.DeleteManyAsync(_referralRepository.GetManyAsync(rf => rf.OpportunityItemId == opportunityItem.Id).ToList());
+                    await _provisionGapRepository.DeleteManyAsync(_provisionGapRepository.GetManyAsync(gap => gap.OpportunityItemId == opportunityItem.Id).ToList());
+                    await _opportunityItemRepository.DeleteAsync(opportunityItem);
                 }
 
                 await _opportunityRepository.DeleteAsync(opportunityId);

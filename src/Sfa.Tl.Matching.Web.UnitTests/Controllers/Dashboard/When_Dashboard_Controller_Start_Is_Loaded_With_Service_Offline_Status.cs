@@ -68,7 +68,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Dashboard
 
             viewModel.Should().NotBeNull();
             viewModel.IsServiceOnline.Should().BeFalse();
-            viewModel.HasSavedOppportunities.Should().BeTrue();
+            viewModel.HasSavedOpportunities.Should().BeTrue();
             viewModel.HeaderText.Should().Be("Put service back online");
             viewModel.Description.Should().Be("Show that the service is no longer 'under maintenance'.");
         }

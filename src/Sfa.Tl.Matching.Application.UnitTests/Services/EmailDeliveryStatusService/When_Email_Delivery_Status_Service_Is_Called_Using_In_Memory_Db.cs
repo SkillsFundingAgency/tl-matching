@@ -276,7 +276,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         }
 
         [Theory, AutoDomainData]
-        public async Task Then_Do_Not_Update_Email_History_If_Doesnt_Exsits(
+        public async Task Then_Do_Not_Update_Email_History_If_Does_Not_Exsits(
             MatchingDbContext dbContext,
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,

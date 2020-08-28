@@ -15,20 +15,20 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 {
-    public class When_ProviderVenueService_Is_Called_To_Unremove_Venue
+    public class When_ProviderVenueService_Is_Called_To_Put_Back_Venue
     {
         private readonly IProviderVenueRepository _providerVenueRepository;
 
-        public When_ProviderVenueService_Is_Called_To_Unremove_Venue()
+        public When_ProviderVenueService_Is_Called_To_Put_Back_Venue()
         {
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
+            var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
 
             var config = new MapperConfiguration(c =>
             {
                 c.AddMaps(typeof(ProviderMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserNameResolver") ?
-                        (object)new LoggedInUserNameResolver<RemoveProviderVenueViewModel, Domain.Models.ProviderVenue>(httpcontextAccesor) :
+                        (object)new LoggedInUserNameResolver<RemoveProviderVenueViewModel, Domain.Models.ProviderVenue>(httpContextAccessor) :
                         type.Name.Contains("UtcNowResolver") ?
                             new UtcNowResolver<RemoveProviderVenueViewModel, Domain.Models.ProviderVenue>(new DateTimeProvider()) :
                                 null);

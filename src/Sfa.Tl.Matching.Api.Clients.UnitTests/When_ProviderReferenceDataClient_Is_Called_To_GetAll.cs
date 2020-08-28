@@ -10,12 +10,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Api.Clients.UnitTests
 {
-    public class When_ProviderReferenecDataClient_Is_Called_To_GetAll
+    public class When_ProviderReferenceDataClient_Is_Called_To_GetAll
     {
         private readonly List<ProviderRecordStructure> _result;
         private readonly IProviderQueryPortTypeClient _client;
 
-        public When_ProviderReferenecDataClient_Is_Called_To_GetAll()
+        public When_ProviderReferenceDataClient_Is_Called_To_GetAll()
         {
             var lastUpdateDate = new DateTime(2019, 5, 6);
             var logger = new NullLogger<ProviderReferenceDataClient>();
