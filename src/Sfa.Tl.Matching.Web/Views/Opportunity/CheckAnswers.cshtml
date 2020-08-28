@@ -11,7 +11,7 @@
        asp-route-Postcode="0"
        asp-route-SelectedRouteId="0"
        class="govuk-back-link" id="tl-back">Back</a>
-    @await Component.InvokeAsync("Cancel", new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })
+    @await Component.InvokeAsync("Cancel", new { opportunityId = Model.OpportunityId, opportunityItemId = Model.OpportunityItemId })
 }
 
 <div class="govuk-grid-row">
@@ -86,7 +86,7 @@
         <dl class="govuk-summary-list tl-summary-list" id="tl-providers-table">
             @for (int i = 0; i < Model.Providers.Count(); i++)
             {
-                var distance = @Model.Providers[i].DistanceFromEmployer;
+                var distance = Model.Providers[i].DistanceFromEmployer;
                 var milesText = "miles";
                 if (distance == 1)
                 {

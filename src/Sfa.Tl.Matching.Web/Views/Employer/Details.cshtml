@@ -11,7 +11,7 @@
        asp-route-Postcode="0"
        asp-route-SelectedRouteId="0"
        class="govuk-back-link" id="tl-back">Back</a>
-    @await Component.InvokeAsync("Cancel", new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })
+    @await Component.InvokeAsync("Cancel", new { opportunityId = Model.OpportunityId, opportunityItemId = Model.OpportunityItemId })
 }
 
 <div class="govuk-grid-row">

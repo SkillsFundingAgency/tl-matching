@@ -1,7 +1,7 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.ProviderProximitySearchParametersViewModel
 
 <form id="tl-provider-filter-form" class="form" asp-controller="ProviderProximity" asp-action="FilterResults" novalidate>
-    <input type="hidden" asp-for=" @Model.Postcode" />
+    <input type="hidden" asp-for="@Model.Postcode" />
 
     <div class="tl-pane">
         <h2 class="govuk-heading-s govuk-!-margin-bottom-3">
@@ -11,7 +11,7 @@
             <div class="govuk-checkboxes govuk-checkboxes--small">
                 @for (var i = 0; i < Model.Filters.Length; i++)
                 {
-                    <input type="hidden" asp-for=" @Model.Filters[i].Name" name="Filters[@i].Name"/>
+                    <input type="hidden" asp-for="@Model.Filters[i].Name" name="Filters[@i].Name"/>
                     <div class="govuk-checkboxes__item">
                         <input type="checkbox" class="govuk-checkboxes__input" asp-for="@Model.Filters[i].IsSelected" name="Filters[@i].IsSelected">
                         <label class="govuk-body-s govuk-checkboxes__label" asp-for="@Model.Filters[i].IsSelected" >

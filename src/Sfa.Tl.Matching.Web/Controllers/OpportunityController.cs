@@ -130,7 +130,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var opportunityItemCount = await _opportunityService.GetSavedOpportunityItemCountAsync(viewModel.OpportunityId);
 
-            //if First Opp (saved opportunity items == 0) then LoadWhoIsEmployer else if referral then check answer of if provisiongap then OpportunityBasket
+            //if First Opp (saved opportunity items == 0) then LoadWhoIsEmployer else if referral then check answer of if ProvisionGap then OpportunityBasket
             return opportunityItemCount == 0 ?
                 RedirectToRoute("GetOpportunityCompanyName", new { viewModel.OpportunityId, viewModel.OpportunityItemId })
                 : viewModel.OpportunityType == OpportunityType.Referral ?
