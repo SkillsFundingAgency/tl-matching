@@ -57,21 +57,10 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ReferralEmails
             _referralEmailService
                 .Received(1)
                 .SendProviderReferralEmailAsync(
-                    Arg.Any<int>(),
-                    Arg.Any<IEnumerable<int>>(),
-                    Arg.Any<int>(),
-                    Arg.Is<string>(u => u == "System"));
-        }
-
-        [Fact]
-        public void SendProviderReferralEmailAsync_Is_Called_Exactly_Once_With_Expected_Parameters_2()
-        {
-            _referralEmailService
-                .Received(1)
-                .SendProviderReferralEmailAsync(
                     Arg.Is<int>(id => id == 1),
-                    // ReSharper disable once PossibleMultipleEnumeration
+                    // ReSharper disable PossibleMultipleEnumeration
                     Arg.Is<IEnumerable<int>>(p => p.Count() == 1 && p.First() == 101),
+                    // ReSharper restore PossibleMultipleEnumeration
                     Arg.Is<int>(id => id == 10),
                     Arg.Is<string>(u => u == "System"));
         }

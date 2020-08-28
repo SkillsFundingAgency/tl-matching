@@ -40,14 +40,15 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ReferralEmails
         }
         
         [Fact]
-        public void SendEmployerReferralEmailAsync_Is_Called_Exactly_Once_With_Expected_Parameters_2()
+        public void SendEmployerReferralEmailAsync_Is_Called_Exactly_Once_With_Expected_Parameters()
         {
             _referralEmailService
                 .Received(1)
                 .SendEmployerReferralEmailAsync(
                     Arg.Is<int>(id => id == 1),
-                    // ReSharper disable once PossibleMultipleEnumeration
+                    // ReSharper disable PossibleMultipleEnumeration
                     Arg.Is<IEnumerable<int>>(p => p.Count() == 1 && p.First() == 101),
+                    // ReSharper restore PossibleMultipleEnumeration
                     Arg.Is<int>(id => id == 10),
                     Arg.Is<string>(u => u == "System"));
         }
