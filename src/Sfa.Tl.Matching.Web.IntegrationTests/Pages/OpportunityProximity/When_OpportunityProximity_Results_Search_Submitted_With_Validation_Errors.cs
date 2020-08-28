@@ -47,16 +47,20 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.OpportunityProximity
             var errorSummaryList = responseContent.QuerySelector(".govuk-error-summary div ul");
             errorSummaryList.Children[errorSummaryIndex].TextContent.Should().Be(errorMessage);
 
-            AssertError(responseContent, field, errorMessage);
+            AssertError(responseContent, field);
 
             Assert.Null(response.Headers.Location?.OriginalString);
         }
 
-        private static void AssertError(IParentNode responseContent, string field, string errorMessage)
+        private static void AssertError(IParentNode responseContent, string field)
         {
             var input = responseContent.QuerySelector($"#{field}");
             var div = input.ParentElement;
             div.ClassName.Should().Be("govuk-form-group govuk-form-group--error");
+
+            //No error message shown on this page, just the error border
+            var errorSpan = div.QuerySelector(".govuk-error-message") as IHtmlSpanElement;
+            errorSpan.Should().BeNull();
         }
     }
 }

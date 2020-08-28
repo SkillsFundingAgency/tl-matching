@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Sfa.Tl.Matching.Domain.Models
 {
+    // ReSharper disable UnusedMember.Global
     public class Opportunity : BaseEntity
     {
         public Guid? EmployerCrmId { get; set; }

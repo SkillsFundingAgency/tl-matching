@@ -9,6 +9,7 @@ namespace Sfa.Tl.Matching.Tests.Common.Extensions
     /// <remarks>
     /// Adapted from https://github.com/romantitov/MockQueryable/
     /// </remarks>>
+    // ReSharper disable UnusedMember.Global
     public static class NSubstituteExtensions
     {
         public static IQueryable<TEntity> BuildMock<TEntity>(this IQueryable<TEntity> data) where TEntity : class

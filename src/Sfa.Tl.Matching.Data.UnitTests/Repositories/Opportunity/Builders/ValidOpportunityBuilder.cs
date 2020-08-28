@@ -5,6 +5,7 @@ using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
 {
+    // ReSharper disable UnusedMember.Global
     public class ValidOpportunityBuilder
     {
         private readonly Domain.Models.Opportunity _opportunity;

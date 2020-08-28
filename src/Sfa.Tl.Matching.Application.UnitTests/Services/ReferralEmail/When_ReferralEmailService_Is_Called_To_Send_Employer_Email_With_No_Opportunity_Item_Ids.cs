@@ -47,12 +47,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
 
             var functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
-            var itemIds = new List<int>();
-
             var referralEmailService = new ReferralEmailService(mapper, datetimeProvider, _emailService,
                 _opportunityRepository, opportunityItemRepository, _backgroundProcessHistoryRepository, functionLogRepository);
 
-            referralEmailService.SendEmployerReferralEmailAsync(1, itemIds, 1, "system").GetAwaiter().GetResult();
+            referralEmailService.SendEmployerReferralEmailAsync(1, new List<int>(), 1, "system").GetAwaiter().GetResult();
         }
 
         [Fact]

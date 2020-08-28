@@ -86,7 +86,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task CreateOrUpdateAsync(UserCache data, UserCacheDto dto)
         {
-            _mapper.Map<UserCacheDto, UserCache>(dto, data);
+            _mapper.Map(dto, data);
 
             if (data == null)
             {
