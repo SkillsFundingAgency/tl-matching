@@ -44,7 +44,7 @@ namespace Sfa.Tl.Matching.Web
 
         protected MatchingConfiguration MatchingConfiguration;
         protected bool IsTestAdminUser { get; set; } = true;
-        
+
         public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
@@ -69,6 +69,11 @@ namespace Sfa.Tl.Matching.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.Configure<CookieTempDataProviderOptions>(options =>
+            {
+                options.Cookie.IsEssential = true;
+            });
+
             services.Configure<FormOptions>(options =>
             {
                 options.ValueCountLimit = 15360;
@@ -83,18 +88,13 @@ namespace Sfa.Tl.Matching.Web
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
 
-            //services.AddRazorPages();
-
             services.AddControllersWithViews()
                 .AddMvcOptions(config =>
                 {
-                    //if (!isConfigLocalOrDev)
-                    //{
-                        var policy = new AuthorizationPolicyBuilder()
-                            .RequireAuthenticatedUser()
-                            .Build();
-                        config.Filters.Add(new AuthorizeFilter(policy));
-                    //}
+                    var policy = new AuthorizationPolicyBuilder()
+                        .RequireAuthenticatedUser()
+                        .Build();
+                    config.Filters.Add(new AuthorizeFilter(policy));
 
                     config.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
                     config.Filters.Add(new ResponseCacheAttribute
