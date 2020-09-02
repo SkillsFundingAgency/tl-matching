@@ -95,19 +95,24 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
             if (entities.Count == 0) return;
 
-            await using var transaction = await _dbContext.Database.BeginTransactionAsync();
-            try
+            var strategy = _dbContext.Database.CreateExecutionStrategy();
+
+            await strategy.Execute(async () =>
             {
-                await _dbContext.BulkUpdateAsync(entities,
-                    config => config.UseTempDB = true);
-                await transaction.CommitAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message, ex.InnerException);
-                await transaction.RollbackAsync();
-                throw;
-            }
+                await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+                try
+                {
+                    await _dbContext.BulkUpdateAsync(entities,
+                        config => config.UseTempDB = true);
+                    await transaction.CommitAsync();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message, ex.InnerException);
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            });
         }
 
         public virtual async Task UpdateWithSpecifiedColumnsOnlyAsync(T entity, params Expression<Func<T, object>>[] properties)
@@ -162,23 +167,28 @@ namespace Sfa.Tl.Matching.Data.Repositories
                     };
                 }).ToList();
 
-                await using var transaction = await _dbContext.Database.BeginTransactionAsync();
-                try
+                var strategy = _dbContext.Database.CreateExecutionStrategy();
+
+                await strategy.Execute(async () =>
                 {
-                    await _dbContext.BulkUpdateAsync(entities,
-                        config =>
-                        {
-                            config.PropertiesToInclude = propList;
-                            config.UseTempDB = true;
-                        });
-                    await transaction.CommitAsync();
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex.Message, ex.InnerException);
-                    await transaction.RollbackAsync();
-                    throw;
-                }
+                    await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+                    try
+                    {
+                        await _dbContext.BulkUpdateAsync(entities,
+                            config =>
+                            {
+                                config.PropertiesToInclude = propList;
+                                config.UseTempDB = true;
+                            });
+                        await transaction.CommitAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex.Message, ex.InnerException);
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+                });
             }
             catch (DbUpdateException due)
             {
