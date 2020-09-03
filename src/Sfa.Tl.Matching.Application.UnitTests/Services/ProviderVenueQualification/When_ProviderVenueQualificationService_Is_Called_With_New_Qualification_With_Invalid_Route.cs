@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualification
 {
-    public class When_ProviderVenueQualificationService_Is_Called_To_Remove_Provider_Qualification
+    public class When_ProviderVenueQualificationService_Is_Called_With_New_Qualification_With_Invalid_Route
     {
         private readonly IProviderService _providerService;
         private readonly IProviderVenueService _providerVenueService;
@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
 
         private readonly IEnumerable<ProviderVenueQualificationUpdateResultsDto> _results;
 
-        public When_ProviderVenueQualificationService_Is_Called_To_Remove_Provider_Qualification()
+        public When_ProviderVenueQualificationService_Is_Called_With_New_Qualification_With_Invalid_Route()
         {
             _providerService = Substitute.For<IProviderService>();
             _providerVenueService = Substitute.For<IProviderVenueService>();
@@ -33,7 +33,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
 
             var dtoList = new ValidProviderVenueQualificationDtoListBuilder()
                 .AddVenue()
-                .AddQualificationWithRoutes(false) // Qualification not offerred
+                .AddQualificationWithRoutes(routes: new List<string>
+                {
+                    "Invalid route"
+                })
                 .Build();
             var dto = dtoList.First();
 
@@ -75,21 +78,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
 
             _qualificationService
                 .GetQualificationAsync("1234567X")
-                .Returns(new QualificationDetailViewModel
-                {
-                    Id = 10,
-                    LarId = "1234567X",
-                    Title = "Full qualification title",
-                    ShortTitle = "Short qualification title"
-                });
-            
+                .Returns((QualificationDetailViewModel)null);
+
+            _qualificationService
+                .CreateQualificationEntityAsync(Arg.Is<MissingQualificationViewModel>(
+                        p => p.LarId == "1234567X"))
+                    .Returns(10); //Qualification id
+
             _providerQualificationService
                 .GetProviderQualificationAsync(Arg.Any<int>(), Arg.Any<int>())
-                .Returns(new ProviderQualificationDto
-                {
-                    ProviderVenueId = 1,
-                    QualificationId = 10
-                });
+                .Returns((ProviderQualificationDto)null);
 
             _routePathService
                 .GetRouteSummaryByNameAsync("Agriculture, environmental and animal care")
@@ -107,21 +105,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                 });
 
             _qualificationRouteMappingService
-                .GetQualificationRouteMappingAsync(1, 10)
-                .Returns(new QualificationRouteMappingViewModel
-                {
-                    QualificationId= 10,
-                    RouteId = 1,
-                    Source = "Test"
-                });
-            _qualificationRouteMappingService
-                .GetQualificationRouteMappingAsync(3, 10)
-                .Returns(new QualificationRouteMappingViewModel
-                {
-                    QualificationId = 10,
-                    RouteId = 3,
-                    Source = "Test"
-                });
+                .GetQualificationRouteMappingAsync(Arg.Any<int>(), Arg.Any<int>())
+                .Returns((QualificationRouteMappingViewModel)null);
 
             var providerVenueQualificationService = new ProviderVenueQualificationService
             (
@@ -153,9 +138,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
         }
 
         [Fact]
-        public void Then_Results_Has_No_Errors()
+        public void Then_Results_Has_Expected_Errors()
         {
-            _results.First().HasErrors.Should().BeFalse();
+            _results.First().HasErrors.Should().BeTrue();
+            _results.First().Message.Should().ContainEquivalentOf("Route Invalid route not found in existing Routes.");
         }
 
         [Fact]
@@ -183,30 +169,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
         }
 
         [Fact]
-        public void Then_ProviderService_UpdateProviderDetailAsync_Is_Not_Called()
-        {
-            _providerService
-                .DidNotReceive()
-                .UpdateProviderDetailAsync(Arg.Any<ProviderDetailViewModel>());
-        }
-
-        [Fact]
-        public void Then_ProviderVenueService_CreateVenueAsync_Is_Not_Called()
-        {
-            _providerVenueService
-                .DidNotReceive()
-                .CreateVenueAsync(Arg.Any<AddProviderVenueViewModel>());
-        }
-
-        [Fact]
-        public void Then_ProviderVenueService_UpdateVenueAsync_Is_Not_Called()
-        {
-            _providerVenueService
-                .DidNotReceive()
-                .UpdateVenueAsync(Arg.Any<ProviderVenueDetailViewModel>());
-        }
-
-        [Fact]
         public void Then_ProviderVenueService_UpdateVenueAsync_Is_Not_Called_To_Remove_Venue()
         {
             _providerVenueService
@@ -223,12 +185,21 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
         }
 
         [Fact]
+        public void Then_ProviderVenueService_GetRemoveProviderVenueViewModelAsync_Is_Not_Called()
+        {
+            _providerVenueService
+                .DidNotReceive()
+                .GetRemoveProviderVenueViewModelAsync(Arg.Any<int>());
+        }
+
+        [Fact]
         public void Then_ProviderQualificationService_GetProviderQualificationAsync_Is_Called_Exactly_Once()
         {
             _providerQualificationService
                 .Received(1)
                 .GetProviderQualificationAsync(Arg.Any<int>(), Arg.Any<int>());
         }
+
 
         [Fact]
         public void Then_ProviderQualificationService_GetProviderQualificationAsync_Is_Called_With_Expected_Values()
@@ -247,77 +218,66 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
         }
 
         [Fact]
-        public void Then_RoutePathService_GetRouteSummaryByNameAsync_Is_Called_Exactly_Twice()
+        public void Then_RoutePathService_GetRouteSummaryByNameAsync_Is_Called_Exactly_Once()
         {
             _routePathService
-                .Received(2)
+                .Received(1)
                 .GetRouteSummaryByNameAsync(Arg.Any<string>());
         }
 
         [Fact]
-        public void Then_RoutePathService_GetRouteSummaryByNameAsync_Is_Called_Exactly_Once_With_Agriculture_Route()
+        public void Then_RoutePathService_GetRouteSummaryByNameAsync_Is_Called_Exactly_Once_With_Invalid_Route()
         {
             _routePathService
                 .Received(1)
-                .GetRouteSummaryByNameAsync("Agriculture, environmental and animal care");
+                .GetRouteSummaryByNameAsync("Invalid route");
         }
-
+        
         [Fact]
-        public void Then_RoutePathService_GetRouteSummaryByNameAsync_Is__Exactly_Once_With_Digital_Route()
-        {
-            _routePathService
-                .Received(1)
-                .GetRouteSummaryByNameAsync("Digital");
-        }
-
-        [Fact]
-        public void Then_QualificationRouteMappingService_GetQualificationRouteMappingAsync_Is_Called_Exactly_Twice()
+        public void Then_QualificationRouteMappingService_GetQualificationRouteMappingAsync_Is_Not_Called()
         {
             _qualificationRouteMappingService
-                .Received(2)
+                .DidNotReceive()
                 .GetQualificationRouteMappingAsync(Arg.Any<int>(), Arg.Any<int>());
         }
-
+        
         [Fact]
-        public void Then_QualificationRouteMappingService_GetQualificationRouteMappingAsync_Is_Called_Exactly_Once_With_Agriculture_Route()
-        {
-            _qualificationRouteMappingService
-                .Received(1)
-                .GetQualificationRouteMappingAsync(1, 10);
-        }
-
-        [Fact]
-        public void Then_QualificationRouteMappingService_GetQualificationRouteMappingAsync_Is_Called_Exactly_Once_With_Digital_Route()
-        {
-            _qualificationRouteMappingService
-                .Received(1)
-                .GetQualificationRouteMappingAsync(3, 10);
-        }
-
-        [Fact]
-        public void Then_QualificationService_CreateQualificationEntityAsync_Is_Not_Called()
+        public void Then_QualificationService_CreateQualificationEntityAsync_Is_Called_Exactly_Once_With_Expected_Values()
         {
             _qualificationService
-                .DidNotReceive()
-                .CreateQualificationEntityAsync(Arg.Any<MissingQualificationViewModel>());
+                .Received(1)
+                .CreateQualificationEntityAsync(Arg.Is<MissingQualificationViewModel>(
+                    p =>
+                        p.ProviderVenueId == 1 &&
+                        p.LarId == "1234567X" &&
+                        p.ProviderVenueId == 1 &&
+                        p.Title == "Full qualification title" &&
+                        p.ShortTitle == "Short qualification title" &&
+                        p.Source == "Import"));
         }
 
         [Fact]
-        public void Then_ProviderQualificationService_CreateProviderQualificationAsync_Is_Not_Called()
-        {
-            _providerQualificationService
-                .DidNotReceive()
-                .CreateProviderQualificationAsync(Arg.Any<AddQualificationViewModel>());
-        }
-        
-        [Fact]
-        public void Then_ProviderQualificationService_RemoveProviderQualificationAsync_Is_Called_With_Expected_Values()
+        public void Then_ProviderQualificationService_CreateProviderQualificationAsync_Is_Called_Exactly_Once()
         {
             _providerQualificationService
                 .Received(1)
-                .RemoveProviderQualificationAsync(1, 10);
+                .CreateProviderQualificationAsync(Arg.Any<AddQualificationViewModel>());
         }
-        
+
+        [Fact]
+        public void Then_ProviderQualificationService_CreateProviderQualificationAsync_Is_Called_Exactly_Once_With_Expected_Values()
+        {
+            _providerQualificationService
+                .Received(1)
+                .CreateProviderQualificationAsync(Arg.Is<AddQualificationViewModel>(
+                    p =>
+                        p.ProviderVenueId == 1 &&
+                        p.QualificationId == 10 &&
+                        p.Postcode == "CV1 2WT" &&
+                        p.LarId == "1234567X" &&
+                        p.Source == "Import"));
+        }
+
         [Fact]
         public void Then_QualificationRouteMappingService_CreateQualificationRouteMappingAsync_Is_Not_Called()
         {

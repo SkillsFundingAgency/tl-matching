@@ -44,19 +44,23 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
             return this;
         }
 
-        public ValidProviderVenueQualificationDtoListBuilder AddQualificationWithRoutes(bool qualificationIsOffered = true)
+        public ValidProviderVenueQualificationDtoListBuilder AddQualificationWithRoutes(bool qualificationIsOffered = true, 
+            IList<string> routes = null)
         {
+            //Default routes
+            routes ??= new List<string>
+            {
+                "Agriculture, environmental and animal care",
+                "Digital"
+            };
+
             var providerVenueQualificationDto = _providerVenueQualificationDtoList.First();
 
             providerVenueQualificationDto.LarId = "1234567X";
             providerVenueQualificationDto.QualificationTitle = "Full qualification title";
             providerVenueQualificationDto.QualificationShortTitle = "Short qualification title";
             providerVenueQualificationDto.QualificationIsOffered = qualificationIsOffered;
-            providerVenueQualificationDto.Routes = new List<string>
-            {
-                "Agriculture, environmental and animal care",
-                "Digital"
-            };
+            providerVenueQualificationDto.Routes = routes;
 
             return this;
         }

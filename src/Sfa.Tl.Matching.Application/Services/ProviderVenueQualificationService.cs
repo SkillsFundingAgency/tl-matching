@@ -97,33 +97,42 @@ namespace Sfa.Tl.Matching.Application.Services
                         }
                     }
 
-                    // Provider Venue Update
-                    var venueViewModel = await _providerVenueService.GetVenueWithTrimmedPostcodeAsync(providerId, providerVenueQualification.VenuePostcode);
-
-                    if (venueViewModel == null)
+                    ProviderVenueDetailViewModel venueViewModel = null;
+                    if (!string.IsNullOrEmpty(providerVenueQualification.VenuePostcode))
                     {
-                        var addProviderVenue = new AddProviderVenueViewModel
+                        // Provider Venue Update
+                        venueViewModel =
+                            await _providerVenueService.GetVenueWithTrimmedPostcodeAsync(providerId,
+                                providerVenueQualification.VenuePostcode);
+
+                        if (venueViewModel == null)
                         {
-                            ProviderId = providerId,
-                            Postcode = providerVenueQualification.VenuePostcode,
-                            Source = Source
-                        };
+                            var addProviderVenue = new AddProviderVenueViewModel
+                            {
+                                ProviderId = providerId,
+                                Postcode = providerVenueQualification.VenuePostcode,
+                                Source = Source
+                            };
 
-                        var venueId = await _providerVenueService.CreateVenueAsync(addProviderVenue);
-                        Debug.WriteLine($"Created venue with id {venueId} for provider {providerId} and postcode {providerVenueQualification.VenuePostcode}");
+                            var venueId = await _providerVenueService.CreateVenueAsync(addProviderVenue);
+                            Debug.WriteLine(
+                                $"Created venue with id {venueId} for provider {providerId} and postcode {providerVenueQualification.VenuePostcode}");
 
-                        venueViewModel = await _providerVenueService.GetVenueAsync(venueId);
-                    }
+                            venueViewModel = await _providerVenueService.GetVenueAsync(venueId);
+                        }
 
-                    var providerVenueValidator = ValidateProviderVenueToUpdate(venueViewModel, providerVenueQualification);
+                        var providerVenueValidator =
+                            ValidateProviderVenueToUpdate(venueViewModel, providerVenueQualification);
 
-                    if (providerVenueValidator.IsUpdated)
-                    {
-                        await _providerVenueService.UpdateVenueAsync(providerVenueValidator.ProviderVenueDetailViewModel);
+                        if (providerVenueValidator.IsUpdated)
+                        {
+                            await _providerVenueService.UpdateVenueAsync(providerVenueValidator
+                                .ProviderVenueDetailViewModel);
+                        }
                     }
 
                     // Provider Venue Delete
-                    if (venueViewModel.IsRemoved != providerVenueQualification.VenueIsRemoved)
+                    if (venueViewModel != null && venueViewModel.IsRemoved != providerVenueQualification.VenueIsRemoved)
                     {
                         var removeProviderVenueViewModel = new RemoveProviderVenueViewModel
                         {
@@ -139,85 +148,81 @@ namespace Sfa.Tl.Matching.Application.Services
                     }
 
                     // Qualification
-                    if (!string.IsNullOrWhiteSpace(providerVenueQualification.LarId))
+                    if (venueViewModel != null && !string.IsNullOrWhiteSpace(providerVenueQualification.LarId))
                     {
-                        //TODO: Not sure we should check VenueIsRemoved
-                        if (venueViewModel != null) // && !providerVenueQualification.VenueIsRemoved)
+                        var qualification = await _qualificationService.GetQualificationAsync(providerVenueQualification.LarId);
+
+                        int qualificationId;
+
+                        if (qualification == null)
                         {
-                            var qualification = await _qualificationService.GetQualificationAsync(providerVenueQualification.LarId);
-
-                            int qualificationId;
-
-                            if (qualification == null)
+                            var missingQualificationViewModel = new MissingQualificationViewModel
                             {
-                                var missingQualificationViewModel = new MissingQualificationViewModel
+                                LarId = providerVenueQualification.LarId,
+                                ProviderVenueId = venueViewModel.Id,
+                                Title = providerVenueQualification.QualificationTitle,
+                                ShortTitle = providerVenueQualification.QualificationShortTitle,
+                                Source = Source
+                            };
+
+                            qualificationId = await _qualificationService.CreateQualificationEntityAsync(missingQualificationViewModel);
+                            Debug.WriteLine($">>>> Created Removing Qualification {qualificationId}");
+                        }
+                        else
+                        {
+                            qualificationId = qualification.Id;
+                        }
+
+                        var providerQualificationViewModel = await _providerQualificationService.GetProviderQualificationAsync(venueViewModel.Id, qualificationId);
+
+                        if (providerQualificationViewModel == null && providerVenueQualification.QualificationIsOffered)
+                        {
+                            var addQualificationViewModel = new AddQualificationViewModel
+                            {
+                                LarId = providerVenueQualification.LarId,
+                                QualificationId = qualificationId,
+                                Source = Source,
+                                ProviderVenueId = venueViewModel.Id,
+                                Postcode = venueViewModel.Postcode
+                            };
+
+                            Debug.WriteLine($">>>> Creating ProviderQualification {addQualificationViewModel.LarId} - {addQualificationViewModel.QualificationId} - {addQualificationViewModel.ProviderVenueId}");
+                            await _providerQualificationService.CreateProviderQualificationAsync(addQualificationViewModel);
+                        }
+                        // Delete Provider Venue Qualification
+                        else if (providerQualificationViewModel != null && !providerVenueQualification.QualificationIsOffered)
+                        {
+                            Debug.WriteLine($">>>> Removing ProviderQualification {venueViewModel.Id} - {qualificationId} ({providerQualificationViewModel.ProviderVenueId} - {providerQualificationViewModel.QualificationId})");
+                            await _providerQualificationService.RemoveProviderQualificationAsync(venueViewModel.Id, qualificationId);
+                        }
+                            
+                        // Route Mapping
+                        foreach (var routeName in providerVenueQualification.Routes)
+                        {
+                            var route = await _routePathService.GetRouteSummaryByNameAsync(routeName);
+
+                            if (route == null)
+                            {
+                                result.HasErrors = true;
+                                result.Message = $"Data Error: Route {routeName} not found in existing Routes. UkPrn: {providerVenueQualification.UkPrn}, postcode: {providerVenueQualification.VenuePostcode}, LAR Id: {providerVenueQualification.LarId}";
+                                continue;
+                            }
+
+                            var routeMapping =
+                                await _qualificationRouteMappingService.GetQualificationRouteMappingAsync(route.Id,
+                                    qualificationId);
+
+                            if (routeMapping == null)
+                            {
+                                var qualificationRouteMappingViewModel = new QualificationRouteMappingViewModel
                                 {
-                                    LarId = providerVenueQualification.LarId,
-                                    ProviderVenueId = venueViewModel.Id,
-                                    Title = providerVenueQualification.QualificationTitle,
-                                    ShortTitle = providerVenueQualification.QualificationShortTitle,
+                                    RouteId = route.Id,
+                                    QualificationId = qualificationId,
                                     Source = Source
                                 };
 
-                                qualificationId = await _qualificationService.CreateQualificationEntityAsync(missingQualificationViewModel);
-                                Debug.WriteLine($">>>> Created Removing Qualification {qualificationId}");
-                            }
-                            else
-                            {
-                                qualificationId = qualification.Id;
-                            }
-
-                            var providerQualificationViewModel = await _providerQualificationService.GetProviderQualificationAsync(venueViewModel.Id, qualificationId);
-
-                            if (providerQualificationViewModel == null && providerVenueQualification.QualificationIsOffered)
-                            {
-                                var addQualificationViewModel = new AddQualificationViewModel
-                                {
-                                    LarId = providerVenueQualification.LarId,
-                                    QualificationId = qualificationId,
-                                    Source = Source,
-                                    ProviderVenueId = venueViewModel.Id,
-                                    Postcode = venueViewModel.Postcode
-                                };
-
-                                Debug.WriteLine($">>>> Creating ProviderQualification {addQualificationViewModel.LarId} - {addQualificationViewModel.QualificationId} - {addQualificationViewModel.ProviderVenueId}");
-                                await _providerQualificationService.CreateProviderQualificationAsync(addQualificationViewModel);
-                            }
-                            // Delete Provider Venue Qualification
-                            else if (providerQualificationViewModel != null && !providerVenueQualification.QualificationIsOffered)
-                            {
-                                Debug.WriteLine($">>>> Removing ProviderQualification {venueViewModel.Id} - {qualificationId} ({providerQualificationViewModel.ProviderVenueId} - {providerQualificationViewModel.QualificationId})");
-                                await _providerQualificationService.RemoveProviderQualificationAsync(venueViewModel.Id, qualificationId);
-                            }
-                            
-                            // Route Mapping
-                            foreach (var routeName in providerVenueQualification.Routes)
-                            {
-                                var route = await _routePathService.GetRouteSummaryByNameAsync(routeName);
-
-                                if (route == null)
-                                {
-                                    result.HasErrors = true;
-                                    result.Message = $"Data Error: Route {routeName} not found in existing Routes. UkPrn: {providerVenueQualification.UkPrn}, postcode: {providerVenueQualification.VenuePostcode}, LAR Id: {providerVenueQualification.LarId}";
-                                    continue;
-                                }
-
-                                var routeMapping =
-                                    await _qualificationRouteMappingService.GetQualificationRouteMappingAsync(route.Id,
-                                        qualificationId);
-
-                                if (routeMapping == null)
-                                {
-                                    var qualificationRouteMappingViewModel = new QualificationRouteMappingViewModel
-                                    {
-                                        RouteId = route.Id,
-                                        QualificationId = qualificationId,
-                                        Source = Source
-                                    };
-
-                                    await _qualificationRouteMappingService.CreateQualificationRouteMappingAsync(
-                                        qualificationRouteMappingViewModel);
-                                }
+                                await _qualificationRouteMappingService.CreateQualificationRouteMappingAsync(
+                                    qualificationRouteMappingViewModel);
                             }
                         }
                     }

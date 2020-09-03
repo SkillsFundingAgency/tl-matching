@@ -151,6 +151,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
         }
 
         [Fact]
+        public void Then_Results_Has_No_Errors()
+        {
+            _results.First().HasErrors.Should().BeFalse();
+        }
+
+        [Fact]
         public void Then_ProviderService_SearchAsync_Is_Called_Exactly_Once()
         {
             _providerService

@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualification
 {
-    public class When_ProviderVenueQualificationService_Is_Called_To_Update_ProviderVenue
+    public class When_ProviderVenueQualificationService_Is_Called_To_Update_Provider_With_No_Venue
     {
         private readonly IProviderVenueService _providerVenueService;
         private readonly IProviderQualificationService _providerQualificationService;
@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
 
         private readonly IEnumerable<ProviderVenueQualificationUpdateResultsDto> _results;
 
-        public When_ProviderVenueQualificationService_Is_Called_To_Update_ProviderVenue()
+        public When_ProviderVenueQualificationService_Is_Called_To_Update_Provider_With_No_Venue()
         {
             var providerService = Substitute.For<IProviderService>();
             _providerVenueService = Substitute.For<IProviderVenueService>();
@@ -74,7 +74,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
             );
 
             var dtoList = new ValidProviderVenueQualificationDtoListBuilder()
-                .AddVenue()
                 .Build();
 
             _results = providerVenueQualificationService.Update(dtoList).GetAwaiter().GetResult();
@@ -92,10 +91,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
         public void Then_Results_Has_Expected_Values()
         {
             _results.First().UkPrn.Should().Be(10000001);
-            _results.First().VenuePostcode.Should().Be("CV1 2WT");
+            _results.First().VenuePostcode.Should().BeNull();
             _results.First().LarId.Should().BeNull();
         }
-
+        
         [Fact]
         public void Then_Results_Has_No_Errors()
         {
@@ -103,10 +102,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
         }
 
         [Fact]
-        public void Then_ProviderVenueService_GetVenueWithTrimmedPostcodeAsync_Is_Called_Exactly_Once()
+        public void Then_ProviderVenueService_GetVenueWithTrimmedPostcodeAsync_Is_Not_Called()
         {
             _providerVenueService
-                .Received(1)
+                .DidNotReceive()
                 .GetVenueWithTrimmedPostcodeAsync(1, "CV1 2WT");
         }
 
@@ -182,19 +181,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                 .DidNotReceive()
                 .CreateVenueAsync(Arg.Any<AddProviderVenueViewModel>());
         }
-        
+
         [Fact]
-        public void Then_ProviderVenueService_UpdateVenueAsync_Is_Called_Exactly_Once_With_Expected_Values()
+        public void Then_ProviderVenueService_UpdateVenueAsync_Is_Not_Called()
         {
             _providerVenueService
                 .Received(1)
-                .UpdateVenueAsync(Arg.Is<ProviderVenueDetailViewModel>(
-                p =>
-                    p.Id == 1 &&
-                    p.ProviderId == 1 &&
-                    p.Postcode == "CV1 2WT" &&
-                    p.Name == "Test Provider Venue" &&
-                    p.Source == "Import"));
+                .DidNotReceive()
+                .UpdateVenueAsync(Arg.Any<ProviderVenueDetailViewModel>());
         }
     }
 }
