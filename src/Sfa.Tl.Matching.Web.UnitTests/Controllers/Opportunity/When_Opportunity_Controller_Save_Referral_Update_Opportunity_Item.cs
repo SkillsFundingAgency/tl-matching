@@ -39,9 +39,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 {
                     if (type.FullName != null && type.FullName.Contains("LoggedInUserEmailResolver"))
                         return new LoggedInUserEmailResolver<SaveReferralViewModel, OpportunityDto>(httpContextAccessor);
-                    if (type.FullName.Contains("LoggedInUserNameResolver") && type.FullName.Contains("SaveReferralViewModel"))
+                    if (type.FullName != null && type.FullName.Contains("LoggedInUserNameResolver") && type.FullName.Contains("SaveReferralViewModel"))
                         return new LoggedInUserNameResolver<SaveReferralViewModel, OpportunityDto>(httpContextAccessor);
-                    if (type.FullName.Contains("LoggedInUserNameResolver") && type.FullName.Contains("SelectedProviderViewModel"))
+                    if (type.FullName != null && type.FullName.Contains("LoggedInUserNameResolver") && type.FullName.Contains("SelectedProviderViewModel"))
                         return new LoggedInUserNameResolver<SelectedProviderViewModel, ReferralDto>(httpContextAccessor);
 
                     return null;

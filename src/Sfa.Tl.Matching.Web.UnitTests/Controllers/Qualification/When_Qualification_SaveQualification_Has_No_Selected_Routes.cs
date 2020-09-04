@@ -64,6 +64,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 
             dynamic responseObject = JsonConvert.DeserializeObject(validJson!);
 
+            Assert.NotNull(responseObject);
             Assert.True(responseObject.success == "False");
 
             var responseString = responseObject.response.ToString() as string;

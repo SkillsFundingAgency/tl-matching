@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Tests.Common.Extensions
               .Invoke(this, new object[] { expression });
 
             return (TResult)typeof(Task).GetMethod(nameof(Task.FromResult))
-              .MakeGenericMethod(resultType)
+                ?.MakeGenericMethod(resultType)
               .Invoke(null, new[] { executionResult });
         }
 
