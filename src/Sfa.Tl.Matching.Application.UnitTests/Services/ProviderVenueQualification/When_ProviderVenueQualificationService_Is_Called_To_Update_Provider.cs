@@ -61,7 +61,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
 
             var dtoList = new ValidProviderVenueQualificationDtoListBuilder().Build();
 
-            _results = providerVenueQualificationService.Update(dtoList).GetAwaiter().GetResult();
+            _results = providerVenueQualificationService.UpdateAsync(dtoList).GetAwaiter().GetResult();
         }
 
         [Fact]

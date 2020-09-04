@@ -4,6 +4,8 @@ using Sfa.Tl.Matching.Models.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Sfa.Tl.Matching.Application.Services
@@ -34,7 +36,7 @@ namespace Sfa.Tl.Matching.Application.Services
             _qualificationRouteMappingService = qualificationRouteMappingService;
         }
 
-        public async Task<IEnumerable<ProviderVenueQualificationUpdateResultsDto>> Update(IEnumerable<ProviderVenueQualificationDto> data)
+        public async Task<IEnumerable<ProviderVenueQualificationUpdateResultsDto>> UpdateAsync(IEnumerable<ProviderVenueQualificationDto> data)
         {
             var results = new List<ProviderVenueQualificationUpdateResultsDto>();
 
@@ -50,180 +52,23 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 try
                 {
-                    int providerId;
-                    var provider = await _providerService.SearchAsync(providerVenueQualification.UkPrn);
+                    var providerId = await CreateOrUpdateProviderAsync(providerVenueQualification);
 
-                    if (provider == null)
-                    {
-                        //Create the new provider
-                        var createProviderViewModel = new CreateProviderDetailViewModel
-                        {
-                            UkPrn = providerVenueQualification.UkPrn,
-                            Name = providerVenueQualification.Name,
-                            DisplayName = !string.IsNullOrWhiteSpace(providerVenueQualification.DisplayName)
-                                ? providerVenueQualification.DisplayName
-                                : providerVenueQualification.Name,
-                            PrimaryContact = providerVenueQualification.PrimaryContact,
-                            PrimaryContactEmail = providerVenueQualification.PrimaryContactEmail,
-                            PrimaryContactPhone = providerVenueQualification.PrimaryContactPhone,
-                            SecondaryContact = providerVenueQualification.SecondaryContact,
-                            SecondaryContactEmail = providerVenueQualification.SecondaryContactEmail,
-                            SecondaryContactPhone = providerVenueQualification.SecondaryContactPhone,
-                            IsEnabledForReferral = providerVenueQualification.IsEnabledForReferral,
-                            IsCdfProvider = providerVenueQualification.IsCdfProvider,
-                            //NOTE: IsTLevelProvider needs to be set manually
-                            Source = Source
-                        };
-
-                        providerId = await _providerService.CreateProviderAsync(createProviderViewModel);
-                        Debug.WriteLine($"Created provider with id {providerId} for UKPRN {providerVenueQualification.UkPrn}");
-                    }
-                    else
-                    {
-                        //Update an existing provider
-                        providerId = provider.Id;
-
-                        var providerViewModel = await _providerService.GetProviderDetailByIdAsync(providerId);
-                        if (providerViewModel != null)
-                        {
-                            var providerValidator =
-                                ValidateProviderToUpdate(providerViewModel, providerVenueQualification);
-
-                            if (providerValidator.IsUpdated)
-                            {
-                                await _providerService.UpdateProviderDetailAsync(providerValidator
-                                    .ProviderDetailViewModel);
-                            }
-                        }
-                    }
-
-                    ProviderVenueDetailViewModel venueViewModel = null;
-                    if (!string.IsNullOrEmpty(providerVenueQualification.VenuePostcode))
-                    {
-                        // Provider Venue Update
-                        venueViewModel =
-                            await _providerVenueService.GetVenueWithTrimmedPostcodeAsync(providerId,
-                                providerVenueQualification.VenuePostcode);
-
-                        if (venueViewModel == null)
-                        {
-                            var addProviderVenue = new AddProviderVenueViewModel
-                            {
-                                ProviderId = providerId,
-                                Postcode = providerVenueQualification.VenuePostcode,
-                                Source = Source
-                            };
-
-                            var venueId = await _providerVenueService.CreateVenueAsync(addProviderVenue);
-                            Debug.WriteLine(
-                                $"Created venue with id {venueId} for provider {providerId} and postcode {providerVenueQualification.VenuePostcode}");
-
-                            venueViewModel = await _providerVenueService.GetVenueAsync(venueId);
-                        }
-
-                        var providerVenueValidator =
-                            ValidateProviderVenueToUpdate(venueViewModel, providerVenueQualification);
-
-                        if (providerVenueValidator.IsUpdated)
-                        {
-                            await _providerVenueService.UpdateVenueAsync(providerVenueValidator
-                                .ProviderVenueDetailViewModel);
-                        }
-                    }
-
-                    // Provider Venue Delete
-                    if (venueViewModel != null && venueViewModel.IsRemoved != providerVenueQualification.VenueIsRemoved)
-                    {
-                        var removeProviderVenueViewModel = new RemoveProviderVenueViewModel
-                        {
-                            Postcode = venueViewModel.Postcode,
-                            ProviderId = venueViewModel.ProviderId,
-                            ProviderVenueId = venueViewModel.Id
-                        };
-
-                        if (providerVenueQualification.VenueIsRemoved)
-                            await _providerVenueService.UpdateVenueAsync(removeProviderVenueViewModel);
-                        else
-                            await _providerVenueService.UpdateVenueToNotRemovedAsync(removeProviderVenueViewModel);
-                    }
+                    var venueViewModel = await CreateOrUpdateProviderVenueAsync(providerVenueQualification, providerId);
 
                     // Qualification
                     if (venueViewModel != null && !string.IsNullOrWhiteSpace(providerVenueQualification.LarId))
                     {
-                        var qualification = await _qualificationService.GetQualificationAsync(providerVenueQualification.LarId);
+                        var qualificationId = await CreateOrUpdateQualificationAsync(providerVenueQualification, venueViewModel.Id);
 
-                        int qualificationId;
+                        await CreateOrUpdateProviderQualificationAsync(providerVenueQualification, venueViewModel.Id, venueViewModel.Postcode, qualificationId);
 
-                        if (qualification == null)
-                        {
-                            var missingQualificationViewModel = new MissingQualificationViewModel
-                            {
-                                LarId = providerVenueQualification.LarId,
-                                ProviderVenueId = venueViewModel.Id,
-                                Title = providerVenueQualification.QualificationTitle,
-                                ShortTitle = providerVenueQualification.QualificationShortTitle,
-                                Source = Source
-                            };
-
-                            qualificationId = await _qualificationService.CreateQualificationEntityAsync(missingQualificationViewModel);
-                            Debug.WriteLine($">>>> Created Removing Qualification {qualificationId}");
-                        }
-                        else
-                        {
-                            qualificationId = qualification.Id;
-                        }
-
-                        var providerQualificationViewModel = await _providerQualificationService.GetProviderQualificationAsync(venueViewModel.Id, qualificationId);
-
-                        if (providerQualificationViewModel == null && providerVenueQualification.QualificationIsOffered)
-                        {
-                            var addQualificationViewModel = new AddQualificationViewModel
-                            {
-                                LarId = providerVenueQualification.LarId,
-                                QualificationId = qualificationId,
-                                Source = Source,
-                                ProviderVenueId = venueViewModel.Id,
-                                Postcode = venueViewModel.Postcode
-                            };
-
-                            Debug.WriteLine($">>>> Creating ProviderQualification {addQualificationViewModel.LarId} - {addQualificationViewModel.QualificationId} - {addQualificationViewModel.ProviderVenueId}");
-                            await _providerQualificationService.CreateProviderQualificationAsync(addQualificationViewModel);
-                        }
-                        // Delete Provider Venue Qualification
-                        else if (providerQualificationViewModel != null && !providerVenueQualification.QualificationIsOffered)
-                        {
-                            Debug.WriteLine($">>>> Removing ProviderQualification {venueViewModel.Id} - {qualificationId} ({providerQualificationViewModel.ProviderVenueId} - {providerQualificationViewModel.QualificationId})");
-                            await _providerQualificationService.RemoveProviderQualificationAsync(venueViewModel.Id, qualificationId);
-                        }
-                            
                         // Route Mapping
-                        foreach (var routeName in providerVenueQualification.Routes)
+                        var routeErrors = await CreateOrUpdateQualificationRouteMappingAsync(providerVenueQualification, qualificationId);
+                        if (!string.IsNullOrEmpty(routeErrors))
                         {
-                            var route = await _routePathService.GetRouteSummaryByNameAsync(routeName);
-
-                            if (route == null)
-                            {
-                                result.HasErrors = true;
-                                result.Message = $"Data Error: Route {routeName} not found in existing Routes. UkPrn: {providerVenueQualification.UkPrn}, postcode: {providerVenueQualification.VenuePostcode}, LAR Id: {providerVenueQualification.LarId}";
-                                continue;
-                            }
-
-                            var routeMapping =
-                                await _qualificationRouteMappingService.GetQualificationRouteMappingAsync(route.Id,
-                                    qualificationId);
-
-                            if (routeMapping == null)
-                            {
-                                var qualificationRouteMappingViewModel = new QualificationRouteMappingViewModel
-                                {
-                                    RouteId = route.Id,
-                                    QualificationId = qualificationId,
-                                    Source = Source
-                                };
-
-                                await _qualificationRouteMappingService.CreateQualificationRouteMappingAsync(
-                                    qualificationRouteMappingViewModel);
-                            }
+                            result.HasErrors = true;
+                            result.Message = routeErrors;
                         }
                     }
                 }
@@ -237,6 +82,218 @@ namespace Sfa.Tl.Matching.Application.Services
             }
 
             return results;
+        }
+
+        private async Task<int> CreateOrUpdateProviderAsync(ProviderVenueQualificationDto providerVenueQualification)
+        {
+            int providerId;
+            var provider = await _providerService.SearchAsync(providerVenueQualification.UkPrn);
+
+            if (provider == null)
+            {
+                //Create the new provider
+                var createProviderViewModel = new CreateProviderDetailViewModel
+                {
+                    UkPrn = providerVenueQualification.UkPrn,
+                    Name = providerVenueQualification.Name,
+                    DisplayName = !string.IsNullOrWhiteSpace(providerVenueQualification.DisplayName)
+                        ? providerVenueQualification.DisplayName
+                        : providerVenueQualification.Name,
+                    PrimaryContact = providerVenueQualification.PrimaryContact,
+                    PrimaryContactEmail = providerVenueQualification.PrimaryContactEmail,
+                    PrimaryContactPhone = providerVenueQualification.PrimaryContactPhone,
+                    SecondaryContact = providerVenueQualification.SecondaryContact,
+                    SecondaryContactEmail = providerVenueQualification.SecondaryContactEmail,
+                    SecondaryContactPhone = providerVenueQualification.SecondaryContactPhone,
+                    IsEnabledForReferral = providerVenueQualification.IsEnabledForReferral,
+                    IsCdfProvider = providerVenueQualification.IsCdfProvider,
+                    //NOTE: IsTLevelProvider needs to be set manually
+                    Source = Source
+                };
+
+                providerId = await _providerService.CreateProviderAsync(createProviderViewModel);
+                Debug.WriteLine($"Created provider with id {providerId} for UKPRN {providerVenueQualification.UkPrn}");
+            }
+            else
+            {
+                //Update an existing provider
+                providerId = provider.Id;
+
+                var providerViewModel = await _providerService.GetProviderDetailByIdAsync(providerId);
+                if (providerViewModel != null)
+                {
+                    var providerValidator =
+                        ValidateProviderToUpdate(providerViewModel, providerVenueQualification);
+
+                    if (providerValidator.IsUpdated)
+                    {
+                        await _providerService.UpdateProviderDetailAsync(providerValidator
+                            .ProviderDetailViewModel);
+                    }
+                }
+            }
+
+            return providerId;
+        }
+
+        private async Task<ProviderVenueDetailViewModel> CreateOrUpdateProviderVenueAsync(ProviderVenueQualificationDto providerVenueQualification, int providerId)
+        {
+            if (string.IsNullOrEmpty(providerVenueQualification.VenuePostcode))
+            {
+                return null;
+            }
+
+            var venueViewModel = await _providerVenueService.GetVenueWithTrimmedPostcodeAsync(providerId,
+                        providerVenueQualification.VenuePostcode);
+
+            if (venueViewModel == null)
+            {
+                var addProviderVenue = new AddProviderVenueViewModel
+                {
+                    ProviderId = providerId,
+                    Postcode = providerVenueQualification.VenuePostcode,
+                    Source = Source
+                };
+
+                var venueId = await _providerVenueService.CreateVenueAsync(addProviderVenue);
+                Debug.WriteLine(
+                    $"Created venue with id {venueId} for provider {providerId} and postcode {providerVenueQualification.VenuePostcode}");
+
+                venueViewModel = await _providerVenueService.GetVenueAsync(venueId);
+            }
+
+            var providerVenueValidator = ValidateProviderVenueToUpdate(venueViewModel, providerVenueQualification);
+
+            if (providerVenueValidator.IsUpdated)
+            {
+                await _providerVenueService.UpdateVenueAsync(providerVenueValidator.ProviderVenueDetailViewModel);
+            }
+
+            // Provider Venue Delete
+            if (venueViewModel.IsRemoved != providerVenueQualification.VenueIsRemoved)
+            {
+                var removeProviderVenueViewModel = new RemoveProviderVenueViewModel
+                {
+                    Postcode = venueViewModel.Postcode,
+                    ProviderId = venueViewModel.ProviderId,
+                    ProviderVenueId = venueViewModel.Id
+                };
+
+                if (providerVenueQualification.VenueIsRemoved)
+                    await _providerVenueService.UpdateVenueAsync(removeProviderVenueViewModel);
+                else
+                    await _providerVenueService.UpdateVenueToNotRemovedAsync(removeProviderVenueViewModel);
+            }
+
+            return venueViewModel;
+        }
+
+        private async Task<int> CreateOrUpdateQualificationAsync(ProviderVenueQualificationDto providerVenueQualification, int providerVenueId)
+        {
+            var qualification = await _qualificationService.GetQualificationAsync(providerVenueQualification.LarId);
+
+            int qualificationId;
+
+            if (qualification == null)
+            {
+                var missingQualificationViewModel = new MissingQualificationViewModel
+                {
+                    LarId = providerVenueQualification.LarId,
+                    ProviderVenueId = providerVenueId,
+                    Title = providerVenueQualification.QualificationTitle,
+                    ShortTitle = providerVenueQualification.QualificationShortTitle,
+                    Source = Source
+                };
+
+                qualificationId = await _qualificationService.CreateQualificationEntityAsync(missingQualificationViewModel);
+                Debug.WriteLine($">>>> Created Removing Qualification {qualificationId}");
+            }
+            else
+            {
+                qualificationId = qualification.Id;
+            }
+
+            return qualificationId;
+        }
+
+        private async Task CreateOrUpdateProviderQualificationAsync(ProviderVenueQualificationDto providerVenueQualification,
+            int providerVenueId, string postcode, int qualificationId)
+        {
+            var providerQualificationViewModel =
+                await _providerQualificationService.GetProviderQualificationAsync(providerVenueId, qualificationId);
+
+            if (providerQualificationViewModel == null && providerVenueQualification.QualificationIsOffered)
+            {
+                var addQualificationViewModel = new AddQualificationViewModel
+                {
+                    LarId = providerVenueQualification.LarId,
+                    QualificationId = qualificationId,
+                    Source = Source,
+                    ProviderVenueId = providerVenueId,
+                    Postcode = postcode
+                };
+
+                Debug.WriteLine(
+                    $">>>> Creating ProviderQualification {addQualificationViewModel.LarId} - {addQualificationViewModel.QualificationId} - {addQualificationViewModel.ProviderVenueId}");
+                await _providerQualificationService.CreateProviderQualificationAsync(addQualificationViewModel);
+            }
+            // Delete Provider Venue Qualification
+            else if (providerQualificationViewModel != null && !providerVenueQualification.QualificationIsOffered)
+            {
+                Debug.WriteLine(
+                    $">>>> Removing ProviderQualification {providerVenueId} - {qualificationId} ({providerQualificationViewModel.ProviderVenueId} - {providerQualificationViewModel.QualificationId})");
+                await _providerQualificationService.RemoveProviderQualificationAsync(providerVenueId, qualificationId);
+            }
+        }
+
+        private async Task<string> CreateOrUpdateQualificationRouteMappingAsync(ProviderVenueQualificationDto providerVenueQualification,
+            int qualificationId)
+        {
+            var invalidRouteNames = new List<string>();
+
+            foreach (var routeName in providerVenueQualification.Routes)
+            {
+                var route = await _routePathService.GetRouteSummaryByNameAsync(routeName);
+
+                if (route == null)
+                {
+                    invalidRouteNames.Add($"{routeName}");
+                    continue;
+                }
+
+                var routeMapping =
+                    await _qualificationRouteMappingService.GetQualificationRouteMappingAsync(route.Id,
+                        qualificationId);
+
+                if (routeMapping == null)
+                {
+                    var qualificationRouteMappingViewModel = new QualificationRouteMappingViewModel
+                    {
+                        RouteId = route.Id,
+                        QualificationId = qualificationId,
+                        Source = Source
+                    };
+
+                    await _qualificationRouteMappingService.CreateQualificationRouteMappingAsync(
+                        qualificationRouteMappingViewModel);
+                }
+            }
+
+            if (invalidRouteNames.Any())
+            {
+                var sb = new StringBuilder($"Data Error: Route{(invalidRouteNames.Count > 1 ? "s" : "")} ");
+
+                for (var i = 0; i < invalidRouteNames.Count; i++)
+                {
+                    sb.Append($"{(i > 0 ? ", " : "")}'{invalidRouteNames[i]}'");
+                }
+
+                sb.Append($" not found in existing Routes. UkPrn: {providerVenueQualification.UkPrn}, postcode: {providerVenueQualification.VenuePostcode}, LAR Id: {providerVenueQualification.LarId}");
+
+                return sb.ToString();
+            }
+
+            return null;
         }
 
         private static (bool IsUpdated, ProviderDetailViewModel ProviderDetailViewModel) ValidateProviderToUpdate(ProviderDetailViewModel providerDetailViewModel, ProviderVenueQualificationDto providerVenueQualification)

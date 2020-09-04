@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
             _fileReader.ReadData(fileImportDto)
                 .Returns(readResultDto);
 
-            _providerVenueQualificationService.Update(readResultDto.ProviderVenueQualifications)
+            _providerVenueQualificationService.UpdateAsync(readResultDto.ProviderVenueQualifications)
                 .Returns(updateResultDtoList);
 
             var service = new ProviderVenueQualificationFileImportService(logger, _fileReader,
@@ -61,7 +61,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
         {
             _providerVenueQualificationService
                 .Received(1)
-                .Update(Arg.Any<IEnumerable<ProviderVenueQualificationDto>>());
+                .UpdateAsync(Arg.Any<IEnumerable<ProviderVenueQualificationDto>>());
         }
 
         [Fact]

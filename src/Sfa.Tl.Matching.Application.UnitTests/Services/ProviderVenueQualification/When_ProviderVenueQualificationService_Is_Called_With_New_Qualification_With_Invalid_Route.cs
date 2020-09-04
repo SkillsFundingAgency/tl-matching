@@ -35,7 +35,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                 .AddVenue()
                 .AddQualificationWithRoutes(routes: new List<string>
                 {
-                    "Invalid route"
+                    "Invalid route 1",
+                    "Invalid route 2"
                 })
                 .Build();
             var dto = dtoList.First();
@@ -118,7 +119,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                 _qualificationRouteMappingService
             );
 
-            _results = providerVenueQualificationService.Update(dtoList).GetAwaiter().GetResult();
+            _results = providerVenueQualificationService.UpdateAsync(dtoList).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -141,7 +142,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
         public void Then_Results_Has_Expected_Errors()
         {
             _results.First().HasErrors.Should().BeTrue();
-            _results.First().Message.Should().ContainEquivalentOf("Route Invalid route not found in existing Routes.");
+            _results.First().Message.Should().ContainEquivalentOf("Routes 'Invalid route 1', 'Invalid route 2' not found in existing Routes.");
         }
 
         [Fact]
@@ -218,21 +219,29 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
         }
 
         [Fact]
-        public void Then_RoutePathService_GetRouteSummaryByNameAsync_Is_Called_Exactly_Once()
+        public void Then_RoutePathService_GetRouteSummaryByNameAsync_Is_Called_Exactly_Twice()
         {
             _routePathService
-                .Received(1)
+                .Received(2)
                 .GetRouteSummaryByNameAsync(Arg.Any<string>());
         }
 
         [Fact]
-        public void Then_RoutePathService_GetRouteSummaryByNameAsync_Is_Called_Exactly_Once_With_Invalid_Route()
+        public void Then_RoutePathService_GetRouteSummaryByNameAsync_Is_Called_Exactly_Once_With_Invalid_Route_1()
         {
             _routePathService
                 .Received(1)
-                .GetRouteSummaryByNameAsync("Invalid route");
+                .GetRouteSummaryByNameAsync("Invalid route 1");
         }
-        
+
+        [Fact]
+        public void Then_RoutePathService_GetRouteSummaryByNameAsync_Is_Called_Exactly_Once_With_Invalid_Route_2()
+        {
+            _routePathService
+                .Received(1)
+                .GetRouteSummaryByNameAsync("Invalid route 2");
+        }
+
         [Fact]
         public void Then_QualificationRouteMappingService_GetQualificationRouteMappingAsync_Is_Not_Called()
         {
