@@ -19,7 +19,7 @@ trigger:
     - NewBuild
     exclude:
     - "*"
-  pr: none
+pr: none
 
 variables:
   - name: applicationName
