@@ -17,8 +17,6 @@ trigger:
   branches:
     include:
     - NewBuild_Core
-    exclude:
-    - "*"
 
 variables:
 - name: applicationName
