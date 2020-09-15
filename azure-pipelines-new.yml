@@ -38,7 +38,7 @@ stages:
 - stage: build
   displayName: Build
   jobs:
-  - job: List files
+  - job: Listfiles
     steps:
     - pwsh: Get-ChildItem -Recurse
   
