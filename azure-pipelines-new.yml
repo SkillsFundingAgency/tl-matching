@@ -42,11 +42,12 @@ stages:
     steps:
     - pwsh: Get-ChildItem -Recurse
   
-  # - template: /Application/dotnet/jobs/build-application.yml@devopsTemplates
-  #   parameters:
-  #     applicationName: $(applicationName)
-  #     webPublish: false
-  #     nugetConfigPath: src\nuget.config
+  - template: /Application/dotnet/jobs/build-application.yml@devopsTemplates
+    parameters:
+      applicationName: $(applicationName)
+      webPublish: false
+      nugetConfigPath: /src/Nuget.config
+
   
 
 # stages:
