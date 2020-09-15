@@ -40,11 +40,14 @@ stages:
 - stage: build
   displayName: Build
   jobs:
-  - template: /Application/dotnet/jobs/build-application.yml@devopsTemplates
-    parameters:
-      applicationName: $(applicationName)
-      webPublish: false
-      nugetConfigPath: src\nuget.config
+  - pwsh: |
+      Get-ChildItem -Recurse
+  
+  # - template: /Application/dotnet/jobs/build-application.yml@devopsTemplates
+  #   parameters:
+  #     applicationName: $(applicationName)
+  #     webPublish: false
+  #     nugetConfigPath: src\nuget.config
   
 
 # stages:
