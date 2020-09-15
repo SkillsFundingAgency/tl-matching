@@ -38,14 +38,14 @@ variables:
 
 
   stages:
-    - stage: build
-      displayName: Build
-      jobs:
-      - template: /Application/dotnet/jobs/build-application.yml@devopsTemplates
-        parameters:
-          applicationName: $(applicationName)
-          webPublish: false
-          nugetConfigPath: nuget.config
+  - stage: build
+    displayName: Build
+    jobs:
+    - template: /Application/dotnet/jobs/build-application.yml@devopsTemplates
+      parameters:
+        applicationName: $(applicationName)
+        webPublish: false
+        nugetConfigPath: nuget.config
     
 
 # stages:
