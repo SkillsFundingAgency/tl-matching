@@ -16,7 +16,7 @@ resources:
 trigger:
   branches:
     include:
-    - NewBuild
+    - NewBuild_Core
     exclude:
     - "*"
 
