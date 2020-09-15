@@ -38,10 +38,9 @@ stages:
 - stage: build
   displayName: Build
   jobs:
-  -job: List files
+  - job: List files
     steps:
-      - pwsh: |
-        Get-ChildItem -Recurse
+    - pwsh: Get-ChildItem -Recurse
   
   # - template: /Application/dotnet/jobs/build-application.yml@devopsTemplates
   #   parameters:
