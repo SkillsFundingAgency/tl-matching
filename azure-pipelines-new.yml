@@ -19,7 +19,7 @@ trigger:
     - NewBuild
     exclude:
     - "*"
-    
+
 variables:
 - name: applicationName
   value: matching
@@ -44,7 +44,7 @@ stages:
     parameters:
       applicationName: $(applicationName)
       webPublish: false
-      nugetConfigPath: nuget.config
+      nugetConfigPath: src\nuget.config
   
 
 # stages:
