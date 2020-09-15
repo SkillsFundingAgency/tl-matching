@@ -34,302 +34,303 @@ variables:
   # SQLServerAdminPassword: ''
 
 
-stages:
-- stage: build
-  displayName: Build
-  jobs:
-  - job: Listfiles
-    steps:
-    - pwsh: Get-ChildItem -Recurse
-  
-  - template: /Application/dotnet/jobs/build-application.yml@devopsTemplates
-    parameters:
-      applicationName: $(applicationName)
-      webPublish: false
-      nugetConfigPath: ./src/Nuget.config
-
-  
-
 # stages:
-# - stage: Build
+# - stage: build
+#   displayName: Build
 #   jobs:
-#   - job: 'CodeBuild'
-#     pool:
-#         name: 'Azure Pipelines'
-#         vmImage: 'windows-2019'
-#     workspace:
-#       clean: all
+#   - job: Listfiles
 #     steps:
-#       - task: gittools.gitversion.gitversion-task.GitVersion@5
-#         displayName: GitVersion
-#         inputs:
-#           updateAssemblyInfo: true
-#       - task: DotNetCoreCLI@2
-#         displayName: Restore
-#         inputs:
-#           command: restore
-#           projects: 'src/**/*.csproj'
-#           noCache: true
-#           feedsToUse: config
-#           nugetConfigPath: src/NuGet.config
-#       - task: Npm@1
-#         displayName: 'npm install'
-#         inputs:
-#           workingDir: src/Sfa.Tl.Matching.Web/
-#           verbose: false
-#       - task: Gulp@0
-#         displayName: gulp
-#         inputs:
-#           gulpFile: src/Sfa.Tl.Matching.Web/gulpfile.js
-#           targets: default
-#       - task: DotNetCoreCLI@2
-#         displayName: Build
-#         inputs:
-#           projects: 'src/**/*.csproj'
-#           arguments: '--configuration $(buildConfiguration)  --no-restore'        
-#       - task: DotNetCoreCLI@2
-#         displayName: Test
-#         inputs:
-#           command: test
-#           projects: '**/*.UnitTests.csproj'
-#           arguments: '--configuration $(buildConfiguration)'
-#       - task: DotNetCoreCLI@2
-#         displayName: Integration Tests
-#         inputs:
-#           command: test
-#           projects: '**/*.Web.IntegrationTests.csproj'
-#           arguments: '--configuration $(buildConfiguration)'
-#       - task: DotNetCoreCLI@2
-#         displayName: 'Publish Website'
-#         inputs:
-#           command: publish
-#           publishWebProjects: true
-#           projects: 'src/Sfa.Tl.Matching.Web/Sfa.Tl.Matching.Web.csproj'
-#           arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build'
-#       - task: DotNetCoreCLI@2
-#         displayName: 'Publish Function App'
-#         inputs:
-#           command: publish
-#           publishWebProjects: false
-#           projects: 'src/Sfa.Tl.Matching.Functions/Sfa.Tl.Matching.Functions.csproj'
-#           arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build'
-#       - task: DotNetCoreCLI@2
-#         displayName: 'Publish Application Integration Tests'
-#         inputs:
-#           command: publish
-#           publishWebProjects: false
-#           projects: 'src/Sfa.Tl.Matching.Application.IntegrationTests/Sfa.Tl.Matching.Application.IntegrationTests.csproj'
-#           arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build'
-#       - task: DotNetCoreCLI@2
-#         displayName: 'Publish Web Integration Tests'
-#         inputs:
-#           command: publish
-#           publishWebProjects: false
-#           projects: 'src/Sfa.Tl.Matching.Web.IntegrationTests/Sfa.Tl.Matching.Web.IntegrationTests.csproj'
-#           arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build'
-#       - task: CopyFiles@2
-#         displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
-#         inputs:
-#           contents: |
-#             azure/** 
-#             config/**
-#           targetFolder: '$(build.artifactstagingdirectory)/publish'
-#           overWrite: true
-#       - task: PublishBuildArtifacts@1
-#         displayName: 'Publish Artifact'
-#         inputs:
-#             PathtoPublish: '$(build.artifactstagingdirectory)/publish'
+#     - pwsh: Get-ChildItem -Recurse
+  
+#   - template: /Application/dotnet/jobs/build-application.yml@devopsTemplates
+#     parameters:
+#       applicationName: $(applicationName)
+#       webPublish: false
+#       nugetConfigPath: ./src/Nuget.config
+#       agentImage: windows-latest
 
-#   - job: 'DACPACBuild'
-#     pool:
-#         name: 'Azure Pipelines'
-#         vmImage: 'windows-2019'
-#     workspace:
-#       clean: all
-#     steps:
-#     - task: VSBuild@1
-#       displayName: 'Build DACPAC'
-#       inputs:
-#         solution: 'src\Sfa.Tl.Matching.Database\Sfa.Tl.Matching.Database.sqlproj'
-#         platform: '$(buildPlatform)'
-#         configuration: '$(buildConfiguration)'
-#         msbuildArgs: '/p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
-#     - task: CopyFiles@2
-#       displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
-#       inputs:
-#         contents: |	
-#           src\**\*.dacpac	
-#         targetFolder: '$(build.artifactstagingdirectory)/publish'
-#         overWrite: true
-#     - task: PublishBuildArtifacts@1
-#       displayName: 'Publish Artifact'
-#       inputs:
-#           pathtoPublish: '$(build.artifactstagingdirectory)/publish'
+  
 
-# - stage: AT_Tests
+stages:
+- stage: Build
+  jobs:
+  - job: 'CodeBuild'
+    pool:
+        name: 'Azure Pipelines'
+        vmImage: 'windows-2019'
+    workspace:
+      clean: all
+    steps:
+      - task: gittools.gitversion.gitversion-task.GitVersion@5
+        displayName: GitVersion
+        inputs:
+          updateAssemblyInfo: true
+      - task: DotNetCoreCLI@2
+        displayName: Restore
+        inputs:
+          command: restore
+          projects: 'src/**/*.csproj'
+          noCache: true
+          feedsToUse: config
+          nugetConfigPath: src/NuGet.config
+      - task: Npm@1
+        displayName: 'npm install'
+        inputs:
+          workingDir: src/Sfa.Tl.Matching.Web/
+          verbose: false
+      - task: Gulp@0
+        displayName: gulp
+        inputs:
+          gulpFile: src/Sfa.Tl.Matching.Web/gulpfile.js
+          targets: default
+      - task: DotNetCoreCLI@2
+        displayName: Build
+        inputs:
+          projects: 'src/**/*.csproj'
+          arguments: '--configuration $(buildConfiguration)  --no-restore'        
+      - task: DotNetCoreCLI@2
+        displayName: Test
+        inputs:
+          command: test
+          projects: '**/*.UnitTests.csproj'
+          arguments: '--configuration $(buildConfiguration)'
+      - task: DotNetCoreCLI@2
+        displayName: Integration Tests
+        inputs:
+          command: test
+          projects: '**/*.Web.IntegrationTests.csproj'
+          arguments: '--configuration $(buildConfiguration)'
+      - task: DotNetCoreCLI@2
+        displayName: 'Publish Website'
+        inputs:
+          command: publish
+          publishWebProjects: true
+          projects: 'src/Sfa.Tl.Matching.Web/Sfa.Tl.Matching.Web.csproj'
+          arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build'
+      - task: DotNetCoreCLI@2
+        displayName: 'Publish Function App'
+        inputs:
+          command: publish
+          publishWebProjects: false
+          projects: 'src/Sfa.Tl.Matching.Functions/Sfa.Tl.Matching.Functions.csproj'
+          arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build'
+      - task: DotNetCoreCLI@2
+        displayName: 'Publish Application Integration Tests'
+        inputs:
+          command: publish
+          publishWebProjects: false
+          projects: 'src/Sfa.Tl.Matching.Application.IntegrationTests/Sfa.Tl.Matching.Application.IntegrationTests.csproj'
+          arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build'
+      - task: DotNetCoreCLI@2
+        displayName: 'Publish Web Integration Tests'
+        inputs:
+          command: publish
+          publishWebProjects: false
+          projects: 'src/Sfa.Tl.Matching.Web.IntegrationTests/Sfa.Tl.Matching.Web.IntegrationTests.csproj'
+          arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build'
+      - task: CopyFiles@2
+        displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+        inputs:
+          contents: |
+            azure/** 
+            config/**
+          targetFolder: '$(build.artifactstagingdirectory)/publish'
+          overWrite: true
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact'
+        inputs:
+            PathtoPublish: '$(build.artifactstagingdirectory)/publish'
 
-#   jobs:
-#   - job:
-#     steps: 
-#     - powershell: |
-#         $IP = Invoke-RestMethod http://ipinfo.io/json | Select -exp ip
-#         Write-Host "##vso[task.setvariable variable=TestRunnerOutboundIp]$IP"
-#       displayName: 'Get Outbound IP for SQL Server Firewall'
+  - job: 'DACPACBuild'
+    pool:
+        name: 'Azure Pipelines'
+        vmImage: 'windows-2019'
+    workspace:
+      clean: all
+    steps:
+    - task: VSBuild@1
+      displayName: 'Build DACPAC'
+      inputs:
+        solution: 'src\Sfa.Tl.Matching.Database\Sfa.Tl.Matching.Database.sqlproj'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+        msbuildArgs: '/p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
+    - task: CopyFiles@2
+      displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+      inputs:
+        contents: |	
+          src\**\*.dacpac	
+        targetFolder: '$(build.artifactstagingdirectory)/publish'
+        overWrite: true
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact'
+      inputs:
+          pathtoPublish: '$(build.artifactstagingdirectory)/publish'
 
-#     - template: '.\TLevelsDeployment.yml'
-#       parameters: 
-#         ResourceGroupName: '$(ResourceGroupName)'
-#         Subscription: 'SFA-TL-Dev/Test'
-#         TemplateFile: '$(System.DefaultWorkingDirectory)/tl-matching/drop/azure/test-db.template.json'
-#         EnvironmentNameAbbreviation: $(Release.EnvironmentName)
-#         ArmOverrideParameters: '-environmentNameAbbreviation "$(Release.EnvironmentName)" -sharedEnvResourceGroup "$(SharedEnvResourceGroupName)" -sharedSQLServerName "$(SharedSQLServerName)" -sqlDatabaseSkuName "$(testSqlDatabaseSkuName)" -sqlDatabaseTier "$(testSqlDatabaseTier)" -testRunnerOutboundIp "$(TestRunnerOutboundIp)"'
-#         WorkerASPInstances:
-#         SharedASPName:
-#         SharedEnvResourceGroupName:
-#         SharedKeyVaultName:
-#         SharedSQLServerName:
-#         SQLDatabaseName:
-#         SQLServerAdminUsername:
-#         SQLServerAdminPassword:
-#         DacPacLocation:
-#         SQLDatabaseSkuName:
-#         SQLDatabaseTier:
-#         ConfigurationStorageConnectionString:
-#         UICustomHostName:
-#         CertificateName:
-#         XEmployerFeedbackTriggerXX:
-#         ProviderFeedbackTrigger:
-#         ProviderReferenceTrigger:
-#         ConfigPath:
-#         ConfigTargetFilename:
-#         ConfigStorageAccountName:
+- stage: AT_Tests
+
+  jobs:
+  - job:
+    steps: 
+    - powershell: |
+        $IP = Invoke-RestMethod http://ipinfo.io/json | Select -exp ip
+        Write-Host "##vso[task.setvariable variable=TestRunnerOutboundIp]$IP"
+      displayName: 'Get Outbound IP for SQL Server Firewall'
+
+    - template: '.\TLevelsDeployment.yml'
+      parameters: 
+        ResourceGroupName: '$(ResourceGroupName)'
+        Subscription: 'SFA-TL-Dev/Test'
+        TemplateFile: '$(System.DefaultWorkingDirectory)/tl-matching/drop/azure/test-db.template.json'
+        EnvironmentNameAbbreviation: $(Release.EnvironmentName)
+        ArmOverrideParameters: '-environmentNameAbbreviation "$(Release.EnvironmentName)" -sharedEnvResourceGroup "$(SharedEnvResourceGroupName)" -sharedSQLServerName "$(SharedSQLServerName)" -sqlDatabaseSkuName "$(testSqlDatabaseSkuName)" -sqlDatabaseTier "$(testSqlDatabaseTier)" -testRunnerOutboundIp "$(TestRunnerOutboundIp)"'
+        WorkerASPInstances:
+        SharedASPName:
+        SharedEnvResourceGroupName:
+        SharedKeyVaultName:
+        SharedSQLServerName:
+        SQLDatabaseName:
+        SQLServerAdminUsername:
+        SQLServerAdminPassword:
+        DacPacLocation:
+        SQLDatabaseSkuName:
+        SQLDatabaseTier:
+        ConfigurationStorageConnectionString:
+        UICustomHostName:
+        CertificateName:
+        XEmployerFeedbackTriggerXX:
+        ProviderFeedbackTrigger:
+        ProviderReferenceTrigger:
+        ConfigPath:
+        ConfigTargetFilename:
+        ConfigStorageAccountName:
 
 
-#     - task: AzureResourceGroupDeployment@2
-#       displayName: 'Azure Deployment:Create Or Update Resource Group action on $(ResourceGroupName)'
-#       inputs:
-#         azureSubscription: 'S126-TL-Dev-Service-Connection'
-#         resourceGroupName: '$(ResourceGroupName)'
-#         location: 'West Europe'
-#         csmFile: '$(System.DefaultWorkingDirectory)/tl-matching/drop/azure/test-db.template.json'
-#         overrideParameters: '-environmentNameAbbreviation "$(Release.EnvironmentName)" -sharedEnvResourceGroup "$(SharedEnvResourceGroupName)" -sharedSQLServerName "$(SharedSQLServerName)" -sqlDatabaseSkuName "$(testSqlDatabaseSkuName)" 
-#         -sqlDatabaseTier "$(testSqlDatabaseTier)" -testRunnerOutboundIp "$(TestRunnerOutboundIp)"'
-#         deploymentOutputs: TestARMOutputs
+    - task: AzureResourceGroupDeployment@2
+      displayName: 'Azure Deployment:Create Or Update Resource Group action on $(ResourceGroupName)'
+      inputs:
+        azureSubscription: 'S126-TL-Dev-Service-Connection'
+        resourceGroupName: '$(ResourceGroupName)'
+        location: 'West Europe'
+        csmFile: '$(System.DefaultWorkingDirectory)/tl-matching/drop/azure/test-db.template.json'
+        overrideParameters: '-environmentNameAbbreviation "$(Release.EnvironmentName)" -sharedEnvResourceGroup "$(SharedEnvResourceGroupName)" -sharedSQLServerName "$(SharedSQLServerName)" -sqlDatabaseSkuName "$(testSqlDatabaseSkuName)" 
+        -sqlDatabaseTier "$(testSqlDatabaseTier)" -testRunnerOutboundIp "$(TestRunnerOutboundIp)"'
+        deploymentOutputs: TestARMOutputs
 
-#     - task: ARMOutputParserExtension@1
-#       displayName: 'Convert ARM Template Outputs to Variables'
-#       inputs:
-#         armOutput: '$(TestARMOutputs)'
+    - task: ARMOutputParserExtension@1
+      displayName: 'Convert ARM Template Outputs to Variables'
+      inputs:
+        armOutput: '$(TestARMOutputs)'
 
-#     - task: GenerateEnvironmentConfiguration@3
-#       displayName: 'Inject Configuration'
-#       inputs:
-#         SourcePath: '$(System.DefaultWorkingDirectory)/tl-matching/drop/config'
-#         TargetFilename: Sfa.Tl.Matching.IntegrationTests.schema.json
-#         ServiceConnectionName: 'S126-TL-Dev-Service-Connection'
-#         StorageAccountName: '$(ConfigStorageAccountName)'
-#         TableName: Configuration
+    - task: GenerateEnvironmentConfiguration@3
+      displayName: 'Inject Configuration'
+      inputs:
+        SourcePath: '$(System.DefaultWorkingDirectory)/tl-matching/drop/config'
+        TargetFilename: Sfa.Tl.Matching.IntegrationTests.schema.json
+        ServiceConnectionName: 'S126-TL-Dev-Service-Connection'
+        StorageAccountName: '$(ConfigStorageAccountName)'
+        TableName: Configuration
 
-#     - task: SqlAzureDacpacDeployment@1
-#       displayName: 'Azure SQL Publish'
-#       inputs:
-#         azureSubscription: 'S126-TL-Dev-Service-Connection'
-#         ServerName: '$(SharedSQLServerName).database.windows.net'
-#         DatabaseName: '$(TestSQLDatabaseName)' #TestSQLDatabaseName is an output from AzureResourceGroupDeployment
-#         SqlUsername: '$(SQLServerAdminUsername)'
-#         SqlPassword: '$(SQLServerAdminPassword)'
-#         DacpacFile: '$(System.DefaultWorkingDirectory)/tl-matching/drop/src/Sfa.Tl.Matching.Database/bin/Release/Sfa.Tl.Matching.Database.dacpac'
-#         AdditionalArguments: '/p:GenerateSmartDefaults=True'
+    - task: SqlAzureDacpacDeployment@1
+      displayName: 'Azure SQL Publish'
+      inputs:
+        azureSubscription: 'S126-TL-Dev-Service-Connection'
+        ServerName: '$(SharedSQLServerName).database.windows.net'
+        DatabaseName: '$(TestSQLDatabaseName)' #TestSQLDatabaseName is an output from AzureResourceGroupDeployment
+        SqlUsername: '$(SQLServerAdminUsername)'
+        SqlPassword: '$(SQLServerAdminPassword)'
+        DacpacFile: '$(System.DefaultWorkingDirectory)/tl-matching/drop/src/Sfa.Tl.Matching.Database/bin/Release/Sfa.Tl.Matching.Database.dacpac'
+        AdditionalArguments: '/p:GenerateSmartDefaults=True'
 
-#     - task: ExtractFiles@1
-#       displayName: 'Extract Application Integration Tests'
-#       inputs:
-#         archiveFilePatterns: '$(System.DefaultWorkingDirectory)/tl-matching/drop/Sfa.Tl.Matching.Application.IntegrationTests.zip'
-#         destinationFolder: '$(System.DefaultWorkingDirectory)/tl-matching/drop/tests-app'
+    - task: ExtractFiles@1
+      displayName: 'Extract Application Integration Tests'
+      inputs:
+        archiveFilePatterns: '$(System.DefaultWorkingDirectory)/tl-matching/drop/Sfa.Tl.Matching.Application.IntegrationTests.zip'
+        destinationFolder: '$(System.DefaultWorkingDirectory)/tl-matching/drop/tests-app'
 
-#     - task: Tokenization@2
-#       displayName: 'Tokenization: Transform app file *.json'
-#       inputs:
-#         SourcePath: '$(System.DefaultWorkingDirectory)/tl-matching/drop/tests-app'
-#         TargetFileNames: '*.json'
-#         RequireVariable: true
+    - task: Tokenization@2
+      displayName: 'Tokenization: Transform app file *.json'
+      inputs:
+        SourcePath: '$(System.DefaultWorkingDirectory)/tl-matching/drop/tests-app'
+        TargetFileNames: '*.json'
+        RequireVariable: true
     
-#     - task: DotNetCoreCLI@2
-#       displayName: 'Run Application Integration Tests'
-#       inputs:
-#         command: custom
-#         custom: vstest
-#         arguments: '$(System.DefaultWorkingDirectory)/tl-matching/drop/tests-app/Sfa.Tl.Matching.Application.IntegrationTests.dll /logger:trx'
+    - task: DotNetCoreCLI@2
+      displayName: 'Run Application Integration Tests'
+      inputs:
+        command: custom
+        custom: vstest
+        arguments: '$(System.DefaultWorkingDirectory)/tl-matching/drop/tests-app/Sfa.Tl.Matching.Application.IntegrationTests.dll /logger:trx'
 
-#     - task: PublishTestResults@2
-#       displayName: 'Publish Test Results **/TestResults/*.trx'
-#       inputs:
-#         testResultsFormat: VSTest
-#         testResultsFiles: '**/TestResults/*.trx'
-#         failTaskOnFailedTests: true
-# - stage: AT_Deploy
-#   variables:
-#     SharedASPName: tl-at-shared-asp
-#     SharedKeyVaultName: tl-at-shared-kv
-#     ConfigurationStorageConnectionString: 
-#     UICustomHostName: 'at.industryplacementmatching.education.gov.uk'
-#     CertificateName: 'wildcard-industryplacementmatching-education-gov-uk'
-#     ResourceGroupName: 'tl-at-mtch-rg'
-#     WorkerASPSize: '1'
-#     WorkerASPInstances: '1'
-#     SQLDatabaseSkuName: 'S0'
-#     SQLDatabaseTier: 'Standard'
-#     EmployerFeedbackTrigger: '0 30 15 * * MON-FRI'
-#     ProviderFeedbackTrigger: '0 0 9 * * MON-FRI'
-#     ProviderReferenceTrigger: '0 0 9 * * *'
-#   jobs:
-#   - job:
-#     steps:
-#     - task: AzureResourceGroupDeployment@2
-#       displayName: 'Azure Deployment:Create Or Update Resource Group action on $(ResourceGroupName)'
-#       inputs:
-#         azureSubscription: 'SFA-TL-Dev/Test'
-#         resourceGroupName: '$(ResourceGroupName)'
-#         location: 'West Europe'
-#         csmFile: '$(System.DefaultWorkingDirectory)/tl-matching/drop/azure/template.json'
-#         overrideParameters: '-environmentNameAbbreviation "$(Release.EnvironmentName)" -workerASPSize "$(WorkerASPSize)" -workerASPInstances "$(WorkerASPInstances)" -sharedASPName "$(SharedASPName)" -sharedEnvResourceGroup "$(SharedEnvResourceGroupName)" 
-#         -sharedKeyVaultName "$(SharedKeyVaultName)" -sharedSQLServerName "$(SharedSQLServerName)" -sqlDatabaseSkuName "$(SQLDatabaseSkuName)" -sqlDatabaseTier "$(SQLDatabaseTier)" -configurationStorageConnectionString "$(ConfigurationStorageConnectionString)" 
-#         -uiCustomHostName "$(UICustomHostName)" -certificateName "$(CertificateName)" -employerFeedbackTrigger "$(EmployerFeedbackTrigger)" -providerFeedbackTrigger "$(ProviderFeedbackTrigger)" -providerReferenceTrigger "$(ProviderReferenceTrigger)"'
-#         deploymentOutputs: armOutputs
+    - task: PublishTestResults@2
+      displayName: 'Publish Test Results **/TestResults/*.trx'
+      inputs:
+        testResultsFormat: VSTest
+        testResultsFiles: '**/TestResults/*.trx'
+        failTaskOnFailedTests: true
+- stage: AT_Deploy
+  variables:
+    SharedASPName: tl-at-shared-asp
+    SharedKeyVaultName: tl-at-shared-kv
+    ConfigurationStorageConnectionString: 
+    UICustomHostName: 'at.industryplacementmatching.education.gov.uk'
+    CertificateName: 'wildcard-industryplacementmatching-education-gov-uk'
+    ResourceGroupName: 'tl-at-mtch-rg'
+    WorkerASPSize: '1'
+    WorkerASPInstances: '1'
+    SQLDatabaseSkuName: 'S0'
+    SQLDatabaseTier: 'Standard'
+    EmployerFeedbackTrigger: '0 30 15 * * MON-FRI'
+    ProviderFeedbackTrigger: '0 0 9 * * MON-FRI'
+    ProviderReferenceTrigger: '0 0 9 * * *'
+  jobs:
+  - job:
+    steps:
+    - task: AzureResourceGroupDeployment@2
+      displayName: 'Azure Deployment:Create Or Update Resource Group action on $(ResourceGroupName)'
+      inputs:
+        azureSubscription: 'SFA-TL-Dev/Test'
+        resourceGroupName: '$(ResourceGroupName)'
+        location: 'West Europe'
+        csmFile: '$(System.DefaultWorkingDirectory)/tl-matching/drop/azure/template.json'
+        overrideParameters: '-environmentNameAbbreviation "$(Release.EnvironmentName)" -workerASPSize "$(WorkerASPSize)" -workerASPInstances "$(WorkerASPInstances)" -sharedASPName "$(SharedASPName)" -sharedEnvResourceGroup "$(SharedEnvResourceGroupName)" 
+        -sharedKeyVaultName "$(SharedKeyVaultName)" -sharedSQLServerName "$(SharedSQLServerName)" -sqlDatabaseSkuName "$(SQLDatabaseSkuName)" -sqlDatabaseTier "$(SQLDatabaseTier)" -configurationStorageConnectionString "$(ConfigurationStorageConnectionString)" 
+        -uiCustomHostName "$(UICustomHostName)" -certificateName "$(CertificateName)" -employerFeedbackTrigger "$(EmployerFeedbackTrigger)" -providerFeedbackTrigger "$(ProviderFeedbackTrigger)" -providerReferenceTrigger "$(ProviderReferenceTrigger)"'
+        deploymentOutputs: armOutputs
 
 
-#     - task: ARMTemplateOutputs@0
-#       displayName: 'Convert ARM Template Outputs to Variables'
-#       inputs:
-#         ARMOutputs: '$(armOutputs)'
+    - task: ARMTemplateOutputs@0
+      displayName: 'Convert ARM Template Outputs to Variables'
+      inputs:
+        ARMOutputs: '$(armOutputs)'
 
-#     - task: GenerateEnvironmentConfiguration@3
-#       displayName: 'Process schemas in $(System.DefaultWorkingDirectory)/tl-matching/drop/config'
-#       inputs:
-#         SourcePath: '$(System.DefaultWorkingDirectory)/tl-matching/drop/config'
-#         TargetFilename: Sfa.Tl.Matching.schema.json
-#         ServiceConnectionName: 'SFA-TL-Dev/Test'
-#         StorageAccountName: '$(ConfigStorageAccountName)'
-#         TableName: Configuration
+    - task: GenerateEnvironmentConfiguration@3
+      displayName: 'Process schemas in $(System.DefaultWorkingDirectory)/tl-matching/drop/config'
+      inputs:
+        SourcePath: '$(System.DefaultWorkingDirectory)/tl-matching/drop/config'
+        TargetFilename: Sfa.Tl.Matching.schema.json
+        ServiceConnectionName: 'SFA-TL-Dev/Test'
+        StorageAccountName: '$(ConfigStorageAccountName)'
+        TableName: Configuration
 
-#     - task: SqlAzureDacpacDeployment@1
-#       displayName: 'Azure SQL Publish'
-#       inputs:
-#         azureSubscription: 'SFA-TL-Dev/Test'
-#         ServerName: '$(SharedSQLServerName).database.windows.net'
-#         DatabaseName: '$(SQLDatabaseName)'
-#         SqlUsername: '$(SQLServerAdminUsername)'
-#         SqlPassword: '$(SQLServerAdminPassword)'
-#         DacpacFile: '$(System.DefaultWorkingDirectory)/tl-matching/drop/src/Sfa.Tl.Matching.Database/bin/Release/Sfa.Tl.Matching.Database.dacpac'
-#         AdditionalArguments: '/p:GenerateSmartDefaults=True'
+    - task: SqlAzureDacpacDeployment@1
+      displayName: 'Azure SQL Publish'
+      inputs:
+        azureSubscription: 'SFA-TL-Dev/Test'
+        ServerName: '$(SharedSQLServerName).database.windows.net'
+        DatabaseName: '$(SQLDatabaseName)'
+        SqlUsername: '$(SQLServerAdminUsername)'
+        SqlPassword: '$(SQLServerAdminPassword)'
+        DacpacFile: '$(System.DefaultWorkingDirectory)/tl-matching/drop/src/Sfa.Tl.Matching.Database/bin/Release/Sfa.Tl.Matching.Database.dacpac'
+        AdditionalArguments: '/p:GenerateSmartDefaults=True'
 
-#     - task: AzureRmWebAppDeployment@3
-#       displayName: 'Azure App Service Deploy: $(WorkerFunctionAppName)'
-#       inputs:
-#         azureSubscription: 'SFA-TL-Dev/Test'
-#         appType: functionapp
-#         WebAppName: '$(WorkerFunctionAppName)'
-#         Package: '$(System.DefaultWorkingDirectory)/tl-matching/drop/Sfa.Tl.Matching.Functions.zip'
-#         UseWebDeploy: true
-#         RemoveAdditionalFilesFlag: true
-#         RenameFilesFlag: true
+    - task: AzureRmWebAppDeployment@3
+      displayName: 'Azure App Service Deploy: $(WorkerFunctionAppName)'
+      inputs:
+        azureSubscription: 'SFA-TL-Dev/Test'
+        appType: functionapp
+        WebAppName: '$(WorkerFunctionAppName)'
+        Package: '$(System.DefaultWorkingDirectory)/tl-matching/drop/Sfa.Tl.Matching.Functions.zip'
+        UseWebDeploy: true
+        RemoveAdditionalFilesFlag: true
+        RenameFilesFlag: true
