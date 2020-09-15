@@ -19,11 +19,10 @@ trigger:
     - NewBuild
     exclude:
     - "*"
-pr: none
-
+    
 variables:
-  - name: applicationName
-    value: matching
+- name: applicationName
+  value: matching
 
   # buildConfiguration: 'release'
   # buildPlatform: 'anycpu'
@@ -37,16 +36,16 @@ variables:
   # SQLServerAdminPassword: ''
 
 
-  stages:
-  - stage: build
-    displayName: Build
-    jobs:
-    - template: /Application/dotnet/jobs/build-application.yml@devopsTemplates
-      parameters:
-        applicationName: $(applicationName)
-        webPublish: false
-        nugetConfigPath: nuget.config
-    
+stages:
+- stage: build
+  displayName: Build
+  jobs:
+  - template: /Application/dotnet/jobs/build-application.yml@devopsTemplates
+    parameters:
+      applicationName: $(applicationName)
+      webPublish: false
+      nugetConfigPath: nuget.config
+  
 
 # stages:
 # - stage: Build
