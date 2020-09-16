@@ -32,6 +32,7 @@
                 <dd class="govuk-summary-list__actions">
                     <a asp-route="GetOpportunityProviderResults"
                        asp-route-opportunityId="@Model.OpportunityId"
+                       asp-route-opportunityItemId="@Model.OpportunityItemId"
                        asp-route-postcode="@Model.Postcode"
                        asp-route-selectedRouteId="@Model.RouteId"
                        class="govuk-link" id="tl-change-link">Change<span class="govuk-visually-hidden"> the type of placement</span></a>
@@ -47,6 +48,7 @@
                 <dd class="govuk-summary-list__actions">
                     <a asp-route="GetOpportunityProviderResults"
                        asp-route-opportunityId="@Model.OpportunityId"
+                       asp-route-opportunityItemId="@Model.OpportunityItemId"
                        asp-route-postcode="@Model.Postcode"
                        asp-route-selectedRouteId="@Model.RouteId"
                        class="govuk-link" id="tl-change-link">Change<span class="govuk-visually-hidden"> the postcode of the workplace</span></a>

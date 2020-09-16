@@ -34,7 +34,7 @@
 
         <h1 class="govuk-heading-l">Confirm that the employer’s contact details for industry placements are accurate and up-to-date</h1>
 
-        <form asp-action="SaveCheckOpportunityEmployerDetailsAsync" novalidate>
+        <form asp-route="SaveCheckOpportunityEmployerDetails" novalidate>
             <input asp-for="OpportunityId" type="hidden" />
             <input asp-for="OpportunityItemId" type="hidden" />
             <input asp-for="CompanyName" type="hidden" />

@@ -220,6 +220,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
+        [ActionName("DeleteOpportunityItem")]
         public async Task<IActionResult> DeleteOpportunityItemAsync(DeleteOpportunityItemViewModel viewModel)
         {
             await _opportunityService.DeleteOpportunityItemAsync(viewModel.OpportunityId, viewModel.OpportunityItemId);
