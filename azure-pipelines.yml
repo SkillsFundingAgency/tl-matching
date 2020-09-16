@@ -5,7 +5,7 @@ trigger:
     - feature/*
     - bugs/*    
     exclude:
-    - feature/NewBuild
+    - NewBuild_Core
     - "*"
 
 variables:

@@ -1,0 +1,22 @@
+#Your build pipeline references an undefined variable named SQLServerAdminUsername . Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references an undefined variable named ‘SQLServerAdminPassword . Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references an undefined variable named SQLServerActiveDirectoryAdminLogin . Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references an undefined variable named SQLServerActiveDirectoryAdminObjectId . Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references an undefined variable named AppServicePlanTier . Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references an undefined variable named AppServicePlanSize . Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references an undefined variable named AppServicePlanInstances . Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references an undefined variable named AzureWebsitesRPObjectId . Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references an undefined variable named KeyVaultReadWriteObjectIds . Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+variables:
+  ResourceGroupName: '$(SharedEnvResourceGroupName)'
+  ThreatDetectionEmailAddress: 'tlevelsdevops@education.gov.uk'
+
+steps:
+- task: AzureResourceGroupDeployment@2
+  displayName: 'Azure Deployment:Create Or Update Resource Group action on $(ResourceGroupName)'
+  inputs:
+    azureSubscription: 'SFA-TL-Dev/Test'
+    resourceGroupName: '$(ResourceGroupName)'
+    location: 'West Europe'
+    csmFile: '$(System.DefaultWorkingDirectory)/tl-shared-infrastructure/drop/shared-infrastructure/environment.template.json'
+    overrideParameters: '-environmentNameAbbreviation "$(Release.EnvironmentName)" -sqlServerAdminUsername "$(SQLServerAdminUsername)" -sqlServerAdminPassword "$(SQLServerAdminPassword)" -sqlServerActiveDirectoryAdminLogin "$(SQLServerActiveDirectoryAdminLogin)" -sqlServerActiveDirectoryAdminObjectId "$(SQLServerActiveDirectoryAdminObjectId)" -threatDetectionEmailAddress "$(ThreatDetectionEmailAddress)" -appServicePlanTier "$(AppServicePlanTier)" -appServicePlanSize "$(AppServicePlanSize)" -appServicePlanInstances "$(AppServicePlanInstances)" -azureWebsitesRPObjectId "$(AzureWebsitesRPObjectId)" -keyVaultReadWriteObjectIds $(KeyVaultReadWriteObjectIds)'
