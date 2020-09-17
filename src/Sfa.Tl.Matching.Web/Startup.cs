@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
@@ -43,7 +44,7 @@ namespace Sfa.Tl.Matching.Web
         private readonly IWebHostEnvironment _env;
 
         protected MatchingConfiguration MatchingConfiguration;
-        protected bool IsTestAdminUser { get; set; } = true;
+        protected bool IsTestAdminUser { get; set; } = false;
 
         public IConfiguration Configuration { get; }
 
@@ -103,6 +104,8 @@ namespace Sfa.Tl.Matching.Web
                         Location = ResponseCacheLocation.None
                     });
 
+                    //config.Filters.Add<DataAnnotationsValidator>();
+
                     config.Filters.Add<CustomExceptionFilterAttribute>();
                     config.Filters.Add<ServiceUnavailableFilterAttribute>();
                     config.Filters.Add<BackLinkFilter>();
@@ -123,6 +126,8 @@ namespace Sfa.Tl.Matching.Web
                         o.Identity = o.ClaimsIdentity;
                     });
             }
+
+            services.AddAuthorization();
 
             RegisterDependencies(services);
         }
@@ -162,10 +167,10 @@ namespace Sfa.Tl.Matching.Web
                 ));
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
             app.UseCookiePolicy();
 
+            app.UseStaticFiles();
             app.UseRouting();
 
             app.UseAuthentication();
