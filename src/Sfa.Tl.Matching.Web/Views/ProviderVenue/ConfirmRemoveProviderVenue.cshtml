@@ -12,7 +12,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-l">Are you sure you want to remove @Model.Postcode?</h1>
-        <form asp-controller="ProviderVenue" asp-action="GetConfirmRemoveProviderVenueAsync">
+        <form asp-controller="ProviderVenue" asp-action="GetConfirmRemoveProviderVenue">
             <input asp-for="ProviderId" type="hidden" />
             <input asp-for="ProviderVenueId" type="hidden" />
 
