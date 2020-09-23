@@ -122,7 +122,6 @@
     <Build Include="Indexes\IX_Referral_OpportunityItemId.sql" />
     <Build Include="Indexes\IX_OpportunityItem_OpportunityId_IsSaved_IsSelectedForReferral_IsDeleted.sql" />
     <Build Include="Indexes\IX_OpportunityItem_OpportunityId_IsSaved_IsCompleted_IsDeleted.sql" />
-    <None Include="PostDeployment\Deduplicate Qualifications.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />

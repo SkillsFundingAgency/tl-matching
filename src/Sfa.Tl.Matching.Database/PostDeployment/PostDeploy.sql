@@ -12,4 +12,3 @@ DECLARE @TicketNo VARCHAR(32)
 :r ".\Remove Obsolete Tables.sql"
 :r ".\Seed UserProfile.sql"
 :r ".\Update Qualification Titles.sql"
-:r ".\Deduplicate Qualifications.sql"
