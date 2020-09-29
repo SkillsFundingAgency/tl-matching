@@ -16,14 +16,12 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Path
         {
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Path>>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                var data = new ValidPathListBuilder().Build();
+            using var dbContext = InMemoryDbContext.Create();
+            var data = new ValidPathListBuilder().Build();
 
-                var repository = new GenericRepository<Domain.Models.Path>(logger, dbContext);
-                _result = repository.CreateManyAsync(data)
-                    .GetAwaiter().GetResult();
-            }
+            var repository = new GenericRepository<Domain.Models.Path>(logger, dbContext);
+            _result = repository.CreateManyAsync(data)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

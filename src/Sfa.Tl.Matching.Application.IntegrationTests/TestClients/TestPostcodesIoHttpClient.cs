@@ -37,11 +37,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.TestClients
                     Postcode = responsePostcode
                 }
             };
-            var serialised = JsonConvert.SerializeObject(response);
+            var serialized = JsonConvert.SerializeObject(response);
 
             var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = new StringContent(serialised)
+                Content = new StringContent(serialized)
             };
             httpResponseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 

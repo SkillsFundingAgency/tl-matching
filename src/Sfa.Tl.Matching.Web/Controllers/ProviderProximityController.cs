@@ -67,6 +67,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
+        [ActionName("FilterResults")]
         public IActionResult FilterResultsAsync(ProviderProximitySearchParametersViewModel viewModel)
         {
             if (viewModel.Filters == null || viewModel.Filters.Count(f => f.IsSelected) == 0)

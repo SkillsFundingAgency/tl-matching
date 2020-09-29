@@ -9,27 +9,37 @@ using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Functions.Extensions;
 
 namespace Sfa.Tl.Matching.Functions
 {
     public class QualificationSearchColumns
     {
+        private readonly IQualificationService _qualificationService;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
+
+        public QualificationSearchColumns(
+            IQualificationService qualificationService,
+            IRepository<FunctionLog> functionLogRepository)
+        {
+            _qualificationService = qualificationService;
+            _functionLogRepository = functionLogRepository;
+        }
+
         // ReSharper disable once UnusedMember.Global
         [FunctionName("ManualUpdateQualificationSearchColumns")]
         public async Task<IActionResult> ManualUpdateQualificationSearchColumnsAsync(
+#pragma warning disable IDE0060 // Remove unused parameter
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+#pragma warning restore IDE0060 // Remove unused parameter
             ExecutionContext context,
-            ILogger logger,
-            [Inject] IQualificationService qualificationService,
-            [Inject] IRepository<FunctionLog> functionLogRepository)
+            ILogger logger)
         {
             try
             {
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
                 var stopwatch = Stopwatch.StartNew();
-                var updatedRecords = await qualificationService.UpdateQualificationsSearchColumnsAsync();
+                var updatedRecords = await _qualificationService.UpdateQualificationsSearchColumnsAsync();
                 stopwatch.Stop();
 
                 logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
@@ -40,14 +50,14 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error importing QualificationSearchColumns Data. Internal Error Message {e}";
+                var errorMessage = $"Error importing QualificationSearchColumns Data. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
-                    FunctionName = nameof(QualificationSearchColumns),
+                    ErrorMessage = errorMessage,
+                    FunctionName = context.FunctionName,
                     RowNumber = -1
                 });
                 throw;

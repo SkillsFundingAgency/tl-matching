@@ -70,7 +70,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                 .AddVenue()
                 .Build();
 
-            _results = providerVenueQualificationService.Update(dtoList).GetAwaiter().GetResult();
+            _results = providerVenueQualificationService.UpdateAsync(dtoList).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -87,6 +87,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
             _results.First().UkPrn.Should().Be(10000001);
             _results.First().VenuePostcode.Should().Be("CV1 2WT");
             _results.First().LarId.Should().BeNull();
+        }
+
+        [Fact]
+        public void Then_Results_Has_No_Errors()
+        {
+            _results.First().HasErrors.Should().BeFalse();
         }
 
         [Fact]

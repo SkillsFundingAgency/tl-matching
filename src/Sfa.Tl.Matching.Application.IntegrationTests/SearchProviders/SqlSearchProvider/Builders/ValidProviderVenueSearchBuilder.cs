@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using GeoAPI.Geometries;
 using NetTopologySuite;
+using NetTopologySuite.Geometries;
 using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearchProvider.Builders
@@ -142,12 +142,6 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             };
         }
 
-        private static IPoint CreatePointLocation(double latitude, double longitude)
-        {
-            var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(4326);
-            return geometryFactory.CreatePoint(new Coordinate(longitude, latitude));
-        }
-
         private static Provider BuildProvider(bool isCdfProvider)
         {
             return new Provider
@@ -191,6 +185,12 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                     Source = "Test"
                 }
             };
+        }
+
+        private static Point CreatePointLocation(double latitude, double longitude)
+        {
+            var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(4326);
+            return geometryFactory.CreatePoint(new Coordinate(longitude, latitude));
         }
     }
 }

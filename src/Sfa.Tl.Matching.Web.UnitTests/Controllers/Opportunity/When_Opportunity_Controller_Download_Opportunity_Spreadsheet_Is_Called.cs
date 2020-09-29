@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunitySpreadsheetDataAsync(1).Returns(
-                new FileDownloadDto()
+                new FileDownloadDto
                 {
                     FileName = "test_file.xlsx",
                     ContentType = "application/file",

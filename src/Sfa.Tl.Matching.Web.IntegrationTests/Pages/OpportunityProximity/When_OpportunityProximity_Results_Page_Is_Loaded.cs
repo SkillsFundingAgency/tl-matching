@@ -12,6 +12,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.OpportunityProximity
         private const string Title = "Select providers for this opportunity";
         private const int OpportunityId = 1000;
         private const int OpportunityItemId = 2000;
+        private const int RouteId = 1;
 
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
@@ -27,7 +28,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.OpportunityProximity
 
             var client = _factory.CreateClient();
 
-            var response = await client.GetAsync($"/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-30-miles-of-CV1%202WT-for-route-1");
+            var response = await client.GetAsync($"/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-30-miles-of-CV1%202WT-for-route-{RouteId}");
 
             response.EnsureSuccessStatusCode();
             Assert.Equal("text/html; charset=utf-8",
@@ -42,7 +43,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.OpportunityProximity
 
             var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
             backLink.Text.Should().Be("Back");
-            backLink.PathName.Should().Be($"/get-back-link/{OpportunityId}/{OpportunityItemId}/CV1%202WT/1");
+            backLink.PathName.Should().Be($"/get-back-link/{OpportunityId}/{OpportunityItemId}/CV1%202WT/{RouteId}");
 
             var cancelLink = documentHtml.GetElementById("tl-finish") as IHtmlAnchorElement;
             cancelLink.PathName.Should().Be($"/remove-opportunityItem/{OpportunityId}-{OpportunityItemId}");
@@ -70,7 +71,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.OpportunityProximity
 
             var noProvidersLink = documentHtml.GetElementById("tl-search-nosuitable") as IHtmlAnchorElement;
             noProvidersLink.Text.Should().Be("No suitable providers? Let us know");
-            noProvidersLink.PathName.Should().Be($"/2-provisiongap-opportunities-within-30-miles-of-CV1%202WT-for-route-1");
+            noProvidersLink.PathName.Should().Be($"/2-provisiongap-opportunities-within-30-miles-of-CV1%202WT-for-route-{RouteId}");
 
             var searchResults = documentHtml.QuerySelector(".tl-search-results") as IHtmlOrderedListElement;
             AssertSearchResult(searchResults, 0);

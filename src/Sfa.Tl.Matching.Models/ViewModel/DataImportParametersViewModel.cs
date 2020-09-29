@@ -1,5 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Humanizer;
 using Microsoft.AspNetCore.Http;
@@ -22,20 +22,17 @@ namespace Sfa.Tl.Matching.Models.ViewModel
                 Text = GetUploadTypeDisplayName(uploadType)
             }).ToArray();
 
-        private string GetUploadTypeDisplayName(string uploadTypeName)
+        private static string GetUploadTypeDisplayName(string uploadTypeName)
         {
             var importType = Enum.Parse<DataImportType>(uploadTypeName);
 
-            var displayNameAttribute = importType.GetCustomAttribute<DisplayNameAttribute>();
-            if (displayNameAttribute != null)
+            var displayAttribute = importType.GetCustomAttribute<DisplayAttribute>();
+            if (displayAttribute != null)
             {
-                return displayNameAttribute.DisplayName;
-            }
-
-            var descriptionAttribute = importType.GetCustomAttribute<DescriptionAttribute>();
-            if (descriptionAttribute != null)
-            {
-                return descriptionAttribute.Description;
+                if (!string.IsNullOrWhiteSpace(displayAttribute.Name))
+                    return displayAttribute.Name;
+                if (!string.IsNullOrWhiteSpace(displayAttribute.Description))
+                    return displayAttribute.Description;
             }
 
             return importType.Humanize();

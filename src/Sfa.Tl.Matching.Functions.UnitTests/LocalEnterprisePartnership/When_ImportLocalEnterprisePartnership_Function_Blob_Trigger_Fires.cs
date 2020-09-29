@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.Azure.Storage.Blob;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -24,18 +24,18 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.LocalEnterprisePartnership
             var context = new ExecutionContext();
             var logger = Substitute.For<ILogger>();
 
+            _fileImportService = Substitute.For<IFileImportService<LocalEnterprisePartnershipStagingFileImportDto>>();
             _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
-            _fileImportService = Substitute.For<IFileImportService<LocalEnterprisePartnershipStagingFileImportDto>>();
+            var localEnterprisePartnershipFunctions = new Functions.LocalEnterprisePartnership(_fileImportService,
+                _functionLogRepository);
 
-            var localEnterprisePartnership = new Functions.LocalEnterprisePartnership();
-            localEnterprisePartnership.ImportLocalEnterprisePartnershipAsync(
+            localEnterprisePartnershipFunctions.ImportLocalEnterprisePartnershipAsync(
                 blobStream,
                 "test",
                 context,
-                logger,
-                _fileImportService,
-                _functionLogRepository).GetAwaiter().GetResult();
+                logger
+                ).GetAwaiter().GetResult();
         }
 
         [Fact]

@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Dashboard
         {
             _employerService = Substitute.For<IEmployerService>();
             _serviceStatusHistoryService = Substitute.For<IServiceStatusHistoryService>();
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
+            var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
 
             var dashboardController = new DashboardController(_employerService, _serviceStatusHistoryService);
             var controllerWithClaims = new ClaimsBuilder<DashboardController>(dashboardController)
@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Dashboard
                 .AddUserName("username")
                 .Build();
 
-            httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
+            httpContextAccessor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
             _employerService.GetInProgressEmployerOpportunityCountAsync("username").Returns(0);
             _serviceStatusHistoryService.GetLatestServiceStatusHistoryAsync()
@@ -68,7 +68,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Dashboard
 
             viewModel.Should().NotBeNull();
             viewModel.IsServiceOnline.Should().BeTrue();
-            viewModel.HasSavedOppportunities.Should().BeFalse();
+            viewModel.HasSavedOpportunities.Should().BeFalse();
             viewModel.HeaderText.Should().Be("Take service offline");
             viewModel.Description.Should().Be("Show that the service is 'under maintenance'.");
         }

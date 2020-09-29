@@ -21,8 +21,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification
 
         public When_ProviderQualificationService_Is_Called_To_CreateProviderQualification()
         {
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
-            httpcontextAccesor.HttpContext.Returns(new DefaultHttpContext
+            var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
+            httpContextAccessor.HttpContext.Returns(new DefaultHttpContext
             {
                 User = new ClaimsPrincipal(new ClaimsIdentity(new[]
                 {
@@ -36,9 +36,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification
                 c.AddMaps(typeof(ProviderQualificationMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<AddQualificationViewModel, Domain.Models.ProviderQualification>(httpcontextAccesor) :
+                        new LoggedInUserEmailResolver<AddQualificationViewModel, Domain.Models.ProviderQualification>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<AddQualificationViewModel, Domain.Models.ProviderQualification>(httpcontextAccesor) :
+                            (object)new LoggedInUserNameResolver<AddQualificationViewModel, Domain.Models.ProviderQualification>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<AddQualificationViewModel, Domain.Models.ProviderQualification>(new DateTimeProvider()) :
                                 null);

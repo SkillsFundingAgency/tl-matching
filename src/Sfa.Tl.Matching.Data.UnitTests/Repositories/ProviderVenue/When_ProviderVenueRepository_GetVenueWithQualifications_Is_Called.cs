@@ -31,41 +31,39 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
         {
             var logger = Substitute.For<ILogger<ProviderVenueRepository>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
+            using var dbContext = InMemoryDbContext.Create();
+            dbContext.Add(new Domain.Models.ProviderVenue
             {
-                dbContext.Add(new Domain.Models.ProviderVenue
+                Id = Id,
+                Name = VenueName,
+                Postcode = Postcode,
+                IsEnabledForReferral = IsEnabledForReferral,
+                IsRemoved = IsRemoved,
+                Provider = new Domain.Models.Provider
                 {
-                    Id = Id,
-                    Name = VenueName,
-                    Postcode = Postcode,
-                    IsEnabledForReferral = IsEnabledForReferral,
-                    IsRemoved = IsRemoved,
-                    Provider = new Domain.Models.Provider
+                    Id = ProviderId,
+                    Name = ProviderName,
+                    IsCdfProvider = IsCdfProvider
+                },
+                ProviderQualification = new List<Domain.Models.ProviderQualification>
+                {
+                    new Domain.Models.ProviderQualification
                     {
-                        Id = ProviderId,
-                        Name = ProviderName,
-                        IsCdfProvider = IsCdfProvider
-                    },
-                    ProviderQualification = new List<Domain.Models.ProviderQualification>
-                    {
-                        new Domain.Models.ProviderQualification
+                        Qualification = new Domain.Models.Qualification
                         {
-                            Qualification = new Domain.Models.Qualification
-                            {
-                                Id = QualificationId,
-                                LarId = LarId,
-                                Title = Title,
-                                ShortTitle = ShortTitle
-                            }
+                            Id = QualificationId,
+                            LarId = LarId,
+                            Title = Title,
+                            ShortTitle = ShortTitle
                         }
                     }
-                });
-                dbContext.SaveChanges();
+                }
+            });
+            dbContext.SaveChanges();
 
-                var repository = new ProviderVenueRepository(logger, dbContext);
-                _result = repository.GetVenueWithQualificationsAsync(Id)
-                    .GetAwaiter().GetResult();
-            }
+            var repository = new ProviderVenueRepository(logger, dbContext);
+            _result = repository.GetVenueWithQualificationsAsync(Id)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

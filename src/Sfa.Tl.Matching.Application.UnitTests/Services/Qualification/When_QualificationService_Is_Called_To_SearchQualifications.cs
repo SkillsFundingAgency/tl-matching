@@ -27,11 +27,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
             var qlogger = Substitute.For<ILogger<GenericRepository<Domain.Models.Qualification>>>();
             var qrmlogger = Substitute.For<ILogger<GenericRepository<QualificationRouteMapping>>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                dbContext.AddRange(new ValidQualificationListBuilder().Build());
-                dbContext.AddRange(
-   new QualificationRouteMapping
+            using var dbContext = InMemoryDbContext.Create();
+            dbContext.AddRange(new ValidQualificationListBuilder().Build());
+            dbContext.AddRange(
+                new QualificationRouteMapping
                 {
                     RouteId = 1,
                     QualificationId = 1
@@ -47,17 +46,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                     QualificationId = 3
                 });
 
-                dbContext.SaveChanges();
+            dbContext.SaveChanges();
 
-                var qualificationRepo = new GenericRepository<Domain.Models.Qualification>(qlogger, dbContext);
-                var routeMappingRepo = new GenericRepository<QualificationRouteMapping>(qrmlogger, dbContext);
+            var qualificationRepo = new GenericRepository<Domain.Models.Qualification>(qlogger, dbContext);
+            var routeMappingRepo = new GenericRepository<QualificationRouteMapping>(qrmlogger, dbContext);
 
-                var learningAimReferenceRepository = Substitute.For<IRepository<LearningAimReference>>();
+            var learningAimReferenceRepository = Substitute.For<IRepository<LearningAimReference>>();
 
-                var service = new QualificationService(mapper, qualificationRepo, routeMappingRepo, learningAimReferenceRepository);
+            var service = new QualificationService(mapper, qualificationRepo, routeMappingRepo, learningAimReferenceRepository);
 
-                _searchResults = service.SearchQualificationAsync("Scientific Reasoning").GetAwaiter().GetResult();
-            }
+            _searchResults = service.SearchQualificationAsync("Scientific Reasoning").GetAwaiter().GetResult();
         }
 
         [Fact]

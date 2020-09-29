@@ -55,15 +55,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             var result = _result as JsonResult;
             result.Should().NotBeNull();
 
-            var validJson = result?.Value.ToString()
+            var validJson = result?.Value.ToString()?
                 .Replace("=", ":")
                 .Replace(" False", "\"False\"")
                 .Replace(" True", "\"True\"");
             
             validJson.Should().NotBeNull();
 
-            dynamic responseObject = JsonConvert.DeserializeObject(validJson);
+            dynamic responseObject = JsonConvert.DeserializeObject(validJson!);
 
+            Assert.NotNull(responseObject);
             Assert.True(responseObject.success == "False");
 
             var responseString = responseObject.response.ToString() as string;

@@ -16,14 +16,12 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailHistory
         {
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.EmailHistory>>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                var data = new ValidEmailHistoryListBuilder().Build();
+            using var dbContext = InMemoryDbContext.Create();
+            var data = new ValidEmailHistoryListBuilder().Build();
 
-                var repository = new GenericRepository<Domain.Models.EmailHistory>(logger, dbContext);
-                _result = repository.CreateManyAsync(data)
-                    .GetAwaiter().GetResult();
-            }
+            var repository = new GenericRepository<Domain.Models.EmailHistory>(logger, dbContext);
+            _result = repository.CreateManyAsync(data)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

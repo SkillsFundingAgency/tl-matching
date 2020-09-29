@@ -24,8 +24,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
         public When_OpportunityService_Is_Called_To_Update_ProvisionGap()
         {
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
-            httpcontextAccesor.HttpContext.Returns(new DefaultHttpContext
+            var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
+            httpContextAccessor.HttpContext.Returns(new DefaultHttpContext
             {
                 User = new ClaimsPrincipal(new ClaimsIdentity(new[]
                 {
@@ -38,9 +38,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 c.AddMaps(typeof(OpportunityMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<PlacementInformationSaveDto, ProvisionGap>(httpcontextAccesor) :
+                        new LoggedInUserEmailResolver<PlacementInformationSaveDto, ProvisionGap>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<PlacementInformationSaveDto, ProvisionGap>(httpcontextAccesor) :
+                            (object)new LoggedInUserNameResolver<PlacementInformationSaveDto, ProvisionGap>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<PlacementInformationSaveDto, ProvisionGap>(new DateTimeProvider()) :
                                 null);

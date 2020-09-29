@@ -86,16 +86,16 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task CreateOrUpdateAsync(UserCache data, UserCacheDto dto)
         {
-            var userCacheItem = _mapper.Map<UserCache>(dto);
+            _mapper.Map(dto, data);
 
             if (data == null)
             {
+                var userCacheItem = _mapper.Map<UserCache>(dto);
                 await _userCacheRepository.CreateAsync(userCacheItem);
             }
             else
             {
-                userCacheItem.Id = data.Id;
-                await _userCacheRepository.UpdateWithSpecifiedColumnsOnlyAsync(userCacheItem,
+                await _userCacheRepository.UpdateWithSpecifiedColumnsOnlyAsync(data,
                     cache => cache.UrlHistory,
                     cache => cache.ModifiedBy,
                     cache => cache.ModifiedOn);
@@ -120,10 +120,12 @@ namespace Sfa.Tl.Matching.Application.Services
         private static Func<List<CurrentUrl>, int> GetCounter => items => items.Count == 0 ? 1 : items.Max(url => url.Id) + 1;
         private static Func<UserCache, List<CurrentUrl>> UserBackLinks => data => data != null ? data.Value.OrderByDescending(x => x.Id).ToList() : new List<CurrentUrl>();
         private static T GetNext<T>(IEnumerable<T> list, T current) => list.SkipWhile(x => !x.Equals(current)).Skip(1).First();
+
         private async Task<(UserCache usercache, List<CurrentUrl> urlList)> GetBackLinkDataAsync(string username)
         {
-            var data = await _userCacheRepository.GetFirstOrDefaultAsync(x => x.CreatedBy == username && x.Key == CacheTypes.BackLink.ToString());
-
+            var data = await _userCacheRepository
+                .GetFirstOrDefaultAsync(x => x.CreatedBy == username && x.Key == CacheTypes.BackLink.ToString());
+            
             return (data, UserBackLinks(data));
         }
     }

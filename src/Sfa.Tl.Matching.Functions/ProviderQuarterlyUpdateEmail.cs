@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Functions.Extensions;
 using Sfa.Tl.Matching.Models.Command;
 using Sfa.Tl.Matching.Models.Enums;
 
@@ -14,12 +13,21 @@ namespace Sfa.Tl.Matching.Functions
 {
     public class ProviderQuarterlyUpdateEmail
     {
+        private readonly IProviderQuarterlyUpdateEmailService _providerQuarterlyUpdateEmailService;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
+
+        public ProviderQuarterlyUpdateEmail(
+            IProviderQuarterlyUpdateEmailService providerQuarterlyUpdateEmailService,
+            IRepository<FunctionLog> functionLogRepository)
+        {
+            _providerQuarterlyUpdateEmailService = providerQuarterlyUpdateEmailService;
+            _functionLogRepository = functionLogRepository;
+        }
+
         [FunctionName("SendProviderQuarterlyUpdateEmails")]
         public async Task SendProviderQuarterlyUpdateEmailsAsync([QueueTrigger(QueueName.ProviderQuarterlyRequestQueue, Connection = "BlobStorageConnectionString")]SendProviderQuarterlyUpdateEmail providerRequestData, 
             ExecutionContext context,
-            ILogger logger,
-            [Inject] IProviderQuarterlyUpdateEmailService providerQuarterlyUpdateEmailService,
-            [Inject] IRepository<FunctionLog> functionLogRepository)
+            ILogger logger)
         {
             var backgroundProcessHistoryId = providerRequestData.BackgroundProcessHistoryId;
 
@@ -27,7 +35,7 @@ namespace Sfa.Tl.Matching.Functions
             {
                 var stopwatch = Stopwatch.StartNew();
 
-                var emailsSent = await providerQuarterlyUpdateEmailService.SendProviderQuarterlyUpdateEmailsAsync(backgroundProcessHistoryId, "System");
+                var emailsSent = await _providerQuarterlyUpdateEmailService.SendProviderQuarterlyUpdateEmailsAsync(backgroundProcessHistoryId, "System");
 
                 stopwatch.Stop();
 
@@ -36,13 +44,13 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error sending quarterly update emails for feedback id {backgroundProcessHistoryId}. Internal Error Message {e}";
+                var errorMessage = $"Error sending quarterly update emails for feedback id {backgroundProcessHistoryId}. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
                     RowNumber = -1
                 });

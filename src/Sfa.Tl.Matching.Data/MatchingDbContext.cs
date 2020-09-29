@@ -8,7 +8,11 @@ namespace Sfa.Tl.Matching.Data
     {
         private readonly bool _applyQueryFilters;
 
-        public MatchingDbContext(DbContextOptions options, bool applyQueryFilters = true) : base(options)
+        public MatchingDbContext(DbContextOptions options) : this(options, true)
+        {
+        }
+
+        public MatchingDbContext(DbContextOptions options, bool applyQueryFilters) : base(options)
         {
             _applyQueryFilters = applyQueryFilters;
         }
@@ -36,10 +40,10 @@ namespace Sfa.Tl.Matching.Data
         public virtual DbSet<Route> Route { get; set; }
         public virtual DbSet<FunctionLog> FunctionLog { get; set; }
         public virtual DbSet<ServiceStatusHistory> ServiceStatusHistory { get; set; }
-        public virtual DbQuery<MatchingServiceOpportunityReport> MatchingServiceOpportunityReport { get; set; }
-        public virtual DbQuery<MatchingServiceProviderOpportunityReport> MatchingServiceProviderOpportunityReport { get; set; }
-        public virtual DbQuery<MatchingServiceProviderEmployerReport> MatchingServiceProviderEmployerReport { get; set; }
-        public virtual DbQuery<OpportunityBasketItem> OpportunityBasketItem { get; set; }
+        public virtual DbSet<MatchingServiceOpportunityReport> MatchingServiceOpportunityReport { get; set; }
+        public virtual DbSet<MatchingServiceProviderEmployerReport> MatchingServiceProviderEmployerReport { get; set; }
+        public virtual DbSet<MatchingServiceProviderOpportunityReport> MatchingServiceProviderOpportunityReport { get; set; }
+        public virtual DbSet<OpportunityBasketItem> OpportunityBasketItem { get; set; }
         public virtual DbSet<UserCache> UserCache { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -52,6 +56,11 @@ namespace Sfa.Tl.Matching.Data
                 .WithMany(e => e.Opportunity)
                 .HasPrincipalKey(e => e.CrmId)
                 .HasForeignKey(o => o.EmployerCrmId);
+
+            modelBuilder.Entity<MatchingServiceOpportunityReport>().HasNoKey();
+            modelBuilder.Entity<MatchingServiceProviderEmployerReport>().HasNoKey();
+            modelBuilder.Entity<MatchingServiceProviderOpportunityReport>().HasNoKey();
+            modelBuilder.Entity<OpportunityBasketItem>().HasNoKey();
 
             if (_applyQueryFilters)
             {

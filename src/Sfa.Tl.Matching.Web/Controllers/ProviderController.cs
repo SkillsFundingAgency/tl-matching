@@ -24,6 +24,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
+        [ActionName("SearchProvider")]
         [Route("search-ukprn", Name = "SearchProvider")]
         public async Task<IActionResult> SearchProviderAsync()
         {
@@ -102,7 +103,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             }
 
             if (!viewModel.IsCdfProvider)
-                return RedirectToAction(nameof(SearchProviderByUkPrnAsync));
+                return RedirectToAction("SearchProvider");
 
             return RedirectToAction(nameof(AddProviderDetail), new AddProviderViewModel
             {
@@ -182,7 +183,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _providerService.UpdateProviderDetailAsync(viewModel);
 
-            return RedirectToAction(nameof(SearchProviderByUkPrnAsync));
+            return RedirectToAction("SearchProvider");
         }
 
         private async Task<ProviderSearchViewModel> SearchProvidersWithFundingAsync(ProviderSearchParametersViewModel viewModel)

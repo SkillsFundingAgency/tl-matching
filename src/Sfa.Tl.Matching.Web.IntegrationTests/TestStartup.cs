@@ -1,6 +1,6 @@
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Models.Configuration;
@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
 {
     public class TestStartup : Startup
     {
-        public TestStartup(IConfiguration configuration, ILoggerFactory loggerFactory) : base(configuration, loggerFactory)
+        public TestStartup(IConfiguration configuration, IWebHostEnvironment env) : base(configuration, env)
         {
         }
 

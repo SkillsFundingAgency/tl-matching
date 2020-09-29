@@ -35,7 +35,9 @@ namespace Sfa.Tl.Matching.Models.Event
 
         [JsonProperty("sfa_aupa")]
         // ReSharper disable once InconsistentNaming
+#pragma warning disable IDE1006 // Naming Styles
         public SfaAupa sfa_aupa { get; set; }
+#pragma warning restore IDE1006 // Naming Styles
 
         [JsonProperty("sfa_ceasedtrading")]
         public int CeasedTrading { get; set; }

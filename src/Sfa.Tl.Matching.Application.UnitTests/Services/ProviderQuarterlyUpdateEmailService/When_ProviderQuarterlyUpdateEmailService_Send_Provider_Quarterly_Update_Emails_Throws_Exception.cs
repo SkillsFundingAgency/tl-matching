@@ -11,6 +11,7 @@ using Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdateEmai
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Enums;
+using Sfa.Tl.Matching.Tests.Common.Extensions;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdateEmailService
@@ -142,15 +143,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         [Fact]
         public void Then_Logger_Is_Called_With_Error_Message()
         {
-            _logger.Received(1).Log(
-                LogLevel.Error,
-                Arg.Any<EventId>(),
-                Arg.Is<object>(o =>
-                    o.ToString()
-                        .Contains(
-                            "Error sending provider quarterly update emails.")),
-                Arg.Any<Exception>(),
-                Arg.Any<Func<object, Exception, string>>());
+            _logger.ShouldContainMessage(LogLevel.Error, "Error sending provider quarterly update emails.");
         }
 
         [Fact]

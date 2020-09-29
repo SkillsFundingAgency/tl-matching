@@ -26,18 +26,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
             var logger = Substitute.For<ILogger<ProviderRepository>>();
             var providerReferenceRepository = Substitute.For<IRepository<ProviderReference>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                dbContext.Add(new ValidProviderBuilder()
-                    .Build());
-                dbContext.SaveChanges();
+            using var dbContext = InMemoryDbContext.Create();
+            dbContext.Add(new ValidProviderBuilder()
+                .Build());
+            dbContext.SaveChanges();
 
-                var providerRepository = new ProviderRepository(logger, dbContext);
+            var providerRepository = new ProviderRepository(logger, dbContext);
 
-                var service = new ProviderService(mapper, providerRepository, providerReferenceRepository);
+            var service = new ProviderService(mapper, providerRepository, providerReferenceRepository);
 
-                _result = service.GetProviderDetailByIdAsync(1).GetAwaiter().GetResult();
-            }
+            _result = service.GetProviderDetailByIdAsync(1).GetAwaiter().GetResult();
         }
 
         [Fact]

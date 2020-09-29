@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var opportunity = new Domain.Models.Opportunity
             {
                 Id = 1,
-                Employer = new Domain.Models.Employer()
+                Employer = new Domain.Models.Employer
                 {
                     CompanyName = "CompanyName",
                     AlsoKnownAs = "AlsoKnownAs"

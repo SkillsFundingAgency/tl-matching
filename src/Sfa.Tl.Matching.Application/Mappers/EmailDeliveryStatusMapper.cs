@@ -20,17 +20,13 @@ namespace Sfa.Tl.Matching.Application.Mappers
 
         private static EmailDeliveryStatusType GetEmailDeliveryStatusType(string status)
         {
-            switch (status)
+            return status switch
             {
-                case "permanent-failure":
-                    return EmailDeliveryStatusType.PermanentFailure;
-                case "temporary-failure":
-                    return EmailDeliveryStatusType.TemporaryFailure;
-                case "technical-failure":
-                    return EmailDeliveryStatusType.TechnicalFailure;
-                default:
-                    return EmailDeliveryStatusType.TechnicalFailure;
-            }
+                "permanent-failure" => EmailDeliveryStatusType.PermanentFailure,
+                "temporary-failure" => EmailDeliveryStatusType.TemporaryFailure,
+                "technical-failure" => EmailDeliveryStatusType.TechnicalFailure,
+                _ => EmailDeliveryStatusType.TechnicalFailure
+            };
         }
     }
 }

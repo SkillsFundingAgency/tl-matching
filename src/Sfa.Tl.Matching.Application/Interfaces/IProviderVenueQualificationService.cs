@@ -6,6 +6,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IProviderVenueQualificationService
     {
-        Task<IEnumerable<ProviderVenueQualificationUpdateResultsDto>> Update(IEnumerable<ProviderVenueQualificationDto> data);
+        Task<IEnumerable<ProviderVenueQualificationUpdateResultsDto>> UpdateAsync(IEnumerable<ProviderVenueQualificationDto> data);
     }
 }

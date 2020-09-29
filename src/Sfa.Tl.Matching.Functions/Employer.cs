@@ -10,21 +10,29 @@ using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Functions.Extensions;
 
 // ReSharper disable UnusedMember.Global
 
 namespace Sfa.Tl.Matching.Functions
 {
-    public static class Employer
+    public class Employer
     {
+        private readonly IEmployerService _employerService;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
+
+        public Employer(
+            IEmployerService employerService,
+            IRepository<FunctionLog> functionLogRepository)
+        {
+            _employerService = employerService;
+            _functionLogRepository = functionLogRepository;
+        }
+
         [FunctionName("EmployerCreatedHandler")]
-        public static async Task<IActionResult> EmployerCreatedHandlerAsync(
+        public async Task<IActionResult> EmployerCreatedHandlerAsync(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             ExecutionContext context,
-            ILogger logger,
-            [Inject] IEmployerService employerService,
-            [Inject] IRepository<FunctionLog> functionLogRepository)
+            ILogger logger)
         {
             try
             {
@@ -38,7 +46,7 @@ namespace Sfa.Tl.Matching.Functions
                     requestBody = await streamReader.ReadToEndAsync();
                 }
                 
-                var updatedRecords = await employerService.HandleEmployerCreatedAsync(requestBody);
+                var updatedRecords = await _employerService.HandleEmployerCreatedAsync(requestBody);
 
                 stopwatch.Stop();
 
@@ -50,13 +58,13 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error importing Employer Data. Internal Error Message {e}";
+                var errorMessage = $"Error importing Employer Data. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = nameof(QualificationSearchColumns),
                     RowNumber = -1
                 });
@@ -65,12 +73,10 @@ namespace Sfa.Tl.Matching.Functions
         }
 
         [FunctionName("EmployerUpdatedHandler")]
-        public static async Task<IActionResult> EmployerUpdatedHandlerAsync(
+        public async Task<IActionResult> EmployerUpdatedHandlerAsync(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             ExecutionContext context,
-            ILogger logger,
-            [Inject] IEmployerService employerService,
-            [Inject] IRepository<FunctionLog> functionLogRepository)
+            ILogger logger)
         {
             try
             {
@@ -84,7 +90,7 @@ namespace Sfa.Tl.Matching.Functions
                     requestBody = await streamReader.ReadToEndAsync();
                 }
 
-                var updatedRecords = await employerService.HandleEmployerUpdatedAsync(requestBody);
+                var updatedRecords = await _employerService.HandleEmployerUpdatedAsync(requestBody);
 
                 stopwatch.Stop();
 
@@ -96,13 +102,13 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error importing Employer Data. Internal Error Message {e}";
+                var errorMessage = $"Error importing Employer Data. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = nameof(QualificationSearchColumns),
                     RowNumber = -1
                 });
@@ -111,12 +117,10 @@ namespace Sfa.Tl.Matching.Functions
         }
 
         [FunctionName("ContactUpdatedHandler")]
-        public static async Task<IActionResult> ContactUpdatedHandlerAsync(
+        public async Task<IActionResult> ContactUpdatedHandlerAsync(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             ExecutionContext context,
-            ILogger logger,
-            [Inject] IEmployerService employerService,
-            [Inject] IRepository<FunctionLog> functionLogRepository)
+            ILogger logger)
         {
             try
             {
@@ -130,7 +134,7 @@ namespace Sfa.Tl.Matching.Functions
                     requestBody = await streamReader.ReadToEndAsync();
                 }
 
-                var updatedRecords = await employerService.HandleContactUpdatedAsync(requestBody);
+                var updatedRecords = await _employerService.HandleContactUpdatedAsync(requestBody);
 
                 stopwatch.Stop();
 
@@ -142,13 +146,13 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error importing Employer Data. Internal Error Message {e}";
+                var errorMessage = $"Error importing Employer Data. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = nameof(QualificationSearchColumns),
                     RowNumber = -1
                 });

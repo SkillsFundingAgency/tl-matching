@@ -13,9 +13,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
     public class When_Employer_Controller_Delete_Employer
     {
-
         [Theory, AutoDomainData]
-        public async Task Then_Result_Should_Return_To_GetSavedEmployerOpportunity(SavedEmployerOpportunityViewModel viewModel, IEmployerService employerService, EmployerController sut, int opportunityId)
+        public async Task Then_Result_Should_Return_To_GetSavedEmployerOpportunity(
+            SavedEmployerOpportunityViewModel viewModel,
+            IEmployerService employerService,
+            EmployerController sut,
+            int opportunityId)
         {
             //Arrange
             employerService.GetSavedEmployerOpportunitiesAsync(Arg.Any<string>()).Returns(viewModel);
@@ -30,7 +33,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         }
 
         [Theory, AutoDomainData]
-        public async Task Then_Result_Should_Return_To_Start([Frozen] IEmployerService employerService, EmployerController sut, int opportunityId)
+        public async Task Then_Result_Should_Return_To_Start(
+            [Frozen] IEmployerService employerService,
+            EmployerController sut,
+            int opportunityId)
         {
             //Arrange
             employerService.GetSavedEmployerOpportunitiesAsync(Arg.Any<string>()).Returns(new SavedEmployerOpportunityViewModel());

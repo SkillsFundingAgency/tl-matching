@@ -1,26 +1,23 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Sfa.Tl.Matching.Models.Extensions;
 
 namespace Sfa.Tl.Matching.Models.Enums
 {
     public enum DataImportType
     {
-        [Description("Learning Aim Reference")]
+        [Display(Name = "Learning Aim Reference")]
         [FileExtensions(Extensions = FileImportTypeExtensions.Csv)]
         LearningAimReference,
 
-        [Description("Local Enterprise Partnership")]
+        [Display(Name = "Local Enterprise Partnership")]
         [FileExtensions(Extensions = FileImportTypeExtensions.Csv)]
         LocalEnterprisePartnership,
 
-        [Description("Postcodes")]
-        [DisplayName("ONS Postcodes")]
+        [Display(Name = "ONS Postcodes", Description = "Postcodes")]
         [FileExtensions(Extensions = FileImportTypeExtensions.Zip)]
         Postcodes,
 
-        [Description("Provider Venue Qualification")]
-        [DisplayName("CDF Provider Update")]
+        [Display(Name = "CDF Provider Update", Description = "Provider Venue Qualification")]
         [FileExtensions(Extensions = FileImportTypeExtensions.Excel)]
         ProviderVenueQualification
     }

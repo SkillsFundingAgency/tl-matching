@@ -121,7 +121,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         [Theory]
         [InlineAutoDomainData("delivered")]
         [InlineAutoDomainData("permanent-failure")]
-        public async Task Then_Do_Not_Update_Email_History_If_Notification_Id_Doesnt_Exists_In_Callback_PayLoad(
+        public async Task Then_Do_Not_Update_Email_History_If_Notification_Id_Does_Not_Exists_In_Callback_PayLoad(
             string status,
             MatchingConfiguration configuration,
             IEmailService emailService,

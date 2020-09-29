@@ -1,8 +1,0 @@
-{
-  "extensions": [
-    {
-      "name": "Startup",
-      "typeName": "Sfa.Tl.Matching.Functions.Startup, Sfa.Tl.Matching.Functions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
-    }
-  ]
-}

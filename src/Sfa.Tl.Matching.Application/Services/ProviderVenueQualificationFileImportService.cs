@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Application.Services
             }
 
             var results = 
-                (await _providerVenueQualificationService.Update(readResultDto.ProviderVenueQualifications))
+                (await _providerVenueQualificationService.UpdateAsync(readResultDto.ProviderVenueQualifications))
                 .ToList();
 
             // Log errors in data updates

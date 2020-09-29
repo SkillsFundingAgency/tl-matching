@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Functions.Extensions;
 using Sfa.Tl.Matching.Models.Command;
 using Sfa.Tl.Matching.Models.Enums;
 
@@ -14,12 +13,21 @@ namespace Sfa.Tl.Matching.Functions
 {
     public class ReferralEmails
     {
+        private readonly IReferralEmailService _referralEmailService;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
+
+        public ReferralEmails(
+            IReferralEmailService referralEmailService,
+            IRepository<FunctionLog> functionLogRepository)
+        {
+            _referralEmailService = referralEmailService;
+            _functionLogRepository = functionLogRepository;
+        }
+
         [FunctionName("SendEmployerReferralEmails")]
         public async Task SendEmployerReferralEmailsAsync([QueueTrigger(QueueName.EmployerReferralEmailQueue, Connection = "BlobStorageConnectionString")]SendEmployerReferralEmail employerReferralEmailData, 
             ExecutionContext context,
-            ILogger logger,
-            [Inject] IReferralEmailService referralEmailService,
-            [Inject] IRepository<FunctionLog> functionLogRepository)
+            ILogger logger)
         {
             var stopwatch = Stopwatch.StartNew();
 
@@ -29,17 +37,17 @@ namespace Sfa.Tl.Matching.Functions
 
             try
             {
-                await referralEmailService.SendEmployerReferralEmailAsync(opportunityId, itemIds, backgroundProcessHistoryId, "System");
+                await _referralEmailService.SendEmployerReferralEmailAsync(opportunityId, itemIds, backgroundProcessHistoryId, "System");
             }
             catch (Exception e)
             {
-                var errormessage = $"Error sending employer referral email for opportunity id, {opportunityId}. Internal Error Message {e}";
+                var errorMessage = $"Error sending employer referral email for opportunity id, {opportunityId}. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
                     RowNumber = -1
                 });
@@ -49,15 +57,12 @@ namespace Sfa.Tl.Matching.Functions
 
             logger.LogInformation($"Function {context.FunctionName} sent emails\n" +
                                   $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
-
         }
 
         [FunctionName("SendProviderReferralEmails")]
         public async Task SendProviderReferralEmailsAsync([QueueTrigger(QueueName.ProviderReferralEmailQueue, Connection = "BlobStorageConnectionString")]SendProviderReferralEmail providerReferralEmailData,
             ExecutionContext context,
-            ILogger logger,
-            [Inject] IReferralEmailService referralEmailService,
-            [Inject] IRepository<FunctionLog> functionLogRepository)
+            ILogger logger)
         {
             var stopwatch = Stopwatch.StartNew();
 
@@ -67,17 +72,17 @@ namespace Sfa.Tl.Matching.Functions
 
             try
             {
-                await referralEmailService.SendProviderReferralEmailAsync(opportunityId, itemIds, backgroundProcessHistoryId, "System");
+                await _referralEmailService.SendProviderReferralEmailAsync(opportunityId, itemIds, backgroundProcessHistoryId, "System");
             }
             catch (Exception e)
             {
-                var errormessage = $"Error sending provider referral email for opportunity id, {opportunityId}. Internal Error Message {e}";
+                var errorMessage = $"Error sending provider referral email for opportunity id, {opportunityId}. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
                     RowNumber = -1
                 });
@@ -87,7 +92,6 @@ namespace Sfa.Tl.Matching.Functions
 
             logger.LogInformation($"Function {context.FunctionName} sent emails\n" +
                                   $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
-
         }
     }
 }

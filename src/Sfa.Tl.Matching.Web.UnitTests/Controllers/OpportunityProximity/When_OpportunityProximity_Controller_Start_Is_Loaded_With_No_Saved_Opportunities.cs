@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             viewResult?.Model.Should().NotBeNull();
 
             var viewModel = _result.GetViewModel<DashboardViewModel>();
-            viewModel.HasSavedOppportunities.Should().BeFalse();
+            viewModel.HasSavedOpportunities.Should().BeFalse();
         }
     }
 }

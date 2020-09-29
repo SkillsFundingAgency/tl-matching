@@ -1,15 +1,14 @@
-﻿@using Sfa.Tl.Matching.Application.Extensions
-@model Sfa.Tl.Matching.Models.ViewModel.OpportunityProximitySearchViewModel
+﻿@model Sfa.Tl.Matching.Models.ViewModel.OpportunityProximitySearchViewModel
 
 <h2 class="govuk-body">
     @{ var result = Model.SearchResults.SearchResultProviderCount == 1 ? "result" : "results"; }
-    <span class="govuk-!-font-size-36 govuk-!-font-weight-bold" id="tl-search-count">@Model.SearchResults.SearchResultProviderCount</span> @result in <span class="govuk-!-font-weight-bold tl-lowercase" id="tl-search-skillarea">@Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value == @Model.SearchParameters.SelectedRouteId.ToString())?.Text</span> within <span class="govuk-!-font-weight-bold" id="tl-search-distance">@Sfa.Tl.Matching.Models.ViewModel.SearchParametersViewModel.DefaultSearchRadius miles</span> of <span class="govuk-!-font-weight-bold" id="tl-search-postcode">@Model.SearchParameters.Postcode</span>
+    <span class="govuk-!-font-size-36 govuk-!-font-weight-bold" id="tl-search-count">@Model.SearchResults.SearchResultProviderCount</span> @result in <span class="govuk-!-font-weight-bold tl-lowercase" id="tl-search-skillarea">@Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value ==Model.SearchParameters.SelectedRouteId.ToString())?.Text</span> within <span class="govuk-!-font-weight-bold" id="tl-search-distance">@Sfa.Tl.Matching.Models.ViewModel.SearchParametersViewModel.DefaultSearchRadius miles</span> of <span class="govuk-!-font-weight-bold" id="tl-search-postcode">@Model.SearchParameters.Postcode</span>
 </h2>
 
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 <p class="govuk-hint">Choose one or more providers for this opportunity</p>
 
-<form id="tl-result-form" asp-controller="OpportunityProximity" asp-action="ValidateProviderSearchResultAsync">
+<form id="tl-result-form" asp-controller="OpportunityProximity" asp-action="ValidateProviderSearchResult">
     <input asp-for="SearchParameters.Postcode" name="Postcode" type="hidden" />
     <input asp-for="SearchParameters.SelectedRouteId" name="SelectedRouteId" type="hidden" />
     <input asp-for="SearchResults.SearchResultProviderCount" name="SearchResultProviderCount" type="hidden" />
@@ -32,7 +31,7 @@
                             @* DO NOT DELETE - asp-for needs to be Model.SearchResults.Results[i].IsSelected *@
                             <input type="checkbox" class="govuk-checkboxes__input" asp-for="@Model.SearchResults.Results[i].IsSelected" name="SelectedProvider[@i].IsSelected" />
                             <label class="govuk-heading-m govuk-checkboxes__label" asp-for="@Model.SearchResults.Results[i].IsSelected" name="SelectedProvider[@i].IsSelected">
-                                @if (@Model.SearchResults.Results[i].IsTLevelProvider)
+                                @if (Model.SearchResults.Results[i].IsTLevelProvider)
                                 {
                                     <span id="tl-provider" class="tl-search-results-flag">T level provider</span>
                                 }

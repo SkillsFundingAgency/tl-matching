@@ -1,6 +1,5 @@
 ﻿using System;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Table;
+using Microsoft.Azure.Cosmos.Table;
 using Newtonsoft.Json;
 using Sfa.Tl.Matching.Models.Configuration;
 
@@ -22,6 +21,11 @@ namespace Sfa.Tl.Matching.Application.Configuration
 
                 var dynResult = result.Result as DynamicTableEntity;
                 var data = dynResult?.Properties["Data"].StringValue;
+
+                if (data == null)
+                {
+                    throw new NullReferenceException("Configuration data was null.");
+                }
 
                 return JsonConvert.DeserializeObject<MatchingConfiguration>(data);
             }

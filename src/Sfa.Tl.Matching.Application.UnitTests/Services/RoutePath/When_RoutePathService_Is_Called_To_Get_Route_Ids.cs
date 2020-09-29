@@ -29,17 +29,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
             });
             var mapper = new Mapper(config);
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                dbContext.AddRange(new ValidRouteListBuilder().Build());
-                dbContext.SaveChanges();
+            using var dbContext = InMemoryDbContext.Create();
+            dbContext.AddRange(new ValidRouteListBuilder().Build());
+            dbContext.SaveChanges();
 
-                IRepository<Route> routeRepository = new GenericRepository<Route>(logger, dbContext);
+            IRepository<Route> routeRepository = new GenericRepository<Route>(logger, dbContext);
 
-                IRoutePathService service = new RoutePathService(mapper, routeRepository);
+            IRoutePathService service = new RoutePathService(mapper, routeRepository);
 
-                _result = service.GetRouteIdsAsync().GetAwaiter().GetResult();
-            }
+            _result = service.GetRouteIdsAsync().GetAwaiter().GetResult();
         }
 
         [Fact]

@@ -41,7 +41,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.IsReferralOpportunityItemAsync(OpportunityItemId).Returns(true);
 
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
+            var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
             var referralService = Substitute.For<IReferralService>();
 
             var config = new MapperConfiguration(c =>
@@ -49,9 +49,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 c.AddMaps(typeof(EmployerDtoMapper).Assembly);
                 c.ConstructServicesUsing(type => 
                     type.Name.Contains("LoggedInUserEmailResolver") ? 
-                        new LoggedInUserEmailResolver<EmployerDetailsViewModel, EmployerDetailDto>(httpcontextAccesor) :
+                        new LoggedInUserEmailResolver<EmployerDetailsViewModel, EmployerDetailDto>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ? 
-                            (object) new LoggedInUserNameResolver<EmployerDetailsViewModel, EmployerDetailDto>(httpcontextAccesor) :
+                            (object) new LoggedInUserNameResolver<EmployerDetailsViewModel, EmployerDetailDto>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ? 
                                 new UtcNowResolver<EmployerDetailsViewModel, EmployerDetailDto>(new DateTimeProvider()) :
                                 null);
@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 .AddUserName(ModifiedBy)
                 .Build();
 
-            httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
+            httpContextAccessor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
             _result = controllerWithClaims.SaveOpportunityEmployerDetailsAsync(_viewModel).GetAwaiter().GetResult();
         }

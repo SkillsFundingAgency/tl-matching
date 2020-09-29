@@ -20,36 +20,33 @@ namespace Sfa.Tl.Matching.Application.FileWriter.Opportunity
             var templateName = ApplicationConstants.PipelineOpportunitiesReportTemplate;
             var resourceName = $"{assembly.GetName().Name}.Templates.{templateName}";
 
-            using (var templateStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
-            using (var stream = new MemoryStream())
+            using var templateStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
+            using var stream = new MemoryStream();
+
+            if (templateStream == null)
             {
-                if (templateStream == null)
-                {
-                    throw new NullReferenceException(
-                        $"No stream found for template {templateName}. " +
-                        "Make sure the template has been included in the project");
-                }
+                throw new NullReferenceException(
+                    $"No stream found for template {templateName}. " +
+                    "Make sure the template has been included in the project");
+            }
 
-                templateStream.CopyTo(stream);
+            templateStream.CopyTo(stream);
 
-                using (var spreadSheet = SpreadsheetDocument.Open(stream, true))
-                {
+            using var spreadSheet = SpreadsheetDocument.Open(stream, true);
                     var referralsSheetData = spreadSheet.GetSheetData(0);
-                    WriteReferralsToSheet(data, referralsSheetData);
+            WriteReferralsToSheet(data, referralsSheetData);
 
                     var provisionGapsheetData = spreadSheet.GetSheetData(1);
-                    WriteProvisionGapsToSheet(data, provisionGapsheetData);
+            WriteProvisionGapsToSheet(data, provisionGapsheetData);
 
-                    RemoveEmptySheets(spreadSheet, data);
+            RemoveEmptySheets(spreadSheet, data);
 
-                    spreadSheet.WorkbookPart.Workbook.Save();
-                    spreadSheet.Close();
+            spreadSheet.WorkbookPart.Workbook.Save();
+            spreadSheet.Close();
 
-                    templateStream.CopyTo(stream);
+            templateStream.CopyTo(stream);
 
-                    return stream.ToArray();
-                }
-            }
+            return stream.ToArray();
         }
 
         private void RemoveEmptySheets(SpreadsheetDocument spreadSheet, OpportunityReportDto data)

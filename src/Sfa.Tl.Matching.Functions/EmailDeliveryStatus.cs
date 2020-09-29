@@ -11,7 +11,6 @@ using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Functions.Extensions;
 using Sfa.Tl.Matching.Models.Command;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Enums;
@@ -20,18 +19,29 @@ namespace Sfa.Tl.Matching.Functions
 {
     public class EmailDeliveryStatus
     {
+        private readonly MatchingConfiguration _matchingConfiguration;
+        private readonly IEmailDeliveryStatusService _emailDeliveryStatusService;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
+
+        public EmailDeliveryStatus(
+            MatchingConfiguration matchingConfiguration,
+            IEmailDeliveryStatusService emailDeliveryStatusService,
+            IRepository<FunctionLog> functionLogRepository)
+        {
+            _matchingConfiguration = matchingConfiguration;
+            _emailDeliveryStatusService = emailDeliveryStatusService;
+            _functionLogRepository = functionLogRepository;
+        }
+
         [FunctionName("EmailDeliveryStatusHandler")]
         public async Task<IActionResult> EmailDeliveryStatusHandlerAsync(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             ExecutionContext context,
-            ILogger logger,
-            [Inject] MatchingConfiguration matchingConfiguration,
-            [Inject] IEmailDeliveryStatusService emailDeliveryStatusService,
-            [Inject] IRepository<FunctionLog> functionLogRepository)
+            ILogger logger)
         {
             try
             {
-                if (!IsValidRequest(req, matchingConfiguration.EmailDeliveryStatusToken.ToString()))
+                if (!IsValidRequest(req, _matchingConfiguration.EmailDeliveryStatusToken.ToString()))
                     throw new AuthenticationException("Invalid Token");
 
                 logger.LogInformation($"Function {context.FunctionName} triggered");
@@ -44,7 +54,7 @@ namespace Sfa.Tl.Matching.Functions
                     requestBody = await streamReader.ReadToEndAsync();
                 }
 
-                var updatedRecords = await emailDeliveryStatusService.HandleEmailDeliveryStatusAsync(requestBody);
+                var updatedRecords = await _emailDeliveryStatusService.HandleEmailDeliveryStatusAsync(requestBody);
 
                 stopwatch.Stop();
 
@@ -56,15 +66,15 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (AuthenticationException exception)
             {
-                var errormessage = $"Invalid Authorization Token {exception}";
+                var errorMessage = $"Invalid Authorization Token {exception}";
 
-                return await LogError(functionLogRepository, logger, errormessage);
+                return await LogError(logger, errorMessage);
             }
             catch (Exception e)
             {
-                var errormessage = $"Error updating email status. Internal Error Message {e}";
+                var errorMessage = $"Error updating email status. Internal Error Message {e}";
 
-                return await LogError(functionLogRepository, logger, errormessage);
+                return await LogError(logger, errorMessage);
             }
         }
 
@@ -73,29 +83,26 @@ namespace Sfa.Tl.Matching.Functions
             [QueueTrigger(QueueName.EmailDeliveryStatusQueue, Connection = "BlobStorageConnectionString")]
             SendEmailDeliveryStatus emailDeliveryStatusData,
             ExecutionContext context,
-            ILogger logger,
-            [Inject] MatchingConfiguration matchingConfiguration,
-            [Inject] IEmailDeliveryStatusService emailDeliveryStatusService,
-            [Inject] IRepository<FunctionLog> functionLogRepository)
+            ILogger logger)
         {
-            if (!matchingConfiguration.SendEmailEnabled) return;
+            if (!_matchingConfiguration.SendEmailEnabled) return;
 
             var stopwatch = Stopwatch.StartNew();
 
             try
             {
-                await emailDeliveryStatusService.SendEmailDeliveryStatusAsync(emailDeliveryStatusData.NotificationId);
+                await _emailDeliveryStatusService.SendEmailDeliveryStatusAsync(emailDeliveryStatusData.NotificationId);
             }
             catch (Exception e)
             {
-                var errormessage =
+                var errorMessage =
                     $"Error sending failed email notification for Notification Id: {emailDeliveryStatusData.NotificationId}. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
                     RowNumber = -1
                 });
@@ -116,18 +123,18 @@ namespace Sfa.Tl.Matching.Functions
             return token == $"Bearer {emailDeliveryStatusToken}";
         }
 
-        private static async Task<BadRequestObjectResult> LogError(IRepository<FunctionLog> functionLogRepository, ILogger logger, string errormessage)
+        private async Task<BadRequestObjectResult> LogError(ILogger logger, string errorMessage)
         {
-            logger.LogError(errormessage);
+            logger.LogError(errorMessage);
 
-            await functionLogRepository.CreateAsync(new FunctionLog
+            await _functionLogRepository.CreateAsync(new FunctionLog
             {
-                ErrorMessage = errormessage,
+                ErrorMessage = errorMessage,
                 FunctionName = nameof(EmailDeliveryStatus),
                 RowNumber = -1
             });
 
-            return new BadRequestObjectResult(errormessage);
+            return new BadRequestObjectResult(errorMessage);
         }
     }
 }

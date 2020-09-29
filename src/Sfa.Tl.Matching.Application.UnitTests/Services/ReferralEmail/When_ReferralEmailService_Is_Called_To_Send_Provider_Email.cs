@@ -6,7 +6,7 @@ using FluentAssertions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders;
+using Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Enums;
@@ -55,7 +55,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
             _opportunityRepository
                 .GetProviderReferralsAsync(
                     Arg.Any<int>(), Arg.Any<IEnumerable<int>>())
-                .Returns(new ValidOpportunityReferralDtoListBuilder().Build());
+                .Returns(new ValidOpportunityReferralDtoListBuilder().BuildWithOneReferral());
 
             var functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 

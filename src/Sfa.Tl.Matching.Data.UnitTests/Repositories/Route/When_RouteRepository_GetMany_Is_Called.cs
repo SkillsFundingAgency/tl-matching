@@ -19,14 +19,12 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Route
         {
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Route>>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                dbContext.AddRange(new ValidRouteListBuilder().Build());
-                dbContext.SaveChanges();
+            using var dbContext = InMemoryDbContext.Create();
+            dbContext.AddRange(new ValidRouteListBuilder().Build());
+            dbContext.SaveChanges();
 
-                var repository = new GenericRepository<Domain.Models.Route>(logger, dbContext);
-                _result = repository.GetManyAsync().ToList();
-            }
+            var repository = new GenericRepository<Domain.Models.Route>(logger, dbContext);
+            _result = repository.GetManyAsync().ToList();
         }
 
         [Fact]

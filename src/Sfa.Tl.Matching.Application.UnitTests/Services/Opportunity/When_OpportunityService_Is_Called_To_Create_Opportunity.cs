@@ -25,8 +25,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
         public When_OpportunityService_Is_Called_To_Create_Opportunity()
         {
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
-            httpcontextAccesor.HttpContext.Returns(new DefaultHttpContext
+            var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
+            httpContextAccessor.HttpContext.Returns(new DefaultHttpContext
             {
                 User = new ClaimsPrincipal(new ClaimsIdentity(new[]
                 {
@@ -39,9 +39,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 c.AddMaps(typeof(OpportunityMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<OpportunityDto, Domain.Models.Opportunity>(httpcontextAccesor) :
+                        new LoggedInUserEmailResolver<OpportunityDto, Domain.Models.Opportunity>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<OpportunityDto, Domain.Models.Opportunity>(httpcontextAccesor) :
+                            (object)new LoggedInUserNameResolver<OpportunityDto, Domain.Models.Opportunity>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<OpportunityDto, Domain.Models.Opportunity>(new DateTimeProvider()) :
                                 null);

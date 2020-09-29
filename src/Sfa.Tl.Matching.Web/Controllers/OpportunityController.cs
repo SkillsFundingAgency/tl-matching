@@ -66,7 +66,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> SaveReferralAsync()
         {
             var selectedProviders = TempData["SelectedProviders"] as string;
-            var saveReferralViewModel = JsonConvert.DeserializeObject<SaveReferralViewModel>(selectedProviders);
+            var saveReferralViewModel = JsonConvert.DeserializeObject<SaveReferralViewModel>(selectedProviders!);
 
             var opportunityDto = _mapper.Map<OpportunityDto>(saveReferralViewModel);
             var opportunityItemDto = _mapper.Map<OpportunityItemDto>(saveReferralViewModel);
@@ -130,7 +130,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var opportunityItemCount = await _opportunityService.GetSavedOpportunityItemCountAsync(viewModel.OpportunityId);
 
-            //if First Opp (saved opportunity items == 0) then LoadWhoIsEmployer else if referral then check answer of if provisiongap then OpportunityBasket
+            //if First Opp (saved opportunity items == 0) then LoadWhoIsEmployer else if referral then check answer of if ProvisionGap then OpportunityBasket
             return opportunityItemCount == 0 ?
                 RedirectToRoute("GetOpportunityCompanyName", new { viewModel.OpportunityId, viewModel.OpportunityItemId })
                 : viewModel.OpportunityType == OpportunityType.Referral ?
@@ -220,6 +220,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
+        [ActionName("DeleteOpportunityItem")]
         public async Task<IActionResult> DeleteOpportunityItemAsync(DeleteOpportunityItemViewModel viewModel)
         {
             await _opportunityService.DeleteOpportunityItemAsync(viewModel.OpportunityId, viewModel.OpportunityItemId);

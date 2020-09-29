@@ -21,14 +21,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 
         public When_ProviderVenueService_Is_Called_To_Remove_Venue()
         {
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
+            var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
 
             var config = new MapperConfiguration(c =>
             {
                 c.AddMaps(typeof(ProviderMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserNameResolver") ?
-                        (object)new LoggedInUserNameResolver<RemoveProviderVenueViewModel, Domain.Models.ProviderVenue>(httpcontextAccesor) :
+                        (object)new LoggedInUserNameResolver<RemoveProviderVenueViewModel, Domain.Models.ProviderVenue>(httpContextAccessor) :
                         type.Name.Contains("UtcNowResolver") ?
                             new UtcNowResolver<RemoveProviderVenueViewModel, Domain.Models.ProviderVenue>(new DateTimeProvider()) :
                                 null);

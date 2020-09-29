@@ -26,22 +26,20 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
 
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Qualification>>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                dbContext.AddRange(new ValidQualificationListBuilder()
-                    .Build());
-                dbContext.SaveChanges();
+            using var dbContext = InMemoryDbContext.Create();
+            dbContext.AddRange(new ValidQualificationListBuilder()
+                .Build());
+            dbContext.SaveChanges();
 
-                var repository = new GenericRepository<Domain.Models.Qualification>(logger, dbContext);
+            var repository = new GenericRepository<Domain.Models.Qualification>(logger, dbContext);
 
-                var learningAimReferenceRepository = Substitute.For<IRepository<LearningAimReference>>();
-                var qualificationRouteMappingRepository = Substitute.For<IRepository<QualificationRouteMapping>>();
+            var learningAimReferenceRepository = Substitute.For<IRepository<LearningAimReference>>();
+            var qualificationRouteMappingRepository = Substitute.For<IRepository<QualificationRouteMapping>>();
 
-                var service = new QualificationService(mapper, repository, qualificationRouteMappingRepository,
-                    learningAimReferenceRepository);
+            var service = new QualificationService(mapper, repository, qualificationRouteMappingRepository,
+                learningAimReferenceRepository);
 
-                _searchResult = service.SearchQualificationAsync("No Qualification Exists").GetAwaiter().GetResult();
-            }
+            _searchResult = service.SearchQualificationAsync("No Qualification Exists").GetAwaiter().GetResult();
         }
 
         [Fact]

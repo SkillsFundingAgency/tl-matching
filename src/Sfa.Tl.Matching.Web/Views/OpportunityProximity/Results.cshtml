@@ -5,12 +5,13 @@
     ViewData["Title"] = "Select providers for this opportunity";
 }
 @section backButton{
-    @*<a asp-controller="OpportunityProximity" asp-action="Index" class="govuk-back-link" id="tl-back">Back</a>*@
     <a asp-route="GetBackLink"  
        asp-route-opportunityId="@Model.OpportunityId"
        asp-route-opportunityItemId="@Model.OpportunityItemId"
+       asp-route-Postcode="@Model.SearchParameters.Postcode"
+       asp-route-SelectedRouteId="@Model.SearchParameters.SelectedRouteId"
        class="govuk-back-link" id="tl-back">Back</a>
-    @await Component.InvokeAsync("Cancel", new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })
+    @await Component.InvokeAsync("Cancel", new { opportunityId = Model.OpportunityId, opportunityItemId = Model.OpportunityItemId })
 }
 
 @if (!ViewData.ModelState.IsValid &&

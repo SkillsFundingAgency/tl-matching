@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using GeoAPI.Geometries;
 using Microsoft.Azure.WebJobs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetTopologySuite;
+using NetTopologySuite.Geometries;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Functions.Extensions;
 
 // ReSharper disable UnusedMember.Global
 
@@ -21,16 +20,32 @@ namespace Sfa.Tl.Matching.Functions
 {
     public class Proximity
     {
+        private readonly IGoogleMapApiClient _googleMapApiClient;
+        private readonly ILocationApiClient _locationApiClient;
+        private readonly IRepository<OpportunityItem> _opportunityItemRepository;
+        private readonly IRepository<ProviderVenue> _providerVenueRepository;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
+
+        public Proximity(
+            ILocationApiClient locationApiClient,
+            IGoogleMapApiClient googleMapApiClient,
+            IRepository<OpportunityItem> opportunityItemRepository,
+            IRepository<ProviderVenue> providerVenueRepository,
+            IRepository<FunctionLog> functionLogRepository)
+        {
+            _googleMapApiClient = googleMapApiClient;
+            _locationApiClient = locationApiClient;
+            _opportunityItemRepository = opportunityItemRepository;
+            _providerVenueRepository = providerVenueRepository;
+            _functionLogRepository = functionLogRepository;
+        }
+
         [FunctionName("BackFillProviderPostTown")]
         public async Task BackFillProviderPostTownAsync(
             [TimerTrigger("0 0 0 1 1 *", RunOnStartup = true)]
             TimerInfo timer,
             ExecutionContext context,
-            ILogger logger,
-            [Inject] IGoogleMapApiClient googleMapApiClient,
-            [Inject] IRepository<ProviderVenue> providerVenueRepository,
-            [Inject] IRepository<FunctionLog> functionLogRepository
-        )
+            ILogger logger)
         {
             try
             {
@@ -40,16 +55,18 @@ namespace Sfa.Tl.Matching.Functions
 
                 var providerVenues = new List<ProviderVenue>();
 
-                foreach (var providerVenue in providerVenueRepository.GetManyAsync(pv => pv.Town == null || pv.Town == "" || pv.Town == " "))
+                foreach (var providerVenue in _providerVenueRepository.GetManyAsync(pv => pv.Town == null ||
+                                                                                                               pv.Town == "" || 
+                                                                                                               pv.Town == " "))
                 {
-                    var googleAddressdetail = await googleMapApiClient.GetAddressDetailsAsync(providerVenue.Postcode);
+                    var googleAddressDetail = await _googleMapApiClient.GetAddressDetailsAsync(providerVenue.Postcode);
 
-                    providerVenue.Town = googleAddressdetail;
+                    providerVenue.Town = googleAddressDetail;
 
                     providerVenues.Add(providerVenue);
                 }
 
-                await providerVenueRepository.UpdateManyAsync(providerVenues);
+                await _providerVenueRepository.UpdateManyAsync(providerVenues);
 
                 stopwatch.Stop();
 
@@ -59,13 +76,13 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error Back Filling Provider Post Town Data. Internal Error Message {e}";
+                var errorMessage = $"Error Back Filling Provider Post Town Data. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = nameof(BackFillProviderPostTownAsync),
                     RowNumber = -1
                 });
@@ -75,14 +92,11 @@ namespace Sfa.Tl.Matching.Functions
 
         [FunctionName("BackFillEmployerPostTown")]
         public async Task BackFillEmployerPostTownAsync(
-            [TimerTrigger("0 0 0 1 1 *", RunOnStartup = true)]
-            TimerInfo timer,
+#pragma warning disable IDE0060 // Remove unused parameter
+            [TimerTrigger("0 0 0 1 1 *", RunOnStartup = true)] TimerInfo timer,
+#pragma warning restore IDE0060 // Remove unused parameter
             ExecutionContext context,
-            ILogger logger,
-            [Inject] ILocationApiClient locationApiClient,
-            [Inject] IGoogleMapApiClient googleMapApiClient,
-            [Inject] IRepository<OpportunityItem> opportunityItemRepository,
-            [Inject] IRepository<FunctionLog> functionLogRepository
+            ILogger logger
         )
         {
             try
@@ -93,33 +107,35 @@ namespace Sfa.Tl.Matching.Functions
 
                 var opportunityItems = new List<OpportunityItem>();
 
-                foreach (var opportunityItem in opportunityItemRepository.GetManyAsync(io => io.Town == null || io.Town == "" || io.Town == " "))
+                foreach (var opportunityItem in _opportunityItemRepository.GetManyAsync(io => io.Town == null || 
+                                                                                                                     io.Town == "" || 
+                                                                                                                     io.Town == " "))
                 {
-                    var (isValidPostcode, postcode) = await locationApiClient.IsValidPostcodeAsync(opportunityItem.Postcode, true);
+                    var (isValidPostcode, postcode) = await _locationApiClient.IsValidPostcodeAsync(opportunityItem.Postcode, true);
 
                     if (!isValidPostcode)
                     {
-                        var errormessage = "Error Back Filling Employer Post Town Data. Invalid Postcode";
+                        var errorMessage = "Error Back Filling Employer Post Town Data. Invalid Postcode";
 
-                        logger.LogError(errormessage);
+                        logger.LogError(errorMessage);
 
-                        await functionLogRepository.CreateAsync(new FunctionLog
+                        await _functionLogRepository.CreateAsync(new FunctionLog
                         {
-                            ErrorMessage = errormessage,
-                            FunctionName = nameof(BackFillEmployerPostTownAsync),
+                            ErrorMessage = errorMessage,
+                            FunctionName = context.FunctionName,
                             RowNumber = opportunityItem.Id
                         });
                     }
-                    var googleAddressdetail = await googleMapApiClient.GetAddressDetailsAsync(postcode);
+                    var googleAddressDetail = await _googleMapApiClient.GetAddressDetailsAsync(postcode);
 
-                    opportunityItem.Town = googleAddressdetail;
+                    opportunityItem.Town = googleAddressDetail;
                     opportunityItem.Postcode = postcode;
 
                     opportunityItems.Add(opportunityItem);
 
                 }
 
-                await opportunityItemRepository.UpdateManyAsync(opportunityItems);
+                await _opportunityItemRepository.UpdateManyAsync(opportunityItems);
 
                 stopwatch.Stop();
 
@@ -129,14 +145,14 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error Back Filling Employer Post Town Data. Internal Error Message {e}";
+                var errorMessage = $"Error Back Filling Employer Post Town Data. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
-                    FunctionName = nameof(BackFillEmployerPostTownAsync),
+                    ErrorMessage = errorMessage,
+                    FunctionName = context.FunctionName,
                     RowNumber = -1
                 });
                 throw;
@@ -145,21 +161,18 @@ namespace Sfa.Tl.Matching.Functions
 
         [FunctionName("BackFillProximityData")]
         public async Task BackFillProximityDataAsync(
-            [TimerTrigger("0 0 0 1 1 *", RunOnStartup = true)]
-            TimerInfo timer,
+#pragma warning disable IDE0060 // Remove unused parameter
+            [TimerTrigger("0 0 0 1 1 *", RunOnStartup = true)] TimerInfo timer,
+#pragma warning restore IDE0060 // Remove unused parameter
             ExecutionContext context,
-            ILogger logger,
-            [Inject] ILocationApiClient locationApiClient,
-            [Inject] IRepository<ProviderVenue> providerVenueRepository,
-            [Inject] IRepository<FunctionLog> functionLogRepository
-        )
+            ILogger logger)
         {
             try
             {
                 var stopwatch = Stopwatch.StartNew();
 
                 logger.LogInformation($"Function {context.FunctionName} triggered");
-                var providerVenues = await providerVenueRepository.GetManyAsync(venue => venue.Location == null ||
+                var providerVenues = await _providerVenueRepository.GetManyAsync(venue => venue.Location == null ||
                                                                                     venue.Longitude == null ||
                                                                                     venue.Latitude == null ||
                                                                                     !EF.Functions.Like(venue.Postcode, "% %") ||
@@ -172,7 +185,7 @@ namespace Sfa.Tl.Matching.Functions
                 {
                     try
                     {
-                        var geoLocationData = await locationApiClient.GetGeoLocationDataAsync(venue.Postcode, true);
+                        var geoLocationData = await _locationApiClient.GetGeoLocationDataAsync(venue.Postcode, true);
 
                         venue.Postcode = geoLocationData.Postcode;
                         venue.Latitude = geoLocationData.Latitude.ToDecimal();
@@ -183,20 +196,20 @@ namespace Sfa.Tl.Matching.Functions
                     }
                     catch (Exception e)
                     {
-                        var errormessage = $"Error Back Filling Provider Venue Data. Invalid Postcode. Internal Error Message {e}";
+                        var errorMessage = $"Error Back Filling Provider Venue Data. Invalid Postcode. Internal Error Message {e}";
 
-                        logger.LogError(errormessage);
+                        logger.LogError(errorMessage);
 
-                        await functionLogRepository.CreateAsync(new FunctionLog
+                        await _functionLogRepository.CreateAsync(new FunctionLog
                         {
-                            ErrorMessage = errormessage,
-                            FunctionName = nameof(BackFillProximityDataAsync),
+                            ErrorMessage = errorMessage,
+                            FunctionName = context.FunctionName,
                             RowNumber = venue.Id
                         });
                     }
                 }
 
-                await providerVenueRepository.UpdateManyAsync(providerVenues);
+                await _providerVenueRepository.UpdateManyAsync(providerVenues);
                 stopwatch.Stop();
 
                 logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
@@ -205,14 +218,14 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error Back Filling Proximity Data. Internal Error Message {e}";
+                var errorMessage = $"Error Back Filling Proximity Data. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
-                    FunctionName = nameof(BackFillProximityDataAsync),
+                    ErrorMessage = errorMessage,
+                    FunctionName = context.FunctionName,
                     RowNumber = -1
                 });
                 throw;

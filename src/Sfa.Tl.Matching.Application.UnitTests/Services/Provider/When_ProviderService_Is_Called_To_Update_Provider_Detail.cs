@@ -22,8 +22,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 
         public When_ProviderService_Is_Called_To_Update_Provider_Detail()
         {
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
-            httpcontextAccesor.HttpContext.Returns(new DefaultHttpContext
+            var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
+            httpContextAccessor.HttpContext.Returns(new DefaultHttpContext
             {
                 User = new ClaimsPrincipal(new ClaimsIdentity(new[]
                 {
@@ -38,9 +38,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
                 c.AddMaps(typeof(ProviderMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<ProviderDetailViewModel, Domain.Models.Provider>(httpcontextAccesor) :
+                        new LoggedInUserEmailResolver<ProviderDetailViewModel, Domain.Models.Provider>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<ProviderDetailViewModel, Domain.Models.Provider>(httpcontextAccesor) :
+                            (object)new LoggedInUserNameResolver<ProviderDetailViewModel, Domain.Models.Provider>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<ProviderDetailViewModel, Domain.Models.Provider>(dateTimeProvider) :
                                 null);

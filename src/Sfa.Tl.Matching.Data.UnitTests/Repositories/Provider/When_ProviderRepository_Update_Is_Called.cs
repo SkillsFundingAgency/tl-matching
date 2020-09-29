@@ -18,35 +18,33 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider
         {
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Provider>>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                var entity = new ValidProviderBuilder().Build();
-                dbContext.Add(entity);
-                dbContext.SaveChanges();
+            using var dbContext = InMemoryDbContext.Create();
+            var entity = new ValidProviderBuilder().Build();
+            dbContext.Add(entity);
+            dbContext.SaveChanges();
 
-                var repository = new GenericRepository<Domain.Models.Provider>(logger, dbContext);
+            var repository = new GenericRepository<Domain.Models.Provider>(logger, dbContext);
 
-                entity.Name = "Updated ProviderName";
-                entity.DisplayName = "Updated Provider Display Name";
-                entity.OfstedRating = 2;
-                entity.PrimaryContact = "Updated PrimaryContact";
-                entity.PrimaryContactEmail = "updated.primary@contact.co.uk";
-                entity.PrimaryContactPhone = "01777759999";
-                entity.SecondaryContact = "Updated SecondaryContact";
-                entity.SecondaryContactEmail = "updated.secondary@contact.co.uk";
-                entity.SecondaryContactPhone = "01777758888";
-                entity.IsCdfProvider = false;
-                entity.IsEnabledForReferral = false;
-                entity.Source = "Updated";
+            entity.Name = "Updated ProviderName";
+            entity.DisplayName = "Updated Provider Display Name";
+            entity.OfstedRating = 2;
+            entity.PrimaryContact = "Updated PrimaryContact";
+            entity.PrimaryContactEmail = "updated.primary@contact.co.uk";
+            entity.PrimaryContactPhone = "01777759999";
+            entity.SecondaryContact = "Updated SecondaryContact";
+            entity.SecondaryContactEmail = "updated.secondary@contact.co.uk";
+            entity.SecondaryContactPhone = "01777758888";
+            entity.IsCdfProvider = false;
+            entity.IsEnabledForReferral = false;
+            entity.Source = "Updated";
 
-                entity.ModifiedOn = new DateTime(2019, 11, 01, 12, 30, 00);
-                entity.ModifiedBy = "UpdateTestUser";
+            entity.ModifiedOn = new DateTime(2019, 11, 01, 12, 30, 00);
+            entity.ModifiedBy = "UpdateTestUser";
 
-                repository.UpdateAsync(entity).GetAwaiter().GetResult();
+            repository.UpdateAsync(entity).GetAwaiter().GetResult();
 
-                _result = repository.GetSingleOrDefaultAsync(x => x.Id == 1)
-                    .GetAwaiter().GetResult();
-            }
+            _result = repository.GetSingleOrDefaultAsync(x => x.Id == 1)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

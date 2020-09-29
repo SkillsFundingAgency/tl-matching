@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Transactions;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Data.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -32,100 +32,90 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
             var dataTable = entities.ToDataTable();
 
-            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
+            using var transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
+            await using (var connection = new SqlConnection(_matchingConfiguration.SqlConnectionString))
             {
-                using (var connection = new SqlConnection(_matchingConfiguration.SqlConnectionString))
+                connection.Open();
+
+                await using var transaction = connection.BeginTransaction();
+                var truncateCommand = new SqlCommand($"TRUNCATE TABLE {typeof(T).Name};", connection, transaction);
+                truncateCommand.ExecuteNonQuery();
+
+                using var bulkCopy = CreateSqlBulkCopy(connection, transaction, dataTable);
+                var isSuccessful = false;
+                try
                 {
-                    connection.Open();
+                    await bulkCopy.WriteToServerAsync(dataTable);
 
-                    using (var transaction = connection.BeginTransaction())
-                    {
-                        var truncateCommand = new SqlCommand($"TRUNCATE TABLE {typeof(T).Name};", connection, transaction);
-                        truncateCommand.ExecuteNonQuery();
-
-                        using (var bulkCopy = CreateSqlBulkCopy(connection, transaction, dataTable))
-                        {
-                            var isSuccessful = false;
-                            try
-                            {
-                                await bulkCopy.WriteToServerAsync(dataTable);
-
-                                isSuccessful = true;
-                            }
-                            catch (Exception ex)
-                            {
-                                _logger.LogError($"{typeof(GenericRepository<T>).Name} - Error inserting {typeof(T).Name} data into the database. Internal Exception : {ex} ");
-                                throw;
-                            }
-                            finally
-                            {
-                                if (isSuccessful)
-                                {
-                                    transaction.Commit();
-                                }
-                                // ReSharper disable once RedundantIfElseBlock
-                                else
-                                {
-                                    transaction.Rollback();
-                                }
-                                connection.Close();
-                            }
-                        }
-                    }
+                    isSuccessful = true;
                 }
-                transactionScope.Complete();
+                catch (Exception ex)
+                {
+                    _logger.LogError($"{typeof(GenericRepository<T>).Name} - Error inserting {typeof(T).Name} data into the database. Internal Exception : {ex} ");
+                    throw;
+                }
+                finally
+                {
+                    if (isSuccessful)
+                    {
+                        await transaction.CommitAsync();
+                    }
+                    // ReSharper disable once RedundantIfElseBlock
+                    else
+                    {
+                        await transaction.RollbackAsync();
+                    }
+                    connection.Close();
+                }
             }
+            transactionScope.Complete();
         }
 
         public async Task<int> MergeFromStagingAsync(bool deleteMissingRows = true)
         {
             int numberOfRecordsAffected;
 
-            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, TimeSpan.FromSeconds(DefaultCommandTimeout), TransactionScopeAsyncFlowOption.Enabled))
+            using var transactionScope = new TransactionScope(TransactionScopeOption.Required, TimeSpan.FromSeconds(DefaultCommandTimeout), TransactionScopeAsyncFlowOption.Enabled);
+            await using (var connection = new SqlConnection(_matchingConfiguration.SqlConnectionString))
             {
-                using (var connection = new SqlConnection(_matchingConfiguration.SqlConnectionString))
+                connection.Open();
+
+                await using var transaction = connection.BeginTransaction();
+                var isSuccessful = false;
+                try
                 {
-                    connection.Open();
+                    var mergeSql = GetMergeSql(deleteMissingRows);
 
-                    using (var transaction = connection.BeginTransaction())
+                    var mergeCommand = new SqlCommand(mergeSql, connection, transaction)
                     {
-                        var isSuccessful = false;
-                        try
-                        {
-                            var mergeSql = GetMergeSql(deleteMissingRows);
+                        CommandTimeout = DefaultCommandTimeout
+                    };
 
-                            var mergeCommand = new SqlCommand(mergeSql, connection, transaction)
-                            {
-                                CommandTimeout = DefaultCommandTimeout
-                            };
+                    numberOfRecordsAffected = await mergeCommand.ExecuteNonQueryAsync();
 
-                            numberOfRecordsAffected = await mergeCommand.ExecuteNonQueryAsync();
-
-                            isSuccessful = true;
-                        }
-                        catch (Exception ex)
-                        {
-                            isSuccessful = false;
-                            _logger.LogError($"{typeof(GenericRepository<T>).Name} - Error inserting {typeof(T).Name} data into the database. Internal Exception : {ex} ");
-                            throw;
-                        }
-                        finally
-                        {
-                            if (isSuccessful)
-                            {
-                                transaction.Commit();
-                            }
-                            // ReSharper disable once RedundantIfElseBlock
-                            else
-                            {
-                                transaction.Rollback();
-                            }
-                            connection.Close();
-                        }
-                    }
+                    isSuccessful = true;
                 }
-                transactionScope.Complete();
+                catch (Exception ex)
+                {
+                    isSuccessful = false;
+                    _logger.LogError($"{typeof(GenericRepository<T>).Name} - Error inserting {typeof(T).Name} data into the database. Internal Exception : {ex} ");
+                    throw;
+                }
+                finally
+                {
+                    if (isSuccessful)
+                    {
+                        await transaction.CommitAsync();
+                    }
+                    // ReSharper disable once RedundantIfElseBlock
+                    else
+                    {
+                        await transaction.RollbackAsync();
+                    }
+                    connection.Close();
+                }
             }
+            transactionScope.Complete();
 
             return numberOfRecordsAffected;
         }

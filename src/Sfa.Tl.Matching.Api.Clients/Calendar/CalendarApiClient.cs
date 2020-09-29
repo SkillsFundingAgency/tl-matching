@@ -32,25 +32,24 @@ namespace Sfa.Tl.Matching.Api.Clients.Calendar
 
             responseMessage.EnsureSuccessStatusCode();
 
-            using (var stream = await responseMessage.Content.ReadAsStreamAsync())
-            using (var reader = new StreamReader(stream))
-            using (var jsonReader = new JsonTextReader(reader))
+            await using var stream = await responseMessage.Content.ReadAsStreamAsync();
+            using var reader = new StreamReader(stream);
+            using var jsonReader = new JsonTextReader(reader);
+
+            var json = await JObject.LoadAsync(jsonReader);
+            var englandAndWalesHolidays = json
+                .SelectTokens(
+                    "$.divisions.england-and-wales..[?(@.date)]");
+
+            var serializer = new JsonSerializer
             {
-                var json = await JObject.LoadAsync(jsonReader);
-                var englandAndWalesHolidays = json
-                    .SelectTokens(
-                        "$.divisions.england-and-wales..[?(@.date)]");
+                DateFormatString = "dd/MM/yyyy"
+            };
 
-                var serializer = new JsonSerializer
-                {
-                    DateFormatString = "dd/MM/yyyy"
-                };
-
-                var allResults = englandAndWalesHolidays
-                    .Select(x => x.ToObject<BankHolidayResultDto>(serializer))
-                    .ToList();
-                return allResults;
-            }
+            var allResults = englandAndWalesHolidays
+                .Select(x => x.ToObject<BankHolidayResultDto>(serializer))
+                .ToList();
+            return allResults;
         }
     }
 }

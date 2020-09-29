@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Hosting;
 using Notify.Client;
 using Notify.Interfaces;
 using Sfa.Tl.Matching.Application.Configuration;
@@ -33,23 +33,24 @@ using Sfa.Tl.Matching.Application.FileWriter.Provider;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Event;
-using Sfa.Tl.Matching.Web.Authorisation;
+using Sfa.Tl.Matching.Web.Authentication;
 using Sfa.Tl.Matching.Web.Filters;
 
 namespace Sfa.Tl.Matching.Web
 {
     public class Startup
     {
+        private readonly IWebHostEnvironment _env;
+
         protected MatchingConfiguration MatchingConfiguration;
-        private readonly ILoggerFactory _loggerFactory;
         protected bool IsTestAdminUser { get; set; } = true;
-        
+
         public IConfiguration Configuration { get; }
 
-        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
-            _loggerFactory = loggerFactory;
+            _env = env;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -68,6 +69,11 @@ namespace Sfa.Tl.Matching.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.Configure<CookieTempDataProviderOptions>(options =>
+            {
+                options.Cookie.IsEssential = true;
+            });
+
             services.Configure<FormOptions>(options =>
             {
                 options.ValueCountLimit = 15360;
@@ -82,15 +88,13 @@ namespace Sfa.Tl.Matching.Web
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
 
-            services.AddMvc(config =>
+            services.AddControllersWithViews()
+                .AddMvcOptions(config =>
                 {
-                    if (!isConfigLocalOrDev)
-                    {
-                        var policy = new AuthorizationPolicyBuilder()
-                            .RequireAuthenticatedUser()
-                            .Build();
-                        config.Filters.Add(new AuthorizeFilter(policy));
-                    }
+                    var policy = new AuthorizationPolicyBuilder()
+                        .RequireAuthenticatedUser()
+                        .Build();
+                    config.Filters.Add(new AuthorizeFilter(policy));
 
                     config.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
                     config.Filters.Add(new ResponseCacheAttribute
@@ -102,8 +106,7 @@ namespace Sfa.Tl.Matching.Web
                     config.Filters.Add<CustomExceptionFilterAttribute>();
                     config.Filters.Add<ServiceUnavailableFilterAttribute>();
                     config.Filters.Add<BackLinkFilter>();
-                })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                });
 
             if (!isConfigLocalOrDev)
                 AddAuthentication(services);
@@ -114,25 +117,27 @@ namespace Sfa.Tl.Matching.Web
                         options.DefaultAuthenticateScheme = "Local Scheme";
                         options.DefaultChallengeScheme = "Local Scheme";
                     })
-                    .AddTestAuth(o =>
+                    .AddTestAuthentication(o =>
                     {
                         o.IsAdminUser = IsTestAdminUser;
                         o.Identity = o.ClaimsIdentity;
                     });
             }
 
+            services.AddAuthorization();
+
             RegisterDependencies(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public virtual void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             var cultureInfo = new CultureInfo("en-GB");
 
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
-            if (env.IsDevelopment())
+            if (_env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
@@ -159,13 +164,20 @@ namespace Sfa.Tl.Matching.Web
                 ));
 
             app.UseHttpsRedirection();
+
+            app.UseCookiePolicy();
+
             app.UseStaticFiles();
+            app.UseRouting();
 
             app.UseAuthentication();
-
-            app.UseMvcWithDefaultRoute();
-            app.UseCookiePolicy();
+            app.UseAuthorization();
             app.UseStatusCodePagesWithRedirects("/Home/Error/{0}");
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
+            });
         }
 
         protected virtual void ConfigureConfiguration(IServiceCollection services)
@@ -217,9 +229,16 @@ namespace Sfa.Tl.Matching.Web
             services.AddDbContext<MatchingDbContext>(options =>
                 options
                     .UseSqlServer(MatchingConfiguration.SqlConnectionString,
-                    builder => builder
-                        .UseNetTopologySuite()
-                                      .EnableRetryOnFailure()), ServiceLifetime.Transient);
+                        builder => builder
+                            .UseNetTopologySuite()
+                            .EnableRetryOnFailure())
+#if DEBUG
+                    //Logging to identify issues in EF Core 3.x change tracking
+                    .EnableSensitiveDataLogging()
+#endif
+                    ,
+                    ServiceLifetime.Transient)
+                ;
 
             //Inject services
             services.AddSingleton(MatchingConfiguration);

@@ -5,27 +5,35 @@ using System.IO.Compression;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.Azure.Storage.Blob;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Functions.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Functions
 {
     public class PostcodeLookup
     {
+        private readonly IFileImportService<PostcodeLookupStagingFileImportDto> _fileImportService;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
+
+        public PostcodeLookup(
+            IFileImportService<PostcodeLookupStagingFileImportDto> fileImportService,
+            IRepository<FunctionLog> functionLogRepository)
+        {
+            _fileImportService = fileImportService;
+            _functionLogRepository = functionLogRepository;
+        }
+
         [FunctionName("ImportPostcodeLookup")]
         public async Task ImportPostcodeLookupAsync(
             [BlobTrigger("postcodes/{name}", Connection = "BlobStorageConnectionString")]
             ICloudBlob blockBlob,
             string name,
             ExecutionContext context,
-            ILogger logger,
-            [Inject] IFileImportService<PostcodeLookupStagingFileImportDto> fileImportService,
-            [Inject] IRepository<FunctionLog> functionLogRepository)
+            ILogger logger)
         {
             try
             {
@@ -39,30 +47,26 @@ namespace Sfa.Tl.Matching.Functions
 
                 var stopwatch = Stopwatch.StartNew();
 
-                using (var ms = new MemoryStream())
+                await using (var ms = new MemoryStream())
                 {
                     await stream.CopyToAsync(ms);
 
-                    using (var zipArchive = new ZipArchive(ms, ZipArchiveMode.Read))
+                    using var zipArchive = new ZipArchive(ms, ZipArchiveMode.Read);
+                    foreach (var entry in zipArchive.Entries)
                     {
-                        foreach (var entry in zipArchive.Entries)
+                        if (zipArchive.Entries.Count == 1
+                            || (entry.FullName.StartsWith("Data/ONSPD")
+                                && entry.Name.StartsWith(".csv")))
                         {
-                            if (zipArchive.Entries.Count == 1
-                                || (entry.FullName.StartsWith("Data/ONSPD")
-                                    && entry.Name.StartsWith(".csv")))
-                            {
-                                using (var entryStream = entry.Open())
+                            await using var entryStream = entry.Open();
+                            createdRecords = await _fileImportService.BulkImportAsync(
+                                new PostcodeLookupStagingFileImportDto
                                 {
-                                    createdRecords = await fileImportService.BulkImportAsync(
-                                        new PostcodeLookupStagingFileImportDto
-                                        {
-                                            FileDataStream = entryStream,
-                                            CreatedBy = blockBlob.GetCreatedByMetadata()
-                                        });
+                                    FileDataStream = entryStream,
+                                    CreatedBy = blockBlob.GetCreatedByMetadata()
+                                });
 
-                                    break;
-                                }
-                            }
+                            break;
                         }
                     }
                 }
@@ -76,13 +80,13 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error importing PostcodeLookup data. Internal Error Message {e}";
+                var errorMessage = $"Error importing PostcodeLookup data. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
                     RowNumber = -1
                 });

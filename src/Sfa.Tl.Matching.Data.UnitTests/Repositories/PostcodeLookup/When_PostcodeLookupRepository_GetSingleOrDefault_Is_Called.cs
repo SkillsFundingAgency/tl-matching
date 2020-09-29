@@ -17,15 +17,13 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.PostcodeLookup
         {
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.PostcodeLookup>>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                dbContext.AddRange(new ValidPostcodeLookupListBuilder().Build());
-                dbContext.SaveChanges();
+            using var dbContext = InMemoryDbContext.Create();
+            dbContext.AddRange(new ValidPostcodeLookupListBuilder().Build());
+            dbContext.SaveChanges();
 
-                var repository = new GenericRepository<Domain.Models.PostcodeLookup>(logger, dbContext);
-                _result = repository.GetSingleOrDefaultAsync(x => x.Postcode == "CV1 2WT")
-                    .GetAwaiter().GetResult();
-            }
+            var repository = new GenericRepository<Domain.Models.PostcodeLookup>(logger, dbContext);
+            _result = repository.GetSingleOrDefaultAsync(x => x.Postcode == "CV1 2WT")
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

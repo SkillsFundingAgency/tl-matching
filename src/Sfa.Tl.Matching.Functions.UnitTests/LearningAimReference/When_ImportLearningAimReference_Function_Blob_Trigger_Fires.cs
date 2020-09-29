@@ -1,9 +1,11 @@
 ﻿using System.IO;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.Azure.Storage.Blob;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
@@ -12,6 +14,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.LearningAimReference
     public class When_ImportLearningAimReference_Function_Blob_Trigger_Fires
     {
         private readonly IFileImportService<LearningAimReferenceStagingFileImportDto> _fileImportService;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
 
         public When_ImportLearningAimReference_Function_Blob_Trigger_Fires()
         {
@@ -21,13 +24,16 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.LearningAimReference
             var logger = Substitute.For<ILogger>();
 
             _fileImportService = Substitute.For<IFileImportService<LearningAimReferenceStagingFileImportDto>>();
-            
-            Functions.LearningAimReference.ImportLearningAimReferenceAsync(
+            _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
+
+            var learningAimReferenceFunctions = new Functions.LearningAimReference(_fileImportService,
+                _functionLogRepository);
+
+            learningAimReferenceFunctions.ImportLearningAimReferenceAsync(
                 blobStream,
                 "test",
                 context,
-                logger,
-                _fileImportService).GetAwaiter().GetResult();
+                logger).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -36,6 +42,15 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.LearningAimReference
             _fileImportService
                 .Received(1)
                 .BulkImportAsync(Arg.Any<LearningAimReferenceStagingFileImportDto>());
+        }
+
+
+        [Fact]
+        public void FunctionLogRepository_Create_Is_Not_Called()
+        {
+            _functionLogRepository
+                .DidNotReceiveWithAnyArgs()
+                .CreateAsync(Arg.Any<FunctionLog>());
         }
     }
 }

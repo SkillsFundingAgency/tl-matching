@@ -41,11 +41,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
 
         public OpportunityItemBuilder AddProvisionGap()
         {
-            if (_opportunityItem.ProvisionGap == null)
-            {
-                _opportunityItem.ProvisionGap = new List<ProvisionGap>();
-            }
-
+            _opportunityItem.ProvisionGap ??= new List<ProvisionGap>();
             _opportunityItem.OpportunityType = OpportunityType.ProvisionGap.ToString();
             _opportunityItem.ProvisionGap.Add(
                 new ProvisionGap

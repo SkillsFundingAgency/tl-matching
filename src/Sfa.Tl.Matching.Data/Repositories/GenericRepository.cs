@@ -95,21 +95,24 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
             if (entities.Count == 0) return;
 
-            using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+            var strategy = _dbContext.Database.CreateExecutionStrategy();
+
+            await strategy.Execute(async () =>
             {
+                await using var transaction = await _dbContext.Database.BeginTransactionAsync();
                 try
                 {
                     await _dbContext.BulkUpdateAsync(entities,
                         config => config.UseTempDB = true);
-                    transaction.Commit();
+                    await transaction.CommitAsync();
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex.Message, ex.InnerException);
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
                     throw;
                 }
-            }
+            });
         }
 
         public virtual async Task UpdateWithSpecifiedColumnsOnlyAsync(T entity, params Expression<Func<T, object>>[] properties)
@@ -156,36 +159,36 @@ namespace Sfa.Tl.Matching.Data.Repositories
             {
                 var propList = properties.Select(pro =>
                 {
-                    switch (pro.Body)
+                    return pro.Body switch
                     {
-                        case UnaryExpression expression:
-                            return ((MemberExpression)expression.Operand).Member.Name;
-                        case MemberExpression expression1:
-                            return expression1.Member.Name;
-                        default:
-                            throw new InvalidOperationException("unable to extract PropertyName for Bulk Update");
-                    }
+                        UnaryExpression expression => ((MemberExpression) expression.Operand).Member.Name,
+                        MemberExpression expression1 => expression1.Member.Name,
+                        _ => throw new InvalidOperationException("unable to extract PropertyName for Bulk Update")
+                    };
                 }).ToList();
 
-                using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+                var strategy = _dbContext.Database.CreateExecutionStrategy();
+
+                await strategy.Execute(async () =>
                 {
+                    await using var transaction = await _dbContext.Database.BeginTransactionAsync();
                     try
                     {
                         await _dbContext.BulkUpdateAsync(entities,
-                        config =>
+                            config =>
                             {
                                 config.PropertiesToInclude = propList;
                                 config.UseTempDB = true;
                             });
-                        transaction.Commit();
+                        await transaction.CommitAsync();
                     }
                     catch (Exception ex)
                     {
                         _logger.LogError(ex.Message, ex.InnerException);
-                        transaction.Rollback();
+                        await transaction.RollbackAsync();
                         throw;
                     }
-                }
+                });
             }
             catch (DbUpdateException due)
             {
@@ -271,17 +274,16 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return await queryable.FirstOrDefaultAsync();
         }
 
-        public async Task<TDto> GetSingleOrDefaultAsync<TDto>(Expression<Func<T, bool>> predicate, Expression<Func<T, TDto>> selector, Expression<Func<T, object>> orderBy, bool asendingorder = true, params Expression<Func<T, object>>[] navigationPropertyPath)
+        public async Task<TDto> GetSingleOrDefaultAsync<TDto>(Expression<Func<T, bool>> predicate, Expression<Func<T, TDto>> selector, Expression<Func<T, object>> orderBy, bool ascendingOrder = true, params Expression<Func<T, object>>[] navigationPropertyPath)
         {
-            var queryable = GetQueryableWithIncludes(predicate, orderBy, asendingorder, navigationPropertyPath);
+            var queryable = GetQueryableWithIncludes(predicate, orderBy, ascendingOrder, navigationPropertyPath);
 
             return await queryable.Select(selector).SingleOrDefaultAsync();
-
         }
 
-        public async Task<TDto> GetFirstOrDefaultAsync<TDto>(Expression<Func<T, bool>> predicate, Expression<Func<T, TDto>> selector, Expression<Func<T, object>> orderBy, bool asendingorder = true, params Expression<Func<T, object>>[] navigationPropertyPath)
+        public async Task<TDto> GetFirstOrDefaultAsync<TDto>(Expression<Func<T, bool>> predicate, Expression<Func<T, TDto>> selector, Expression<Func<T, object>> orderBy, bool ascendingOrder = true, params Expression<Func<T, object>>[] navigationPropertyPath)
         {
-            var queryable = GetQueryableWithIncludes(predicate, orderBy, asendingorder, navigationPropertyPath);
+            var queryable = GetQueryableWithIncludes(predicate, orderBy, ascendingOrder, navigationPropertyPath);
 
             return await queryable.Select(selector).FirstOrDefaultAsync();
         }
@@ -292,7 +294,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 await _dbContext.Set<T>().CountAsync();
         }
 
-        private IQueryable<T> GetQueryableWithIncludes(Expression<Func<T, bool>> predicate, Expression<Func<T, object>> orderBy, bool asendingorder = true, params Expression<Func<T, object>>[] navigationPropertyPath)
+        private IQueryable<T> GetQueryableWithIncludes(Expression<Func<T, bool>> predicate, Expression<Func<T, object>> orderBy, bool ascendingOrder = true, params Expression<Func<T, object>>[] navigationPropertyPath)
         {
             var queryable = _dbContext.Set<T>().AsQueryable();
 
@@ -305,7 +307,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 queryable = queryable.Where(predicate);
 
             if (orderBy != null)
-                queryable = asendingorder ? queryable.OrderBy(orderBy) : queryable.OrderByDescending(orderBy);
+                queryable = ascendingOrder ? queryable.OrderBy(orderBy) : queryable.OrderByDescending(orderBy);
 
             return queryable;
         }

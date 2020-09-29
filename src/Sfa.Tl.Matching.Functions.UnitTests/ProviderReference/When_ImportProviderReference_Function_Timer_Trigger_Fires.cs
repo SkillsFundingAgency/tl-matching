@@ -13,6 +13,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderReference
     public class When_ImportProviderReference_Function_Timer_Trigger_Fires
     {
         private readonly IReferenceDataService _referenceDataService;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
         private readonly DateTime _minValue = new DateTime(0001, 1, 1, 0, 0, 0);
 
         public When_ImportProviderReference_Function_Timer_Trigger_Fires()
@@ -22,16 +23,16 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderReference
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
             dateTimeProvider.MinValue().Returns(_minValue);
 
-            var functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
+            _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
-            var providerReference = new Functions.ProviderReference();
+            var providerReference = new Functions.ProviderReference(_referenceDataService,
+                dateTimeProvider, _functionLogRepository);
+
             providerReference.ImportProviderReferenceAsync(
                 new TimerInfo(timerSchedule, new ScheduleStatus()),
                 new ExecutionContext(),
-                new NullLogger<Functions.ProviderReference>(),
-                _referenceDataService,
-                dateTimeProvider,
-                functionLogRepository).GetAwaiter().GetResult();
+                new NullLogger<Functions.ProviderReference>()
+                ).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -40,6 +41,14 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderReference
             _referenceDataService
                 .Received(1)
                 .SynchronizeProviderReferenceAsync(_minValue);
+        }
+        
+        [Fact]
+        public void FunctionLogRepository_Create_Is_Not_Called()
+        {
+            _functionLogRepository
+                .DidNotReceiveWithAnyArgs()
+                .CreateAsync(Arg.Any<FunctionLog>());
         }
     }
 }

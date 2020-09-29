@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.PostcodeLookup
         {
             if (string.IsNullOrWhiteSpace(lepCode))
             {
-                MatchingDbContext.Database.ExecuteSqlCommand("DELETE FROM PostcodeLookup");
+                MatchingDbContext.Database.ExecuteSqlRaw("DELETE FROM PostcodeLookup");
                 MatchingDbContext.SaveChanges();
                 return;
             }

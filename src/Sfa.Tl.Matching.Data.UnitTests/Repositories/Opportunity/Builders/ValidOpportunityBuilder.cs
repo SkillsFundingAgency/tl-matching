@@ -5,6 +5,7 @@ using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
 {
+    // ReSharper disable UnusedMember.Global
     public class ValidOpportunityBuilder
     {
         private readonly Domain.Models.Opportunity _opportunity;
@@ -40,11 +41,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
 
         public ValidOpportunityBuilder AddReferrals(bool isCompleted = false, bool isSelectedForReferral = false)
         {
-            if (_opportunity.OpportunityItem == null)
-            {
-                _opportunity.OpportunityItem = new List<Domain.Models.OpportunityItem>();
-            }
-
+            _opportunity.OpportunityItem ??= new List<Domain.Models.OpportunityItem>();
             _opportunity.OpportunityItem.Add(
                 new Domain.Models.OpportunityItem
                 {
@@ -121,11 +118,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
 
         public ValidOpportunityBuilder AddProvisionGaps()
         {
-            if (_opportunity.OpportunityItem == null)
-            {
-                _opportunity.OpportunityItem = new List<Domain.Models.OpportunityItem>();
-            }
-
+            _opportunity.OpportunityItem ??= new List<Domain.Models.OpportunityItem>();
             _opportunity.OpportunityItem.Add(
                 new Domain.Models.OpportunityItem
                 {
@@ -159,11 +152,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
 
         public ValidOpportunityBuilder AddAbandonedOpportunityItem()
         {
-            if (_opportunity.OpportunityItem == null)
-            {
-                _opportunity.OpportunityItem = new List<Domain.Models.OpportunityItem>();
-            }
-
+            _opportunity.OpportunityItem ??= new List<Domain.Models.OpportunityItem>();
             _opportunity.OpportunityItem.Add(
                 new Domain.Models.OpportunityItem
                 {
@@ -187,11 +176,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
 
         public ValidOpportunityBuilder AddSavedOpportunityItem()
         {
-            if (_opportunity.OpportunityItem == null)
-            {
-                _opportunity.OpportunityItem = new List<Domain.Models.OpportunityItem>();
-            }
-
+            _opportunity.OpportunityItem ??= new List<Domain.Models.OpportunityItem>();
             _opportunity.OpportunityItem.Add(
                 new Domain.Models.OpportunityItem
                 {

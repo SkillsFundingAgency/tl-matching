@@ -12,7 +12,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-l">Are you sure you want to remove @Model.Postcode?</h1>
-        <form asp-controller="ProviderVenue" asp-action="GetConfirmRemoveProviderVenueAsync">
+        <form asp-controller="ProviderVenue" asp-action="GetConfirmRemoveProviderVenue">
             <input asp-for="ProviderId" type="hidden" />
             <input asp-for="ProviderVenueId" type="hidden" />
 
@@ -22,7 +22,7 @@
             <button id="tl-remove" type="submit" class="govuk-button">Remove venue</button>
         </form>
         <p class="govuk-body">
-            <a asp-controller="ProviderVenue" asp-action="GetProviderVenueDetailAsync" asp-route-providerVenueId="@Model.ProviderVenueId" class="govuk-link" id="tl-cancel">Cancel and return to venue overview</a>
+            <a asp-route="GetProviderVenueDetail" asp-route-providerVenueId="@Model.ProviderVenueId" class="govuk-link" id="tl-cancel">Cancel and return to venue overview</a>
         </p>
     </div>
 </div>

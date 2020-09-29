@@ -32,15 +32,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.OpportunityPipelineRe
         [Fact]
         public void Then_Spreadsheet_Has_No_Tabs()
         {
-            using (var stream = new MemoryStream(_result))
-            {
-                using (var spreadSheet = SpreadsheetDocument.Open(stream, false))
-                {
-                    var workbookPart = spreadSheet.WorkbookPart;
-                    var sheets = workbookPart.Workbook.Sheets.ChildElements.OfType<Sheet>();
-                    sheets.Count().Should().Be(0);
-                }
-            }
+            using var stream = new MemoryStream(_result);
+            using var spreadSheet = SpreadsheetDocument.Open(stream, false);
+            var workbookPart = spreadSheet.WorkbookPart;
+            var sheets = workbookPart.Workbook.Sheets.ChildElements.OfType<Sheet>();
+            sheets.Count().Should().Be(0);
         }
     }
 }

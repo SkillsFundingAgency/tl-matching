@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 
             var result = _result as RedirectToActionResult;
             result.Should().NotBeNull();
-            result?.ActionName.Should().Be("SearchProviderByUkPrnAsync");
+            result?.ActionName.Should().Be("SearchProvider");
         }
 
         [Fact]

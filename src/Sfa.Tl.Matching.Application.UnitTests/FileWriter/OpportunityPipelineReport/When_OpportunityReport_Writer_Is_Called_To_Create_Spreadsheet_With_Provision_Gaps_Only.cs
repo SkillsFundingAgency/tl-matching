@@ -34,39 +34,31 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.OpportunityPipelineRe
         [Fact]
         public void Then_Spreadsheet_Has_One_Tab()
         {
-            using (var stream = new MemoryStream(_result))
-            {
-                using (var spreadSheet = SpreadsheetDocument.Open(stream, false))
-                {
-                    var workbookPart = spreadSheet.WorkbookPart;
-                    var sheets = workbookPart.Workbook.Sheets.ChildElements.OfType<Sheet>();
-                    sheets.Count().Should().Be(1);
-                }
-            }
+            using var stream = new MemoryStream(_result);
+            using var spreadSheet = SpreadsheetDocument.Open(stream, false);
+            var workbookPart = spreadSheet.WorkbookPart;
+            var sheets = workbookPart.Workbook.Sheets.ChildElements.OfType<Sheet>();
+            sheets.Count().Should().Be(1);
         }
 
         [Fact]
         public void Then_Spreadsheet_First_Tab_Has_Provision_Gaps()
         {
-            using (var stream = new MemoryStream(_result))
-            {
-                using (var spreadSheet = SpreadsheetDocument.Open(stream, false))
-                {
-                    var sheetData = spreadSheet.GetSheetData(0);
-                    sheetData.Should().NotBeNull();
+            using var stream = new MemoryStream(_result);
+            using var spreadSheet = SpreadsheetDocument.Open(stream, false);
+            var sheetData = spreadSheet.GetSheetData(0);
+            sheetData.Should().NotBeNull();
 
-                    var rows = sheetData.Descendants<Row>().ToList();
-                    rows.Count.Should().Be(2);
+            var rows = sheetData.Descendants<Row>().ToList();
+            rows.Count.Should().Be(2);
 
-                    var cells = rows[1].Descendants<Cell>().ToList();
-                    cells.Count.Should().Be(4);
+            var cells = rows[1].Descendants<Cell>().ToList();
+            cells.Count.Should().Be(4);
 
-                    cells[0].InnerText.Should().Be("London SW1 1AA");
-                    cells[1].InnerText.Should().Be("Provision Gap Role");
-                    cells[2].InnerText.Should().Be("At least 1");
-                    cells[3].InnerText.Should().Be("Reason");
-                }
-            }
+            cells[0].InnerText.Should().Be("London SW1 1AA");
+            cells[1].InnerText.Should().Be("Provision Gap Role");
+            cells[2].InnerText.Should().Be("At least 1");
+            cells[3].InnerText.Should().Be("Reason");
         }
     }
 }

@@ -18,20 +18,18 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
         {
             var logger = Substitute.For<ILogger<OpportunityRepository>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                dbContext.Add(
-                    new ValidOpportunityBuilder()
-                        .AddEmployer()
-                        .AddReferrals()
-                        .AddProvisionGaps()
-                        .Build());
-                dbContext.SaveChanges();
+            using var dbContext = InMemoryDbContext.Create();
+            dbContext.Add(
+                new ValidOpportunityBuilder()
+                    .AddEmployer()
+                    .AddReferrals()
+                    .AddProvisionGaps()
+                    .Build());
+            dbContext.SaveChanges();
                 
-                var repository = new OpportunityRepository(logger, dbContext);
-                _result = repository.GetEmployerReferralsAsync(1, new[] { 1 })
-                    .GetAwaiter().GetResult();
-            }
+            var repository = new OpportunityRepository(logger, dbContext);
+            _result = repository.GetEmployerReferralsAsync(1, new[] { 1 })
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

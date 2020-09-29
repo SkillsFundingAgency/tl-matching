@@ -18,31 +18,29 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Employer
         {
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Employer>>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                var entity = new ValidEmployerBuilder().Build();
-                dbContext.Add(entity);
-                dbContext.SaveChanges();
+            using var dbContext = InMemoryDbContext.Create();
+            var entity = new ValidEmployerBuilder().Build();
+            dbContext.Add(entity);
+            dbContext.SaveChanges();
 
-                var repository = new GenericRepository<Domain.Models.Employer>(logger, dbContext);
+            var repository = new GenericRepository<Domain.Models.Employer>(logger, dbContext);
 
-                entity.CompanyName = "Updated Company";
-                entity.AlsoKnownAs = "Updated Also Known As";
-                entity.CompanyNameSearch = "UpdatedCompanyUpdatedAlsoKnownAs";
-                entity.Aupa = "Planning";
-                entity.PrimaryContact = "UpdatedEmployer Contact";
-                entity.Phone = "020 123 9999";
-                entity.Email = "updated.employer.contact@employer.co.uk";
-                entity.Owner = "Updated Owner";
+            entity.CompanyName = "Updated Company";
+            entity.AlsoKnownAs = "Updated Also Known As";
+            entity.CompanyNameSearch = "UpdatedCompanyUpdatedAlsoKnownAs";
+            entity.Aupa = "Planning";
+            entity.PrimaryContact = "UpdatedEmployer Contact";
+            entity.Phone = "020 123 9999";
+            entity.Email = "updated.employer.contact@employer.co.uk";
+            entity.Owner = "Updated Owner";
 
-                entity.ModifiedOn = new DateTime(2019, 11, 01, 12, 30, 00);
-                entity.ModifiedBy = "UpdateTestUser";
+            entity.ModifiedOn = new DateTime(2019, 11, 01, 12, 30, 00);
+            entity.ModifiedBy = "UpdateTestUser";
 
-                repository.UpdateAsync(entity).GetAwaiter().GetResult();
+            repository.UpdateAsync(entity).GetAwaiter().GetResult();
 
-                _result = repository.GetSingleOrDefaultAsync(x => x.Id == 1)
-                    .GetAwaiter().GetResult();
-            }
+            _result = repository.GetSingleOrDefaultAsync(x => x.Id == 1)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

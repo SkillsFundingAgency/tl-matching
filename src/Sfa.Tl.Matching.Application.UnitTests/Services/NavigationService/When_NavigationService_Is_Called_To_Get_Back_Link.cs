@@ -1,12 +1,16 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Extensions;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Application.UnitTests.InMemoryDb;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
@@ -21,9 +25,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
         [Theory, AutoDomainData]
         public async Task Then_Get_Back_Link(
             MatchingDbContext dbContext,
-            ILogger<GenericRepository<UserCache>> logger,
             HttpContext httpContext,
-            HttpContextAccessor httpContextAccessor
+            HttpContextAccessor httpContextAccessor,
+            ILogger<GenericRepository<UserCache>> logger
         )
         {
             httpContextAccessor.HttpContext = httpContext;
@@ -47,13 +51,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
             var sut = new Application.Services.NavigationService(mapper, repo);
 
             //Act
-            await sut.AddCurrentUrlAsync("/Start", username);
-            await sut.AddCurrentUrlAsync("/find-providers", username);
-            await sut.AddCurrentUrlAsync("/test-url", username);
+            await AddTestUrls(sut, dbContext, username, new List<string> { "/Start", "/find-providers", "/test-url" });
 
             //Assert
             var prevUrl = await sut.GetBackLinkAsync(username);
             prevUrl.Should().Be("/find-providers");
+
+            dbContext.DetachAllEntities();
 
             prevUrl = await sut.GetBackLinkAsync(username);
             prevUrl.Should().Be("/Start");
@@ -88,9 +92,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
             var sut = new Application.Services.NavigationService(mapper, repo);
 
             //Act
-            await sut.AddCurrentUrlAsync("/Start", username);
-            await sut.AddCurrentUrlAsync("/find-providers", username);
-            await sut.AddCurrentUrlAsync("/test-url", username);
+            await AddTestUrls(sut, dbContext, username, new List<string> { "/Start", "/find-providers", "/test-url" });
 
             var addedItem = await repo.GetFirstOrDefaultAsync(x => x.CreatedBy == username && x.Key == CacheTypes.BackLink.ToString());
 
@@ -128,15 +130,21 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
             var sut = new Application.Services.NavigationService(mapper, repo);
 
             //Act
-            await sut.AddCurrentUrlAsync("/Start", username);
-            await sut.AddCurrentUrlAsync("/find-providers", username);
-            await sut.AddCurrentUrlAsync("/test-url", username);
-
+            await AddTestUrls(sut, dbContext, username, new List<string> { "/Start", "/find-providers", "/test-url" });
+            
             var addedItem = await repo.GetFirstOrDefaultAsync(x => x.CreatedBy == "invalid user" && x.Key == CacheTypes.BackLink.ToString());
 
             //Assert
             addedItem.Should().BeNull();
         }
 
+        private static async Task AddTestUrls(INavigationService navigationService, DbContext dbContext, string username, IEnumerable<string> urls)
+        {
+            foreach (var url in urls)
+            {
+                await navigationService.AddCurrentUrlAsync(url, username);
+                dbContext.DetachAllEntities();
+            }
+        }
     }
 }

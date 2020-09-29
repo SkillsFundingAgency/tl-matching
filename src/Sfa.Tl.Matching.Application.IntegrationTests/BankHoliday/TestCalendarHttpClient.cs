@@ -49,11 +49,9 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.BankHoliday
         private static string GetTestJson()
         {
             var resourceName = $"{typeof(TestCalendarHttpClient).Namespace}.TestBankHolidays.json";
-            using (var templateStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
-            using (var streamReader = new StreamReader(templateStream ?? throw new InvalidOperationException("Could not find json test file")))
-            {
-                return streamReader.ReadToEnd();
-            }
+            using var templateStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
+            using var streamReader = new StreamReader(templateStream ?? throw new InvalidOperationException("Could not find json test file"));
+            return streamReader.ReadToEnd();
         }
     }
 }

@@ -3,27 +3,35 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.Azure.Storage.Blob;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Functions.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Functions
 {
     public class LocalEnterprisePartnership
     {
+        private readonly IFileImportService<LocalEnterprisePartnershipStagingFileImportDto> _fileImportService;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
+
+        public LocalEnterprisePartnership(
+            IFileImportService<LocalEnterprisePartnershipStagingFileImportDto> fileImportService,
+            IRepository<FunctionLog> functionLogRepository)
+        {
+            _fileImportService = fileImportService;
+            _functionLogRepository = functionLogRepository;
+        }
+
         [FunctionName("ImportLocalEnterprisePartnership")]
         public async Task ImportLocalEnterprisePartnershipAsync(
             [BlobTrigger("localenterprisepartnership/{name}", Connection = "BlobStorageConnectionString")]
             ICloudBlob blockBlob,
             string name,
             ExecutionContext context,
-            ILogger logger,
-            [Inject] IFileImportService<LocalEnterprisePartnershipStagingFileImportDto> fileImportService,
-            [Inject] IRepository<FunctionLog> functionLogRepository)
+            ILogger logger)
         {
             try
             {
@@ -35,7 +43,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 var stopwatch = Stopwatch.StartNew();
 
-                var createdRecords = await fileImportService.BulkImportAsync(new LocalEnterprisePartnershipStagingFileImportDto
+                var createdRecords = await _fileImportService.BulkImportAsync(new LocalEnterprisePartnershipStagingFileImportDto
                 {
                     FileDataStream = stream,
                     CreatedBy = blockBlob.GetCreatedByMetadata()
@@ -50,13 +58,13 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error importing LocalEnterprisePartnership data. Internal Error Message {e}";
+                var errorMessage = $"Error importing LocalEnterprisePartnership data. Internal Error Message {e}";
 
-                logger.LogError(errormessage);
+                logger.LogError(errorMessage);
 
-                await functionLogRepository.CreateAsync(new FunctionLog
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
                     RowNumber = -1
                 });

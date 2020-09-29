@@ -20,10 +20,6 @@ jobs:
   workspace:
     clean: all
   steps:
-    - task: UseDotNet@2
-      displayName: 'Install .NET Core SDK'
-      inputs:
-        version: '2.2.x'
     - task: gittools.gitversion.gitversion-task.GitVersion@5
       displayName: GitVersion
       inputs:

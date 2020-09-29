@@ -25,7 +25,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.InMemoryDb
             await dbContext.AddAsync(backgroundProcessHistory);
             await dbContext.SaveChangesAsync();
 
-            var items = dbContext.OpportunityItem.Where(oi => oi.OpportunityId == opportunity.Id).AsNoTracking()
+            dbContext.DetachAllEntities();
+
+            var items = dbContext.OpportunityItem
+                .AsNoTracking()
+                .Where(oi => oi.OpportunityId == opportunity.Id)
                 .ToList();
 
             foreach (var opportunityItem in items)
@@ -42,6 +46,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.InMemoryDb
             }
 
             await dbContext.SaveChangesAsync();
+            dbContext.DetachAllEntities();
         }
 
         public static async Task SetEmailTemplate(
@@ -51,7 +56,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.InMemoryDb
             await dbContext.AddAsync(emailTemplate);
             
             await dbContext.SaveChangesAsync();
-
+            dbContext.DetachAllEntities();
         }
 
         public static async Task SetEmailHistory(
@@ -65,8 +70,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.InMemoryDb
             await dbContext.AddAsync(emailHistory);
 
             await dbContext.SaveChangesAsync();
-
+            dbContext.DetachAllEntities();
         }
-
     }
 }

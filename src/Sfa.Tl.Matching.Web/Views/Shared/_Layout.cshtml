@@ -19,13 +19,13 @@
     <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
 
     <partial name="_govuk_CookieBanner" />
-    @RenderSection("sticky", false)
+    @await RenderSectionAsync("sticky", false)
 
     <partial name="_govuk_Header" />
     <partial name="_govuk_PhaseBanner" />
 
     <div class="govuk-width-container">
-        @RenderSection("backbutton", false)
+        @await RenderSectionAsync("backbutton", false)
         <main class="govuk-main-wrapper" id="main-content" role="main">
             @RenderBody()
         </main>
@@ -35,7 +35,7 @@
 
     <partial name="_govuk_Scripts" />
 
-    @RenderSection("jsfiles", false)
+    @await RenderSectionAsync("jsfiles", false)
 
 </body>
 </html>

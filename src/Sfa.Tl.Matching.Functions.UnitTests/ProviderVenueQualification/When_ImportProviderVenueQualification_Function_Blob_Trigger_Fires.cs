@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.Azure.Storage.Blob;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -29,16 +29,15 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderVenueQualification
 
             _fileImportService = Substitute.For<IProviderVenueQualificationFileImportService>();
 
-            var providerVenueQualification = new Functions.ProviderVenueQualification();
+            var providerVenueQualification = new Functions.ProviderVenueQualification(_fileImportService,
+                _functionLogRepository, httpContextAccessor);
 
             providerVenueQualification.ImportProviderVenueQualification(
                 blobStream,
                 "test",
                 context,
-                logger,
-                _fileImportService,
-                _functionLogRepository,
-                httpContextAccessor).GetAwaiter().GetResult();
+                logger
+                ).GetAwaiter().GetResult();
         }
 
         [Fact]

@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return View(new DashboardViewModel
             {
-                HasSavedOppportunities = savedOpportunitiesCount > 0,
+                HasSavedOpportunities = savedOpportunitiesCount > 0,
                 IsServiceOnline = serviceStatusHistory.IsOnline
             });
         }

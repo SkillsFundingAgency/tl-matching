@@ -17,7 +17,7 @@
        asp-route-SelectedRouteId="@Model.RouteId"
        class="govuk-back-link"
        id="tl-back">Back</a>
-    @await Component.InvokeAsync("Cancel", new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })
+    @await Component.InvokeAsync("Cancel", new { opportunityId = Model.OpportunityId, opportunityItemId = Model.OpportunityItemId })
 }
 
 <form asp-route="SavePlacementInformation" novalidate>
@@ -25,8 +25,8 @@
     <input asp-for="OpportunityItemId" type="hidden" />
     <input asp-for="OpportunityType" type="hidden" />
     <input asp-for="SearchResultProviderCount" type="hidden" />
-    <input asp-for=" CompanyName" type="hidden" />
-    <input asp-for=" CompanyNameAka" type="hidden" />
+    <input asp-for="CompanyName" type="hidden" />
+    <input asp-for="CompanyNameAka" type="hidden" />
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">

@@ -60,13 +60,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.Dupli
             );
 
             var filePath = Path.Combine(TestHelper.GetTestExecutionDirectory(), $"Services\\FileImportService\\DuplicateRows\\{typeof(TEntity).Name}-DuplicateRows.csv");
-            using (var stream = File.Open(filePath, FileMode.Open))
+            using var stream = File.Open(filePath, FileMode.Open);
+            FileImportService.BulkImportAsync(new TImportDto
             {
-                FileImportService.BulkImportAsync(new TImportDto
-                {
-                    FileDataStream = stream
-                }).GetAwaiter().GetResult();
-            }
+                FileDataStream = stream
+            }).GetAwaiter().GetResult();
         }
     }
 }

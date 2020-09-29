@@ -70,7 +70,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
             CreateMap<SaveQualificationViewModel, IList<QualificationRouteMapping>>()
                 .ConstructUsing((m, context) =>
                 {
-                    var userNameResolver = context.Mapper.ServiceCtor(typeof(LoggedInUserNameResolver<SaveQualificationViewModel, Qualification>))
+                    var userNameResolver = context.Options.ServiceCtor(typeof(LoggedInUserNameResolver<SaveQualificationViewModel, Qualification>))
                         as LoggedInUserNameResolver<SaveQualificationViewModel, Qualification>;
 
                     return m.Routes == null ? 

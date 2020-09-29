@@ -88,6 +88,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
+        [ActionName("GetConfirmRemoveProviderVenue")]
         [Route("remove-venue/{providerVenueId}", Name = "GetConfirmRemoveProviderVenue")]
         public async Task<IActionResult> GetConfirmRemoveProviderVenueAsync(int providerVenueId)
         {

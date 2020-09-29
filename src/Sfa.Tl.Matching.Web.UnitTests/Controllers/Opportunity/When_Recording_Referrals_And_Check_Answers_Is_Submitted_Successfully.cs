@@ -25,16 +25,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         public When_Recording_Referrals_And_Check_Answers_Is_Submitted_Successfully()
         {
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
+            var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
 
             var config = new MapperConfiguration(c =>
             {
                 c.AddMaps(typeof(CheckAnswersDtoMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<CheckAnswersViewModel, CheckAnswersDto>(httpcontextAccesor) :
+                        new LoggedInUserEmailResolver<CheckAnswersViewModel, CheckAnswersDto>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<CheckAnswersViewModel, CheckAnswersDto>(httpcontextAccesor) :
+                            (object)new LoggedInUserNameResolver<CheckAnswersViewModel, CheckAnswersDto>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<CheckAnswersViewModel, CheckAnswersDto>(new DateTimeProvider()) :
                                 null);
@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddUserName(ModifiedBy)
                 .Build();
 
-            httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
+            httpContextAccessor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
             _result = controllerWithClaims.SaveCheckAnswers(OpportunityId, OpportunityItemId).GetAwaiter().GetResult();
         }

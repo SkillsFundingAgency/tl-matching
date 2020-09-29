@@ -18,8 +18,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ServiceStatusHistory
 
         public When_ServiceStatusHistoryService_Is_Called_To_Save()
         {
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
-            httpcontextAccesor.HttpContext.Returns(new DefaultHttpContext
+            var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
+            httpContextAccessor.HttpContext.Returns(new DefaultHttpContext
             {
                 User = new ClaimsPrincipal(new ClaimsIdentity(new[]
                 {
@@ -32,9 +32,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ServiceStatusHistory
                 c.AddMaps(typeof(OpportunityMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<ServiceStatusHistoryViewModel, Domain.Models.ServiceStatusHistory>(httpcontextAccesor) :
+                        new LoggedInUserEmailResolver<ServiceStatusHistoryViewModel, Domain.Models.ServiceStatusHistory>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<ServiceStatusHistoryViewModel, Domain.Models.ServiceStatusHistory>(httpcontextAccesor) :
+                            (object)new LoggedInUserNameResolver<ServiceStatusHistoryViewModel, Domain.Models.ServiceStatusHistory>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<OpportunityDto, Domain.Models.Opportunity>(new DateTimeProvider()) :
                                 null);

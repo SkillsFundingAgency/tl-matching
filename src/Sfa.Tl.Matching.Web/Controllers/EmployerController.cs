@@ -154,7 +154,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("remove-employer/{opportunityId}", Name = "DeleteEmployer")]
         public async Task<IActionResult> DeleteEmployerAsync(int opportunityId)
         {
-
             await _opportunityService.DeleteEmployerOpportunityItemAsync(opportunityId);
 
             var employerOpportunities =
@@ -185,7 +184,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _referralService.ConfirmOpportunitiesAsync(viewModel.OpportunityId, HttpContext.User.GetUserName());
 
-            return RedirectToRoute("GetReferralEmailSent", new { id = viewModel.OpportunityId });
+            return RedirectToRoute("GetReferralEmailSent", new { opportunityId = viewModel.OpportunityId });
         }
 
         private async Task<EmployerConsentViewModel> GetEmployerConsentViewModel(int opportunityId, int opportunityItemId)

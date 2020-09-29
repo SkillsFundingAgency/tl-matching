@@ -18,26 +18,24 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderQualification
         {
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.ProviderQualification>>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                var entity = new ValidProviderQualificationBuilder().Build();
-                dbContext.Add(entity);
-                dbContext.SaveChanges();
+            using var dbContext = InMemoryDbContext.Create();
+            var entity = new ValidProviderQualificationBuilder().Build();
+            dbContext.Add(entity);
+            dbContext.SaveChanges();
 
-                var repository = new GenericRepository<Domain.Models.ProviderQualification>(logger, dbContext);
+            var repository = new GenericRepository<Domain.Models.ProviderQualification>(logger, dbContext);
 
-                entity.ProviderVenueId = 2;
-                entity.QualificationId = 3;
-                entity.Source = "Updated";
+            entity.ProviderVenueId = 2;
+            entity.QualificationId = 3;
+            entity.Source = "Updated";
 
-                entity.ModifiedOn = new DateTime(2019, 11, 01, 12, 30, 00);
-                entity.ModifiedBy = "UpdateTestUser";
+            entity.ModifiedOn = new DateTime(2019, 11, 01, 12, 30, 00);
+            entity.ModifiedBy = "UpdateTestUser";
 
-                repository.UpdateAsync(entity).GetAwaiter().GetResult();
+            repository.UpdateAsync(entity).GetAwaiter().GetResult();
 
-                _result = repository.GetSingleOrDefaultAsync(x => x.Id == 1)
-                    .GetAwaiter().GetResult();
-            }
+            _result = repository.GetSingleOrDefaultAsync(x => x.Id == 1)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

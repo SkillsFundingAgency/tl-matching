@@ -5,28 +5,38 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.Azure.Storage.Blob;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Functions.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Functions
 {
     public class ProviderVenueQualification
     {
+        private readonly IProviderVenueQualificationFileImportService _fileImportService;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public ProviderVenueQualification(
+            IProviderVenueQualificationFileImportService fileImportService,
+            IRepository<FunctionLog> functionLogRepository,
+            IHttpContextAccessor httpContextAccessor)
+        {
+            _fileImportService = fileImportService;
+            _functionLogRepository = functionLogRepository;
+            _httpContextAccessor = httpContextAccessor;
+        }
+        
         [FunctionName("ImportProviderVenueQualification")]
         public async Task ImportProviderVenueQualification(
-            [BlobTrigger("providervenuequalification/{name}", Connection = "BlobStorageConnectionString")] ICloudBlob blockBlob,
+            [BlobTrigger("providervenuequalification/{name}", Connection = "BlobStorageConnectionString")] 
+            ICloudBlob blockBlob,
             string name,
             ExecutionContext context,
-            ILogger logger,
-            [Inject] IProviderVenueQualificationFileImportService fileImportService,
-            [Inject] IRepository<FunctionLog> functionLogRepository,
-            [Inject] IHttpContextAccessor httpContextAccessor
-        )
+            ILogger logger)
         {
             try
             {
@@ -38,9 +48,9 @@ namespace Sfa.Tl.Matching.Functions
 
                 var createdByUser = blockBlob.GetCreatedByMetadata();
 
-                if (httpContextAccessor != null && httpContextAccessor.HttpContext == null)
+                if (_httpContextAccessor != null && _httpContextAccessor.HttpContext == null)
                 {
-                    httpContextAccessor.HttpContext = new DefaultHttpContext
+                    _httpContextAccessor.HttpContext = new DefaultHttpContext
                     {
                         User = new ClaimsPrincipal(new ClaimsIdentity(new[]
                         {
@@ -51,7 +61,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 var stopwatch = Stopwatch.StartNew();
 
-                var updatedRecords = await fileImportService.BulkImportAsync(new ProviderVenueQualificationFileImportDto
+                var updatedRecords = await _fileImportService.BulkImportAsync(new ProviderVenueQualificationFileImportDto
                 {
                     FileDataStream = stream,
                     CreatedBy = createdByUser
@@ -66,12 +76,12 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception ex)
             {
-                var errormessage = $"Error importing ProviderVenueQualification data. Internal Error Message {ex}";
+                var errorMessage = $"Error importing ProviderVenueQualification data. Internal Error Message {ex}";
 
-                logger.LogError(errormessage);
-                await functionLogRepository.CreateAsync(new FunctionLog
+                logger.LogError(errorMessage);
+                await _functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = errormessage,
+                    ErrorMessage = errorMessage,
                     FunctionName = context.FunctionName,
                     RowNumber = -1
                 });

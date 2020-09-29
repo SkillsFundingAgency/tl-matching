@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.Azure.Storage;
+using Microsoft.Azure.Storage.Blob;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Configuration;
@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             await blockBlob.UploadFromByteArrayAsync(dto.Data, 0, dto.Data.Length);
 
-            _logger.LogInformation($"Successfuly uploaded {dto.FileName} to {dto.ImportType} folder");
+            _logger.LogInformation($"Successfully uploaded {dto.FileName} to {dto.ImportType} folder");
         }
 
         public async Task UploadFromStreamAsync(DataStreamUploadDto dto)
@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             await blockBlob.UploadFromStreamAsync(dto.DataStream);
 
-            _logger.LogInformation($"Successfuly uploaded {dto.FileName} to {dto.ContainerName} folder");
+            _logger.LogInformation($"Successfully uploaded {dto.FileName} to {dto.ContainerName} folder");
         }
 
         private async Task<CloudBlockBlob> GetBlockBlobReference(string containerName, string fileName,

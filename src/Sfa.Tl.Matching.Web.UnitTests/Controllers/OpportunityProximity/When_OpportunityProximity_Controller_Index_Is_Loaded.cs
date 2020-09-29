@@ -16,13 +16,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 
         public When_OpportunityProximity_Controller_Index_Is_Loaded()
         {
-            var proximityopportunityService = Substitute.For<IOpportunityProximityService>();
+            var proximityOpportunityService = Substitute.For<IOpportunityProximityService>();
             var locationService = Substitute.For<ILocationService>();
             var routeService = Substitute.For<IRoutePathService>();
 
             _opportunityService = Substitute.For<IOpportunityService>();
 
-            var opportunityProximityController = new OpportunityProximityController(routeService, proximityopportunityService, _opportunityService, locationService);
+            var opportunityProximityController = new OpportunityProximityController(routeService, proximityOpportunityService, _opportunityService, locationService);
 
             _result = opportunityProximityController.Index().GetAwaiter().GetResult();
         }

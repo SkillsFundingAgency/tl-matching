@@ -15,7 +15,6 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
                     new Claim(ClaimTypes.GivenName, "adminUserName")
                 }))
             });
-
         }
     }
 }

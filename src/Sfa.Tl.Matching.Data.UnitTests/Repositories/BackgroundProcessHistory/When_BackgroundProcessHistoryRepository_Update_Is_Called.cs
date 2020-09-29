@@ -19,26 +19,24 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.BackgroundProcessHistory
         {
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.BackgroundProcessHistory>>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                var entity = new ValidBackgroundProcessHistoryBuilder().Build();
-                dbContext.Add(entity);
-                dbContext.SaveChanges();
+            using var dbContext = InMemoryDbContext.Create();
+            var entity = new ValidBackgroundProcessHistoryBuilder().Build();
+            dbContext.Add(entity);
+            dbContext.SaveChanges();
 
-                var repository = new GenericRepository<Domain.Models.BackgroundProcessHistory>(logger, dbContext);
+            var repository = new GenericRepository<Domain.Models.BackgroundProcessHistory>(logger, dbContext);
 
-                entity.RecordCount = 10;
-                entity.Status = BackgroundProcessHistoryStatus.Complete.ToString();
-                entity.StatusMessage = "UpdatedStatus Message";
+            entity.RecordCount = 10;
+            entity.Status = BackgroundProcessHistoryStatus.Complete.ToString();
+            entity.StatusMessage = "UpdatedStatus Message";
 
-                entity.ModifiedOn = new DateTime(2019, 11, 01, 12, 30, 00);
-                entity.ModifiedBy = "UpdateTestUser";
+            entity.ModifiedOn = new DateTime(2019, 11, 01, 12, 30, 00);
+            entity.ModifiedBy = "UpdateTestUser";
 
-                repository.UpdateAsync(entity).GetAwaiter().GetResult();
+            repository.UpdateAsync(entity).GetAwaiter().GetResult();
 
-                _result = repository.GetSingleOrDefaultAsync(x => x.Id == 1)
-                    .GetAwaiter().GetResult();
-            }
+            _result = repository.GetSingleOrDefaultAsync(x => x.Id == 1)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

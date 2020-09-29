@@ -1,5 +1,9 @@
-﻿using FluentAssertions;
+﻿using System;
+using System.Collections.Generic;
+using FluentAssertions;
 using Sfa.Tl.Matching.Application.Extensions;
+using Sfa.Tl.Matching.Models.Enums;
+using Sfa.Tl.Matching.Models.Event;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
@@ -46,6 +50,63 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
         public void ToTitleCaseDataTests(string input, string result)
         {
             input.ToTitleCase().Should().Be(result);
+        }
+
+        public static IEnumerable<object[]> SfaAupaData =>
+            new List<object[]>
+            {
+                new object[] { new SfaAupa { Value = 229660000 }, AupaStatus.Aware },
+                new object[] { new SfaAupa { Value = 229660001 }, AupaStatus.Understand },
+                new object[] { new SfaAupa { Value = 229660002 }, AupaStatus.Planning },
+                new object[] { new SfaAupa { Value = 229660003 }, AupaStatus.Active }
+            };
+
+        [Theory(DisplayName = "ToAupaStatus Data Tests")]
+        [MemberData(nameof(SfaAupaData))]
+        public void ToAupaDataTests(SfaAupa input, AupaStatus result)
+        {
+            input.ToAupaStatus().Should().Be(result);
+        }
+
+        [Theory(DisplayName = "ToBool Data Tests")]
+        [InlineData("Yes", true)]
+        [InlineData("True", true)]
+        [InlineData("", false)]
+        [InlineData("No", false)]
+        [InlineData("False", false)]
+        [InlineData("-", false)]
+        public void ToBoolDataTests(string input, bool result)
+        {
+            input.ToBool().Should().Be(result);
+        }
+        
+        public static IEnumerable<object[]> GuidData =>
+            new List<object[]>
+            {
+                new object[] { "998F7B21-4929-4B75-9A45-C40D4F5D0F48", new Guid("998F7B21-4929-4B75-9A45-C40D4F5D0F48"),  }
+            };
+
+        [Theory(DisplayName = "ToGuid Data Tests")]
+        [MemberData(nameof(GuidData))]
+        public void ToGuidDataTests(string input, Guid result)
+        {
+            input.ToGuid().Should().Be(result);
+        }
+
+        [Theory(DisplayName = "ToDecimal Data Tests")]
+        [InlineData("0", 0)]
+        [InlineData("1.234", 1.234)]
+        public void ToDecimalDataTests(string input, decimal result)
+        {
+            input.ToDecimal().Should().Be(result);
+        }
+
+        [Theory(DisplayName = "ToLong Data Tests")]
+        [InlineData("0", 0)]
+        [InlineData("1", 1)]
+        public void ToLongDataTests(string input, long result)
+        {
+            input.ToLong().Should().Be(result);
         }
     }
 }

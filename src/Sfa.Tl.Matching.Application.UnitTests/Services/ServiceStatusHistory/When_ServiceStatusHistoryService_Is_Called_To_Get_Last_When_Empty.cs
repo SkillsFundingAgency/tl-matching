@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using AutoMapper;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Data;
-using Sfa.Tl.Matching.Data.Repositories;
+using Sfa.Tl.Matching.Application.UnitTests.Services.ServiceStatusHistory.Builders;
+using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Tests.Common.Extensions;
 using Xunit;
@@ -24,26 +23,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ServiceStatusHistory
             var config = new MapperConfiguration(c => c.AddMaps(typeof(ServiceStatusHistoryMapper).Assembly));
             var mapper = new Mapper(config);
 
-            var serviceStatusHistories = new List<Domain.Models.ServiceStatusHistory>()
-                .AsQueryable();
+            var mockDbSet = new ServiceStatusHistoryBuilder()
+                .BuildEmptyList()
+                .AsQueryable()
+                .BuildMockDbSet();
 
-            var mockSet = Substitute.For<DbSet<Domain.Models.ServiceStatusHistory>, IAsyncEnumerable<Domain.Models.ServiceStatusHistory>, IQueryable<Domain.Models.ServiceStatusHistory>>();
-
-            // ReSharper disable once SuspiciousTypeConversion.Global
-            ((IAsyncEnumerable<Domain.Models.ServiceStatusHistory>)mockSet).GetEnumerator()
-                .Returns(new FakeAsyncEnumerator<Domain.Models.ServiceStatusHistory>(serviceStatusHistories.GetEnumerator()));
-            ((IQueryable<Domain.Models.ServiceStatusHistory>)mockSet).Provider.Returns(
-                new FakeAsyncQueryProvider<Domain.Models.ServiceStatusHistory>(serviceStatusHistories.Provider));
-            ((IQueryable<Domain.Models.ServiceStatusHistory>)mockSet).Expression.Returns(serviceStatusHistories.Expression);
-            ((IQueryable<Domain.Models.ServiceStatusHistory>)mockSet).ElementType.Returns(serviceStatusHistories.ElementType);
-            ((IQueryable<Domain.Models.ServiceStatusHistory>)mockSet).GetEnumerator().Returns(serviceStatusHistories.GetEnumerator());
-
-            var contextOptions = new DbContextOptions<MatchingDbContext>();
-            var mockContext = Substitute.For<MatchingDbContext>(contextOptions, false);
-            mockContext.Set<Domain.Models.ServiceStatusHistory>().Returns(mockSet);
-
-            var serviceStatusHistoryRepository =
-                new GenericRepository<Domain.Models.ServiceStatusHistory>(NullLogger<GenericRepository<Domain.Models.ServiceStatusHistory>>.Instance, mockContext);
+            var serviceStatusHistoryRepository = Substitute.For<IRepository<Domain.Models.ServiceStatusHistory>>();
+            serviceStatusHistoryRepository.GetManyAsync(Arg.Any<Expression<Func<Domain.Models.ServiceStatusHistory, bool>>>()).Returns(mockDbSet);
 
             var serviceStatusHistoryService = new ServiceStatusHistoryService(mapper, serviceStatusHistoryRepository);
             _result = serviceStatusHistoryService.GetLatestServiceStatusHistoryAsync()

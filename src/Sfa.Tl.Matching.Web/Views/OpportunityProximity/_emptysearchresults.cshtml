@@ -7,7 +7,7 @@
 
 @if (Model.SearchResults?.AdditionalResults != null && Model.SearchResults.AdditionalResults.Any())
 {
-    <h2 class="govuk-body"><span class="govuk-!-font-size-36 govuk-!-font-weight-bold" id="tl-search-count">0</span> results in <span class="govuk-!-font-weight-bold tl-lowercase" id="tl-search-skillarea">@Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value == @Model.SearchParameters.SelectedRouteId.ToString())?.Text </span>within <span class="govuk-!-font-weight-bold" id="tl-search-distance">@Sfa.Tl.Matching.Models.ViewModel.SearchParametersViewModel.DefaultSearchRadius miles</span> of <span class="govuk-!-font-weight-bold" id="tl-search-postcode">@Model.SearchParameters.Postcode</span></h2>
+    <h2 class="govuk-body"><span class="govuk-!-font-size-36 govuk-!-font-weight-bold" id="tl-search-count">0</span> results in <span class="govuk-!-font-weight-bold tl-lowercase" id="tl-search-skillarea">@Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value == Model.SearchParameters.SelectedRouteId.ToString())?.Text </span>within <span class="govuk-!-font-weight-bold" id="tl-search-distance">@SearchParametersViewModel.DefaultSearchRadius miles</span> of <span class="govuk-!-font-weight-bold" id="tl-search-postcode">@Model.SearchParameters.Postcode</span></h2>
 
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
     <h2 class="govuk-heading-s">If you change the skill area</h2>
@@ -22,7 +22,7 @@
 }
 else
 {
-<h2 class="govuk-body"><span class="govuk-!-font-size-36 govuk-!-font-weight-bold" id="tl-search-count">0</span> results in <span class="govuk-!-font-weight-bold tl-lowercase" id="tl-search-skillarea">any skill area </span>within <span class="govuk-!-font-weight-bold" id="tl-search-distance">@Sfa.Tl.Matching.Models.ViewModel.SearchParametersViewModel.DefaultSearchRadius miles</span> of <span class="govuk-!-font-weight-bold" id="tl-search-postcode">@Model.SearchParameters.Postcode</span></h2>
+<h2 class="govuk-body"><span class="govuk-!-font-size-36 govuk-!-font-weight-bold" id="tl-search-count">0</span> results in <span class="govuk-!-font-weight-bold tl-lowercase" id="tl-search-skillarea">any skill area </span>within <span class="govuk-!-font-weight-bold" id="tl-search-distance">@SearchParametersViewModel.DefaultSearchRadius miles</span> of <span class="govuk-!-font-weight-bold" id="tl-search-postcode">@Model.SearchParameters.Postcode</span></h2>
 }
 
 <p class="govuk-body">

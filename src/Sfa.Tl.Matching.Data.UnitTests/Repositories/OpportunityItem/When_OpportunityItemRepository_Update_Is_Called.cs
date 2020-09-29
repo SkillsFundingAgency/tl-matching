@@ -19,33 +19,31 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.OpportunityItem
         {
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.OpportunityItem>>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                var entity = new ValidOpportunityItemBuilder().Build();
-                dbContext.Add(entity);
-                dbContext.SaveChanges();
+            using var dbContext = InMemoryDbContext.Create();
+            var entity = new ValidOpportunityItemBuilder().Build();
+            dbContext.Add(entity);
+            dbContext.SaveChanges();
 
-                var repository = new GenericRepository<Domain.Models.OpportunityItem>(logger, dbContext);
+            var repository = new GenericRepository<Domain.Models.OpportunityItem>(logger, dbContext);
 
-                entity.RouteId = 2;
-                entity.OpportunityType = OpportunityType.ProvisionGap.ToString();
-                entity.Postcode = "BB1 1BB";
-                entity.JobRole = "Updated Job Title";
-                entity.PlacementsKnown = false;
-                entity.Placements = 9;
-                entity.SearchResultProviderCount = 25;
-                entity.IsSaved = false;
-                entity.IsSelectedForReferral = false;
-                entity.IsCompleted = false;
+            entity.RouteId = 2;
+            entity.OpportunityType = OpportunityType.ProvisionGap.ToString();
+            entity.Postcode = "BB1 1BB";
+            entity.JobRole = "Updated Job Title";
+            entity.PlacementsKnown = false;
+            entity.Placements = 9;
+            entity.SearchResultProviderCount = 25;
+            entity.IsSaved = false;
+            entity.IsSelectedForReferral = false;
+            entity.IsCompleted = false;
 
-                entity.ModifiedOn = new DateTime(2019, 11, 01, 12, 30, 00);
-                entity.ModifiedBy = "UpdateTestUser";
+            entity.ModifiedOn = new DateTime(2019, 11, 01, 12, 30, 00);
+            entity.ModifiedBy = "UpdateTestUser";
 
-                repository.UpdateAsync(entity).GetAwaiter().GetResult();
+            repository.UpdateAsync(entity).GetAwaiter().GetResult();
 
-                _result = repository.GetSingleOrDefaultAsync(x => x.Id == 1)
-                    .GetAwaiter().GetResult();
-            }
+            _result = repository.GetSingleOrDefaultAsync(x => x.Id == 1)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

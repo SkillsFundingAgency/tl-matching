@@ -9,6 +9,7 @@ using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
@@ -36,27 +37,32 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityReportDto>>();
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
+            var mockDbSet = new ReferralListBuilder()
+                .Build()
+                .AsQueryable()
+                .BuildMockDbSet();
+            //var mockDbSet = new List<Domain.Models.Referral>
+            //    {
+            //        new Domain.Models.Referral
+            //        {
+            //            ProviderVenue = new Domain.Models.ProviderVenue
+            //            {
+            //                Postcode = "AA1 1AA",
+            //                Provider = new Domain.Models.Provider
+            //                {
+            //                    Name = "Provider1"
+            //                }
+            //            }
+            //        }
+            //    }
+            //    .AsQueryable()
+            //    .BuildMockDbSet();
+
             _referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
-           
+
             _referralRepository.GetManyAsync(
                 Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>())
-                .Returns(new FakeAsyncEnumerable<Domain.Models.Referral>(
-                    new List<Domain.Models.Referral>
-                        {
-                            new Domain.Models.Referral
-                            {
-                                ProviderVenue = new Domain.Models.ProviderVenue
-                                {
-                                    Postcode = "AA1 1AA",
-                                    Provider = new Domain.Models.Provider
-                                    {
-                                        Name = "Provider1"
-                                    }
-                                }
-                            }
-                        }
-                        .AsQueryable()
-                ));
+                .Returns(mockDbSet);
 
             var opportunityService = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository,
                 provisionGapRepository, _referralRepository, googleMapApiClient,

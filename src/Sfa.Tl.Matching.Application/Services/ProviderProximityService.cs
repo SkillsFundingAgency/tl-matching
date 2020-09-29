@@ -125,7 +125,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 searchResults.Providers = filteredProviders;
             }
 
-            searchResults = searchResults ?? new ProviderProximityReportDto();
+            searchResults ??= new ProviderProximityReportDto();
             searchResults.SkillAreas = searchParameters.SelectedRouteNames;
 
             return searchResults;

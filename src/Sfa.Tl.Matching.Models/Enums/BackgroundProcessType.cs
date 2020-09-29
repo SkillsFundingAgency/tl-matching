@@ -1,5 +1,6 @@
 ﻿namespace Sfa.Tl.Matching.Models.Enums
 {
+    // ReSharper disable UnusedMember.Global
     public enum BackgroundProcessType
     {
         ProviderQuarterlyUpdateEmail = 1,

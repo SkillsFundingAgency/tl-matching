@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             _emailBodyDto = new EmailBodyDto();
         }
 
-        public EmailBodyDtoBuilder AddPoviderEmail()
+        public EmailBodyDtoBuilder AddProviderEmail()
         {
             _emailBodyDto.PrimaryContactEmail = "primary-contact@email.com";
             _emailBodyDto.SecondaryContactEmail = "secondary-contact@email.com";

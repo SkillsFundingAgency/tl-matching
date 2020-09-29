@@ -46,8 +46,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
 
             Assert.Equal(HttpStatusCode.OK, pageResponse.StatusCode);
 
-            //TODO: Add the following line back - not working due BulkUpdate added by TLWP-962 
-            //Assert.Equal("permission/3000-0", responseContent.BaseUrl.Path);
+            Assert.Equal("employer-opportunities/3000-0", responseContent.BaseUrl.Path);
         }
     }
 }

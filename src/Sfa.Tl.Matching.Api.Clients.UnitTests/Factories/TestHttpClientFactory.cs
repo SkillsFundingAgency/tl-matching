@@ -10,11 +10,11 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests.Factories
     {
         protected HttpClient CreateClient(object response, string uri, string contentType = "application/json")
         {
-            var serialised = JsonConvert.SerializeObject(response);
+            var serialized = JsonConvert.SerializeObject(response);
 
             var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = new StringContent(serialised)
+                Content = new StringContent(serialized)
             };
             httpResponseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
 

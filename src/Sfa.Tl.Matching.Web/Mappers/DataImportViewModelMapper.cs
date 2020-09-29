@@ -21,11 +21,9 @@ namespace Sfa.Tl.Matching.Web.Mappers
 
         private static byte[] GetByteArray(IFormFile source)
         {
-            using (var ms = new MemoryStream())
-            {
-                source.CopyTo(ms);
-                return ms.ToArray();
-            }
+            using var ms = new MemoryStream();
+            source.CopyTo(ms);
+            return ms.ToArray();
         }
     }
 }

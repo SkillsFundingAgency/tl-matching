@@ -50,6 +50,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
 
             dbContext.Add(emailHistory);
             await dbContext.SaveChangesAsync();
+            dbContext.DetachAllEntities();
 
             payload.Id = emailHistory.NotificationId.GetValueOrDefault();
 
@@ -101,6 +102,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
 
             dbContext.Add(emailHistory);
             await dbContext.SaveChangesAsync();
+            dbContext.DetachAllEntities();
 
             payload.Status = status;
             payload.Id = emailHistory.NotificationId.GetValueOrDefault();
@@ -152,6 +154,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
 
             dbContext.Add(emailHistory);
             await dbContext.SaveChangesAsync();
+            dbContext.DetachAllEntities();
 
             payload.Status = status;
             payload.Id = emailHistory.NotificationId.GetValueOrDefault();
@@ -273,7 +276,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         }
 
         [Theory, AutoDomainData]
-        public async Task Then_Do_Not_Update_Email_History_If_Doesnt_Exsits(
+        public async Task Then_Do_Not_Update_Email_History_If_Does_Not_Exsits(
             MatchingDbContext dbContext,
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
@@ -334,6 +337,5 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             return new Application.Services.EmailDeliveryStatusService(configuration,
                 emailService, opportunityRepository, messageQueueService, emailDeliveryServiceStatusLogger);
         }
-
     }
 }

@@ -19,14 +19,12 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping
         {
             var logger = Substitute.For<ILogger<QualificationRouteMappingRepository>>();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                dbContext.AddRange(new ValidQualificationRouteMappingListBuilder().Build());
-                dbContext.SaveChanges();
+            using var dbContext = InMemoryDbContext.Create();
+            dbContext.AddRange(new ValidQualificationRouteMappingListBuilder().Build());
+            dbContext.SaveChanges();
 
-                var repository = new QualificationRouteMappingRepository(logger, dbContext);
-                _result = repository.GetManyAsync().ToList();
-            }
+            var repository = new QualificationRouteMappingRepository(logger, dbContext);
+            _result = repository.GetManyAsync().ToList();
         }
 
         [Fact]

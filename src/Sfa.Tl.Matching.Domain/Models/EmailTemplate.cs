@@ -2,6 +2,7 @@
 
 namespace Sfa.Tl.Matching.Domain.Models
 {
+    // ReSharper disable UnusedMember.Global
     public class EmailTemplate : BaseEntity
     {
         public string TemplateName { get; set; }

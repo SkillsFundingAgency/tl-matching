@@ -32,19 +32,19 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             _opportunityService.CreateOpportunityItemAsync(Arg.Any<OpportunityItemDto>()).Returns(2);
 
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
+            var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
 
             var config = new MapperConfiguration(c =>
             {
                 c.AddMaps(typeof(EmployerDtoMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                 {
-                    if (type.FullName.Contains("LoggedInUserEmailResolver"))
-                        return new LoggedInUserEmailResolver<SaveReferralViewModel, OpportunityDto>(httpcontextAccesor);
-                    if (type.FullName.Contains("LoggedInUserNameResolver") && type.FullName.Contains("SaveReferralViewModel"))
-                        return new LoggedInUserNameResolver<SaveReferralViewModel, OpportunityDto>(httpcontextAccesor);
-                    if (type.FullName.Contains("LoggedInUserNameResolver") && type.FullName.Contains("SelectedProviderViewModel"))
-                        return new LoggedInUserNameResolver<SelectedProviderViewModel, ReferralDto>(httpcontextAccesor);
+                    if (type.FullName != null && type.FullName.Contains("LoggedInUserEmailResolver"))
+                        return new LoggedInUserEmailResolver<SaveReferralViewModel, OpportunityDto>(httpContextAccessor);
+                    if (type.FullName != null && type.FullName.Contains("LoggedInUserNameResolver") && type.FullName.Contains("SaveReferralViewModel"))
+                        return new LoggedInUserNameResolver<SaveReferralViewModel, OpportunityDto>(httpContextAccessor);
+                    if (type.FullName != null && type.FullName.Contains("LoggedInUserNameResolver") && type.FullName.Contains("SelectedProviderViewModel"))
+                        return new LoggedInUserNameResolver<SelectedProviderViewModel, ReferralDto>(httpContextAccessor);
 
                     return null;
                 });
@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddEmail(Email)
                 .Build();
 
-            httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
+            httpContextAccessor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
             var viewModel = new SaveReferralViewModel
             {

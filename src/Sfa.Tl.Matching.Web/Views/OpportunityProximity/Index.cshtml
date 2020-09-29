@@ -12,10 +12,8 @@
        asp-route-SelectedRouteId="0"
        class="govuk-back-link" id="tl-back">Back</a>
 
-    @*@await Component.InvokeAsync("Back",
-        new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })*@
     @await Component.InvokeAsync("Cancel",
-        new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })
+        new { opportunityId = Model.OpportunityId, opportunityItemId = Model.OpportunityItemId })
 }
 
 @if (!ViewData.ModelState.IsValid)

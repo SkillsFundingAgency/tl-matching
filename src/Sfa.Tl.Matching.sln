@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Application
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{AC50D8E9-002B-4A81-B436-8D4284E023B5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Functions.Extensions", "Sfa.Tl.Matching.Functions.Extensions\Sfa.Tl.Matching.Functions.Extensions.csproj", "{66668B61-2D04-45A0-AEEE-CAE0334F56E5}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Data", "Sfa.Tl.Matching.Data\Sfa.Tl.Matching.Data.csproj", "{515AE7C8-BB11-4290-ADED-234977FB1975}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Web.UnitTests", "Sfa.Tl.Matching.Web.UnitTests\Sfa.Tl.Matching.Web.UnitTests.csproj", "{47B2E287-B812-427C-800B-60E18F07DBB2}"
@@ -38,8 +36,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Tests.Common", "Sfa.Tl.Matching.Tests.Common\Sfa.Tl.Matching.Tests.Common.csproj", "{4B74E147-17DC-402B-A606-BA6325D6FD82}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Web.IntegrationTests", "Sfa.Tl.Matching.Web.IntegrationTests\Sfa.Tl.Matching.Web.IntegrationTests.csproj", "{4160583A-78D6-48DC-BF87-E5D3514FFB28}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Web.SeleniumTests", "Sfa.Tl.Matching.Web.SeleniumTests\Sfa.Tl.Matching.Web.SeleniumTests.csproj", "{C1212C08-8AE2-4CAC-9B28-A3EEA593B6EB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Web.Tests.Common", "Sfa.Tl.Matching.Web.Tests.Common\Sfa.Tl.Matching.Web.Tests.Common.csproj", "{9F6AAE87-6C06-412E-8651-7866693D9092}"
 EndProject
@@ -78,10 +74,6 @@ Global
 		{47265647-AC78-4796-860E-C8CE9E318268}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47265647-AC78-4796-860E-C8CE9E318268}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47265647-AC78-4796-860E-C8CE9E318268}.Release|Any CPU.Build.0 = Release|Any CPU
-		{66668B61-2D04-45A0-AEEE-CAE0334F56E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{66668B61-2D04-45A0-AEEE-CAE0334F56E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{66668B61-2D04-45A0-AEEE-CAE0334F56E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{66668B61-2D04-45A0-AEEE-CAE0334F56E5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{515AE7C8-BB11-4290-ADED-234977FB1975}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{515AE7C8-BB11-4290-ADED-234977FB1975}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{515AE7C8-BB11-4290-ADED-234977FB1975}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -122,10 +114,6 @@ Global
 		{4160583A-78D6-48DC-BF87-E5D3514FFB28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4160583A-78D6-48DC-BF87-E5D3514FFB28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4160583A-78D6-48DC-BF87-E5D3514FFB28}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C1212C08-8AE2-4CAC-9B28-A3EEA593B6EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C1212C08-8AE2-4CAC-9B28-A3EEA593B6EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C1212C08-8AE2-4CAC-9B28-A3EEA593B6EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C1212C08-8AE2-4CAC-9B28-A3EEA593B6EB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9F6AAE87-6C06-412E-8651-7866693D9092}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9F6AAE87-6C06-412E-8651-7866693D9092}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F6AAE87-6C06-412E-8651-7866693D9092}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -143,7 +131,6 @@ Global
 		{0BAC15DD-4D9D-43DA-B6FC-2FEE28CA09A3} = {AC50D8E9-002B-4A81-B436-8D4284E023B5}
 		{4B74E147-17DC-402B-A606-BA6325D6FD82} = {AC50D8E9-002B-4A81-B436-8D4284E023B5}
 		{4160583A-78D6-48DC-BF87-E5D3514FFB28} = {AC50D8E9-002B-4A81-B436-8D4284E023B5}
-		{C1212C08-8AE2-4CAC-9B28-A3EEA593B6EB} = {AC50D8E9-002B-4A81-B436-8D4284E023B5}
 		{9F6AAE87-6C06-412E-8651-7866693D9092} = {AC50D8E9-002B-4A81-B436-8D4284E023B5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

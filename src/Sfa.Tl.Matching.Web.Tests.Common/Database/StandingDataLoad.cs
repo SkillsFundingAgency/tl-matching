@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database
             context.AddRange(EmailTemplateData.Create().ToList());
             context.AddRange(EmployerData.Create().ToList());
             context.AddRange(RouteAndPathData.Create().ToList());
-            context.AddRange(ProviderVenueData.Create());            
+            context.AddRange(ProviderVenueData.Create());
             context.AddRange(OpportunityData.Create());
             context.AddRange(ServiceStatusHistoryData.Create().ToList());
             context.AddRange(LearningAimReferenceData.Create().ToList());

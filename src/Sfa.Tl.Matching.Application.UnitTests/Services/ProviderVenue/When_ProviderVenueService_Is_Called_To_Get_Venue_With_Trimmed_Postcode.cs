@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using AutoMapper;
 using FluentAssertions;
@@ -9,6 +11,7 @@ using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
+using Sfa.Tl.Matching.Tests.Common.Extensions;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
@@ -30,19 +33,26 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
             var config = new MapperConfiguration(c => c.AddMaps(typeof(ProviderVenueMapper).Assembly));
             var mapper = new Mapper(config);
 
-            _providerVenueRepository = Substitute.For<IProviderVenueRepository>();
-            _providerVenueRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())
-                .Returns(new Domain.Models.ProviderVenue
+            var mockProviderVenueDbSet = new List<Domain.Models.ProviderVenue>
                 {
-                    Id = ProviderVenueId,
-                    ProviderId = ProviderId,
-                    Name = Name,
-                    Postcode = Postcode,
-                    IsRemoved = IsRemoved,
-                    IsEnabledForReferral = IsEnabledForReferral,
-                    Source = DataSource
-                });
+                    new Domain.Models.ProviderVenue
+                    {
+                        Id = ProviderVenueId,
+                        ProviderId = ProviderId,
+                        Name = Name,
+                        Postcode = Postcode,
+                        IsRemoved = IsRemoved,
+                        IsEnabledForReferral = IsEnabledForReferral,
+                        Source = DataSource
+                    }
+                }
+                .AsQueryable()
+                .BuildMockDbSet();
             
+            _providerVenueRepository = Substitute.For<IProviderVenueRepository>();
+            _providerVenueRepository.GetManyAsync(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())
+                .Returns(mockProviderVenueDbSet);
+
             var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
             var locationService = Substitute.For<ILocationApiClient>();
 
@@ -52,11 +62,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         }
 
         [Fact]
-        public void Then_ProviderVenueRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
+        public void Then_ProviderVenueRepository_GetMany_Is_Called_Exactly_Once()
         {
-            _providerVenueRepository.Received(1).GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>());
+            _providerVenueRepository.Received(1).GetManyAsync(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>());
         }
-
+        
         [Fact]
         public void Then_The_Fields_Are_As_Expected()
         {
