@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Linq;                                                                                                                                               
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -167,12 +167,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
             await _opportunityService.ClearOpportunityItemsSelectedForReferralAsync(opportunityId);
 
             var viewModel = await _opportunityService.GetOpportunityBasketAsync(opportunityId);
-
-            viewModel.OpportunityItemId = opportunityItemId != 0 ? opportunityItemId
-                : viewModel.OpportunityItemId =
-                    (viewModel.ReferralItems.LastOrDefault()?.OpportunityItemId != 0
-                        ? viewModel.ReferralItems.LastOrDefault()?.OpportunityItemId :
-                        viewModel.ProvisionGapItems.LastOrDefault()?.OpportunityItemId) ?? 0;
+            
+            viewModel.OpportunityItemId = opportunityItemId != 0
+                ? opportunityItemId
+                : viewModel.ReferralItems != null &&
+                  viewModel.ReferralItems.LastOrDefault()?.OpportunityItemId != 0
+                    ? viewModel.ReferralItems?.LastOrDefault()?.OpportunityItemId ?? 0
+                    : viewModel.ProvisionGapItems?.LastOrDefault()?.OpportunityItemId ?? 0;
 
             return View("OpportunityBasket", viewModel);
         }
@@ -236,7 +237,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             var downloadedFileInfo = await _opportunityService.GetOpportunitySpreadsheetDataAsync(opportunityId);
 
-            return File(downloadedFileInfo.FileContent, 
+            return File(downloadedFileInfo.FileContent,
                 downloadedFileInfo.ContentType,
                 downloadedFileInfo.FileName);
         }
