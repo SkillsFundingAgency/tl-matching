@@ -191,9 +191,9 @@ ORDER BY	OpportunityId,
 			Postcode, 
 			RouteName
 
-			--Show results with count of items in each basket
-SELECT	EmployerName,
-		OpportunityCreatedBy,
+--Show results with count of items in each basket
+SELECT	OpportunityCreatedBy,
+		EmployerName,
 		count(OpportunityCreatedBy) AS [Count]
 FROM	@results
 GROUP BY	OpportunityCreatedBy,
