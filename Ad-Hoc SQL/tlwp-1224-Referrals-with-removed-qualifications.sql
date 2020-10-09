@@ -191,17 +191,38 @@ ORDER BY	OpportunityId,
 			Postcode, 
 			RouteName
 
---Show results with count of items in each basket
-SELECT	OpportunityId, 
-		EmployerName,
+			--Show results with count of items in each basket
+SELECT	EmployerName,
 		OpportunityCreatedBy,
 		count(OpportunityCreatedBy) AS [Count]
 FROM	@results
-GROUP BY	OpportunityId, 
-			EmployerName,
-			OpportunityCreatedBy
-ORDER BY	OpportunityId, 
-			EmployerName,
-			OpportunityCreatedBy
+GROUP BY	OpportunityCreatedBy,
+			EmployerName
+ORDER BY	OpportunityCreatedBy,
+			EmployerName
 
+--Check if two users could be working on same opportunity 
+--SELECT * 
+--FROM @results	  
+--WHERE OpportunityCreatedBy <> OpportunityModifiedBy
 
+--Show a more user-friendly version of the results
+SELECT	OpportunityCreatedBy,
+		EmployerName, 
+		ProviderName,
+		CASE 
+			WHEN (IsCDFProvider = 0 OR IsEnabledForReferral = 0) THEN 'YES'
+			ELSE ''
+		END AS [Provider Removed],
+		Postcode,	  
+		CASE 
+			WHEN (VenueIsRemoved = 1 OR VenueIsEnabledForReferral = 0) THEN 'YES'
+			ELSE ''
+		END AS [Venue Removed],
+		RouteName
+FROM	@results
+ORDER BY	OpportunityCreatedBy, 
+			EmployerName, 
+			ProviderName, 
+			Postcode, 
+			RouteName
