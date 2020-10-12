@@ -11,7 +11,9 @@ the route for the opportunity is no longer available because there is no longer 
 declare @basket TABLE (
 		OpportunityId INT NOT NULL,
 		OpportunityItemId INT NOT NULL,
+		OpportunityCreatedOn DATETIME2 NOT NULL,
 		OpportunityCreatedBy NVARCHAR(50) NOT NULL,
+		OpportunityModifiedOn DATETIME2 NOT NULL,
 		OpportunityModifiedBy NVARCHAR(50) NOT NULL,
 		EmployerName NVARCHAR(200) NOT NULL,
 		Workplace NVARCHAR(110) NOT NULL,
@@ -43,7 +45,9 @@ declare @results TABLE (
 		OpportunityId INT NOT NULL,
 		OpportunityItemId INT NOT NULL,
 		EmployerName NVARCHAR(200) NOT NULL,
+		OpportunityCreatedOn DATETIME2 NOT NULL,
 		OpportunityCreatedBy NVARCHAR(50) NOT NULL,
+		OpportunityModifiedOn DATETIME2 NOT NULL,
 		OpportunityModifiedBy NVARCHAR(50) NOT NULL,
 		IsCDFProvider bit NOT NULL,
 		IsEnabledForReferral bit NOT NULL,
@@ -61,7 +65,9 @@ declare @results TABLE (
 INSERT INTO @basket
 SELECT  o.Id AS OpportunityId,
 		oi.Id AS OpportunityItemId,
+		o.CreatedOn AS OpportunityCreatedOn,
 		o.CreatedBy AS OpportunityCreatedBy,
+		o.ModifiedOn AS OpportunityModifiedOn,
 		o.ModifiedBy AS OpportunityModifiedBy,
 		e.CompanyName AS EmployerName,
 		oi.Town + ' ' + oi.Postcode AS Workplace,
@@ -160,7 +166,9 @@ INSERT INTO @results
 SELECT	b.OpportunityId, 
 		b.OpportunityItemId, 
 		b.EmployerName, 
+		b.OpportunityCreatedOn, 
 		b.OpportunityCreatedBy, 
+		b.OpportunityModifiedOn, 
 		b.OpportunityModifiedBy, 
 		b.IsCDFProvider, 
 		b.IsEnabledForReferral, 
@@ -219,7 +227,8 @@ SELECT	OpportunityCreatedBy,
 			WHEN (VenueIsRemoved = 1 OR VenueIsEnabledForReferral = 0) THEN 'YES'
 			ELSE ''
 		END AS [Venue Removed],
-		RouteName
+		RouteName,
+		FORMAT (OpportunityCreatedOn, 'yyyy-MM-dd') as [Last changed]
 FROM	@results
 ORDER BY	OpportunityCreatedBy, 
 			EmployerName, 
