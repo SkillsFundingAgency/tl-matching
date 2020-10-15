@@ -59,4 +59,4 @@ variables:
 stages:
   - template: ./yaml/stages/matching-build.yml
 
-  - template: ./yaml/stages/matching-shared-Infrastructure.yml
+  - template: ./yaml/stages/matching-shared-infrastructure
