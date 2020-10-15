@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
     {
         private const string Title = "All opportunities";
         private const int OpportunityId = 1020;
-        private const int OpportunityItemId = 1021;
+        private const int OpportunityItemId = 0; //To simulate case where no id passed in on command line
 
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 

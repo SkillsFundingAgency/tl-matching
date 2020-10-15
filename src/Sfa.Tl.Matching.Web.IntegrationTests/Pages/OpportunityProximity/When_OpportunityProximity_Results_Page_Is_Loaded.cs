@@ -43,8 +43,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.OpportunityProximity
 
             var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
             backLink.Text.Should().Be("Back");
-            //backLink.PathName.Should().Be($"/get-back-link/{OpportunityId}/{OpportunityItemId}/CV1%202WT/1");
-            backLink.PathName.Should().Be($"/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-30-miles-of-CV1%202WT-for-route-{RouteId}");
+            backLink.PathName.Should().Be($"/get-back-link/{OpportunityId}/{OpportunityItemId}/CV1%202WT/{RouteId}");
 
             var cancelLink = documentHtml.GetElementById("tl-finish") as IHtmlAnchorElement;
             cancelLink.PathName.Should().Be($"/remove-opportunityItem/{OpportunityId}-{OpportunityItemId}");

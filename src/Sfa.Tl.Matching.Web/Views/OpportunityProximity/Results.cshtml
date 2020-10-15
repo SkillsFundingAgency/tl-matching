@@ -8,6 +8,8 @@
     <a asp-route="GetBackLink"  
        asp-route-opportunityId="@Model.OpportunityId"
        asp-route-opportunityItemId="@Model.OpportunityItemId"
+       asp-route-Postcode="@Model.SearchParameters.Postcode"
+       asp-route-SelectedRouteId="@Model.SearchParameters.SelectedRouteId"
        class="govuk-back-link" id="tl-back">Back</a>
     @await Component.InvokeAsync("Cancel", new { opportunityId = Model.OpportunityId, opportunityItemId = Model.OpportunityItemId })
 }

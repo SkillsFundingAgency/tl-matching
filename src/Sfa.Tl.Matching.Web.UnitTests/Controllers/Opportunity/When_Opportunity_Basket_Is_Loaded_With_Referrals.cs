@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -12,12 +13,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Opportunity_Basket_Is_Loaded
+    public class When_Opportunity_Basket_Is_Loaded_With_Referrals
     {
         private readonly IOpportunityService _opportunityService;
         private readonly IActionResult _result;
 
-        public When_Opportunity_Basket_Is_Loaded()
+        public When_Opportunity_Basket_Is_Loaded_With_Referrals()
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
 
@@ -28,7 +29,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             {
                 OpportunityId = 1,
                 CompanyName = "Company Name",
-                CompanyNameAka = "Also Known As"
+                CompanyNameAka = "Also Known As",
+                ProvisionGapItems = null,
+                ReferralItems = new List<BasketReferralItemViewModel>
+                {
+                    new BasketReferralItemViewModel
+                    {
+                        OpportunityType = "Referral",
+                        OpportunityItemId = 5
+                    }
+                }
             });
 
             var opportunityController = new OpportunityController(_opportunityService, mapper);
@@ -36,7 +46,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddUserName("CreatedBy")
                 .Build();
 
-            _result = controllerWithClaims.GetOpportunityBasketAsync(1, 1).GetAwaiter().GetResult();
+            _result = controllerWithClaims.GetOpportunityBasketAsync(1, 0).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -50,6 +60,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             viewModel.CompanyName.Should().Be("Company Name");
             viewModel.CompanyNameAka.Should().Be("Also Known As");
             viewModel.CompanyNameWithAka.Should().Be("Company Name (Also Known As)");
+            viewModel.OpportunityId.Should().Be(1);
+            viewModel.OpportunityItemId.Should().Be(5);
         }
 
         [Fact]
@@ -59,7 +71,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 {
                     _opportunityService.Received(1).ClearOpportunityItemsSelectedForReferralAsync(1);
                     _opportunityService.Received(1).GetOpportunityBasketAsync(1);
-
                 });
         }
     }
