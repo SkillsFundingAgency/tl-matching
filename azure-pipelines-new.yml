@@ -45,14 +45,12 @@ variables:
   applicationName: matching
   buildConfiguration: 'release'
   buildPlatform: 'anycpu'
-  ResourceGroupName: 'tl-at-mtch-rg'
-  SharedEnvResourceGroupName: 's126-at-TLevels'
-  SharedSQLServerName: 's126-at-TLevels-001-matching-shared-sqlsvr'
+  ResourceGroupName: 's126-d01-matching'
+  SharedEnvResourceGroupName: 's126-d01-matching-shared'
+  SharedSQLServerName: 's126-d01-matching-shared-001-sqlsvr'
   testSqlDatabaseSkuName: 'S0'
   testSqlDatabaseTier: 'Standard'
-  ConfigStorageAccountName: 'tlatconfigstr'
-  SQLServerAdminUsername: '7acbc5ae77f74b00a9e9'
-  SQLServerAdminPassword: ''
+  ConfigStorageAccountName: 's126d01matchingconfigstr'
   dotnetVersion: '3.x'
    
 
