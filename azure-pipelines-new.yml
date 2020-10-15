@@ -21,6 +21,27 @@ trigger:
 pr: none
 
 variables:
+
+###### shared #####
+# Resource Group
+#   s126-at-TLevels
+# infrastructure
+# 
+#   s126-at-TLevels-001-matching-kv
+#   s126-at-TLevels-001-matching-config-str
+#   s126-at-TLevels-001-matching-shared-str
+#   s126-at-TLevels-001-matching-shared-sqlsvr
+#
+#application:
+# Resource Group
+#   s126-at-TLevels-matching
+# s126-at-TLevels-matching-001-str
+# s126-at-TLevels-matching-001-asp
+# s126-at-TLevels-matching-001-ai
+# s126-at-TLevels-matching-001-web
+# s126-at-TLevels-matching-001-func
+# s126-at-TLevels-matching-001-sqldb
+
   applicationName: matching
   buildConfiguration: 'release'
   buildPlatform: 'anycpu'
@@ -32,19 +53,8 @@ variables:
   ConfigStorageAccountName: 'tlatconfigstr'
   SQLServerAdminUsername: '7acbc5ae77f74b00a9e9'
   SQLServerAdminPassword: ''
-  dotnetVersion: '3.1.402'
-
-
-  # stages:
-  #   - stage: build
-  #     displayName: Build
-  #     jobs:
-  #     - template: /Application/dotnet/jobs/build-application.yml@devopsTemplates
-  #       parameters:
-  #         applicationName: $(applicationName)
-  #         webPublish: false
-  #         nugetConfigPath: nuget.config
-    
+  dotnetVersion: '3.x'
+   
 
 stages:
 - stage: Build
@@ -152,6 +162,7 @@ stages:
         inputs:
             PathtoPublish: '$(build.artifactstagingdirectory)/publish'
 
+    
   - job: 'DACPACBuild'
     pool:
         name: 'Azure Pipelines'
@@ -279,69 +290,98 @@ stages:
         testResultsFormat: VSTest
         testResultsFiles: '**/TestResults/*.trx'
         failTaskOnFailedTests: true
+
 - stage: AT_Deploy
   variables:
-    SharedASPName: tl-at-shared-asp
-    SharedKeyVaultName: tl-at-shared-kv
-    ConfigurationStorageConnectionString: 
-    UICustomHostName: 'at.industryplacementmatching.education.gov.uk'
-    CertificateName: 'wildcard-industryplacementmatching-education-gov-uk'
-    ResourceGroupName: 'tl-at-mtch-rg'
-    WorkerASPSize: '1'
-    WorkerASPInstances: '1'
-    SQLDatabaseSkuName: 'S0'
-    SQLDatabaseTier: 'Standard'
-    EmployerFeedbackTrigger: '0 30 15 * * MON-FRI'
-    ProviderFeedbackTrigger: '0 0 9 * * MON-FRI'
-    ProviderReferenceTrigger: '0 0 9 * * *'
+    ResourceGroupName: '$(SharedEnvResourceGroupName)'
+    SQLServerActiveDirectoryAdminLogin: 'TL DEV SQL ADM'
+    SQLServerActiveDirectoryAdminObjectId: 'ede7deec-20a1-44ac-b5e0-289f5531ff59'
+    ThreatDetectionEmailAddress: 'tlevelsdevops@education.gov.uk'
+    AppServicePlanTier: 'Standard'
+    AppServicePlanSize: '1'
+    AppServicePlanInstances: '2'
+    AzureWebsitesRPObjectId: '7fa23fd6-537e-4d28-b0ca-54d075cce842'
+    KeyVaultReadWriteObjectIds: '["94923ac5-81df-4584-8806-a69f5fae6c14"]'
+
   jobs:
-  - job:
-    steps:
-    - task: AzureResourceGroupDeployment@2
-      displayName: 'Azure Deployment:Create Or Update Resource Group action on $(ResourceGroupName)'
-      inputs:
-        azureSubscription: 'S126-TL-Test-Service-Connection'
-        resourceGroupName: '$(ResourceGroupName)'
-        location: 'West Europe'
-        csmFile: '$(System.DefaultWorkingDirectory)/tl-matching/drop/azure/template.json'
-        overrideParameters: '-environmentNameAbbreviation "$(Release.EnvironmentName)" -workerASPSize "$(WorkerASPSize)" -workerASPInstances "$(WorkerASPInstances)" -sharedASPName "$(SharedASPName)" -sharedEnvResourceGroup "$(SharedEnvResourceGroupName)" 
-        -sharedKeyVaultName "$(SharedKeyVaultName)" -sharedSQLServerName "$(SharedSQLServerName)" -sqlDatabaseSkuName "$(SQLDatabaseSkuName)" -sqlDatabaseTier "$(SQLDatabaseTier)" -configurationStorageConnectionString "$(ConfigurationStorageConnectionString)" 
-        -uiCustomHostName "$(UICustomHostName)" -certificateName "$(CertificateName)" -employerFeedbackTrigger "$(EmployerFeedbackTrigger)" -providerFeedbackTrigger "$(ProviderFeedbackTrigger)" -providerReferenceTrigger "$(ProviderReferenceTrigger)"'
-        deploymentOutputs: armOutputs
+  - job: DeploySharedInfrastructure
+  #Your build pipeline references an undefined variable named ‘SQLServerAdminUsername’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+  #Your build pipeline references an undefined variable named ‘SQLServerAdminPassword’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+
+  steps:
+  - task: AzureResourceGroupDeployment@2
+    displayName: 'Azure Deployment:Create Or Update Resource Group action on $(ResourceGroupName)'
+    inputs:
+      azureSubscription: 'SFA-TL-Dev/Test'
+      resourceGroupName: '$(ResourceGroupName)'
+      location: 'West Europe'
+      csmFile: '$(System.DefaultWorkingDirectory)/tl-matching/drop/azure/environment.json'
+      overrideParameters: '-environmentNameAbbreviation "$(Release.EnvironmentName)" -sqlServerAdminUsername "$(SQLServerAdminUsername)" -sqlServerAdminPassword "$(SQLServerAdminPassword)" -sqlServerActiveDirectoryAdminLogin "$(SQLServerActiveDirectoryAdminLogin)" -sqlServerActiveDirectoryAdminObjectId "$(SQLServerActiveDirectoryAdminObjectId)" -threatDetectionEmailAddress "$(ThreatDetectionEmailAddress)" -appServicePlanTier "$(AppServicePlanTier)" -appServicePlanSize "$(AppServicePlanSize)" -appServicePlanInstances "$(AppServicePlanInstances)" -azureWebsitesRPObjectId "$(AzureWebsitesRPObjectId)" -keyVaultReadWriteObjectIds $(KeyVaultReadWriteObjectIds)'
 
 
-    - task: ARMOutputParserExtension@1
-      displayName: 'Convert ARM Template Outputs to Variables'
-      inputs:
-        armOutput: '$(armOutputs)'
+# - stage: AT_Deploy
+#   variables:
+#     SharedASPName: tl-at-shared-asp
+#     SharedKeyVaultName: tl-at-shared-kv
+#     ConfigurationStorageConnectionString: 
+#     UICustomHostName: 'at.industryplacementmatching.education.gov.uk'
+#     CertificateName: 'wildcard-industryplacementmatching-education-gov-uk'
+#     ResourceGroupName: 'tl-at-mtch-rg'
+#     WorkerASPSize: '1'
+#     WorkerASPInstances: '1'
+#     SQLDatabaseSkuName: 'S0'
+#     SQLDatabaseTier: 'Standard'
+#     EmployerFeedbackTrigger: '0 30 15 * * MON-FRI'
+#     ProviderFeedbackTrigger: '0 0 9 * * MON-FRI'
+#     ProviderReferenceTrigger: '0 0 9 * * *'
+#   jobs:
+#   - job:
+#     steps:
+#     - task: AzureResourceGroupDeployment@2
+#       displayName: 'Azure Deployment:Create Or Update Resource Group action on $(ResourceGroupName)'
+#       inputs:
+#         azureSubscription: 'S126-TL-Test-Service-Connection'
+#         resourceGroupName: '$(ResourceGroupName)'
+#         location: 'West Europe'
+#         csmFile: '$(System.DefaultWorkingDirectory)/tl-matching/drop/azure/template.json'
+#         overrideParameters: '-environmentNameAbbreviation "$(Release.EnvironmentName)" -workerASPSize "$(WorkerASPSize)" -workerASPInstances "$(WorkerASPInstances)" -sharedASPName "$(SharedASPName)" -sharedEnvResourceGroup "$(SharedEnvResourceGroupName)" 
+#         -sharedKeyVaultName "$(SharedKeyVaultName)" -sharedSQLServerName "$(SharedSQLServerName)" -sqlDatabaseSkuName "$(SQLDatabaseSkuName)" -sqlDatabaseTier "$(SQLDatabaseTier)" -configurationStorageConnectionString "$(ConfigurationStorageConnectionString)" 
+#         -uiCustomHostName "$(UICustomHostName)" -certificateName "$(CertificateName)" -employerFeedbackTrigger "$(EmployerFeedbackTrigger)" -providerFeedbackTrigger "$(ProviderFeedbackTrigger)" -providerReferenceTrigger "$(ProviderReferenceTrigger)"'
+#         deploymentOutputs: armOutputs
 
-    - task: GenerateEnvironmentConfiguration@3
-      displayName: 'Process schemas in $(System.DefaultWorkingDirectory)/tl-matching/drop/config'
-      inputs:
-        SourcePath: '$(System.DefaultWorkingDirectory)/tl-matching/drop/config'
-        TargetFilename: Sfa.Tl.Matching.schema.json
-        ServiceConnectionName: 'S126-TL-Test-Service-Connection'
-        StorageAccountName: '$(ConfigStorageAccountName)'
-        TableName: Configuration
 
-    - task: SqlAzureDacpacDeployment@1
-      displayName: 'Azure SQL Publish'
-      inputs:
-        azureSubscription: 'S126-TL-Test-Service-Connection'
-        ServerName: '$(SharedSQLServerName).database.windows.net'
-        DatabaseName: '$(SQLDatabaseName)'
-        SqlUsername: '$(SQLServerAdminUsername)'
-        SqlPassword: '$(SQLServerAdminPassword)'
-        DacpacFile: '$(System.DefaultWorkingDirectory)/tl-matching/drop/src/Sfa.Tl.Matching.Database/bin/Release/Sfa.Tl.Matching.Database.dacpac'
-        AdditionalArguments: '/p:GenerateSmartDefaults=True'
+#     - task: ARMOutputParserExtension@1
+#       displayName: 'Convert ARM Template Outputs to Variables'
+#       inputs:
+#         armOutput: '$(armOutputs)'
 
-    - task: AzureRmWebAppDeployment@3
-      displayName: 'Azure App Service Deploy: $(WorkerFunctionAppName)'
-      inputs:
-        azureSubscription: 'S126-TL-Test-Service-Connection'
-        appType: functionapp
-        WebAppName: '$(WorkerFunctionAppName)'
-        Package: '$(System.DefaultWorkingDirectory)/tl-matching/drop/Sfa.Tl.Matching.Functions.zip'
-        UseWebDeploy: true
-        RemoveAdditionalFilesFlag: true
-        RenameFilesFlag: true
+#     - task: GenerateEnvironmentConfiguration@3
+#       displayName: 'Process schemas in $(System.DefaultWorkingDirectory)/tl-matching/drop/config'
+#       inputs:
+#         SourcePath: '$(System.DefaultWorkingDirectory)/tl-matching/drop/config'
+#         TargetFilename: Sfa.Tl.Matching.schema.json
+#         ServiceConnectionName: 'S126-TL-Test-Service-Connection'
+#         StorageAccountName: '$(ConfigStorageAccountName)'
+#         TableName: Configuration
+
+#     - task: SqlAzureDacpacDeployment@1
+#       displayName: 'Azure SQL Publish'
+#       inputs:
+#         azureSubscription: 'S126-TL-Test-Service-Connection'
+#         ServerName: '$(SharedSQLServerName).database.windows.net'
+#         DatabaseName: '$(SQLDatabaseName)'
+#         SqlUsername: '$(SQLServerAdminUsername)'
+#         SqlPassword: '$(SQLServerAdminPassword)'
+#         DacpacFile: '$(System.DefaultWorkingDirectory)/tl-matching/drop/src/Sfa.Tl.Matching.Database/bin/Release/Sfa.Tl.Matching.Database.dacpac'
+#         AdditionalArguments: '/p:GenerateSmartDefaults=True'
+
+#     - task: AzureRmWebAppDeployment@3
+#       displayName: 'Azure App Service Deploy: $(WorkerFunctionAppName)'
+#       inputs:
+#         azureSubscription: 'S126-TL-Test-Service-Connection'
+#         appType: functionapp
+#         WebAppName: '$(WorkerFunctionAppName)'
+#         Package: '$(System.DefaultWorkingDirectory)/tl-matching/drop/Sfa.Tl.Matching.Functions.zip'
+#         UseWebDeploy: true
+#         RemoveAdditionalFilesFlag: true
+#         RenameFilesFlag: true
