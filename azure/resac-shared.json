@@ -1,7 +1,13 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
-  "parameters": {    
+  "parameters": {
+    "rgName": {
+      "type": "string"
+    },
+    "rgLocation": {
+      "type": "string"
+    },
     "resourceEnvironmentName": {
       "type": "string",
       "metadata": {
@@ -88,14 +94,6 @@
         "environmentVariable": "threatDetectionEmailAddress"
       }
     },
-    "appServicePlanSku": {
-      "type": "object",
-      "defaultValue": {
-        "tier": "Standard",
-        "size": "2",
-        "instances": 2
-      }
-    },
     "redisCacheSku": {
       "type": "object",
       "defaultValue": "",
@@ -112,9 +110,6 @@
     "sqlServerName": "[toLower(concat(variables('resourceNamePrefix'),'-sql'))]",
     "keyVaultName": "[concat(variables('resourceNamePrefix'),'-kv')]",
     "redisCacheName": "[concat(variables('resourceNamePrefix'),'-redis')]",
-    "appServicePlanName": "[concat(variables('resourceNamePrefix'),'-asp')]",
-
-    "redisTemplateUri": "[concat(variables('deploymentUrlBase'), 'redis-cache.json')]",
     "keyVaultAccessPolicies": [
       {
         "objectId": "[parameters('microsoftAzureWebsitesRPObjectId')]",
@@ -182,6 +177,13 @@
   },
   "resources": [
     {
+      "type": "Microsoft.Resources/resourceGroups",
+      "apiVersion": "2018-05-01",
+      "location": "[parameters('rgLocation')]",
+      "name": "[parameters('rgName')]",
+      "properties": {}
+    },
+    {
       "apiVersion": "2017-05-10",
       "name": "key-vault",
       "type": "Microsoft.Resources/deployments",
@@ -208,7 +210,10 @@
             "value": true
           }
         }
-      }
+      },
+      "dependsOn": [
+        "[parameters('rgName')]"
+      ]
     },
     {
       "apiVersion": "2017-05-10",
@@ -251,7 +256,10 @@
             "value": "[variables('configurationStorageName')]"
           }
         }
-      }
+      },
+      "dependsOn": [
+        "[parameters('rgName')]"
+      ]
     },
     {
       "apiVersion": "2017-05-10",
@@ -299,7 +307,10 @@
             "value": "[variables('sharedARMStorageName')]"
           }
         }
-      }
+      },
+      "dependsOn": [
+        "[parameters('rgName')]"
+      ]
     },
     {
       "apiVersion": "2017-05-10",
@@ -385,7 +396,10 @@
         "sku": "[parameters('redisCacheSku')]",
         "enableNonSslPort": false,
         "minimumTlsVersion": "1.2"
-      }
+      },
+      "dependsOn": [
+        "[parameters('rgName')]"
+      ]
     }
   ]
 }
