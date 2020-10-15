@@ -46,8 +46,8 @@ variables:
   buildConfiguration: 'release'
   buildPlatform: 'anycpu'
   ResourceGroupName: 'tl-at-mtch-rg'
-  SharedEnvResourceGroupName: 'tl-at-shared-rg'
-  SharedSQLServerName: 'tl-at-shared-sql'
+  SharedEnvResourceGroupName: 's126-at-TLevels'
+  SharedSQLServerName: 's126-at-TLevels-001-matching-shared-sqlsvr'
   testSqlDatabaseSkuName: 'S0'
   testSqlDatabaseTier: 'Standard'
   ConfigStorageAccountName: 'tlatconfigstr'
@@ -58,3 +58,5 @@ variables:
 
 stages:
   - template: ./yaml/stages/matching-build.yml
+
+  - template: ./yaml/stages/matching-shared-Infrastructure.yml
