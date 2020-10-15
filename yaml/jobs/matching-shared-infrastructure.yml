@@ -1,0 +1,15 @@
+
+jobs:
+- job: DeploySharedInfrastructure
+#Your build pipeline references an undefined variable named ‘SQLServerAdminUsername’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references an undefined variable named ‘SQLServerAdminPassword’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+
+steps:
+- task: AzureResourceGroupDeployment@2
+  displayName: 'Azure Deployment:Create Or Update Resource Group action on $(SharedEnvResourceGroupName)'
+  inputs:
+    azureSubscription: 'SFA-TL-Dev/Test'
+    resourceGroupName: '$(SharedEnvResourceGroupName)'
+    location: 'West Europe'
+    csmFile: './azure/resac-shared.json'
+    overrideParameters: '-environmentNameAbbreviation "$(Release.EnvironmentName)" -sqlServerAdminUsername "$(SQLServerAdminUsername)" -sqlServerAdminPassword "$(SQLServerAdminPassword)" -sqlServerActiveDirectoryAdminLogin "$(SQLServerActiveDirectoryAdminLogin)" -sqlServerActiveDirectoryAdminObjectId "$(SQLServerActiveDirectoryAdminObjectId)" -threatDetectionEmailAddress "$(ThreatDetectionEmailAddress)" -appServicePlanTier "$(AppServicePlanTier)" -appServicePlanSize "$(AppServicePlanSize)" -appServicePlanInstances "$(AppServicePlanInstances)" -azureWebsitesRPObjectId "$(AzureWebsitesRPObjectId)" -keyVaultReadWriteObjectIds $(KeyVaultReadWriteObjectIds)'
