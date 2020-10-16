@@ -214,192 +214,192 @@
       "dependsOn": [
         "[parameters('rgName')]"
       ]
-    },
-    {
-      "apiVersion": "2017-05-10",
-      "name": "[concat('sql-server-key-vault-secrets-', parameters('resourceEnvironmentName'))]",
-      "type": "Microsoft.Resources/deployments",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'),'keyvault-secret.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "keyVaultName": {
-            "value": "[variables('keyVaultName')]"
-          },
-          "secretName": {
-            "value": "[variables('sqlServerName')]"
-          },
-          "secretValue": {
-            "value": "[parameters('sqlServerAdminPassword')]"
-          }
-        }
-      },
-      "dependsOn": [
-        "key-vault"
-      ]
-    },
-    {
-      "apiVersion": "2017-05-10",
-      "name": "config-storage-account",
-      "type": "Microsoft.Resources/deployments",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'),'storage-account-arm.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "storageAccountName": {
-            "value": "[variables('configurationStorageName')]"
-          }
-        }
-      },
-      "dependsOn": [
-        "[parameters('rgName')]"
-      ]
-    },
-    {
-      "apiVersion": "2017-05-10",
-      "name": "[concat('config-storage-account-container', parameters('configurationStorageAccountContainerArray')[copyIndex()])]",
-      "type": "Microsoft.Resources/deployments",
-      "condition": "[greater(length(parameters('configurationStorageAccountContainerArray')), 0)]",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'), 'storage-container.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "storageAccountName": {
-            "value": "[variables('configurationStorageName')]"
-          },
-          "containerName": {
-            "value": "[parameters('configurationStorageAccountContainerArray')[copyIndex()]]"
-          },
-          "publicAccess": {
-            "value": "None"
-          }
-        }
-      },
-      "copy": {
-        "name": "configstorageaccountcontainercopy",
-        "count": "[length(parameters('configurationStorageAccountContainerArray'))]"
-      },
-      "dependsOn": [
-        "config-storage-account"
-      ]
-    },
-    {
-      "apiVersion": "2017-05-10",
-      "name": "arm-shared-storage",
-      "type": "Microsoft.Resources/deployments",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'),'storage-account-arm.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "storageAccountName": {
-            "value": "[variables('sharedARMStorageName')]"
-          }
-        }
-      },
-      "dependsOn": [
-        "[parameters('rgName')]"
-      ]
-    },
-    {
-      "apiVersion": "2017-05-10",
-      "name": "[concat('shared-storage-account-container', parameters('sharedStorageAccountContainerArray')[copyIndex()])]",
-      "type": "Microsoft.Resources/deployments",
-      "condition": "[greater(length(parameters('sharedStorageAccountContainerArray')), 0)]",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'), 'storage-container.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "storageAccountName": {
-            "value": "[variables('sharedARMStorageName')]"
-          },
-          "containerName": {
-            "value": "[parameters('sharedStorageAccountContainerArray')[copyIndex()]]"
-          },
-          "publicAccess": {
-            "value": "None"
-          }
-        }
-      },
-      "copy": {
-        "name": "sharedstorageaccountcontainercopy",
-        "count": "[length(parameters('sharedStorageAccountContainerArray'))]"
-      },
-      "dependsOn": [
-        "arm-shared-storage"
-      ]
-    },
-    {
-      "apiVersion": "2017-05-10",
-      "name": "sql-server",
-      "type": "Microsoft.Resources/deployments",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'),'sql-server.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "sqlServerName": {
-            "value": "[variables('sqlServerName')]"
-          },
-          "sqlServerAdminUserName": {
-            "value": "[concat('tl', uniqueString(resourceGroup().id, guid(variables('sqlServerName'))))]"
-          },
-          "sqlServerAdminPassword": {
-            "reference": {
-              "keyVault": {
-                "id": "[reference('key-vault').outputs.keyVaultResourceId.value]"
-              },
-              "secretName": "[variables('sqlServerName')]"
-            }
-          },
-          "sqlServerActiveDirectoryAdminLogin": {
-            "value": "[parameters('sqlServerActiveDirectoryAdminLogin')]"
-          },
-          "sqlServerActiveDirectoryAdminObjectId": {
-            "value": "[parameters('sqlServerActiveDirectoryAdminObjectId')]"
-          },
-          "threatDetectionEmailAddress": {
-            "value": "[parameters('threatDetectionEmailAddress')]"
-          },
-          "sqlStorageAccountName": {
-            "value": "[variables('sharedARMStorageName')]"
-          }
-        }
-      },
-      "dependsOn": [
-        "arm-shared-storage",
-        "[concat('sql-server-key-vault-secrets-', parameters('resourceEnvironmentName'))]"
-      ]
-    },
-    {
-      "type": "Microsoft.Cache/Redis",
-      "name": "[variables('redisCacheName')]",
-      "apiVersion": "2019-07-01",
-      "location": "[resourceGroup().location]",
-      "properties": {
-        "sku": "[parameters('redisCacheSku')]",
-        "enableNonSslPort": false,
-        "minimumTlsVersion": "1.2"
-      },
-      "dependsOn": [
-        "[parameters('rgName')]"
-      ]
     }
+    // {
+    //   "apiVersion": "2017-05-10",
+    //   "name": "[concat('sql-server-key-vault-secrets-', parameters('resourceEnvironmentName'))]",
+    //   "type": "Microsoft.Resources/deployments",
+    //   "properties": {
+    //     "mode": "Incremental",
+    //     "templateLink": {
+    //       "uri": "[concat(variables('deploymentUrlBase'),'keyvault-secret.json')]",
+    //       "contentVersion": "1.0.0.0"
+    //     },
+    //     "parameters": {
+    //       "keyVaultName": {
+    //         "value": "[variables('keyVaultName')]"
+    //       },
+    //       "secretName": {
+    //         "value": "[variables('sqlServerName')]"
+    //       },
+    //       "secretValue": {
+    //         "value": "[parameters('sqlServerAdminPassword')]"
+    //       }
+    //     }
+    //   },
+    //   "dependsOn": [
+    //     "key-vault"
+    //   ]
+    // },
+    // {
+    //   "apiVersion": "2017-05-10",
+    //   "name": "config-storage-account",
+    //   "type": "Microsoft.Resources/deployments",
+    //   "properties": {
+    //     "mode": "Incremental",
+    //     "templateLink": {
+    //       "uri": "[concat(variables('deploymentUrlBase'),'storage-account-arm.json')]",
+    //       "contentVersion": "1.0.0.0"
+    //     },
+    //     "parameters": {
+    //       "storageAccountName": {
+    //         "value": "[variables('configurationStorageName')]"
+    //       }
+    //     }
+    //   },
+    //   "dependsOn": [
+    //     "[parameters('rgName')]"
+    //   ]
+    // },
+    // {
+    //   "apiVersion": "2017-05-10",
+    //   "name": "[concat('config-storage-account-container', parameters('configurationStorageAccountContainerArray')[copyIndex()])]",
+    //   "type": "Microsoft.Resources/deployments",
+    //   "condition": "[greater(length(parameters('configurationStorageAccountContainerArray')), 0)]",
+    //   "properties": {
+    //     "mode": "Incremental",
+    //     "templateLink": {
+    //       "uri": "[concat(variables('deploymentUrlBase'), 'storage-container.json')]",
+    //       "contentVersion": "1.0.0.0"
+    //     },
+    //     "parameters": {
+    //       "storageAccountName": {
+    //         "value": "[variables('configurationStorageName')]"
+    //       },
+    //       "containerName": {
+    //         "value": "[parameters('configurationStorageAccountContainerArray')[copyIndex()]]"
+    //       },
+    //       "publicAccess": {
+    //         "value": "None"
+    //       }
+    //     }
+    //   },
+    //   "copy": {
+    //     "name": "configstorageaccountcontainercopy",
+    //     "count": "[length(parameters('configurationStorageAccountContainerArray'))]"
+    //   },
+    //   "dependsOn": [
+    //     "config-storage-account"
+    //   ]
+    // },
+    // {
+    //   "apiVersion": "2017-05-10",
+    //   "name": "arm-shared-storage",
+    //   "type": "Microsoft.Resources/deployments",
+    //   "properties": {
+    //     "mode": "Incremental",
+    //     "templateLink": {
+    //       "uri": "[concat(variables('deploymentUrlBase'),'storage-account-arm.json')]",
+    //       "contentVersion": "1.0.0.0"
+    //     },
+    //     "parameters": {
+    //       "storageAccountName": {
+    //         "value": "[variables('sharedARMStorageName')]"
+    //       }
+    //     }
+    //   },
+    //   "dependsOn": [
+    //     "[parameters('rgName')]"
+    //   ]
+    // },
+    // {
+    //   "apiVersion": "2017-05-10",
+    //   "name": "[concat('shared-storage-account-container', parameters('sharedStorageAccountContainerArray')[copyIndex()])]",
+    //   "type": "Microsoft.Resources/deployments",
+    //   "condition": "[greater(length(parameters('sharedStorageAccountContainerArray')), 0)]",
+    //   "properties": {
+    //     "mode": "Incremental",
+    //     "templateLink": {
+    //       "uri": "[concat(variables('deploymentUrlBase'), 'storage-container.json')]",
+    //       "contentVersion": "1.0.0.0"
+    //     },
+    //     "parameters": {
+    //       "storageAccountName": {
+    //         "value": "[variables('sharedARMStorageName')]"
+    //       },
+    //       "containerName": {
+    //         "value": "[parameters('sharedStorageAccountContainerArray')[copyIndex()]]"
+    //       },
+    //       "publicAccess": {
+    //         "value": "None"
+    //       }
+    //     }
+    //   },
+    //   "copy": {
+    //     "name": "sharedstorageaccountcontainercopy",
+    //     "count": "[length(parameters('sharedStorageAccountContainerArray'))]"
+    //   },
+    //   "dependsOn": [
+    //     "arm-shared-storage"
+    //   ]
+    // },
+    // {
+    //   "apiVersion": "2017-05-10",
+    //   "name": "sql-server",
+    //   "type": "Microsoft.Resources/deployments",
+    //   "properties": {
+    //     "mode": "Incremental",
+    //     "templateLink": {
+    //       "uri": "[concat(variables('deploymentUrlBase'),'sql-server.json')]",
+    //       "contentVersion": "1.0.0.0"
+    //     },
+    //     "parameters": {
+    //       "sqlServerName": {
+    //         "value": "[variables('sqlServerName')]"
+    //       },
+    //       "sqlServerAdminUserName": {
+    //         "value": "[concat('tl', uniqueString(resourceGroup().id, guid(variables('sqlServerName'))))]"
+    //       },
+    //       "sqlServerAdminPassword": {
+    //         "reference": {
+    //           "keyVault": {
+    //             "id": "[reference('key-vault').outputs.keyVaultResourceId.value]"
+    //           },
+    //           "secretName": "[variables('sqlServerName')]"
+    //         }
+    //       },
+    //       "sqlServerActiveDirectoryAdminLogin": {
+    //         "value": "[parameters('sqlServerActiveDirectoryAdminLogin')]"
+    //       },
+    //       "sqlServerActiveDirectoryAdminObjectId": {
+    //         "value": "[parameters('sqlServerActiveDirectoryAdminObjectId')]"
+    //       },
+    //       "threatDetectionEmailAddress": {
+    //         "value": "[parameters('threatDetectionEmailAddress')]"
+    //       },
+    //       "sqlStorageAccountName": {
+    //         "value": "[variables('sharedARMStorageName')]"
+    //       }
+    //     }
+    //   },
+    //   "dependsOn": [
+    //     "arm-shared-storage",
+    //     "[concat('sql-server-key-vault-secrets-', parameters('resourceEnvironmentName'))]"
+    //   ]
+    // },
+    // {
+    //   "type": "Microsoft.Cache/Redis",
+    //   "name": "[variables('redisCacheName')]",
+    //   "apiVersion": "2019-07-01",
+    //   "location": "[resourceGroup().location]",
+    //   "properties": {
+    //     "sku": "[parameters('redisCacheSku')]",
+    //     "enableNonSslPort": false,
+    //     "minimumTlsVersion": "1.2"
+    //   },
+    //   "dependsOn": [
+    //     "[parameters('rgName')]"
+    //   ]
+    // }
   ]
 }
