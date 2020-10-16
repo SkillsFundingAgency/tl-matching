@@ -45,9 +45,9 @@ variables:
   applicationName: matching
   buildConfiguration: 'release'
   buildPlatform: 'anycpu'
-  ResourceGroupName: 's126-d01-matching'
-  SharedEnvResourceGroupName: 's126-d01-matching-shared'
-  SharedSQLServerName: 's126-d01-matching-shared-001-sqlsvr'
+  ResourceGroupName: 's126d01-matching'
+  SharedEnvResourceGroupName: 's126d01-matching-shared'
+  SharedSQLServerName: 's126d01-matching-shared-001-sqlsvr'
   testSqlDatabaseSkuName: 'S0'
   testSqlDatabaseTier: 'Standard'
   ConfigStorageAccountName: 's126d01matchingconfigstr'
