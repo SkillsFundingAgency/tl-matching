@@ -19,7 +19,7 @@
         },
         "threatDetectionEmailAddress": {
             "type": "string"
-        },        
+        },
         "azureWebsitesRPObjectId": {
             "type": "string"
         },
@@ -33,12 +33,18 @@
         "sqlServerName": "[concat(variables('resourceNamePrefix'), '-shared-sql')]",
         "sharedStorageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'sharedstr'), '-', '')]",
         "appServicePlanName": "[concat(variables('resourceNamePrefix'), '-shared-asp')]",
-        "appServicePlanSku": { "name": "S1", "tier": "Standard", "size": "S1", "family": "S", "capacity": 2 },
+        "appServicePlanSku": {
+            "name": "S1",
+            "tier": "Standard",
+            "size": "S1",
+            "family": "S",
+            "capacity": 2
+        },
         "appServicePlanOS": "Windows",
         "appServicePlanIsLinux": false,
         "configStorageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'configstr'), '-', '')]",
         "keyVaultName": "[replace(concat(variables('resourceNamePrefix'), 'sharedkv'), '-', '')]",
-        
+
         "keyVaultAccessPolicies": [
             {
                 "objectId": "[parameters('azureWebsitesRPObjectId')]",
@@ -198,7 +204,7 @@
         "sharedASPName": {
             "type": "string",
             "value": "[variables('appServicePlanName')]"
-        },        
+        },
         "sharedKeyVaultName": {
             "type": "string",
             "value": "[variables('keyVaultName')]"
@@ -206,6 +212,14 @@
         "sharedSQLServerName": {
             "type": "string",
             "value": "[variables('sqlServerName')]"
+        },
+        "sharedStorageConnectionString": {
+            "type": "string",
+            "value": "[reference('shared-storage-account').outputs.storageConnectionString.value]"
+        },
+        "configStorageConnectionString": {
+            "type": "string",
+            "value": "[reference('config-storage-account').outputs.storageConnectionString.value]"
         }
     }
 }
