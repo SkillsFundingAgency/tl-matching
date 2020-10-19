@@ -6,18 +6,6 @@
             "type": "string",
             "maxLength": 4
         },
-        "workerASPSize": {
-            "type": "string",
-            "allowedValues": [
-                "1",
-                "2",
-                "3"
-            ]
-        },
-        "workerASPInstances": {
-            "type": "int",
-            "minValue": 1
-        },
         "sharedASPName": {
             "type": "string"
         },
@@ -59,13 +47,16 @@
         }
     },
     "variables": {
-        "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/tl-platform-building-blocks/master/templates/",
-        "resourceNamePrefix": "[concat('tl-', toLower(parameters('environmentNameAbbreviation')))]",
-        "workerASPName": "[concat(variables('resourceNamePrefix'), '-mtchwkr-asp')]",
-        "uiAppName": "[concat(variables('resourceNamePrefix'), '-mtchui-as')]",
-        "workerFunctionAppName": "[concat(variables('resourceNamePrefix'), '-mtchwkr-fa')]",        
-        "sqlDatabaseName": "[concat(variables('resourceNamePrefix'), '-mtch-db')]",
-        "storageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'mtchstr'), '-', '')]"
+        "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/operations-devops-deployment/master/ArmTemplates/",
+        "resourceNamePrefix": "[concat('s126', toLower(parameters('environmentNameAbbreviation')))]",
+        "appServicePlanName": "[concat(variables('resourceNamePrefix'), '-asp')]",
+        "appServicePlanSku": { "name": "S1", "tier": "Standard", "size": "S1", "family": "S", "capacity": 2 },
+        "appServicePlanOS": "Windows",
+        "appServicePlanIsLinux": false,
+        "uiAppName": "[concat(variables('resourceNamePrefix'), '-web')]",
+        "workerFunctionAppName": "[concat(variables('resourceNamePrefix'), '-func-woker')]",        
+        "sqlDatabaseName": "[concat(variables('resourceNamePrefix'), '-sqldb')]",
+        "storageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'str'), '-', '')]"
     },
     "resources": [
         {
@@ -96,15 +87,20 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
+                    "parameters": {
                     "appServicePlanName": {
-                        "value": "[variables('workerASPName')]"
+                        "value": "[variables('appServicePlanName')]"
                     },
-                    "aspSize": {
-                        "value": "[parameters('workerASPSize')]"
+                    "appServicePlanSku": {
+                        "value": "[variables('appServicePlanSku')]"
                     },
-                    "aspInstances": {
-                        "value": "[parameters('workerASPInstances')]"
+                    "appServicePlanOS": {
+                        "value": "[variables('appServicePlanOS')]"
+                    },
+                    "appServicePlanIsLinux": {
+                        "value": "[variables('appServicePlanIsLinux')]"
                     }
+                }
                 }
             }
         },
@@ -240,7 +236,7 @@
                         "value": "[variables('workerFunctionAppName')]"
                     },
                     "appServicePlanName": {
-                        "value": "[variables('workerASPName')]"
+                        "value": "[variables('appServicePlanName')]"
                     },
                     "appServicePlanResourceGroup": {
                         "value": "[resourceGroup().name]"

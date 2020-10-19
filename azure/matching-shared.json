@@ -194,5 +194,18 @@
             }
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "sharedASPName": {
+            "type": "string",
+            "value": "[variables('appServicePlanName')]"
+        },        
+        "sharedKeyVaultName": {
+            "type": "string",
+            "value": "[variables('keyVaultName')]"
+        },
+        "sharedSQLServerName": {
+            "type": "string",
+            "value": "[variables('sqlServerName')]"
+        }
+    }
 }

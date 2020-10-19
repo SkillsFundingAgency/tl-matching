@@ -1,0 +1,29 @@
+#Your build pipeline references an undefined variable named ‘SharedASPName’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references an undefined variable named ‘SharedEnvResourceGroupName’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references an undefined variable named ‘SharedKeyVaultName’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references an undefined variable named ‘SharedSQLServerName’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references an undefined variable named ‘ConfigurationStorageConnectionString’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references an undefined variable named ‘UICustomHostName’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references an undefined variable named ‘CertificateName’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+variables:
+  ResourceGroupName: 'tl-test-mtch-rg'
+  WorkerASPSize: '1'
+  WorkerASPInstances: '1'
+  SQLDatabaseSkuName: 'S0'
+  SQLDatabaseTier: 'Standard'
+  BankHolidayGeneratorTrigger: '0 45 9  * * WED'
+  EmployerFeedbackTrigger: '0 0 9 * * MON-FRI'
+  ProviderFeedbackTrigger: '0 0 9 * * MON-FRI'
+  ProviderReferenceTrigger: '0 0 7 * * *'
+jobs:
+  - job: 
+    steps:
+    - task: AzureResourceGroupDeployment@2
+      displayName: 'Azure Deployment:Create Or Update Resource Group action on $(ResourceGroupName)'
+      inputs:
+        azureSubscription: 'SFA-TL-Dev/Test'
+        resourceGroupName: '$(ResourceGroupName)'
+        location: 'West Europe'
+        csmFile: '$(System.DefaultWorkingDirectory)/tl-matching/drop/azure/template.json'
+        overrideParameters: '-environmentNameAbbreviation "$(Release.EnvironmentName)" -workerASPSize "$(WorkerASPSize)" -workerASPInstances "$(WorkerASPInstances)" -sharedASPName "$(SharedASPName)" -sharedEnvResourceGroup "$(SharedEnvResourceGroupName)" -sharedKeyVaultName "$(SharedKeyVaultName)" -sharedSQLServerName "$(SharedSQLServerName)" -sqlDatabaseSkuName "$(SQLDatabaseSkuName)" -sqlDatabaseTier "$(SQLDatabaseTier)" -configurationStorageConnectionString "$(ConfigurationStorageConnectionString)" -uiCustomHostName "$(UICustomHostName)" -certificateName "$(CertificateName)" -bankHolidayGeneratorTrigger "$(BankHolidayGeneratorTrigger)" -employerFeedbackTrigger "$(EmployerFeedbackTrigger)" -providerFeedbackTrigger "$(ProviderFeedbackTrigger)" -providerReferenceTrigger "$(ProviderReferenceTrigger)"'
+        deploymentOutputs: armOutputs
