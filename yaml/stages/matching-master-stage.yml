@@ -25,4 +25,3 @@ stages:
         SQLServerAdminUsername: $(SQLServerAdminUsername)
         SQLServerAdminPassword: $(SQLServerAdminPassword)
   
-  
