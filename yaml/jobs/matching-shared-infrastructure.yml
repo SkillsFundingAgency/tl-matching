@@ -5,15 +5,9 @@ parameters:
   type: string
 - name: rgLocation
   type: string
-- name: 
+- name: SQLServerAdminUsername
   type: string
-- name: 
-  type: string
-- name: 
-  type: string
-- name: 
-  type: string
-- name: 
+- name: SQLServerAdminPassword
   type: string
   
   variables:

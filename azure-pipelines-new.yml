@@ -71,3 +71,10 @@ stages:
 
     jobs:
     - template: ./yaml/jobs/matching-shared-infrastructure.yml
+      parameters:
+        serviceConnection: $(serviceConnection)
+        SharedEnvResourceGroupName: "s126d01-matching-shared"
+        rgLocation: "West Europe"
+        SQLServerAdminUsername: $(SQLServerAdminUsername)
+        SQLServerAdminPassword: $(SQLServerAdminPassword)
+
