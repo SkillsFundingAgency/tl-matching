@@ -12,6 +12,9 @@ parameters:
 
 jobs:
 - job: DeploySharedInfrastructure
+  pool:
+    name: 'Azure Pipelines'
+    vmImage: 'windows-2019'
   steps:
   - task: AzureResourceGroupDeployment@2
     displayName: 'Azure Deployment:Create Or Update Resource Group action on $(SharedEnvResourceGroupName)'
