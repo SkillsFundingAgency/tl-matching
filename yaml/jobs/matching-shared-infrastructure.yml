@@ -20,4 +20,11 @@ jobs:
       resourceGroupName: '$(SharedEnvResourceGroupName)'
       location: 'West Europe'
       csmFile: './azure/matching-shared.json'
-      overrideParameters: '-environmentNameAbbreviation "d01-matching" -sqlServerAdminUsername "$(SQLServerAdminUsername)" -sqlServerAdminPassword "$(SQLServerAdminPassword)" -sqlServerActiveDirectoryAdminLogin "$(SQLServerActiveDirectoryAdminLogin)" -sqlServerActiveDirectoryAdminObjectId "$(SQLServerActiveDirectoryAdminObjectId)" -threatDetectionEmailAddress "$(ThreatDetectionEmailAddress)" -appServicePlanTier "$(AppServicePlanTier)" -appServicePlanSize "$(AppServicePlanSize)" -appServicePlanInstances "$(AppServicePlanInstances)" -azureWebsitesRPObjectId "$(AzureWebsitesRPObjectId)" -keyVaultReadWriteObjectIds $(KeyVaultReadWriteObjectIds)'
+      overrideParameters: '-environmentNameAbbreviation "d01-matching" 
+        -sqlServerAdminUsername "$(SQLServerAdminUsername)" 
+        -sqlServerAdminPassword "$(SQLServerAdminPassword)" 
+        -sqlServerActiveDirectoryAdminLogin "$(SQLServerActiveDirectoryAdminLogin)" 
+        -sqlServerActiveDirectoryAdminObjectId "$(SQLServerActiveDirectoryAdminObjectId)" 
+        -threatDetectionEmailAddress "$(ThreatDetectionEmailAddress)" 
+        -azureWebsitesRPObjectId "$(AzureWebsitesRPObjectId)" 
+        -keyVaultReadWriteObjectIds $(KeyVaultReadWriteObjectIds)'

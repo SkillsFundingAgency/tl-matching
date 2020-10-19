@@ -19,8 +19,7 @@
         },
         "threatDetectionEmailAddress": {
             "type": "string"
-        },
-        
+        },        
         "azureWebsitesRPObjectId": {
             "type": "string"
         },
