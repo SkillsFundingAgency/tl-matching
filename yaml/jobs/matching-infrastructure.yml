@@ -14,16 +14,7 @@ parameters:
 - name: CertificateName
   type: string
 
-variables:
-  ResourceGroupName: 's126d01-matching'
-  WorkerASPSize: '1'
-  WorkerASPInstances: '1'
-  SQLDatabaseSkuName: 'S0'
-  SQLDatabaseTier: 'Standard'
-  BankHolidayGeneratorTrigger: '0 45 9  * * WED'
-  EmployerFeedbackTrigger: '0 0 9 * * MON-FRI'
-  ProviderFeedbackTrigger: '0 0 9 * * MON-FRI'
-  ProviderReferenceTrigger: '0 0 7 * * *'
+
 jobs:
   - job: 
     steps:
