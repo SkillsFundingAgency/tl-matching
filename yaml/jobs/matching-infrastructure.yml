@@ -21,7 +21,7 @@ jobs:
     - task: AzureResourceGroupDeployment@2
       displayName: 'Azure Deployment:Create Or Update Resource Group action on $(ResourceGroupName)'
       inputs:
-        azureSubscription: 'SFA-TL-Dev/Test'
+        azureSubscription: '$(serviceConnection)'
         resourceGroupName: '$(ResourceGroupName)'
         location: 'West Europe'
         csmFile: '$(System.DefaultWorkingDirectory)/tl-matching/drop/azure/template.json'
