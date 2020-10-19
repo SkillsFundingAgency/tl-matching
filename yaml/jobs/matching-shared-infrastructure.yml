@@ -9,17 +9,6 @@ parameters:
   type: string
 - name: SQLServerAdminPassword
   type: string
-  
-  variables:
-    ResourceGroupName: '$(SharedEnvResourceGroupName)'
-    SQLServerActiveDirectoryAdminLogin: 'TL DEV SQL ADM'
-    SQLServerActiveDirectoryAdminObjectId: 'ede7deec-20a1-44ac-b5e0-289f5531ff59'
-    ThreatDetectionEmailAddress: 'tlevelsdevops@education.gov.uk'
-    AppServicePlanTier: 'Standard'
-    AppServicePlanSize: '1'
-    AppServicePlanInstances: '2'
-    AzureWebsitesRPObjectId: '7fa23fd6-537e-4d28-b0ca-54d075cce842'
-    KeyVaultReadWriteObjectIds: '["94923ac5-81df-4584-8806-a69f5fae6c14"]'
 
 jobs:
 - job: DeploySharedInfrastructure
