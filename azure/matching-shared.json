@@ -20,32 +20,13 @@
         "threatDetectionEmailAddress": {
             "type": "string"
         },
-        "appServicePlanTier": {
-            "type": "string",
-            "allowedValues": [
-                "Standard",
-                "Premium",
-                "PremiumV2"
-            ]
-        },
-        "appServicePlanSize": {
-            "type": "string",
-            "allowedValues": [
-                "1",
-                "2",
-                "3"
-            ]
-        },
-        "appServicePlanInstances": {
-            "type": "int",
-            "minValue": 1
-        },
+        
         "azureWebsitesRPObjectId": {
             "type": "string"
         },
         "keyVaultReadWriteObjectIds": {
             "type": "array"
-        }
+        },
     },
     "variables": {
         "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/operations-devops-deployment/master/ArmTemplates/",
@@ -53,8 +34,12 @@
         "sqlServerName": "[concat(variables('resourceNamePrefix'), '-shared-sql')]",
         "sharedStorageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'sharedstr'), '-', '')]",
         "appServicePlanName": "[concat(variables('resourceNamePrefix'), '-shared-asp')]",
+        "appServicePlanSku": { "name": "S1", "tier": "Standard", "size": "S1", "family": "S", "capacity": 2 },
+        "appServicePlanOS": "Windows",
+        "appServicePlanIsLinux": false,
         "configStorageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'configstr'), '-', '')]",
         "keyVaultName": "[replace(concat(variables('resourceNamePrefix'), 'sharedkv'), '-', '')]",
+        
         "keyVaultAccessPolicies": [
             {
                 "objectId": "[parameters('azureWebsitesRPObjectId')]",
@@ -154,14 +139,14 @@
                     "appServicePlanName": {
                         "value": "[variables('appServicePlanName')]"
                     },
-                    "nonASETier": {
-                        "value": "[parameters('appServicePlanTier')]"
+                    "appServicePlanSku": {
+                        "value": "[variables('appServicePlanSku')]"
                     },
-                    "aspSize": {
-                        "value": "[parameters('appServicePlanSize')]"
+                    "appServicePlanOS": {
+                        "value": "[variables('appServicePlanOS')]"
                     },
-                    "aspInstances": {
-                        "value": "[parameters('appServicePlanInstances')]"
+                    "appServicePlanIsLinux": {
+                        "value": "[variables('appServicePlanIsLinux')]"
                     }
                 }
             }
