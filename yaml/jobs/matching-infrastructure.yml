@@ -16,7 +16,7 @@ parameters:
 
 
 jobs:
-  - job: 
+  - job: DeployMatchingInfrastructure
     steps:
     - task: AzureResourceGroupDeployment@2
       displayName: 'Azure Deployment:Create Or Update Resource Group action on $(ResourceGroupName)'
@@ -24,7 +24,7 @@ jobs:
         azureSubscription: '$(serviceConnection)'
         resourceGroupName: '$(ResourceGroupName)'
         location: 'West Europe'
-        csmFile: '$(System.DefaultWorkingDirectory)/tl-matching/drop/azure/template.json'
+        csmFile: './azure/matching-environment.json'
         overrideParameters: '-environmentNameAbbreviation "$(Release.EnvironmentName)" 
           -workerASPSize "$(WorkerASPSize)" 
           -workerASPInstances "$(WorkerASPInstances)" 
