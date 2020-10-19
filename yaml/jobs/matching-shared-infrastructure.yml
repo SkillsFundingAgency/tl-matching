@@ -28,7 +28,7 @@ jobs:
         -threatDetectionEmailAddress "$(ThreatDetectionEmailAddress)" 
         -azureWebsitesRPObjectId "$(AzureWebsitesRPObjectId)" 
         -keyVaultReadWriteObjectIds $(KeyVaultReadWriteObjectIds)'
-    deploymentOutputs: sharedOutputs
+      deploymentOutputs: sharedOutputs        
   
   - task: ARMOutputParserExtension@1
     displayName: 'Convert ARM Template Outputs to Variables'
