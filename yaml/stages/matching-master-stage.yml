@@ -38,6 +38,7 @@ stages:
         SQLServerAdminPassword: $(SQLServerAdminPassword)
     
     - template: ../jobs/matching-infrastructure.yml
+      dependson: DeploySharedInfrastructure
       parameters:
         SharedASPName: $(arm_sharedASPName)
         SharedEnvResourceGroupName: $(SharedResouceGroup)

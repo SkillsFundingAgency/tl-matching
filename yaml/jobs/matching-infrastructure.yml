@@ -41,4 +41,9 @@ jobs:
           -employerFeedbackTrigger "$(EmployerFeedbackTrigger)" 
           -providerFeedbackTrigger "$(ProviderFeedbackTrigger)" 
           -providerReferenceTrigger "$(ProviderReferenceTrigger)"'
-        deploymentOutputs: armOutputs
+        deploymentOutputs: matchingOutputs
+
+    - task: ARMOutputParserExtension@1
+      displayName: 'Convert ARM Template Outputs to Variables'
+      inputs:
+        armOutput: '$(matchingOutputs)'    
