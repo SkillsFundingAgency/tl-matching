@@ -49,11 +49,17 @@
         "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/operations-devops-deployment/master/ArmTemplates/",
         "resourceNamePrefix": "[concat('s126', toLower(parameters('environmentNameAbbreviation')))]",
         "appServicePlanName": "[concat(variables('resourceNamePrefix'), '-asp')]",
-        "appServicePlanSku": { "name": "S1", "tier": "Standard", "size": "S1", "family": "S", "capacity": 2 },
+        "appServicePlanSku": {
+            "name": "S1",
+            "tier": "Standard",
+            "size": "S1",
+            "family": "S",
+            "capacity": 2
+        },
         "appServicePlanOS": "Windows",
         "appServicePlanIsLinux": false,
         "uiAppName": "[concat(variables('resourceNamePrefix'), '-web')]",
-        "workerFunctionAppName": "[concat(variables('resourceNamePrefix'), '-func-woker')]",        
+        "workerFunctionAppName": "[concat(variables('resourceNamePrefix'), '-func-woker')]",
         "sqlDatabaseName": "[concat(variables('resourceNamePrefix'), '-sqldb')]",
         "storageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'str'), '-', '')]"
     },
@@ -86,7 +92,6 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "parameters": {
                     "appServicePlanName": {
                         "value": "[variables('appServicePlanName')]"
                     },
@@ -99,7 +104,6 @@
                     "appServicePlanIsLinux": {
                         "value": "[variables('appServicePlanIsLinux')]"
                     }
-                }
                 }
             }
         },

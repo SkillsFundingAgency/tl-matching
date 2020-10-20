@@ -43,7 +43,7 @@ stages:
         SharedEnvResourceGroupName: $(SharedResouceGroup)
         SharedKeyVaultName: $(arm_sharedKeyVaultName)
         SharedSQLServerName: $(arm_sharedSQLServerName)
-        ConfigurationStorageConnectionString: $(configStorageConnectionString)
+        ConfigurationStorageConnectionString: $(arm_configStorageConnectionString)
         UICustomHostName: $(UICustomHostName)
         CertificateName: $(CertificateName)
         ResourceGroupName: $(ResourceGroupName)
