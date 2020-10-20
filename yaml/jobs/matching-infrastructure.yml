@@ -31,7 +31,7 @@ jobs:
         overrideParameters: '-environmentNameAbbreviation "d01-matching"         
           -sharedASPName "$(SharedASPName)" 
           -sharedEnvResourceGroup "$(SharedEnvResourceGroupName)" 
-          -sharedKeyVaultName "$(SharedKeyVaultName)" 
+          -sharedKeyVaultName "$(parameters.SharedKeyVaultName)" 
           -sharedSQLServerName "$(SharedSQLServerName)" 
           -sqlDatabaseSkuName "$(SQLDatabaseSkuName)" 
           -sqlDatabaseTier "$(SQLDatabaseTier)" 
