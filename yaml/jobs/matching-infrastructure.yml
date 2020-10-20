@@ -19,7 +19,7 @@ parameters:
 
 jobs:
   - job: DeployMatchingInfrastructure
-    dependson: DeploySharedInfrastructure
+    dependsOn: DeploySharedInfrastructure
     steps:
     - task: AzureResourceGroupDeployment@2
       displayName: 'Azure Deployment:Create Or Update Resource Group action on $(ResourceGroupName)'
