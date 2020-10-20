@@ -46,4 +46,5 @@ stages:
         ConfigurationStorageConnectionString: $(configStorageConnectionString)
         UICustomHostName: $(UICustomHostName)
         CertificateName: $(CertificateName)
+        ResourceGroupName: $(ResourceGroupName)
   

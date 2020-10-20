@@ -13,6 +13,8 @@ parameters:
   type: string
 - name: CertificateName
   type: string
+- name: ResourceGroupName
+  type: string
 
 
 jobs:
@@ -24,8 +26,8 @@ jobs:
         azureSubscription: '$(serviceConnection)'
         resourceGroupName: '$(ResourceGroupName)'
         location: 'West Europe'
-        csmFile: './azure/matching-environment.json'
-        overrideParameters: '-environmentNameAbbreviation "$(Release.EnvironmentName)" 
+        csmFile: './azure/matching-environmant.json'
+        overrideParameters: '-environmentNameAbbreviation "d01-matching" 
           -workerASPSize "$(WorkerASPSize)" 
           -workerASPInstances "$(WorkerASPInstances)" 
           -sharedASPName "$(SharedASPName)" 
