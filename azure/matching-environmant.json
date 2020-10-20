@@ -3,8 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "environmentNameAbbreviation": {
-            "type": "string",
-            "maxLength": 4
+            "type": "string"
         },
         "sharedASPName": {
             "type": "string"
