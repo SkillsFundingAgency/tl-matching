@@ -27,9 +27,7 @@ jobs:
         resourceGroupName: '$(ResourceGroupName)'
         location: 'West Europe'
         csmFile: './azure/matching-environmant.json'
-        overrideParameters: '-environmentNameAbbreviation "d01-matching" 
-          -workerASPSize "$(WorkerASPSize)" 
-          -workerASPInstances "$(WorkerASPInstances)" 
+        overrideParameters: '-environmentNameAbbreviation "d01-matching"         
           -sharedASPName "$(SharedASPName)" 
           -sharedEnvResourceGroup "$(SharedEnvResourceGroupName)" 
           -sharedKeyVaultName "$(SharedKeyVaultName)" 
