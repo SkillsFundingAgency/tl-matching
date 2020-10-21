@@ -24,9 +24,9 @@ jobs:
     steps:
     - pwsh: |
         Write-Host $env.SHAREDASPNAME
-        echo $(SharedKeyVaultName)
-        echo $(SharedSQLServerName)
-        echo $(ConfigurationStorageConnectionString)
+        Write-Host $env.SHAREDKEYVAULTNAME
+        Write-Host $env.SHAREDSQLSERVERNAME
+        Write-Host $env.CONFIGURATIONSTORAGECONNECTIONSTRING
 
     - task: AzureResourceGroupDeployment@2
       displayName: 'Azure Deployment:Create Or Update Resource Group action on $(ResourceGroupName)'
