@@ -1,30 +1,40 @@
 parameters:
-- name: SharedASPName
-  type: string
+# - name: SharedASPName
+#   type: string
 - name: SharedEnvResourceGroupName
   type: string
-- name: SharedKeyVaultName
-  type: string
-- name: SharedSQLServerName
-  type: string
-- name: ConfigurationStorageConnectionString
-  type: string
+# - name: SharedKeyVaultName
+#   type: string
+# - name: SharedSQLServerName
+#   type: string
+# - name: ConfigurationStorageConnectionString
+#   type: string
 - name: UICustomHostName
   type: string
 - name: CertificateName
   type: string
 - name: ResourceGroupName
   type: string
-- name: dependencies
-  type: object
+- name: SharedInfrastructureDependency
+  type: string
 
 
 jobs:
   - job: DeployMatchingInfrastructure
     dependsOn: 
-      - '${{ each dependency in parameters.dependencies }}':
-        - ${{dependency}}
+      - SharedInfrastructureDependency
+    Variables:
+      SharedASPName: $[ dependencies.SharedInfrastructureDependency.outputs['arm_sharedASPName'] ] 
+      SharedKeyVaultName: $[ dependencies.SharedInfrastructureDependency.outputs['arm_sharedKeyVaultName'] ] 
+      SharedSQLServerName: $[ dependencies.SharedInfrastructureDependency.outputs['arm_sharedSQLServerName'] ] 
+      ConfigurationStorageConnectionString: $[ dependencies.SharedInfrastructureDependency.outputs['arm_configStorageConnectionString'] ]
     steps:
+    - pwsh: |
+        $(SharedASPName)
+        $(SharedKeyVaultName)
+        $(SharedSQLServerName)
+        $(ConfigurationStorageConnectionString)
+        
     - task: AzureResourceGroupDeployment@2
       displayName: 'Azure Deployment:Create Or Update Resource Group action on $(ResourceGroupName)'
       inputs:
@@ -35,7 +45,7 @@ jobs:
         overrideParameters: '-environmentNameAbbreviation "d01-matching"         
           -sharedASPName "$(SharedASPName)" 
           -sharedEnvResourceGroup "$(SharedEnvResourceGroupName)" 
-          -sharedKeyVaultName "$(parameters.SharedKeyVaultName)" 
+          -sharedKeyVaultName "$(SharedKeyVaultName)" 
           -sharedSQLServerName "$(SharedSQLServerName)" 
           -sqlDatabaseSkuName "$(SQLDatabaseSkuName)" 
           -sqlDatabaseTier "$(SQLDatabaseTier)" 
