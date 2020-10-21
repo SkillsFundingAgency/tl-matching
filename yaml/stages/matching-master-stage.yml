@@ -41,11 +41,11 @@ stages:
       parameters:
         dependencies:
           - DeploySharedInfrastructure
-        SharedASPName: $[ dependencies.job_deploy_infrastructure.outputs['arm_sharedASPName'] ] 
+        SharedASPName: $[ dependencies.DeploySharedInfrastructure.outputs['arm_sharedASPName'] ] 
         SharedEnvResourceGroupName: $(SharedResouceGroup)
-        SharedKeyVaultName: $[ dependencies.job_deploy_infrastructure.outputs['arm_sharedKeyVaultName'] ] 
-        SharedSQLServerName: $[ dependencies.job_deploy_infrastructure.outputs['arm_sharedSQLServerName'] ] 
-        ConfigurationStorageConnectionString: $[ dependencies.job_deploy_infrastructure.outputs['arm_configStorageConnectionString'] ] 
+        SharedKeyVaultName: $[ dependencies.DeploySharedInfrastructure.outputs['arm_sharedKeyVaultName'] ] 
+        SharedSQLServerName: $[ dependencies.DeploySharedInfrastructure.outputs['arm_sharedSQLServerName'] ] 
+        ConfigurationStorageConnectionString: $[ dependencies.DeploySharedInfrastructure.outputs['arm_configStorageConnectionString'] ] 
         UICustomHostName: $(UICustomHostName)
         CertificateName: $(CertificateName)
         ResourceGroupName: $(ResourceGroupName)
