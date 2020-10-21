@@ -29,11 +29,11 @@ jobs:
       SharedSQLServerName: $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['arm_sharedSQLServerName'] ] 
       ConfigurationStorageConnectionString: $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['arm_configStorageConnectionString'] ]
     steps:
-    - pwsh: |
-        $(SharedASPName)
-        $(SharedKeyVaultName)
-        $(SharedSQLServerName)
-        $(ConfigurationStorageConnectionString)
+    - script: |
+        echo $(SharedASPName)
+        echo $(SharedKeyVaultName)
+        echo $(SharedSQLServerName)
+        echo $(ConfigurationStorageConnectionString)
 
     - task: AzureResourceGroupDeployment@2
       displayName: 'Azure Deployment:Create Or Update Resource Group action on $(ResourceGroupName)'
