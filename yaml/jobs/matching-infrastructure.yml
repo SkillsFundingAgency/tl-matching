@@ -23,7 +23,7 @@ jobs:
       
     steps:
     - pwsh: |
-        echo $env.SHAREDASPNAME
+        Write-Host $env.SHAREDASPNAME
         echo $(SharedKeyVaultName)
         echo $(SharedSQLServerName)
         echo $(ConfigurationStorageConnectionString)
