@@ -23,7 +23,7 @@ jobs:
   - job: DeployMatchingInfrastructure
     dependsOn: 
       - SharedInfrastructureDependency
-    Variables:
+    variables:
       SharedASPName: $[ dependencies.SharedInfrastructureDependency.outputs['arm_sharedASPName'] ] 
       SharedKeyVaultName: $[ dependencies.SharedInfrastructureDependency.outputs['arm_sharedKeyVaultName'] ] 
       SharedSQLServerName: $[ dependencies.SharedInfrastructureDependency.outputs['arm_sharedSQLServerName'] ] 
@@ -34,7 +34,7 @@ jobs:
         $(SharedKeyVaultName)
         $(SharedSQLServerName)
         $(ConfigurationStorageConnectionString)
-        
+
     - task: AzureResourceGroupDeployment@2
       displayName: 'Azure Deployment:Create Or Update Resource Group action on $(ResourceGroupName)'
       inputs:
