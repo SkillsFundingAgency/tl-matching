@@ -39,6 +39,8 @@ stages:
     
     - template: ../jobs/matching-infrastructure.yml
       parameters:
+        dependencies:
+          - DeploySharedInfrastructure
         SharedASPName: $(arm_sharedASPName)
         SharedEnvResourceGroupName: $(SharedResouceGroup)
         SharedKeyVaultName: $(arm_sharedKeyVaultName)

@@ -15,11 +15,15 @@ parameters:
   type: string
 - name: ResourceGroupName
   type: string
+- name: dependencies
+  type: object
 
 
 jobs:
   - job: DeployMatchingInfrastructure
-    dependsOn: DeploySharedInfrastructure
+    dependsOn: 
+      - '${{ each dependency in parameters.dependencies }}':
+        - ${{dependency}}
     steps:
     - task: AzureResourceGroupDeployment@2
       displayName: 'Azure Deployment:Create Or Update Resource Group action on $(ResourceGroupName)'

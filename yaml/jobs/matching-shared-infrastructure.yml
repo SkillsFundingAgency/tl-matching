@@ -36,4 +36,13 @@ jobs:
   - task: ARMOutputParserExtension@1
     displayName: 'Convert ARM Template Outputs to Variables'
     inputs:
-      armOutput: '$(sharedOutputs)'    
+      armOutput: '$(sharedOutputs)'
+  
+  - pwsh: |
+      Write-Host "##vso[task.setvariable variable=arm_sharedASPName;isOutput=true;]arm_sharedASPName"
+      Write-Host "##vso[task.setvariable variable=arm_sharedKeyVaultName;isOutput=true;]arm_sharedKeyVaultName"
+      Write-Host "##vso[task.setvariable variable=arm_sharedSQLServerName;isOutput=true;]arm_sharedSQLServerName"
+      Write-Host "##vso[task.setvariable variable=arm_sharedStorageConnectionString;isOutput=true;]arm_sharedStorageConnectionString"
+      Write-Host "##vso[task.setvariable variable=arm_configStorageConnectionString;isOutput=true;]arm_configStorageConnectionString"
+      Write-Host "##vso[task.setvariable variable=arm_sharedASPName;isOutput=true;]arm_sharedASPName"
+      Write-Host "##vso[task.setvariable variable=arm_sharedASPName;isOutput=true;]arm_sharedASPName"
