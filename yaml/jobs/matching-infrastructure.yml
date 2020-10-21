@@ -1,14 +1,6 @@
 parameters:
-# - name: SharedASPName
-#   type: string
 - name: SharedEnvResourceGroupName
   type: string
-# - name: SharedKeyVaultName
-#   type: string
-# - name: SharedSQLServerName
-#   type: string
-# - name: ConfigurationStorageConnectionString
-#   type: string
 - name: UICustomHostName
   type: string
 - name: CertificateName
@@ -28,9 +20,10 @@ jobs:
       SharedKeyVaultName: $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['arm_sharedKeyVaultName'] ] 
       SharedSQLServerName: $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['arm_sharedSQLServerName'] ] 
       ConfigurationStorageConnectionString: $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['arm_configStorageConnectionString'] ]
+      
     steps:
-    - script: |
-        echo $(SharedASPName)
+    - pwsh: |
+        echo $env.SHAREDASPNAME
         echo $(SharedKeyVaultName)
         echo $(SharedSQLServerName)
         echo $(ConfigurationStorageConnectionString)
