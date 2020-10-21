@@ -22,7 +22,7 @@ parameters:
 jobs:
   - job: DeployMatchingInfrastructure
     dependsOn: 
-      - parameters.SharedInfrastructureDependency
+      - $(parameters.SharedInfrastructureDependency)
     variables:
       SharedASPName: $[ dependencies.$(parameters.SharedInfrastructureDependency).outputs['arm_sharedASPName'] ] 
       SharedKeyVaultName: $[ dependencies.$(parameters.SharedInfrastructureDependency).outputs['arm_sharedKeyVaultName'] ] 
