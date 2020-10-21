@@ -22,12 +22,12 @@ parameters:
 jobs:
   - job: DeployMatchingInfrastructure
     dependsOn: 
-      - SharedInfrastructureDependency
+      - parameters.SharedInfrastructureDependency
     variables:
-      SharedASPName: $[ dependencies.SharedInfrastructureDependency.outputs['arm_sharedASPName'] ] 
-      SharedKeyVaultName: $[ dependencies.SharedInfrastructureDependency.outputs['arm_sharedKeyVaultName'] ] 
-      SharedSQLServerName: $[ dependencies.SharedInfrastructureDependency.outputs['arm_sharedSQLServerName'] ] 
-      ConfigurationStorageConnectionString: $[ dependencies.SharedInfrastructureDependency.outputs['arm_configStorageConnectionString'] ]
+      SharedASPName: $[ dependencies.$(parameters.SharedInfrastructureDependency).outputs['arm_sharedASPName'] ] 
+      SharedKeyVaultName: $[ dependencies.$(parameters.SharedInfrastructureDependency).outputs['arm_sharedKeyVaultName'] ] 
+      SharedSQLServerName: $[ dependencies.$(parameters.SharedInfrastructureDependency).outputs['arm_sharedSQLServerName'] ] 
+      ConfigurationStorageConnectionString: $[ dependencies.$(parameters.SharedInfrastructureDependency).outputs['arm_configStorageConnectionString'] ]
     steps:
     - pwsh: |
         $(SharedASPName)
