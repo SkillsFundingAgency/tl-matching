@@ -28,7 +28,7 @@ jobs:
       Write-Host "--1--"
       Write-Host "$($env:ARMOUTPUT_SHAREDSQLSERVERNAME)"
       Write-Host "--2--"
-      Write-Host $SharedSQLServerName
+      Write-Host $(armOutput.sharedSQLServerName)
       Write-Host "--3--"
       Write-Host "$(SharedSQLServerName)"
       Write-Host "--4--"
