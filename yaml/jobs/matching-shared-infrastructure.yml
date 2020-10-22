@@ -33,26 +33,40 @@ jobs:
         -keyVaultReadWriteObjectIds $(KeyVaultReadWriteObjectIds)'
       deploymentOutputs: sharedOutputs        
   
+  - task: ARM Outputs@6
+    name: ArmOutputs
+    inputs:
+      ConnectedServiceNameSelector: 'ConnectedServiceNameARM'
+      ConnectedServiceNameARM: '$(ServiceConnection)'
+      resourceGroupName: '$(SharedEnvResourceGroupName)'
+      whenLastDeploymentIsFailed: 'fail'
+
   - task: ARMOutputParserExtension@1
     displayName: 'Convert ARM Template Outputs to Variables'
     inputs:
       armOutput: '$(sharedOutputs)'
   
-  - pwsh: |
-      Write-Host "##vso[task.setvariable variable=arm_sharedASPName;isOutput=true;]arm_sharedASPName"
-      Write-Host "##vso[task.setvariable variable=arm_sharedKeyVaultName;isOutput=true;]arm_sharedKeyVaultName"
-      Write-Host "##vso[task.setvariable variable=arm_sharedSQLServerName;isOutput=true;]arm_sharedSQLServerName"
-      Write-Host "##vso[task.setvariable variable=arm_sharedStorageConnectionString;isOutput=true;]arm_sharedStorageConnectionString"
-      Write-Host "##vso[task.setvariable variable=arm_configStorageConnectionString;isOutput=true;]arm_configStorageConnectionString"
+  # - pwsh: |
+  #     Write-Host "##vso[task.setvariable variable=sharedASPName;]arm_sharedASPName"
+  #     Write-Host "##vso[task.setvariable variable=sharedKeyVaultName;]arm_sharedKeyVaultName"
+  #     Write-Host "##vso[task.setvariable variable=sharedSQLServerName;]arm_sharedSQLServerName"
+  #     Write-Host "##vso[task.setvariable variable=sharedStorageConnectionString;]arm_sharedStorageConnectionString"
+  #     Write-Host "##vso[task.setvariable variable=configStorageConnectionString;]arm_configStorageConnectionString"
+
+  #     Write-Host "##vso[task.setvariable variable=arm_sharedASPName;isOutput=true;]arm_sharedASPName"
+  #     Write-Host "##vso[task.setvariable variable=arm_sharedKeyVaultName;isOutput=true;]arm_sharedKeyVaultName"
+  #     Write-Host "##vso[task.setvariable variable=arm_sharedSQLServerName;isOutput=true;]arm_sharedSQLServerName"
+  #     Write-Host "##vso[task.setvariable variable=arm_sharedStorageConnectionString;isOutput=true;]arm_sharedStorageConnectionString"
+  #     Write-Host "##vso[task.setvariable variable=arm_configStorageConnectionString;isOutput=true;]arm_configStorageConnectionString"
       
-      Write-Host $env:ARM_SHAREDASPNAME
-      Write-Host $env:ARM_SHAREDKEYVAULTNAME
-      Write-Host $env:ARM_SHAREDSQLSERVERNAME
-      Write-Host $env:ARM_SHAREDSTORAGECONNECTIONSTRING
-      Write-Host $env:ARM_CONFIGSTORAGECONNECTIONSTRING
+  #     Write-Host $env:ARM_SHAREDASPNAME
+  #     Write-Host $env:ARM_SHAREDKEYVAULTNAME
+  #     Write-Host $env:ARM_SHAREDSQLSERVERNAME
+  #     Write-Host $env:ARM_SHAREDSTORAGECONNECTIONSTRING
+  #     Write-Host $env:ARM_CONFIGSTORAGECONNECTIONSTRING
       
-      Write-Host "arm_sharedASPName: $($env:ARM_SHAREDASPNAME)"
-      Write-Host "arm_sharedKeyVaultName: $($env:ARM_SHAREDKEYVAULTNAME)"
-      Write-Host "arm_sharedSQLServerName $($env:ARM_SHAREDSQLSERVERNAME)"
-      Write-Host "arm_sharedStorageConnectionString $($env:ARM_SHAREDSTORAGECONNECTIONSTRING)"
-      Write-Host "arm_configStorageConnectionString: $($env:ARM_CONFIGSTORAGECONNECTIONSTRING)"
+  #     Write-Host "arm_sharedASPName: $($env:ARM_SHAREDASPNAME)"
+  #     Write-Host "arm_sharedKeyVaultName: $($env:ARM_SHAREDKEYVAULTNAME)"
+  #     Write-Host "arm_sharedSQLServerName $($env:ARM_SHAREDSQLSERVERNAME)"
+  #     Write-Host "arm_sharedStorageConnectionString $($env:ARM_SHAREDSTORAGECONNECTIONSTRING)"
+  #     Write-Host "arm_configStorageConnectionString: $($env:ARM_CONFIGSTORAGECONNECTIONSTRING)"
