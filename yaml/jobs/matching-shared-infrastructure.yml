@@ -1,8 +1,5 @@
 jobs:
 - job: DeploySharedInfrastructure
-  pool:
-    name: 'Azure Pipelines'
-    vmImage: 'windows-2019'
   steps:
   - checkout: self
 
