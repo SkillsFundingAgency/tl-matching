@@ -1,15 +1,3 @@
-parameters:
-- name: serviceConnection
-  type: string
-- name: SharedEnvResourceGroupName
-  type: string
-- name: rgLocation
-  type: string
-- name: SQLServerAdminUsername
-  type: string
-- name: SQLServerAdminPassword
-  type: string
-
 jobs:
 - job: DeploySharedInfrastructure
   pool:
@@ -33,40 +21,59 @@ jobs:
         -keyVaultReadWriteObjectIds $(KeyVaultReadWriteObjectIds)'
       deploymentOutputs: sharedOutputs        
   
-  - task: ARM Outputs@6
-    name: ArmOutputs
-    inputs:
-      ConnectedServiceNameSelector: 'ConnectedServiceNameARM'
-      ConnectedServiceNameARM: '$(ServiceConnection)'
-      resourceGroupName: '$(SharedEnvResourceGroupName)'
-      whenLastDeploymentIsFailed: 'fail'
+  # - task: ARM Outputs@6
+  #   name: ArmOutputs
+  #   inputs:
+  #     ConnectedServiceNameSelector: 'ConnectedServiceNameARM'
+  #     ConnectedServiceNameARM: '$(ServiceConnection)'
+  #     resourceGroupName: '$(SharedEnvResourceGroupName)'
+  #     whenLastDeploymentIsFailed: 'fail'
 
-  - task: ARMOutputParserExtension@1
-    displayName: 'Convert ARM Template Outputs to Variables'
-    inputs:
-      armOutput: '$(sharedOutputs)'
-  
+  # - task: ARMOutputParserExtension@1
+  #   displayName: 'Convert ARM Template Outputs to Variables'
+  #   inputs:
+  #     armOutput: '$(sharedOutputs)'
+  - pwsh: |
+      $armOutput = '$(armOutput)'
+      if ($armOutput){
+        $armOutputObj = $armOutput | ConvertFrom-Json
+        Write-Host "Arm output json is:"
+        Write-Host $armOutput
+        Write-Host "outputs found, converting"
+        $armOutputObj.PSObject.Properties | ForEach-Object {
+            $type = ($_.value.type).ToLower()
+            $keyname = "armOutput.$($_.name)"
+            $value = $_.value.value
+
+            if ($type -eq "securestring") {
+                Write-Host "##vso[task.setvariable variable=$keyname;issecret=true]$value"
+                Write-Host "Added Azure DevOps secret variable '$keyname' ('$type')"
+            } elseif ($type -eq "string") {
+                Write-Host "##vso[task.setvariable variable=$keyname]$value"
+                Write-Host "Added Azure DevOps variable '$keyname' ('$type') with value '$value'"
+            } elseif ($type -eq  "object"){
+              $stringObject = $value | ConvertTo-Json
+              Write-Host "##vso[task.setvariable variable=$keyname]$stringObject"
+              Write-Host "Added Azure DevOps variable '$keyname' ('$type') with value '$stringObject'"
+            } else {
+                Throw "Type '$type' is not supported for '$keyname'"
+            }
+        }
+      } else {
+        Write-Host "no outputs found, done"
+      }
+    name: armOutputs
+    displayName: ARM Outputs Variable Write
+
   # - pwsh: |
-  #     Write-Host "##vso[task.setvariable variable=sharedASPName;]arm_sharedASPName"
-  #     Write-Host "##vso[task.setvariable variable=sharedKeyVaultName;]arm_sharedKeyVaultName"
-  #     Write-Host "##vso[task.setvariable variable=sharedSQLServerName;]arm_sharedSQLServerName"
-  #     Write-Host "##vso[task.setvariable variable=sharedStorageConnectionString;]arm_sharedStorageConnectionString"
-  #     Write-Host "##vso[task.setvariable variable=configStorageConnectionString;]arm_configStorageConnectionString"
-
-  #     Write-Host "##vso[task.setvariable variable=arm_sharedASPName;isOutput=true;]arm_sharedASPName"
-  #     Write-Host "##vso[task.setvariable variable=arm_sharedKeyVaultName;isOutput=true;]arm_sharedKeyVaultName"
-  #     Write-Host "##vso[task.setvariable variable=arm_sharedSQLServerName;isOutput=true;]arm_sharedSQLServerName"
-  #     Write-Host "##vso[task.setvariable variable=arm_sharedStorageConnectionString;isOutput=true;]arm_sharedStorageConnectionString"
-  #     Write-Host "##vso[task.setvariable variable=arm_configStorageConnectionString;isOutput=true;]arm_configStorageConnectionString"
+  #     Write-Host $env:SHAREDASPNAME
+  #     Write-Host $env:SHAREDKEYVAULTNAME
+  #     Write-Host $env:SHAREDSQLSERVERNAME
+  #     Write-Host $env:SHAREDSTORAGECONNECTIONSTRING
+  #     Write-Host $env:CONFIGSTORAGECONNECTIONSTRING
       
-  #     Write-Host $env:ARM_SHAREDASPNAME
-  #     Write-Host $env:ARM_SHAREDKEYVAULTNAME
-  #     Write-Host $env:ARM_SHAREDSQLSERVERNAME
-  #     Write-Host $env:ARM_SHAREDSTORAGECONNECTIONSTRING
-  #     Write-Host $env:ARM_CONFIGSTORAGECONNECTIONSTRING
-      
-  #     Write-Host "arm_sharedASPName: $($env:ARM_SHAREDASPNAME)"
-  #     Write-Host "arm_sharedKeyVaultName: $($env:ARM_SHAREDKEYVAULTNAME)"
-  #     Write-Host "arm_sharedSQLServerName $($env:ARM_SHAREDSQLSERVERNAME)"
-  #     Write-Host "arm_sharedStorageConnectionString $($env:ARM_SHAREDSTORAGECONNECTIONSTRING)"
-  #     Write-Host "arm_configStorageConnectionString: $($env:ARM_CONFIGSTORAGECONNECTIONSTRING)"
+  #     Write-Host "sharedASPName: $($env:SHAREDASPNAME)"
+  #     Write-Host "sharedKeyVaultName: $($env:SHAREDKEYVAULTNAME)"
+  #     Write-Host "sharedSQLServerName $($env:SHAREDSQLSERVERNAME)"
+  #     Write-Host "sharedStorageConnectionString $($env:SHAREDSTORAGECONNECTIONSTRING)"
+  #     Write-Host "configStorageConnectionString: $($env:CONFIGSTORAGECONNECTIONSTRING)"
