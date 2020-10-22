@@ -16,9 +16,7 @@ jobs:
   dependsOn: 
     - DeploySharedInfrastructure
   variables:
-    SharedASPName: $[ dependencies.DeploySharedInfrastructure.outputs['armOutput.armOutput.sharedASPName'] ] 
-    SharedASPName2: $[ dependencies.DeploySharedInfrastructure.outputs['armOutput.sharedASPName'] ] 
-
+    SharedASPName: $[ dependencies.DeploySharedInfrastructure.outputs['armOutput.sharedASPName'] ]
     SharedKeyVaultName: $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['armOutput.sharedKeyVaultName'] ] 
     SharedSQLServerName: $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['armOutput.sharedSQLServerName'] ] 
     ConfigurationStorageConnectionString: $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['armOutput.configStorageConnectionString'] ]
@@ -26,10 +24,10 @@ jobs:
   steps:
   - checkout: self
   - pwsh: |
-      Write-Host $env:SharedASPName
-      Write-Host $env:SharedASPName2
+      env:SHAREDSQLSERVERNAME
 
   - pwsh: Get-ChildItem -Recurse
+
   - template: ./Infrastructure/steps/deploy-template.yml@devopsTemplates
     parameters:
       serviceConnection: $(serviceConnection)
@@ -37,14 +35,14 @@ jobs:
       resourceGroupName: $(ResourceGroupName)
       location: 'West Europe'
       templateFilePath: './azure/matching-environmant.json'
-      armParameterOverrideString: '-environmentNameAbbreviation "d01-matching"         
-        -sharedASPName "$(SharedASPName)" 
-        -sharedEnvResourceGroup "$(SharedEnvResourceGroupName)" 
-        -sharedKeyVaultName "$(SharedKeyVaultName)" 
-        -sharedSQLServerName "$(SharedSQLServerName)" 
-        -sqlDatabaseSkuName "$(SQLDatabaseSkuName)" 
-        -sqlDatabaseTier "$(SQLDatabaseTier)" 
-        -configurationStorageConnectionString "$(ConfigurationStorageConnectionString)" 
+      armParameterOverrideString: '-environmentNameAbbreviation "s126d01-matching"         
+        -sharedASPName $env:SHAREDASPNAME 
+        -sharedEnvResourceGroup $(SharedEnvResourceGroupName) 
+        -sharedKeyVaultName $env:SHAREDKEYVAULTNAME 
+        -sharedSQLServerName $env:SHAREDSQLSERVERNAME 
+        -sqlDatabaseSkuName $(SQLDatabaseSkuName) 
+        -sqlDatabaseTier $(SQLDatabaseTier) 
+        -configurationStorageConnectionString $env:CONFIGURATIONSTORAGECONNECTIONSTRING 
         -uiCustomHostName "$(UICustomHostName)" 
         -certificateName "$(CertificateName)" 
         -bankHolidayGeneratorTrigger "$(BankHolidayGeneratorTrigger)" 
