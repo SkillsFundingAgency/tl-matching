@@ -24,8 +24,9 @@ jobs:
   steps:
   - checkout: self
   - pwsh: |
+      Write-Host $[ dependencies.DeploySharedInfrastructure.outputs['armOutput.sharedSQLServerName'] ] 
       Write-Host "--1--"
-      Write-Host $(SharedSQLServerName)
+      Write-Host "$($env:ARMOUTPUT_SHAREDSQLSERVERNAME)"
       Write-Host "--2--"
       Write-Host $SharedSQLServerName
       Write-Host "--3--"
