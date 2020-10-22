@@ -37,15 +37,11 @@ stages:
         SQLServerAdminUsername: $(SQLServerAdminUsername)
         SQLServerAdminPassword: $(SQLServerAdminPassword)
     
-    # - template: ../jobs/matching-infrastructure.yml
-    #   parameters:
-    #     SharedInfrastructureDependency: DeploySharedInfrastructure
-    #     #SharedASPName: $[ dependencies.DeploySharedInfrastructure.outputs['arm_sharedASPName'] ] 
-    #     SharedEnvResourceGroupName: $(SharedResouceGroup)
-    #     #SharedKeyVaultName: $[ dependencies.DeploySharedInfrastructure.outputs['arm_sharedKeyVaultName'] ] 
-    #     #SharedSQLServerName: $[ dependencies.DeploySharedInfrastructure.outputs['arm_sharedSQLServerName'] ] 
-    #     #ConfigurationStorageConnectionString: $[ dependencies.DeploySharedInfrastructure.outputs['arm_configStorageConnectionString'] ] 
-    #     UICustomHostName: $(UICustomHostName)
-    #     CertificateName: $(CertificateName)
-    #     ResourceGroupName: $(ResourceGroupName)
+    - template: ../jobs/matching-infrastructure.yml
+      parameters:
+        SharedInfrastructureDependency: DeploySharedInfrastructure
+        SharedEnvResourceGroupName: $(SharedResouceGroup)
+        UICustomHostName: $(UICustomHostName)
+        CertificateName: $(CertificateName)
+        ResourceGroupName: $(ResourceGroupName)
   

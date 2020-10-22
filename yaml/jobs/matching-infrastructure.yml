@@ -12,46 +12,71 @@ parameters:
 
 
 jobs:
-  - job: DeployMatchingInfrastructure
-    dependsOn: 
-      - ${{parameters.SharedInfrastructureDependency}}
-    variables:
-      SharedASPName: $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['arm_sharedASPName'] ] 
-      SharedKeyVaultName: $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['arm_sharedKeyVaultName'] ] 
-      SharedSQLServerName: $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['arm_sharedSQLServerName'] ] 
-      ConfigurationStorageConnectionString: $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['arm_configStorageConnectionString'] ]
-      
-    steps:
-    - pwsh: |
-        Write-Host "SharedASPName: $env:SHAREDASPNAME"
-        Write-Host "SharedKeyVaultName: $env:SHAREDKEYVAULTNAME"
-        Write-Host "SharedSQLServerName $env:SHAREDSQLSERVERNAME"
-        Write-Host "ConfigurationStorageConnectionString: $env:CONFIGURATIONSTORAGECONNECTIONSTRING"
+- job: DeployMatchingInfrastructure
+  dependsOn: 
+    - ${{parameters.SharedInfrastructureDependency}}
+  variables:
+    SharedASPName: $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['armOutput.sharedASPName'] ] 
+    SharedKeyVaultName: $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['armOutput.sharedKeyVaultName'] ] 
+    SharedSQLServerName: $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['armOutput.sharedSQLServerName'] ] 
+    ConfigurationStorageConnectionString: $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['armOutput.configStorageConnectionString'] ]
+    
+  steps:
+  - checkout: self
+  - pwsh: Write-Host "$env:SharedASPName"
+  - pwsh: Get-ChildItem -Recurse
+  - template: ./Infrastructure/steps/deploy-template.yml@devopsTemplates
+    parameters:
+      serviceConnection: $(serviceConnection)
+      subscriptionId: $(subscriptionId)
+      resourceGroupName: $(ResourceGroupName)
+      location: 'West Europe'
+      templateFilePath: './azure/matching-environmant.json'
+      armParameterOverrideString: '-environmentNameAbbreviation "d01-matching"         
+        -sharedASPName "$(SharedASPName)" 
+        -sharedEnvResourceGroup "$(SharedEnvResourceGroupName)" 
+        -sharedKeyVaultName "$(SharedKeyVaultName)" 
+        -sharedSQLServerName "$(SharedSQLServerName)" 
+        -sqlDatabaseSkuName "$(SQLDatabaseSkuName)" 
+        -sqlDatabaseTier "$(SQLDatabaseTier)" 
+        -configurationStorageConnectionString "$(ConfigurationStorageConnectionString)" 
+        -uiCustomHostName "$(UICustomHostName)" 
+        -certificateName "$(CertificateName)" 
+        -bankHolidayGeneratorTrigger "$(BankHolidayGeneratorTrigger)" 
+        -employerFeedbackTrigger "$(EmployerFeedbackTrigger)" 
+        -providerFeedbackTrigger "$(ProviderFeedbackTrigger)" 
+        -providerReferenceTrigger "$(ProviderReferenceTrigger)"'
+      processOutputs: true
+  # - pwsh: |
+  #     Write-Host "SharedASPName: $env:SHAREDASPNAME"
+    #     Write-Host "SharedKeyVaultName: $env:SHAREDKEYVAULTNAME"
+    #     Write-Host "SharedSQLServerName $env:SHAREDSQLSERVERNAME"
+    #     Write-Host "ConfigurationStorageConnectionString: $env:CONFIGURATIONSTORAGECONNECTIONSTRING"
 
-    - task: AzureResourceGroupDeployment@2
-      displayName: 'Azure Deployment:Create Or Update Resource Group action on $(ResourceGroupName)'
-      inputs:
-        azureSubscription: '$(serviceConnection)'
-        resourceGroupName: '$(ResourceGroupName)'
-        location: 'West Europe'
-        csmFile: './azure/matching-environmant.json'
-        overrideParameters: '-environmentNameAbbreviation "d01-matching"         
-          -sharedASPName "$(SharedASPName)" 
-          -sharedEnvResourceGroup "$(SharedEnvResourceGroupName)" 
-          -sharedKeyVaultName "$(SharedKeyVaultName)" 
-          -sharedSQLServerName "$(SharedSQLServerName)" 
-          -sqlDatabaseSkuName "$(SQLDatabaseSkuName)" 
-          -sqlDatabaseTier "$(SQLDatabaseTier)" 
-          -configurationStorageConnectionString "$(ConfigurationStorageConnectionString)" 
-          -uiCustomHostName "$(UICustomHostName)" 
-          -certificateName "$(CertificateName)" 
-          -bankHolidayGeneratorTrigger "$(BankHolidayGeneratorTrigger)" 
-          -employerFeedbackTrigger "$(EmployerFeedbackTrigger)" 
-          -providerFeedbackTrigger "$(ProviderFeedbackTrigger)" 
-          -providerReferenceTrigger "$(ProviderReferenceTrigger)"'
-        deploymentOutputs: matchingOutputs
+    # - task: AzureResourceGroupDeployment@2
+    #   displayName: 'Azure Deployment:Create Or Update Resource Group action on $(ResourceGroupName)'
+    #   inputs:
+    #     azureSubscription: '$(serviceConnection)'
+    #     resourceGroupName: '$(ResourceGroupName)'
+    #     location: 'West Europe'
+    #     csmFile: './azure/matching-environmant.json'
+    #     overrideParameters: '-environmentNameAbbreviation "d01-matching"         
+    #       -sharedASPName "$(SharedASPName)" 
+    #       -sharedEnvResourceGroup "$(SharedEnvResourceGroupName)" 
+    #       -sharedKeyVaultName "$(SharedKeyVaultName)" 
+    #       -sharedSQLServerName "$(SharedSQLServerName)" 
+    #       -sqlDatabaseSkuName "$(SQLDatabaseSkuName)" 
+    #       -sqlDatabaseTier "$(SQLDatabaseTier)" 
+    #       -configurationStorageConnectionString "$(ConfigurationStorageConnectionString)" 
+    #       -uiCustomHostName "$(UICustomHostName)" 
+    #       -certificateName "$(CertificateName)" 
+    #       -bankHolidayGeneratorTrigger "$(BankHolidayGeneratorTrigger)" 
+    #       -employerFeedbackTrigger "$(EmployerFeedbackTrigger)" 
+    #       -providerFeedbackTrigger "$(ProviderFeedbackTrigger)" 
+    #       -providerReferenceTrigger "$(ProviderReferenceTrigger)"'
+    #     deploymentOutputs: matchingOutputs
 
-    - task: ARMOutputParserExtension@1
-      displayName: 'Convert ARM Template Outputs to Variables'
-      inputs:
-        armOutput: '$(matchingOutputs)'    
+    # - task: ARMOutputParserExtension@1
+    #   displayName: 'Convert ARM Template Outputs to Variables'
+    #   inputs:
+    #     armOutput: '$(matchingOutputs)'    
