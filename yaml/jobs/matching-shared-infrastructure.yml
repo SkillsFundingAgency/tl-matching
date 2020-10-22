@@ -44,4 +44,9 @@ jobs:
       Write-Host "##vso[task.setvariable variable=arm_sharedSQLServerName;isOutput=true;]arm_sharedSQLServerName"
       Write-Host "##vso[task.setvariable variable=arm_sharedStorageConnectionString;isOutput=true;]arm_sharedStorageConnectionString"
       Write-Host "##vso[task.setvariable variable=arm_configStorageConnectionString;isOutput=true;]arm_configStorageConnectionString"
-      Write-Host $env.ARM_SHAREDASPNAME
+      Write-Host $env:ARM_SHAREDASPNAME
+       Write-Host "arm_sharedASPName: $env:ARM_SHAREDASPNAME"
+        Write-Host "arm_sharedKeyVaultName: $env:ARM_SHAREDKEYVAULTNAME"
+        Write-Host "arm_sharedSQLServerName $env:ARM_SHAREDSQLSERVERNAME"
+        Write-Host "arm_sharedStorageConnectionString $env:ARM_SHAREDSTORAGECONNECTIONSTRING"
+        Write-Host "arm_configStorageConnectionString: $env:ARM_CONFIGSTORAGECONNECTIONSTRING"
