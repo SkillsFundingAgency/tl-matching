@@ -19,7 +19,7 @@ jobs:
         -threatDetectionEmailAddress "$(ThreatDetectionEmailAddress)" 
         -azureWebsitesRPObjectId "$(AzureWebsitesRPObjectId)" 
         -keyVaultReadWriteObjectIds $(KeyVaultReadWriteObjectIds)'
-      deploymentOutputs: sharedOutputs        
+      deploymentOutputs: armOutput        
   
   # - task: ARM Outputs@6
   #   name: ArmOutputs
