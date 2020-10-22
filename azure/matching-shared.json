@@ -211,7 +211,7 @@
         },
         "sharedSQLServerName": {
             "type": "string",
-            "value": "[reference(resourceId('Microsoft.Sql/servers', variables('sqlServerName'))).fullyQualifiedDomainName]"
+            "value": "[variables('sqlServerName')]"
         },
         "sharedStorageConnectionString": {
             "type": "securestring",
