@@ -17,14 +17,14 @@ jobs:
     - DeploySharedInfrastructure
   variables:
     SharedASPName: $[ dependencies.DeploySharedInfrastructure.outputs['armOutput.sharedASPName'] ]
-    SharedKeyVaultName: $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['armOutput.sharedKeyVaultName'] ] 
-    SharedSQLServerName: $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['armOutput.sharedSQLServerName'] ] 
-    ConfigurationStorageConnectionString: $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['armOutput.configStorageConnectionString'] ]
+    SharedKeyVaultName: $[ dependencies.DeploySharedInfrastructure.outputs['armOutput.sharedKeyVaultName'] ] 
+    SharedSQLServerName: $[ dependencies.DeploySharedInfrastructure.outputs['armOutput.sharedSQLServerName'] ] 
+    ConfigurationStorageConnectionString: $[ dependencies.DeploySharedInfrastructure.outputs['armOutput.configStorageConnectionString'] ]
     
   steps:
   - checkout: self
   - pwsh: |
-      env:SHAREDSQLSERVERNAME
+      Write-Host env:SHAREDSQLSERVERNAME
 
   - pwsh: Get-ChildItem -Recurse
 
