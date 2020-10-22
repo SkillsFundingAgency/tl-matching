@@ -36,13 +36,13 @@ jobs:
       location: 'West Europe'
       templateFilePath: './azure/matching-environmant.json'
       armParameterOverrideString: '-environmentNameAbbreviation "s126d01-matching"         
-        -sharedASPName $env:SHAREDASPNAME 
-        -sharedEnvResourceGroup $(SharedEnvResourceGroupName) 
-        -sharedKeyVaultName $env:SHAREDKEYVAULTNAME 
-        -sharedSQLServerName $env:SHAREDSQLSERVERNAME 
-        -sqlDatabaseSkuName $(SQLDatabaseSkuName) 
-        -sqlDatabaseTier $(SQLDatabaseTier) 
-        -configurationStorageConnectionString $env:CONFIGURATIONSTORAGECONNECTIONSTRING 
+        -sharedASPName "$(SharedASPName)" 
+        -sharedEnvResourceGroup "$(SharedEnvResourceGroupName)" 
+        -sharedKeyVaultName "$(SharedKeyVaultName)" 
+        -sharedSQLServerName "$(SharedSQLServerName)" 
+        -sqlDatabaseSkuName "$(SQLDatabaseSkuName)" 
+        -sqlDatabaseTier "$(SQLDatabaseTier)" 
+        -configurationStorageConnectionString "$(ConfigurationStorageConnectionString)" 
         -uiCustomHostName "$(UICustomHostName)" 
         -certificateName "$(CertificateName)" 
         -bankHolidayGeneratorTrigger "$(BankHolidayGeneratorTrigger)" 
