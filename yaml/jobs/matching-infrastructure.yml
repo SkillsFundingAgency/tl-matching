@@ -23,11 +23,10 @@ jobs:
       
     steps:
     - pwsh: |
-        Write-Host $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['arm_sharedASPName'] ]
-        Write-Host $(SharedASPName)
-        Write-Host $(SharedKeyVaultName)
-        Write-Host $(SharedSQLServerName)
-        Write-Host $(ConfigurationStorageConnectionString)
+        Write-Host "SharedASPName: $env:SharedASPName"
+        Write-Host "SharedKeyVaultName: $env:SharedKeyVaultName"
+        Write-Host "SharedSQLServerName $env:SharedSQLServerName"
+        Write-Host "ConfigurationStorageConnectionString: $env:ConfigurationStorageConnectionString"
 
     - task: AzureResourceGroupDeployment@2
       displayName: 'Azure Deployment:Create Or Update Resource Group action on $(ResourceGroupName)'
