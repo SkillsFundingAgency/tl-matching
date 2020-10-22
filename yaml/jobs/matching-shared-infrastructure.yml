@@ -4,14 +4,18 @@ jobs:
     name: 'Azure Pipelines'
     vmImage: 'windows-2019'
   steps:
-  - task: AzureResourceGroupDeployment@2
-    displayName: 'Azure Deployment:Create Or Update Resource Group action on $(SharedEnvResourceGroupName)'
-    inputs:
-      azureSubscription: '$(serviceConnection)'
-      resourceGroupName: '$(SharedEnvResourceGroupName)'
+  - checkout: devopsTemplates
+  
+  - pwsh: Get-ChildItem -Recurse
+
+  - template: ./Infrastructure/steps/deploy-template.yml@devopsTemplates
+    parameters:
+      serviceConnection: $(serviceConnection)
+      subscriptionId: $(subscriptionId)
+      resourceGroupName: $(SharedEnvResourceGroupName)
       location: 'West Europe'
-      csmFile: './azure/matching-shared.json'
-      overrideParameters: '-environmentNameAbbreviation "d01-matching" 
+      templateFilePath: './azure/matching-shared.json'
+      armParameterOverrideString: '-environmentNameAbbreviation "d01-matching" 
         -sqlServerAdminUsername "$(SQLServerAdminUsername)" 
         -sqlServerAdminPassword "$(SQLServerAdminPassword)" 
         -sqlServerActiveDirectoryAdminLogin "$(SQLServerActiveDirectoryAdminLogin)" 
@@ -19,7 +23,25 @@ jobs:
         -threatDetectionEmailAddress "$(ThreatDetectionEmailAddress)" 
         -azureWebsitesRPObjectId "$(AzureWebsitesRPObjectId)" 
         -keyVaultReadWriteObjectIds $(KeyVaultReadWriteObjectIds)'
-      deploymentOutputs: armOutput        
+      processOutputs: true
+
+
+  # - task: AzureResourceGroupDeployment@2
+  #   displayName: 'Azure Deployment:Create Or Update Resource Group action on $(SharedEnvResourceGroupName)'
+  #   inputs:
+  #     azureSubscription: '$(serviceConnection)'
+  #     resourceGroupName: '$(SharedEnvResourceGroupName)'
+  #     location: 'West Europe'
+  #     csmFile: './azure/matching-shared.json'
+  #     overrideParameters: '-environmentNameAbbreviation "d01-matching" 
+  #       -sqlServerAdminUsername "$(SQLServerAdminUsername)" 
+  #       -sqlServerAdminPassword "$(SQLServerAdminPassword)" 
+  #       -sqlServerActiveDirectoryAdminLogin "$(SQLServerActiveDirectoryAdminLogin)" 
+  #       -sqlServerActiveDirectoryAdminObjectId "$(SQLServerActiveDirectoryAdminObjectId)" 
+  #       -threatDetectionEmailAddress "$(ThreatDetectionEmailAddress)" 
+  #       -azureWebsitesRPObjectId "$(AzureWebsitesRPObjectId)" 
+  #       -keyVaultReadWriteObjectIds $(KeyVaultReadWriteObjectIds)'
+  #     deploymentOutputs: armOutput        
   
   # - task: ARM Outputs@6
   #   name: ArmOutputs
@@ -33,37 +55,37 @@ jobs:
   #   displayName: 'Convert ARM Template Outputs to Variables'
   #   inputs:
   #     armOutput: '$(sharedOutputs)'
-  - pwsh: |
-      $armOutput = '$(armOutput)'
-      if ($armOutput){
-        $armOutputObj = $armOutput | ConvertFrom-Json
-        Write-Host "Arm output json is:"
-        Write-Host $armOutput
-        Write-Host "outputs found, converting"
-        $armOutputObj.PSObject.Properties | ForEach-Object {
-            $type = ($_.value.type).ToLower()
-            $keyname = "armOutput.$($_.name)"
-            $value = $_.value.value
+  # - pwsh: |
+  #     $armOutput = '$(armOutput)'
+  #     if ($armOutput){
+  #       $armOutputObj = $armOutput | ConvertFrom-Json
+  #       Write-Host "Arm output json is:"
+  #       Write-Host $armOutput
+  #       Write-Host "outputs found, converting"
+  #       $armOutputObj.PSObject.Properties | ForEach-Object {
+  #           $type = ($_.value.type).ToLower()
+  #           $keyname = "armOutput.$($_.name)"
+  #           $value = $_.value.value
 
-            if ($type -eq "securestring") {
-                Write-Host "##vso[task.setvariable variable=$keyname;issecret=true]$value"
-                Write-Host "Added Azure DevOps secret variable '$keyname' ('$type')"
-            } elseif ($type -eq "string") {
-                Write-Host "##vso[task.setvariable variable=$keyname]$value"
-                Write-Host "Added Azure DevOps variable '$keyname' ('$type') with value '$value'"
-            } elseif ($type -eq  "object"){
-              $stringObject = $value | ConvertTo-Json
-              Write-Host "##vso[task.setvariable variable=$keyname]$stringObject"
-              Write-Host "Added Azure DevOps variable '$keyname' ('$type') with value '$stringObject'"
-            } else {
-                Throw "Type '$type' is not supported for '$keyname'"
-            }
-        }
-      } else {
-        Write-Host "no outputs found, done"
-      }
-    name: armOutputs
-    displayName: ARM Outputs Variable Write
+  #           if ($type -eq "securestring") {
+  #               Write-Host "##vso[task.setvariable variable=$keyname;issecret=true]$value"
+  #               Write-Host "Added Azure DevOps secret variable '$keyname' ('$type')"
+  #           } elseif ($type -eq "string") {
+  #               Write-Host "##vso[task.setvariable variable=$keyname]$value"
+  #               Write-Host "Added Azure DevOps variable '$keyname' ('$type') with value '$value'"
+  #           } elseif ($type -eq  "object"){
+  #             $stringObject = $value | ConvertTo-Json
+  #             Write-Host "##vso[task.setvariable variable=$keyname]$stringObject"
+  #             Write-Host "Added Azure DevOps variable '$keyname' ('$type') with value '$stringObject'"
+  #           } else {
+  #               Throw "Type '$type' is not supported for '$keyname'"
+  #           }
+  #       }
+  #     } else {
+  #       Write-Host "no outputs found, done"
+  #     }
+  #   name: armOutputs
+  #   displayName: ARM Outputs Variable Write
 
   # - pwsh: |
   #     Write-Host $env:SHAREDASPNAME
