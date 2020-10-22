@@ -24,7 +24,14 @@ jobs:
   steps:
   - checkout: self
   - pwsh: |
-      Write-Host $env:SHAREDSQLSERVERNAME
+      Write-Host "--1--"
+      Write-Host $(SharedSQLServerName)
+      Write-Host "--2--"
+      Write-Host $SharedSQLServerName
+      Write-Host "--3--"
+      Write-Host "$(SharedSQLServerName)"
+      Write-Host "--4--"
+      Write-Host "$($SharedSQLServerName)"
 
   - pwsh: Get-ChildItem -Recurse
 
