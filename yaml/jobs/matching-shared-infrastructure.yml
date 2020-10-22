@@ -4,8 +4,7 @@ jobs:
     name: 'Azure Pipelines'
     vmImage: 'windows-2019'
   steps:
-  - checkout: devopsTemplates
-  
+  - checkout: self
   - pwsh: Get-ChildItem -Recurse
 
   - template: ./Infrastructure/steps/deploy-template.yml@devopsTemplates
