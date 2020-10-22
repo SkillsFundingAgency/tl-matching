@@ -14,16 +14,21 @@ parameters:
 jobs:
 - job: DeployMatchingInfrastructure
   dependsOn: 
-    - ${{parameters.SharedInfrastructureDependency}}
+    - DeploySharedInfrastructure
   variables:
-    SharedASPName: $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['armOutput.sharedASPName'] ] 
+    SharedASPName: $[ dependencies.DeploySharedInfrastructure.outputs['armOutput.armOutput.sharedASPName'] ] 
+    SharedASPName2: $[ dependencies.DeploySharedInfrastructure.outputs['armOutput.sharedASPName'] ] 
+
     SharedKeyVaultName: $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['armOutput.sharedKeyVaultName'] ] 
     SharedSQLServerName: $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['armOutput.sharedSQLServerName'] ] 
     ConfigurationStorageConnectionString: $[ dependencies.${{parameters.SharedInfrastructureDependency}}.outputs['armOutput.configStorageConnectionString'] ]
     
   steps:
   - checkout: self
-  - pwsh: Write-Host "$env:SharedASPName"
+  - pwsh: |
+      Write-Host $env:SharedASPName
+      Write-Host $env:SharedASPName2
+
   - pwsh: Get-ChildItem -Recurse
   - template: ./Infrastructure/steps/deploy-template.yml@devopsTemplates
     parameters:
