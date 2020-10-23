@@ -1,9 +1,21 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "environmentNameAbbreviation": {
             "type": "string"
+        },
+        "workerASPSize": {
+            "type": "string",
+            "allowedValues": [
+                "1",
+                "2",
+                "3"
+            ]
+        },
+        "workerASPInstances": {
+            "type": "int",
+            "minValue": 1
         },
         "sharedASPName": {
             "type": "string"
@@ -49,15 +61,6 @@
         "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/operations-devops-deployment/master/ArmTemplates/",
         "resourceNamePrefix": "[concat('s126', toLower(parameters('environmentNameAbbreviation')))]",
         "appServicePlanName": "[concat(variables('resourceNamePrefix'), '-asp')]",
-        "appServicePlanSku": {
-            "name": "S1",
-            "tier": "Standard",
-            "size": "S1",
-            "family": "S",
-            "capacity": 2
-        },
-        "appServicePlanOS": "Windows",
-        "appServicePlanIsLinux": false,
         "uiAppName": "[concat(variables('resourceNamePrefix'), '-web')]",
         "workerFunctionAppName": "[concat(variables('resourceNamePrefix'), '-func-woker')]",
         "sqlDatabaseName": "[concat(variables('resourceNamePrefix'), '-sqldb')]",
@@ -88,21 +91,18 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(variables('deploymentUrlBase'),'app-service-plan.json')]",
+                    "uri": "[concat(variables('deploymentUrlBase'),'app-service-plan-ase.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
                     "appServicePlanName": {
                         "value": "[variables('appServicePlanName')]"
                     },
-                    "appServicePlanSku": {
-                        "value": "[variables('appServicePlanSku')]"
+                    "aspSize": {
+                        "value": "[parameters('workerASPSize')]"
                     },
-                    "appServicePlanOS": {
-                        "value": "[variables('appServicePlanOS')]"
-                    },
-                    "appServicePlanIsLinux": {
-                        "value": "[variables('appServicePlanIsLinux')]"
+                    "aspInstances": {
+                        "value": "[parameters('workerASPInstances')]"
                     }
                 }
             }

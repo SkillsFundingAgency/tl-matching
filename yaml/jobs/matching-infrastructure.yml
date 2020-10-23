@@ -22,6 +22,8 @@ jobs:
     SharedKeyVaultName:  s126d01matchingsharedkv
     SharedSQLServerName:  s126d01-matching-shared-sql
     ConfigurationStorageConnectionString: configStorageConnectionString=DefaultEndpointsProtocol=https;AccountName=s126d01matchingconfigstr;AccountKey=s8UOhuwQ9Y/U3K7wMt6I4+PKW+zyjlIs7rDarxfncF9V3g3Ep/c89MlJrOyPjEqi4+Vzsu1o78nHX8gU0IKLmQ==;EndpointSuffix=core.windows.net 
+    WorkerASPSize: 1
+    workerASPInstances: 1
   steps:
   - checkout: self
   - pwsh: |
@@ -37,6 +39,8 @@ jobs:
       location: 'West Europe'
       templateFilePath: './azure/matching-environmant.json'
       armParameterOverrideString: '-environmentNameAbbreviation "s126d01-matching"         
+        -workerASPSize "$(WorkerASPSize)" 
+        -workerASPInstances "$(WorkerASPInstances)" 
         -sharedASPName "$(SharedASPName)" 
         -sharedEnvResourceGroup "$(SharedEnvResourceGroupName)" 
         -sharedKeyVaultName "$(SharedKeyVaultName)" 
@@ -51,36 +55,3 @@ jobs:
         -providerFeedbackTrigger "$(ProviderFeedbackTrigger)" 
         -providerReferenceTrigger "$(ProviderReferenceTrigger)"'
       processOutputs: true
-  # - pwsh: |
-  #     Write-Host "SharedASPName: $env:SHAREDASPNAME"
-    #     Write-Host "SharedKeyVaultName: $env:SHAREDKEYVAULTNAME"
-    #     Write-Host "SharedSQLServerName $env:SHAREDSQLSERVERNAME"
-    #     Write-Host "ConfigurationStorageConnectionString: $env:CONFIGURATIONSTORAGECONNECTIONSTRING"
-
-    # - task: AzureResourceGroupDeployment@2
-    #   displayName: 'Azure Deployment:Create Or Update Resource Group action on $(ResourceGroupName)'
-    #   inputs:
-    #     azureSubscription: '$(serviceConnection)'
-    #     resourceGroupName: '$(ResourceGroupName)'
-    #     location: 'West Europe'
-    #     csmFile: './azure/matching-environmant.json'
-    #     overrideParameters: '-environmentNameAbbreviation "d01-matching"         
-    #       -sharedASPName "$(SharedASPName)" 
-    #       -sharedEnvResourceGroup "$(SharedEnvResourceGroupName)" 
-    #       -sharedKeyVaultName "$(SharedKeyVaultName)" 
-    #       -sharedSQLServerName "$(SharedSQLServerName)" 
-    #       -sqlDatabaseSkuName "$(SQLDatabaseSkuName)" 
-    #       -sqlDatabaseTier "$(SQLDatabaseTier)" 
-    #       -configurationStorageConnectionString "$(ConfigurationStorageConnectionString)" 
-    #       -uiCustomHostName "$(UICustomHostName)" 
-    #       -certificateName "$(CertificateName)" 
-    #       -bankHolidayGeneratorTrigger "$(BankHolidayGeneratorTrigger)" 
-    #       -employerFeedbackTrigger "$(EmployerFeedbackTrigger)" 
-    #       -providerFeedbackTrigger "$(ProviderFeedbackTrigger)" 
-    #       -providerReferenceTrigger "$(ProviderReferenceTrigger)"'
-    #     deploymentOutputs: matchingOutputs
-
-    # - task: ARMOutputParserExtension@1
-    #   displayName: 'Convert ARM Template Outputs to Variables'
-    #   inputs:
-    #     armOutput: '$(matchingOutputs)'    
