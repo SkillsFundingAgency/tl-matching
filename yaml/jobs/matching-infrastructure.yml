@@ -14,14 +14,14 @@ jobs:
   dependsOn: 
     - DeploySharedInfrastructure
   variables:
-    # SharedASPName: $[ dependencies.DeploySharedInfrastructure.outputs['armOutput.sharedASPName'] ]
-    # SharedKeyVaultName: $[ dependencies.DeploySharedInfrastructure.outputs['armOutput.sharedKeyVaultName'] ] 
-    # SharedSQLServerName: $[ dependencies.DeploySharedInfrastructure.outputs['armOutput.sharedSQLServerName'] ] 
-    # ConfigurationStorageConnectionString: $[ dependencies.DeploySharedInfrastructure.outputs['armOutput.configStorageConnectionString'] ]
-    SharedASPName: s126d01-matching-shared-asp
-    SharedKeyVaultName:  s126d01matchingsharedkv
-    SharedSQLServerName:  s126d01-matching-shared-sql
-    ConfigurationStorageConnectionString: configStorageConnectionString=DefaultEndpointsProtocol=https;AccountName=s126d01matchingconfigstr;AccountKey=s8UOhuwQ9Y/U3K7wMt6I4+PKW+zyjlIs7rDarxfncF9V3g3Ep/c89MlJrOyPjEqi4+Vzsu1o78nHX8gU0IKLmQ==;EndpointSuffix=core.windows.net 
+    SharedASPName: $[ dependencies.DeploySharedInfrastructure.outputs['armOutput.sharedASPName'] ]
+    SharedKeyVaultName: $[ dependencies.DeploySharedInfrastructure.outputs['armOutput.sharedKeyVaultName'] ] 
+    SharedSQLServerName: $[ dependencies.DeploySharedInfrastructure.outputs['armOutput.sharedSQLServerName'] ] 
+    ConfigurationStorageConnectionString: $[ dependencies.DeploySharedInfrastructure.outputs['armOutput.configStorageConnectionString'] ]
+    # SharedASPName: s126d01-matching-shared-asp
+    # SharedKeyVaultName:  s126d01matchingsharedkv
+    # SharedSQLServerName:  s126d01-matching-shared-sql
+    # ConfigurationStorageConnectionString: configStorageConnectionString=DefaultEndpointsProtocol=https;AccountName=s126d01matchingconfigstr;AccountKey=s8UOhuwQ9Y/U3K7wMt6I4+PKW+zyjlIs7rDarxfncF9V3g3Ep/c89MlJrOyPjEqi4+Vzsu1o78nHX8gU0IKLmQ==;EndpointSuffix=core.windows.net 
     
   steps:
   - checkout: self
