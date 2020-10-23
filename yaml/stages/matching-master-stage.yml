@@ -16,7 +16,7 @@ stages:
       AzureWebsitesRPObjectId: '7fa23fd6-537e-4d28-b0ca-54d075cce842'
       KeyVaultReadWriteObjectIds: '["94923ac5-81df-4584-8806-a69f5fae6c14"]'
       SharedResourceGroup: 's126d01-matching-shared'
-      CertificateName: 'arm_sharedSQLServerName'
+      CertificateName: 'wildcard-industryplacementmatching-education-gov-uk'
       UICustomHostName: 'at.industryplacementmatching.education.gov.uk'
     
       ResourceGroupName: 's126d01-matching'
