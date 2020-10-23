@@ -16,6 +16,9 @@ jobs:
         -sqlServerActiveDirectoryAdminLogin "$(SQLServerActiveDirectoryAdminLogin)" 
         -sqlServerActiveDirectoryAdminObjectId "$(SQLServerActiveDirectoryAdminObjectId)" 
         -threatDetectionEmailAddress "$(ThreatDetectionEmailAddress)" 
+        -appServicePlanTier "$(AppServicePlanTier)" 
+        -appServicePlanSize "$(AppServicePlanSize)" 
+        -appServicePlanInstances "$(AppServicePlanInstances)" 
         -azureWebsitesRPObjectId "$(AzureWebsitesRPObjectId)" 
         -keyVaultReadWriteObjectIds $(KeyVaultReadWriteObjectIds)'
       processOutputs: true

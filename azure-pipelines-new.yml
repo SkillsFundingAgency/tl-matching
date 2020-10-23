@@ -52,7 +52,9 @@ variables:
   testSqlDatabaseTier: 'Standard'
   ConfigStorageAccountName: 's126d01matchingconfigstr'
   dotnetVersion: '3.x'
-   
+  WorkerASPSize: 1
+  workerASPInstances: 1
+  AppServicePlanTier: 'Standard' 
 
 stages:
   - template: ./yaml/stages/matching-master-stage.yml

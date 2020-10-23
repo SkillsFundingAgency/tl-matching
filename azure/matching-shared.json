@@ -1,9 +1,10 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "environmentNameAbbreviation": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 4
         },
         "sqlServerAdminUsername": {
             "type": "string"
@@ -20,6 +21,26 @@
         "threatDetectionEmailAddress": {
             "type": "string"
         },
+        "appServicePlanTier": {
+            "type": "string",
+            "allowedValues": [
+                "Standard",
+                "Premium",
+                "PremiumV2"
+            ]
+        },
+        "appServicePlanSize": {
+            "type": "string",
+            "allowedValues": [
+                "1",
+                "2",
+                "3"
+            ]
+        },
+        "appServicePlanInstances": {
+            "type": "int",
+            "minValue": 1
+        },
         "azureWebsitesRPObjectId": {
             "type": "string"
         },
@@ -33,18 +54,8 @@
         "sqlServerName": "[concat(variables('resourceNamePrefix'), '-shared-sql')]",
         "sharedStorageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'sharedstr'), '-', '')]",
         "appServicePlanName": "[concat(variables('resourceNamePrefix'), '-shared-asp')]",
-        "appServicePlanSku": {
-            "name": "S1",
-            "tier": "Standard",
-            "size": "S1",
-            "family": "S",
-            "capacity": 2
-        },
-        "appServicePlanOS": "Windows",
-        "appServicePlanIsLinux": false,
         "configStorageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'configstr'), '-', '')]",
         "keyVaultName": "[replace(concat(variables('resourceNamePrefix'), 'sharedkv'), '-', '')]",
-
         "keyVaultAccessPolicies": [
             {
                 "objectId": "[parameters('azureWebsitesRPObjectId')]",
@@ -144,14 +155,14 @@
                     "appServicePlanName": {
                         "value": "[variables('appServicePlanName')]"
                     },
-                    "appServicePlanSku": {
-                        "value": "[variables('appServicePlanSku')]"
+                    "nonASETier": {
+                        "value": "[parameters('appServicePlanTier')]"
                     },
-                    "appServicePlanOS": {
-                        "value": "[variables('appServicePlanOS')]"
+                    "aspSize": {
+                        "value": "[parameters('appServicePlanSize')]"
                     },
-                    "appServicePlanIsLinux": {
-                        "value": "[variables('appServicePlanIsLinux')]"
+                    "aspInstances": {
+                        "value": "[parameters('appServicePlanInstances')]"
                     }
                 }
             }
