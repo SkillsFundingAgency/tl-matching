@@ -26,7 +26,7 @@ jobs:
   steps:
   - checkout: self
   - pwsh: |
-      Write-Host $SharedSQLServerName
+      Write-Host $env:SHAREDSQLSERVERNAME
       
   - pwsh: Get-ChildItem -Recurse
 
