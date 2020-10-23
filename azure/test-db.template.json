@@ -6,8 +6,7 @@
     },
     "parameters": {
         "environmentNameAbbreviation": {
-            "type": "string",
-            "maxLength": 4
+            "type": "string"
         },
         "sharedEnvResourceGroup": {
             "type": "string"
