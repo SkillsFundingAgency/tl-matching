@@ -7,7 +7,7 @@ jobs:
     parameters:
       serviceConnection: $(serviceConnection)
       subscriptionId: $(subscriptionId)
-      resourceGroupName: $(SharedEnvResourceGroupName)
+      resourceGroupName: $(SharedResourceGroup)
       location: 'West Europe'
       templateFilePath: './azure/matching-shared.json'
       armParameterOverrideString: '-environmentNameAbbreviation "d01-matching" 
@@ -20,5 +20,6 @@ jobs:
         -appServicePlanSize "$(AppServicePlanSize)" 
         -appServicePlanInstances "$(AppServicePlanInstances)" 
         -azureWebsitesRPObjectId "$(AzureWebsitesRPObjectId)" 
-        -keyVaultReadWriteObjectIds $(KeyVaultReadWriteObjectIds)'
+        -keyVaultReadWriteObjectIds $(KeyVaultReadWriteObjectIds)
+        -resourceTags {"Parent Business":"Apprenticeships","Service Offering":"ESFA T Level Service"}'
       processOutputs: true

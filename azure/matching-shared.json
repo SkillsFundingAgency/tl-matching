@@ -47,11 +47,7 @@
             "type": "array"
         },
         "resourceTags": {
-            "type": "object",
-            "defaultValue": {
-                "Parent Business": "Apprenticeships",
-                "Service Offering": "ESFA T Level Service"
-            }
+            "type": "object"
         }
     },
     "variables": {
