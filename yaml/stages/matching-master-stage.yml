@@ -37,11 +37,11 @@ stages:
         SQLServerAdminUsername: $(SQLServerAdminUsername)
         SQLServerAdminPassword: $(SQLServerAdminPassword)
     
-    - template: ../jobs/matching-infrastructure.yml
-      parameters:
-        SharedInfrastructureDependency: DeploySharedInfrastructure
-        SharedEnvResourceGroupName: $(SharedResouceGroup)
-        UICustomHostName: $(UICustomHostName)
-        CertificateName: $(CertificateName)
-        ResourceGroupName: $(ResourceGroupName)
+    # - template: ../jobs/matching-infrastructure.yml
+    #   parameters:
+    #     SharedInfrastructureDependency: DeploySharedInfrastructure
+    #     SharedEnvResourceGroupName: $(SharedResouceGroup)
+    #     UICustomHostName: $(UICustomHostName)
+    #     CertificateName: $(CertificateName)
+    #     ResourceGroupName: $(ResourceGroupName)
   
