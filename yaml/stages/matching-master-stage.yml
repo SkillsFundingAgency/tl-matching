@@ -30,18 +30,12 @@ stages:
       ProviderReferenceTrigger: '0 0 7 * * *'
     jobs:
     - template: ../jobs/matching-shared-infrastructure.yml
-      # parameters:
-      #   serviceConnection: $(serviceConnection)
-      #   SharedEnvResourceGroupName: $(SharedResourceGroup)
-      #   rgLocation: "West Europe"
-      #   SQLServerAdminUsername: $(SQLServerAdminUsername)
-      #   SQLServerAdminPassword: $(SQLServerAdminPassword)
-    
-    # - template: ../jobs/matching-infrastructure.yml
-    #   parameters:
-    #     SharedInfrastructureDependency: DeploySharedInfrastructure
-    #     SharedEnvResourceGroupName: $(SharedResourceGroup)
-    #     UICustomHostName: $(UICustomHostName)
-    #     CertificateName: $(CertificateName)
-    #     ResourceGroupName: $(ResourceGroupName)
+
+    - template: ../jobs/matching-infrastructure.yml
+      parameters:
+        SharedInfrastructureDependency: DeploySharedInfrastructure
+        SharedEnvResourceGroupName: $(SharedResourceGroup)
+        UICustomHostName: $(UICustomHostName)
+        CertificateName: $(CertificateName)
+        ResourceGroupName: $(ResourceGroupName)
   
