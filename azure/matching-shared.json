@@ -45,13 +45,6 @@
         },
         "keyVaultReadWriteObjectIds": {
             "type": "array"
-        },
-        "resourceTags": {
-            "type": "object",
-            "defaultValue": {
-                "Parent Business": "Apprenticeships",
-                "Service Offering": "ESFA T Level Service"
-            }
         }
     },
     "variables": {
@@ -105,9 +98,6 @@
                 "parameters": {
                     "storageAccountName": {
                         "value": "[variables('sharedStorageAccountName')]"
-                    },
-                    "resourceTags": {
-                        "value": "[parameters('resourceTags')]"
                     }
                 }
             }
@@ -143,9 +133,6 @@
                     },
                     "sqlStorageAccountName": {
                         "value": "[variables('sharedStorageAccountName')]"
-                    },
-                    "resourceTags": {
-                        "value": "[parameters('resourceTags')]"
                     }
                 }
             },
@@ -175,9 +162,6 @@
                     },
                     "aspInstances": {
                         "value": "[parameters('appServicePlanInstances')]"
-                    },
-                    "resourceTags": {
-                        "value": "[parameters('resourceTags')]"
                     }
                 }
             }
@@ -195,9 +179,6 @@
                 "parameters": {
                     "storageAccountName": {
                         "value": "[variables('configStorageAccountName')]"
-                    },
-                    "resourceTags": {
-                        "value": "[parameters('resourceTags')]"
                     }
                 }
             }
@@ -224,9 +205,6 @@
                     },
                     "keyVaultAccessPolicies": {
                         "value": "[concat(variables('keyVaultAccessPolicies'), variables('readWriteAccessPolicies'))]"
-                    },
-                    "resourceTags": {
-                        "value": "[parameters('resourceTags')]"
                     }
                 }
             }

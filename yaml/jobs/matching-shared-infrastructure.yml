@@ -20,6 +20,5 @@ jobs:
         -appServicePlanSize "$(AppServicePlanSize)" 
         -appServicePlanInstances "$(AppServicePlanInstances)" 
         -azureWebsitesRPObjectId "$(AzureWebsitesRPObjectId)" 
-        -keyVaultReadWriteObjectIds $(KeyVaultReadWriteObjectIds)
-        -resourceTags {"Parent Business":"Apprenticeships","Service Offering":"ESFA T Level Service"}'
+        -keyVaultReadWriteObjectIds $(KeyVaultReadWriteObjectIds)'
       processOutputs: true
