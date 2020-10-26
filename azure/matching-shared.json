@@ -1,5 +1,5 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "environmentNameAbbreviation": {
@@ -47,7 +47,11 @@
             "type": "array"
         },
         "resourceTags": {
-            "type": "object"
+            "type": "object",
+            "defaultValue": {
+                "Parent Business": "Apprenticeships",
+                "Service Offering": "ESFA T Level Service"
+            }
         }
     },
     "variables": {
