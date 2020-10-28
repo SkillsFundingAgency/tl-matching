@@ -8,13 +8,13 @@ stages:
   - stage: deployAT
     variables:
       SQLServerActiveDirectoryAdminLogin: 'TL DEV SQL ADM'
-      SQLServerActiveDirectoryAdminObjectId: 'ede7deec-20a1-44ac-b5e0-289f5531ff59'
+      SQLServerActiveDirectoryAdminObjectId: '56f27acd-6ea8-4526-a25c-29436d62826c'
       ThreatDetectionEmailAddress: 'tlevelsdevops@education.gov.uk'
       AppServicePlanTier: 'Standard'
       AppServicePlanSize: '1'
       AppServicePlanInstances: '2'
-      AzureWebsitesRPObjectId: '7fa23fd6-537e-4d28-b0ca-54d075cce842'
-      KeyVaultReadWriteObjectIds: '["94923ac5-81df-4584-8806-a69f5fae6c14"]'
+      AzureWebsitesRPObjectId: '0b11c7a6-2868-4728-b83c-d14be9147a97'
+      KeyVaultReadWriteObjectIds: '["56f27acd-6ea8-4526-a25c-29436d62826c", "74b83ac5-f41a-4b61-9fbf-17879ed23731"]'
       SharedResourceGroup: 's126d01-matching-shared'
       CertificateName: 'wildcard-industryplacementmatching-education-gov-uk'
       UICustomHostName: 'at.industryplacementmatching.education.gov.uk'
@@ -38,4 +38,17 @@ stages:
         UICustomHostName: $(UICustomHostName)
         CertificateName: $(CertificateName)
         ResourceGroupName: $(ResourceGroupName)
+    - job: TagResouceGroup
+      steps:
+      - task: AzurePowerShell@5
+        inputs:
+          azureSubscription: 'S126-TL-Dev-Service-Connection'
+          ScriptType: 'InlineScript'
+          Inline: |
+            $Tags = @{'Parent Business' = 'Apprenticeships'; 'Service Offering' = 'ESFA T Level Service' }
+            Get-AzResourceGroup | Where-Object ResourceGroupName -Like "*matching*" | ForEach-Object {
+                Update-AzTag -ResourceId $_.ResourceId -Tag $Tags -Operation Merge   
+            }
+          azurePowerShellVersion: 'LatestVersion'
+          pwsh: true
   
