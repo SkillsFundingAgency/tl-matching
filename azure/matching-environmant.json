@@ -202,7 +202,8 @@
                         "value": "[reference('ui-app-service-certificate').outputs.certificateThumbprint.value]"
                     }
                 }
-            }
+            },
+            "dependsOn": ["ui-app-service-certificate"]
         },
         {
             "apiVersion": "2017-05-10",

@@ -38,7 +38,11 @@ stages:
         UICustomHostName: $(UICustomHostName)
         CertificateName: $(CertificateName)
         ResourceGroupName: $(ResourceGroupName)
+    
     - job: TagResouceGroup
+      dependsOn: 
+        - DeploySharedInfrastructure
+        - DeployMatchingInfrastructure
       steps:
       - task: AzurePowerShell@5
         inputs:
