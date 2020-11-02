@@ -20,5 +20,6 @@ jobs:
         -appServicePlanSize "$(AppServicePlanSize)" 
         -appServicePlanInstances "$(AppServicePlanInstances)" 
         -azureWebsitesRPObjectId "$(AzureWebsitesRPObjectId)" 
-        -keyVaultReadWriteObjectIds $(KeyVaultReadWriteObjectIds)'
+        -keyVaultReadWriteObjectIds "$(KeyVaultReadWriteObjectIds)"
+        -keyVaultFullAccessObjectIds "$(keyVaultFullAccessObjectIds)"'
       processOutputs: true

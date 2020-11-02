@@ -44,6 +44,5 @@ jobs:
         -bankHolidayGeneratorTrigger "$(BankHolidayGeneratorTrigger)" 
         -employerFeedbackTrigger "$(EmployerFeedbackTrigger)" 
         -providerFeedbackTrigger "$(ProviderFeedbackTrigger)" 
-        -providerReferenceTrigger "$(ProviderReferenceTrigger)"
-        -keyVaultFullAccessObjectIds "$(keyVaultFullAccessObjectIds)"'
+        -providerReferenceTrigger "$(ProviderReferenceTrigger)"'
       processOutputs: true
