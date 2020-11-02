@@ -130,7 +130,6 @@
         {
             "apiVersion": "2017-05-10",
             "name": "ui-app-service-certificate",
-            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -198,10 +197,10 @@
                     "customHostName": {
                         "value": "[parameters('uiCustomHostName')]"
                     }
-                    // ,
-                    // "certificateThumbprint": {
-                    //     "value": "[reference('ui-app-service-certificate').outputs.certificateThumbprint.value]"
-                    // }
+                    ,
+                    "certificateThumbprint": {
+                        "value": "[reference('ui-app-service-certificate').outputs.certificateThumbprint.value]"
+                    }
                 }
             }
         },
