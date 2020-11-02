@@ -261,7 +261,7 @@
                         "value": true
                     },
                     "keyVaultAccessPolicies": {
-                        "value": "[concat(variables('keyVaultAccessPolicies'), variables('readWriteAccessPolicies'), variables('fullAccessPolicies'))]"
+                        "value": "[concat(variables('keyVaultAccessPolicies'), variables('readWriteAccessPolicies').readWriteAccessPolicies, variables('fullAccessPolicies').fullAccessPolicies)]"
                     }
                 }
             }
