@@ -15,10 +15,10 @@ stages:
       AppServicePlanInstances: '2'
       AzureWebsitesRPObjectId: '0b11c7a6-2868-4728-b83c-d14be9147a97' # s126-tlevelservice-Reader USR
       KeyVaultReadWriteObjectIds: '["56f27acd-6ea8-4526-a25c-29436d62826c"]' # s126-tlevelservice-Managers USR, 
-      keyVaultFullAccessObjectIds: '["0316d3ae-e503-4dae-9665-c999fca7cf10", "a6621090-e704-45ec-b65f-50257f9d4dcd", "e7c67652-c9d9-489d-ae26-ad2d5330dc80"]'
+      keyVaultFullAccessObjectIds: '["0316d3ae-e503-4dae-9665-c999fca7cf10", "a6621090-e704-45ec-b65f-50257f9d4dcd"]'
       SharedResourceGroup: 's126d01-matching-shared'
       CertificateName: 'wildcard-industryplacementmatching-education-gov-uk'
-      UICustomHostName: 'at.industryplacementmatching.education.gov.uk'
+      UICustomHostName: '' #'at.industryplacementmatching.education.gov.uk'
     
       ResourceGroupName: 's126d01-matching'
       WorkerASPSize: '1'
