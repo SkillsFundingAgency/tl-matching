@@ -127,30 +127,30 @@
                 }
             }
         },
-        // {
-        //     "apiVersion": "2017-05-10",
-        //     "name": "ui-app-service-certificate",
-        //     "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
-        //     "type": "Microsoft.Resources/deployments",
-        //     "properties": {
-        //         "mode": "Incremental",
-        //         "templateLink": {
-        //             "uri": "[concat(variables('deploymentUrlBase'),'app-service-certificate.json')]",
-        //             "contentVersion": "1.0.0.0"
-        //         },
-        //         "parameters": {
-        //             "keyVaultCertificateName": {
-        //                 "value": "[parameters('certificateName')]"
-        //             },
-        //             "keyVaultName": {
-        //                 "value": "[parameters('sharedKeyVaultName')]"
-        //             },
-        //             "keyVaultResourceGroup": {
-        //                 "value": "[parameters('sharedEnvResourceGroup')]"
-        //             }
-        //         }
-        //     }
-        // },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "ui-app-service-certificate",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'),'app-service-certificate.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "keyVaultCertificateName": {
+                        "value": "[parameters('certificateName')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[parameters('sharedKeyVaultName')]"
+                    },
+                    "keyVaultResourceGroup": {
+                        "value": "[parameters('sharedEnvResourceGroup')]"
+                    }
+                }
+            }
+        },
         {
             "apiVersion": "2017-05-10",
             "name": "ui-app-service",
@@ -203,7 +203,7 @@
                     //     "value": "[reference('ui-app-service-certificate').outputs.certificateThumbprint.value]"
                     // }
                 }
-            }            
+            }
         },
         {
             "apiVersion": "2017-05-10",
