@@ -1,0 +1,17 @@
+jobs:
+- job:
+  steps:
+  - powershell: |
+      $IP = Invoke-RestMethod http://ipinfo.io/json | Select -exp ip
+      Write-Host "##vso[task.setvariable variable=TestRunnerOutboundIp]$IP"
+    displayName: 'Get Outbound IP for SQL Server Firewall'
+
+  - task: esfadevops.GenerateEnvironmentConfiguration.custom-build-task.GenerateEnvironmentConfiguration@3
+    displayName: 'Inject Configuration'
+    inputs:
+      SourcePath: '$(System.DefaultWorkingDirectory)/tl-matching/drop/config'
+      TargetFilename: Sfa.Tl.Matching.IntegrationTests.schema.json
+      ServiceConnectionName: 'SFA-TL-Dev/Test'
+      StorageAccountName: '$(ConfigStorageAccountName)'
+      TableName: Configuration
+    continueOnError: true
