@@ -18,7 +18,7 @@ stages:
       keyVaultFullAccessObjectIds: '["0316d3ae-e503-4dae-9665-c999fca7cf10", "a6621090-e704-45ec-b65f-50257f9d4dcd"]'
       SharedResourceGroup: 's126d01-matching-shared'
       CertificateName: 'wildcard-industryplacementmatching-education-gov-uk'
-      UICustomHostName: 'dev.industryplacementmatching.education.gov.uk'
+      UICustomHostName: '' #'dev.industryplacementmatching.education.gov.uk'
     
       ResourceGroupName: 's126d01-matching'
       WorkerASPSize: '1'
