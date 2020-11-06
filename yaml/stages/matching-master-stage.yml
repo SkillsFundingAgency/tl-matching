@@ -15,7 +15,7 @@ stages:
   - template: matching-deploy-infrastructure-stage.yml
     parameters:
       stageName: Test
-      dependencyName: Publish_Dev
+      dependencyName: Deploy_Dev
       environmentName: test
       environmentId: t01
 
