@@ -11,25 +11,14 @@ stages:
       environmentName: dev
       environmentId: d01
   
-  - template: matching-publish-site-stage.yml
-    parameters:
-      stageName: Dev
-      dependencyName: Deploy_dev
-      environmentName: dev
-      environmentId: d01
-
+ 
   - template: matching-deploy-infrastructure-stage.yml
     parameters:
       stageName: Test
       dependencyName: Publish_Dev
       environmentName: test
       environmentId: t01
-  - template: matching-publish-site-stage.yml
-    parameters:
-      stageName: Test
-      dependencyName: Deploy_Test
-      environmentName: test
-      environmentId: t01
+
   
   #deploy at
   # - stage: deployAT

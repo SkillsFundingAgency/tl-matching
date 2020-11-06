@@ -13,3 +13,4 @@ stages:
   displayName: 'Deploy matching infrastructure ${{parameters.environmentName}} [${{parameters.environmentId}}]'
   jobs:
   - template: ../jobs/matching-deploy-infrastructure-job.yml
+  - template: ../jobs/matching-publish-site-job.yml
