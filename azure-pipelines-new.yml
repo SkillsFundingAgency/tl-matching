@@ -21,8 +21,9 @@ trigger:
 pr: none
 
 variables:
+  buildConfiguration: 'release'
+  buildPlatform: 'anycpu'
   dotnetVersion: '3.x'
-
 stages:
   - template: ./yaml/stages/matching-master-stage.yml
 
