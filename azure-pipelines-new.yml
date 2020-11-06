@@ -7,6 +7,8 @@ resources:
     #   type: github
     #   endpoint: DFE-Digital
     #   name: DFE-Digital/operations-devops-tools
+
+
     - repository: devopsTemplates
       type: github
       endpoint: DfE-Digital
@@ -16,7 +18,10 @@ trigger:
   branches:
     include:
     - NewBuild_Core
-pr: none 
+pr: none
+
+variables:
+  dotnetVersion: '3.x'
 
 stages:
   - template: ./yaml/stages/matching-master-stage.yml
