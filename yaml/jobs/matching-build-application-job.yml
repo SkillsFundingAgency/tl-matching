@@ -7,10 +7,10 @@ jobs:
     clean: all
   steps:        
     - task: UseDotNet@2
-      displayName: 'Use .NET Core SDK 2.1'
+      displayName: 'Use .NET Core SDK 2.x LTS'
       inputs:
         packageType: sdk
-        version: 2.1.810
+        version: 2.x
         installationPath: $(Agent.ToolsDirectory)/dotnet
 
     - task: GitVersion@5

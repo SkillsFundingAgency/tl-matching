@@ -1,0 +1,6 @@
+stages:
+- stage: sharedInfrastructure
+  jobs:
+    - template: ../jobs/matching-shared-infrastructure-job.yml
+      parameters:
+        environmentId: d01

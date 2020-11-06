@@ -1,18 +1,22 @@
 stages:
 #Build
   - template: matching-build-stage.yml  
+  - template: matching-shared-infrastructure-stage.yml
 
   - template: matching-deploy-infrastructure-stage.yml
     parameters:
       stageName: Dev
-      dependencyName: build
+      dependencies:
+      - build
+      - sharedInfrastructure
       environmentName: dev
       environmentId: d01 
  
-  - template: matching-deploy-infrastructure-stage.yml
+  - template: matching-infrastructure-stage.yml
     parameters:
       stageName: Test
-      dependencyName: Deploy_Dev
+      dependencies: 
+      - Deploy_Dev
       environmentName: test
       environmentId: t01
 

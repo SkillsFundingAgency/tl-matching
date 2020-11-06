@@ -1,16 +1,19 @@
 parameters:
 - name: stageName
   type: string
-- name: dependencyName
-  type: string
+- name: dependencies
+  type: array
 - name: environmentName
   type: string
 - name: environmentId
   type: string
 stages:
 - stage: Deploy_${{parameters.stageName}}
-  dependsOn: '${{parameters.dependencyName}}'
-  displayName: 'Deploy matching infrastructure ${{parameters.environmentName}} [${{parameters.environmentId}}]'
+  dependsOn: 
+    - '${{ each dependency in parameters.dependencies }}':
+      - '${{dependency}}'
+      
+  displayName: '${{parameters.environmentName}} [${{parameters.environmentId}}]'
   jobs:
   - template: ../jobs/matching-deploy-infrastructure-job.yml
   - template: ../jobs/matching-publish-site-job.yml
