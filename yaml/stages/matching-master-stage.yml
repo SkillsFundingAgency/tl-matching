@@ -1,8 +1,8 @@
 stages:
 #Build
-  # - stage: build
-  #   jobs:
-  #   - template: ../jobs/matching-build.yml
+  - stage: build
+    jobs:
+    - template: ../jobs/matching-build-job.yml
 
   - template: matching-deploy-infrastructure-stage.yml
     parameters:
