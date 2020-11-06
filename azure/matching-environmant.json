@@ -59,7 +59,7 @@
     },
     "variables": {
         "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/operations-devops-deployment/master/ArmTemplates/",
-        "resourceNamePrefix": "[concat('s126', toLower(parameters('environmentNameAbbreviation')))]",
+        "resourceNamePrefix": "[toLower(parameters('environmentNameAbbreviation'))]",
         "appServicePlanName": "[concat(variables('resourceNamePrefix'), '-asp')]",
         "uiAppName": "[concat(variables('resourceNamePrefix'), '-web')]",
         "workerFunctionAppName": "[concat(variables('resourceNamePrefix'), '-func-woker')]",

@@ -1,0 +1,17 @@
+parameters:
+- name: stageName
+  type: string
+- name: dependencyName
+  type: string
+- name: environmentName
+  type: string
+- name: environmentId
+  type: string
+stages:
+- stage: ${{parameters.stageName}}
+  dependsOn: '${{parameters.dependencyName}}'
+  displayName: 'T Levels Matching infrastructure ${{parameters.environmentName}} [${{parameters.environmentId}}]'
+  jobs:
+  - jobs:
+    steps:
+    - pwsh: Write-Host Testing
