@@ -12,6 +12,6 @@ stages:
   dependsOn: '${{parameters.dependencyName}}'
   displayName: 'T Levels Matching infrastructure ${{parameters.environmentName}} [${{parameters.environmentId}}]'
   jobs:
-  - jobs:
+  - job:
     steps:
     - pwsh: Write-Host Testing
