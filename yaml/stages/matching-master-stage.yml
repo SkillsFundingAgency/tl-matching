@@ -1,16 +1,35 @@
 stages:
 #Build
-  - stage: build
-    jobs:
-    - template: ../jobs/matching-build.yml
+  # - stage: build
+  #   jobs:
+  #   - template: ../jobs/matching-build.yml
 
-  - template: matching-deploy-environment.yml
+  - template: matching-deploy-infrastructure.yml
     parameters:
       stageName: Dev
       dependencyName: build
       environmentName: dev
       environmentId: d01
+  
+  - template: matching-publish-site.yml
+    parameters:
+      stageName: Dev
+      dependencyName: Deploy_dev
+      environmentName: dev
+      environmentId: d01
 
+  - template: matching-deploy-infrastructure.yml
+    parameters:
+      stageName: Test
+      dependencyName: Publish_Dev
+      environmentName: test
+      environmentId: t01
+  - template: matching-publish-site.yml
+    parameters:
+      stageName: Test
+      dependencyName: Deploy_Test
+      environmentName: test
+      environmentId: t01
   
   #deploy at
   # - stage: deployAT

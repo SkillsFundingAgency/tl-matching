@@ -8,10 +8,8 @@ parameters:
 - name: environmentId
   type: string
 stages:
-- stage: ${{parameters.stageName}}
+- stage: Deploy_${{parameters.stageName}}
   dependsOn: '${{parameters.dependencyName}}'
-  displayName: 'T Levels Matching infrastructure ${{parameters.environmentName}} [${{parameters.environmentId}}]'
+  displayName: 'Deploy matching infrastructure ${{parameters.environmentName}} [${{parameters.environmentId}}]'
   jobs:
-  - job:
-    steps:
-    - pwsh: Write-Host Testing
+  - template: ../jobs/matching-deploy-infrastructure-job.yml

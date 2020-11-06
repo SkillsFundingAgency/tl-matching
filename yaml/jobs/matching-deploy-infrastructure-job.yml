@@ -1,0 +1,4 @@
+jobs:
+- job: DeployInfrastructure
+  steps:
+  - pwsh: Write-Host Testing

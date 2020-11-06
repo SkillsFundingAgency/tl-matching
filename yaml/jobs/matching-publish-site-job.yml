@@ -1,0 +1,4 @@
+  jobs:
+  - job: PublishSite
+    steps:
+    - pwsh: Write-Host Testing
