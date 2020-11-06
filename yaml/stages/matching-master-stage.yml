@@ -1,16 +1,13 @@
 stages:
 #Build
-  - stage: build
-    jobs:
-    - template: ../jobs/matching-build-job.yml
+  - template: matching-build-stage.yml  
 
   - template: matching-deploy-infrastructure-stage.yml
     parameters:
       stageName: Dev
       dependencyName: build
       environmentName: dev
-      environmentId: d01
-  
+      environmentId: d01 
  
   - template: matching-deploy-infrastructure-stage.yml
     parameters:

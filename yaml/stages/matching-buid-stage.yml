@@ -1,0 +1,5 @@
+stages:
+- stage: build
+  jobs:
+  - template: ../jobs/matching-build-application-job.yml
+  - template: ../jobs/matching-build-dacpac-job.yml
