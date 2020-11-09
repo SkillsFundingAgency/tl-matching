@@ -1,6 +1,19 @@
+parameters:
+- name: stageName
+  type: string
+- name: dependencies
+  type: object
+- name: environmentName
+  type: string
+- name: environmentId
+  type: string
+
 stages:
 - stage: sharedInfrastructure
+  dependsOn: 
+    - '${{ each dependency in parameters.dependencies }}':
+      - '${{dependency}}'
   jobs:
     - template: ../jobs/matching-shared-infrastructure-job.yml
       parameters:
-        environmentId: d01
+        environmentId: '${{ parameters.environmentId }}'

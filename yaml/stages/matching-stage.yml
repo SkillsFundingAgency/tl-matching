@@ -15,5 +15,6 @@ stages:
       
   displayName: '${{parameters.environmentName}} [${{parameters.environmentId}}]'
   jobs:
-  - template: ../jobs/matching-deploy-infrastructure-job.yml
+  - template: ../jobs/matching-shared-infrastructure-job.yml
+  - template: ../jobs/matching-infrastructure-job.yml
   - template: ../jobs/matching-publish-site-job.yml

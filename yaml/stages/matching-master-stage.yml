@@ -1,45 +1,60 @@
 stages:
-#Build
-  - template: matching-build-stage.yml  
-  - template: matching-shared-infrastructure-stage.yml
+  #Build
+  - stage: start
+    jobs:
+    - job: start
+      pwsh: Write-Host "Starting"
 
-  - template: matching-infrastructure-stage.yml
+  - template: matching-build-stage.yml
+    parameters:
+      dependencies:
+        - start
+  
+  # - template: matching-shared-stage.yml
+  #   parameters:
+  #     dependencies:
+  #       - start
+
+  - template: matching-stage.yml
     parameters:
       stageName: Dev
       dependencies:
-      - build
-      - sharedInfrastructure
+        - build        
       environmentName: dev
-      environmentId: d01 
- 
-  - template: matching-infrastructure-stage.yml
+      environmentId: d01
+
+  - template: matching-stage.yml
     parameters:
       stageName: Test
-      dependencies: 
-      - Deploy_Dev
+      dependencies:
+        - Deploy_Dev
       environmentName: test
       environmentId: t01
 
-
-  - template: matching-infrastructure-stage.yml
+  - template: matching-stage.yml
     parameters:
       stageName: PreProd
-      dependencies: 
-      - Deploy_Test
-      environmentName: Integraionf
-      environmentId: t02
+      dependencies:
+        - Deploy_Test
+      environmentName: preprod
+      environmentId: p02
 
-  
+  - template: matching-stage.yml
+    parameters:
+      stageName: Prod
+      dependencies:
+        - Deploy_PreProd
+      environmentName: prod
+      environmentId: p01
+
+
   #deploy at
   # - stage: deployAT
-
-  #   
+  #
   #   jobs:
-
   #   - template: ../jobs/matching-shared-infrastructure.yml
   #     parameters:
   #       environmentId: d01
-
   #   - template: ../jobs/matching-infrastructure.yml
   #     parameters:
   #       SharedInfrastructureDependency: DeploySharedInfrastructure
@@ -47,9 +62,8 @@ stages:
   #       UICustomHostName: $(UICustomHostName)
   #       CertificateName: $(CertificateName)
   #       ResourceGroupName: $(ResourceGroupName)
-    
   #   - job: TagResouceGroup
-  #     dependsOn: 
+  #     dependsOn:
   #       - DeploySharedInfrastructure
   #       - DeployMatchingInfrastructure
   #     steps:
@@ -60,9 +74,8 @@ stages:
   #         Inline: |
   #           $Tags = @{'Parent Business' = 'Apprenticeships'; 'Service Offering' = 'ESFA T Level Service' }
   #           Get-AzResourceGroup | Where-Object ResourceGroupName -Like "*matching*" | ForEach-Object {
-  #               Update-AzTag -ResourceId $_.ResourceId -Tag $Tags -Operation Merge   
+  #               Update-AzTag -ResourceId $_.ResourceId -Tag $Tags -Operation Merge
   #           }
   #         azurePowerShellVersion: 'LatestVersion'
   #         pwsh: true
-
   #   # - template: ../jobs/matching-deploy.yml
