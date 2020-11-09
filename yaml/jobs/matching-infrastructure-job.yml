@@ -1,13 +1,5 @@
 parameters:
-- name: SharedEnvResourceGroupName
-  type: string
-- name: UICustomHostName
-  type: string
-- name: CertificateName
-  type: string
-- name: ResourceGroupName
-  type: string
-- name: SharedInfrastructureDependency
+- name: environmentNameAbbreviation
   type: string
 jobs:
 - job: DeployMatchingInfrastructure
@@ -29,7 +21,7 @@ jobs:
       resourceGroupName: $(ResourceGroupName)
       location: 'West Europe'
       templateFilePath: './azure/matching-environmant.json'
-      armParameterOverrideString: '-environmentNameAbbreviation "s126d01-matching"         
+      armParameterOverrideString: '-environmentNameAbbreviation "${{parapmeters.environmentNameAbbreviation}}"         
         -workerASPSize "$(WorkerASPSize)" 
         -workerASPInstances "$(WorkerASPInstances)" 
         -sharedASPName "$(SharedASPName)" 

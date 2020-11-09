@@ -11,11 +11,6 @@ stages:
       dependencies:
         - start
   
-  # - template: matching-shared-stage.yml
-  #   parameters:
-  #     dependencies:
-  #       - start
-
   - template: matching-stage.yml
     parameters:
       stageName: Dev

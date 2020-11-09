@@ -1,4 +1,6 @@
-
+parameters:
+- name: environmentId
+  type: string
 jobs:
 - job: DeploySharedInfrastructure
   steps:
@@ -11,7 +13,7 @@ jobs:
       resourceGroupName: $(SharedResourceGroup)
       location: 'West Europe'
       templateFilePath: './azure/matching-shared.json'
-      armParameterOverrideString: '-environmentNameAbbreviation "d01-matching" 
+      armParameterOverrideString: '-environmentNameAbbreviation "${{parameters.environmentId}}-matching" 
         -sqlServerAdminUsername "$(SQLServerAdminUsername)" 
         -sqlServerAdminPassword "$(SQLServerAdminPassword)" 
         -sqlServerActiveDirectoryAdminLogin "$(SQLServerActiveDirectoryAdminLogin)" 
