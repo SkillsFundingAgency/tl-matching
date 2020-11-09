@@ -52,7 +52,7 @@ variables:
   testSqlDatabaseSkuName: 'S0'
   testSqlDatabaseTier: 'Standard'
   ConfigStorageAccountName: 's126d01matchingconfigstr'
-  workerASPInstances: 1      
+        
 stages:
   - template: ./yaml/stages/matching-master-stage.yml
 
