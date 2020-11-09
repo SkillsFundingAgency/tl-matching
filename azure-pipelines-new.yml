@@ -36,7 +36,7 @@ variables:
   SharedResourceGroup: 's126d01-matching-shared'
   CertificateName: 'wildcard-industryplacementmatching-education-gov-uk'
   UICustomHostName: '' #'dev.industryplacementmatching.education.gov.uk'    
-  ResourceGroupName: 's126d01-matching'
+  #ResourceGroupName: 's126d01-matching'
   WorkerASPSize: '1'
   WorkerASPInstances: '1'
   SQLDatabaseSkuName: 'S0'
@@ -47,11 +47,11 @@ variables:
   ProviderReferenceTrigger: '0 0 7 * * *'
 
   applicationName: matching
-  SharedEnvResourceGroupName: 's126d01-matching-shared'
-  SharedSQLServerName: 's126d01-matching-shared-001-sqlsvr'
+  # SharedEnvResourceGroupName: 's126d01-matching-shared'
+  # SharedSQLServerName: 's126d01-matching-shared-001-sqlsvr'
   testSqlDatabaseSkuName: 'S0'
   testSqlDatabaseTier: 'Standard'
-  ConfigStorageAccountName: 's126d01matchingconfigstr'
+  #ConfigStorageAccountName: 's126d01matchingconfigstr'
         
 stages:
   - template: ./yaml/stages/matching-master-stage.yml
