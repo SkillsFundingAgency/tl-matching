@@ -3,7 +3,8 @@ stages:
   - stage: start
     jobs:
     - job: start
-      pwsh: Write-Host "Starting"
+      steps:
+      - pwsh: Write-Host "Starting"
 
   - template: matching-build-stage.yml
     parameters:
