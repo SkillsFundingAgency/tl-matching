@@ -18,7 +18,7 @@ stages:
     - '${{ each variableGroup in parameters.variableGroups }}':
       - group: '${{variableGroup}}'
     - name: serviceConnectiona
-      value: $[variables.serviceConnection]
+      value: $(serviceConnection)
     - name: BaseName
       value: "s126${{parameters.environmentId}}-matching"
     - name: ResourceGroupName
