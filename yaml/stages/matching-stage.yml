@@ -17,8 +17,6 @@ stages:
   variables:
     - '${{ each variableGroup in parameters.variableGroups }}':
       - group: '${{variableGroup}}'
-    - name: serviceConnectiona
-      value: $(serviceConnection)
     - name: BaseName
       value: "s126${{parameters.environmentId}}-matching"
     - name: ResourceGroupName
@@ -36,7 +34,7 @@ stages:
   - template: ../jobs/matching-shared-infrastructure-job.yml
     parameters:
       baseName: $(BaseName)
-      serviceConnection: $(serviceConnectiona)
+      serviceConnection: $(serviceConnection)
 
   
   # - template: ../jobs/matching-infrastructure-job.yml
