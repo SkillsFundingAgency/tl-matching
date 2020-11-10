@@ -3,12 +3,15 @@ parameters:
   type: string
 jobs:
 - job: DeploySharedInfrastructure
+  variables:
+    name: serviceConnection
+    value: $[variables.serviceConnection]
   steps:
   - checkout: self
 
   - template: ./Infrastructure/steps/deploy-template.yml@devopsTemplates
     parameters:
-      serviceConnection: $(variables.serviceConnection)
+      serviceConnection: $(serviceConnection)
       subscriptionId: $(subscriptionId)
       resourceGroupName: $(SharedResourceGroup)
       location: 'West Europe'
