@@ -8,7 +8,7 @@ jobs:
 
   - template: ./Infrastructure/steps/deploy-template.yml@devopsTemplates
     parameters:
-      serviceConnection: $(serviceConnection)
+      serviceConnection: $(variables.serviceConnection)
       subscriptionId: $(subscriptionId)
       resourceGroupName: $(SharedResourceGroup)
       location: 'West Europe'
