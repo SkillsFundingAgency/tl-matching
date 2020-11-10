@@ -34,6 +34,7 @@ stages:
   - template: ../jobs/matching-shared-infrastructure-job.yml
     parameters:
       baseName: $(BaseName)
+      serviceConnection: $[variables.serviceConnection]
 
   
   # - template: ../jobs/matching-infrastructure-job.yml
