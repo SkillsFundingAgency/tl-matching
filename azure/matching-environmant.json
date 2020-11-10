@@ -62,7 +62,7 @@
         "resourceNamePrefix": "[toLower(parameters('environmentNameAbbreviation'))]",
         "appServicePlanName": "[concat(variables('resourceNamePrefix'), '-asp')]",
         "uiAppName": "[concat(variables('resourceNamePrefix'), '-web')]",
-        "workerFunctionAppName": "[concat(variables('resourceNamePrefix'), '-func-woker')]",
+        "workerFunctionAppName": "[concat(variables('resourceNamePrefix'), '-func-worker')]",
         "sqlDatabaseName": "[concat(variables('resourceNamePrefix'), '-sqldb')]",
         "storageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'str'), '-', '')]"
     },

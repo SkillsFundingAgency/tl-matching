@@ -28,6 +28,6 @@ stages:
   
   - template: ../jobs/matching-infrastructure-job.yml
     parameters:
-      environmentNameAbbreviation: $(ResouceGroupName)
+      environmentNameAbbreviation: $(BaseName)
   
   - template: ../jobs/matching-publish-site-job.yml

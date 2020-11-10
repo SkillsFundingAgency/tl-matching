@@ -1,5 +1,5 @@
 parameters:
-- name: environmentNameAbbreviation
+- name: BaseName
   type: string
 jobs:
 - job: DeployMatchingInfrastructure
@@ -21,7 +21,7 @@ jobs:
       resourceGroupName: $(ResourceGroupName)
       location: 'West Europe'
       templateFilePath: './azure/matching-environmant.json'
-      armParameterOverrideString: '-environmentNameAbbreviation "${{parameters.environmentNameAbbreviation}}"         
+      armParameterOverrideString: '-environmentNameAbbreviation "${{parameters.BaseName}}"         
         -workerASPSize "$(WorkerASPSize)" 
         -workerASPInstances "$(WorkerASPInstances)" 
         -sharedASPName "$(SharedASPName)" 
