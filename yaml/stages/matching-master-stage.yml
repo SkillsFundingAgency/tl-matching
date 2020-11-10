@@ -11,38 +11,39 @@ stages:
       dependencies:
         - start
   
-  - template: matching-stage.yml
-    parameters:
-      stageName: Dev
-      dependencies:
-        - build        
-      environmentName: dev
-      environmentId: d01
-      sharedEnvironmentId: d01
-      variableGroups:
-        - platform-dev
-        - platform-dev-matching
-      serviceConnection: $(devServiceConnection)
+  # - template: matching-stage.yml
+  #   parameters:
+  #     stageName: Dev
+  #     dependencies:
+  #       - build        
+  #     environmentName: dev
+  #     environmentId: d01
+  #     sharedEnvironmentId: d01
+  #     variableGroups:
+  #       - platform-dev
+  #       - platform-dev-matching
+  #     serviceConnection: $(devServiceConnection)
   
-  - template: matching-stage.yml
-    parameters:
-      stageName: Dev
-      dependencies:
-        - build        
-      environmentName: dev
-      environmentId: d02
-      sharedEnvironmentId: d01
-      variableGroups:
-        - platform-dev
-        - platform-dev-matching
-      serviceConnection: $(devServiceConnection)
+  # - template: matching-stage.yml
+  #   parameters:
+  #     stageName: Dev
+  #     dependencies:
+  #       - build        
+  #     environmentName: dev
+  #     environmentId: d02
+  #     sharedEnvironmentId: d01
+  #     variableGroups:
+  #       - platform-dev
+  #       - platform-dev-matching
+  #     serviceConnection: $(devServiceConnection)
 
   - template: matching-stage.yml
     parameters:
       stageName: Test
       dependencies:
-        - Deploy_d01
-        - Deploy_d02
+        - build
+        # - Deploy_d01
+        # - Deploy_d02
       environmentName: test
       environmentId: t01
       sharedEnvironmentId: t01
