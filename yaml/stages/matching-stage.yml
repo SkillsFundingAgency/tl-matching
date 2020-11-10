@@ -21,12 +21,14 @@ stages:
       - group: '${{variableGroup}}'
     - name: BaseName
       value: "s126${{parameters.environmentId}}-matching"
+    - name: SharedBaseName
+      value: "s126${{parameters.sharedEnvironmentId}}-matching"
     - name: ResourceGroupName
       value: '$(BaseName)'
     - name: SharedResourceGroup
-      value: '$(BaseName)-shared'
+      value: '$(SharedBaseName)-shared'
     - name: SharedSQLServerName
-      value: '$(BaseName)-shared-sqlsvr'
+      value: '$(SharedBaseName)-shared-sqlsvr'
     - name: ConfigStorageAccountName
       value: '$(BaseName)configstr'
   
@@ -35,7 +37,7 @@ stages:
   jobs:
   - template: ../jobs/matching-shared-infrastructure-job.yml
     parameters:
-      baseName: $(BaseName)
+      baseName: $(SharedBaseName)
       serviceConnection: ${{ parameters.serviceConnection }}
 
   

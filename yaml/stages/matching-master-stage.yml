@@ -18,6 +18,7 @@ stages:
         - build        
       environmentName: dev
       environmentId: d01
+      sharedEnvironmentId: d01
       variableGroups:
         - platform-dev
         - platform-dev-matching
@@ -30,6 +31,7 @@ stages:
         - build        
       environmentName: dev
       environmentId: d02
+      sharedEnvironmentId: d01
       variableGroups:
         - platform-dev
         - platform-dev-matching
