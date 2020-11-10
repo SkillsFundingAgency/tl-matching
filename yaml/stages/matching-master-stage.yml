@@ -20,6 +20,7 @@ stages:
       environmentId: d01
       variableGroups:
         - platform-dev
+      serviceConnection: $(devServiceConnection)
 
   # - template: matching-stage.yml
   #   parameters:
