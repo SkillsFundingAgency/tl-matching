@@ -1,16 +1,18 @@
 parameters:
 - name: baseName
   type: string
-- name: serviceConnection
-  type: string
+# - name: serviceConnection
+#   type: string
 jobs:
 - job: DeploySharedInfrastructure
+  variables:
+    - group: platform-dev
   steps:
   - checkout: self
 
   - template: ./Infrastructure/steps/deploy-template.yml@devopsTemplates
     parameters:
-      serviceConnection: ${{ parameters.serviceConnection }}
+      serviceConnection: $(bob)
       subscriptionId: $(subscriptionId)
       resourceGroupName: $(SharedResourceGroup)
       location: 'West Europe'
