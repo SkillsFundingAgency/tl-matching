@@ -7,10 +7,13 @@ parameters:
   type: string
 - name: environmentId
   type: string
+- name: sharedEnvironmentId
+  type: string
 - name: variableGroups
   type: object
 - name: serviceConnection
   type: string
+
 stages:
 - stage: Deploy_${{parameters.environmentId}}
   dependsOn: 
