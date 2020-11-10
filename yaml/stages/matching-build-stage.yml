@@ -7,5 +7,5 @@ stages:
     - '${{ each dependency in parameters.dependencies }}':
       - '${{dependency}}'
   jobs:
-  - template: ../jobs/matching-build-application-job.yml
-  - template: ../jobs/matching-build-dacpac-job.yml
+  # - template: ../jobs/matching-build-application-job.yml
+  # - template: ../jobs/matching-build-dacpac-job.yml

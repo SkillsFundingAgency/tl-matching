@@ -20,6 +20,7 @@ stages:
       environmentId: d01
       variableGroups:
         - platform-dev
+        - platform-dev-matching
       serviceConnection: $(devServiceConnection)
 
   - template: matching-stage.yml
@@ -31,6 +32,7 @@ stages:
       environmentId: t01
       variableGroups:
         - platform-test
+        - platform-test-matching
       serviceConnection: $(testServiceConnection)
 
   # - template: matching-stage.yml
