@@ -11,15 +11,13 @@ jobs:
     SharedASPName: $[ dependencies.DeploySharedInfrastructure.outputs['armOutputs.armOutput.sharedASPName'] ]
     SharedKeyVaultName: $[ dependencies.DeploySharedInfrastructure.outputs['armOutputs.armOutput.sharedKeyVaultName'] ] 
     SharedSQLServerName: $[ dependencies.DeploySharedInfrastructure.outputs['armOutputs.armOutput.sharedSQLServerName'] ] 
-    ConfigurationStorageConnectionString: $[ dependencies.DeploySharedInfrastructure.outputs['armOutputs.armOutput.configStorageConnectionString'] ]
-    serviceConnectionb: ${{ parameters.serviceConnection }}
-    
+    ConfigurationStorageConnectionString: $[ dependencies.DeploySharedInfrastructure.outputs['armOutputs.armOutput.configStorageConnectionString'] ] 
   steps:
   - checkout: self
 
   - template: ./Infrastructure/steps/deploy-template.yml@devopsTemplates
     parameters:
-      serviceConnection: $(serviceConnectionb)
+      serviceConnection: ${{ parameters.serviceConnection }}
       subscriptionId: $(subscriptionId)
       resourceGroupName: $(ResourceGroupName)
       location: 'West Europe'
