@@ -13,17 +13,18 @@ stages:
     - '${{ each dependency in parameters.dependencies }}':
       - '${{dependency}}'
   variables:
-    ResourceGroupName: 's126${{parameters.environmentId}}-matching'
-    SharedEnvResourceGroupName: 's126${{parameters.environmentId}}-matching-shared'
-    SharedSQLServerName: 's126${{parameters.environmentId}}-matching-shared-sqlsvr'
-    ConfigStorageAccountName: 's126${{parameters.environmentId}}matchingconfigstr'
+    BaseName: "s126${{parameters.environmentId}}-matching"
+    ResourceGroupName: '$(BaseName)'
+    SharedResourceGroup: '$(BaseName)-shared'
+    SharedSQLServerName: '$(BaseName)-shared-sqlsvr'
+    ConfigStorageAccountName: '$(BaseName)configstr'
   
       
   displayName: '${{parameters.environmentName}} [${{parameters.environmentId}}]'
   jobs:
   - template: ../jobs/matching-shared-infrastructure-job.yml
     parameters:
-      environmentId: ${{parameters.environmentId}}
+      baseName: $(BaseName)
   
   - template: ../jobs/matching-infrastructure-job.yml
     parameters:
