@@ -21,35 +21,35 @@ stages:
       variableGroups:
         - platform-dev
 
-  - template: matching-stage.yml
-    parameters:
-      stageName: Test
-      dependencies:
-        - Deploy_Dev
-      environmentName: test
-      environmentId: t01
-      variableGroups:
-        - platform-test
+  # - template: matching-stage.yml
+  #   parameters:
+  #     stageName: Test
+  #     dependencies:
+  #       - Deploy_Dev
+  #     environmentName: test
+  #     environmentId: t01
+  #     variableGroups:
+  #       - platform-test
 
-  - template: matching-stage.yml
-    parameters:
-      stageName: PreProd
-      dependencies:
-        - Deploy_Test
-      environmentName: preprod
-      environmentId: p02
-      variableGroups:
-        - platform-prod
+  # - template: matching-stage.yml
+  #   parameters:
+  #     stageName: PreProd
+  #     dependencies:
+  #       - Deploy_Test
+  #     environmentName: preprod
+  #     environmentId: p02
+  #     variableGroups:
+  #       - platform-prod
 
-  - template: matching-stage.yml
-    parameters:
-      stageName: Prod
-      dependencies:
-        - Deploy_PreProd
-      environmentName: prod
-      environmentId: p01
-      variableGroups:
-        - platform-prod
+  # - template: matching-stage.yml
+  #   parameters:
+  #     stageName: Prod
+  #     dependencies:
+  #       - Deploy_PreProd
+  #     environmentName: prod
+  #     environmentId: p01
+  #     variableGroups:
+  #       - platform-prod
 
 
   #deploy at
