@@ -36,3 +36,4 @@ stages:
     parameters:
       baseName: $(SharedBaseName)
       serviceConnection: ${{ parameters.serviceConnection }}
+      sharedEnvironmentId: ${{ parameters.sharedEnvironmentId }}
