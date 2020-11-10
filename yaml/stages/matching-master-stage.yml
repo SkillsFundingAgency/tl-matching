@@ -45,6 +45,7 @@ stages:
         - Deploy_d02
       environmentName: test
       environmentId: t01
+      sharedEnvironmentId: t01
       variableGroups:
         - platform-test
         - platform-test-matching
