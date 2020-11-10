@@ -10,6 +10,7 @@ jobs:
     SharedKeyVaultName: $[ dependencies.DeploySharedInfrastructure.outputs['armOutputs.armOutput.sharedKeyVaultName'] ] 
     SharedSQLServerName: $[ dependencies.DeploySharedInfrastructure.outputs['armOutputs.armOutput.sharedSQLServerName'] ] 
     ConfigurationStorageConnectionString: $[ dependencies.DeploySharedInfrastructure.outputs['armOutputs.armOutput.configStorageConnectionString'] ]
+    serviceConnection: $[variables.serviceConnection]
     
   steps:
   - checkout: self
