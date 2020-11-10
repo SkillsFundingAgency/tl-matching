@@ -1,6 +1,8 @@
 parameters:
 - name: BaseName
   type: string
+- name: serviceConnection
+  type: string
 jobs:
 - job: DeployMatchingInfrastructure
   dependsOn: 
@@ -10,14 +12,14 @@ jobs:
     SharedKeyVaultName: $[ dependencies.DeploySharedInfrastructure.outputs['armOutputs.armOutput.sharedKeyVaultName'] ] 
     SharedSQLServerName: $[ dependencies.DeploySharedInfrastructure.outputs['armOutputs.armOutput.sharedSQLServerName'] ] 
     ConfigurationStorageConnectionString: $[ dependencies.DeploySharedInfrastructure.outputs['armOutputs.armOutput.configStorageConnectionString'] ]
-    serviceConnection: $[variables.serviceConnection]
+    serviceConnectionb: ${{ parameters.serviceConnection }}
     
   steps:
   - checkout: self
 
   - template: ./Infrastructure/steps/deploy-template.yml@devopsTemplates
     parameters:
-      serviceConnection: $(serviceConnection)
+      serviceConnection: $(serviceConnectionb)
       subscriptionId: $(subscriptionId)
       resourceGroupName: $(ResourceGroupName)
       location: 'West Europe'
