@@ -3,15 +3,18 @@ parameters:
   type: string
 - name: serviceConnection
   type: string
+- name: sharedEnvironmentId
+  type: string
 jobs:
 - job: DeployMatchingInfrastructure
   dependsOn: 
-    - DeploySharedInfrastructure
+    - DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}
   variables:
-    SharedASPName: $[ dependencies.DeploySharedInfrastructure.outputs['armOutputs.armOutput.sharedASPName'] ]
-    SharedKeyVaultName: $[ dependencies.DeploySharedInfrastructure.outputs['armOutputs.armOutput.sharedKeyVaultName'] ] 
-    SharedSQLServerName: $[ dependencies.DeploySharedInfrastructure.outputs['armOutputs.armOutput.sharedSQLServerName'] ] 
-    ConfigurationStorageConnectionString: $[ dependencies.DeploySharedInfrastructure.outputs['armOutputs.armOutput.configStorageConnectionString'] ] 
+    SharedInfrastructureBase: DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}
+    SharedASPName: $[ dependencies.$(SharedInfrastructureBase).outputs['armOutputs.armOutput.sharedASPName'] ]
+    SharedKeyVaultName: $[ dependencies.$(SharedInfrastructureBase).outputs['armOutputs.armOutput.sharedKeyVaultName'] ] 
+    SharedSQLServerName: $[ dependencies.$(SharedInfrastructureBase).outputs['armOutputs.armOutput.sharedSQLServerName'] ] 
+    ConfigurationStorageConnectionString: $[ dependencies.$(SharedInfrastructureBase).outputs['armOutputs.armOutput.configStorageConnectionString'] ] 
   steps:
   - checkout: self
 

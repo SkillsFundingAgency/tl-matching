@@ -2,56 +2,92 @@ stages:
   #Build
   - stage: start
     jobs:
-    - job: start
-      steps:
-      - pwsh: Write-Host "Starting"
+      - job: start
+        steps:
+          - pwsh: Write-Host "Starting"
 
   - template: matching-build-stage.yml
     parameters:
       dependencies:
         - start
-  
-  # - template: matching-stage.yml
-  #   parameters:
-  #     stageName: Dev
-  #     dependencies:
-  #       - build        
-  #     environmentName: dev
-  #     environmentId: d01
-  #     sharedEnvironmentId: d01
-  #     variableGroups:
-  #       - platform-dev
-  #       - platform-dev-matching
-  #     serviceConnection: $(devServiceConnection)
-  
-  # - template: matching-stage.yml
-  #   parameters:
-  #     stageName: Dev
-  #     dependencies:
-  #       - build        
-  #     environmentName: dev
-  #     environmentId: d02
-  #     sharedEnvironmentId: d01
-  #     variableGroups:
-  #       - platform-dev
-  #       - platform-dev-matching
-  #     serviceConnection: $(devServiceConnection)
+
+  - template: matching-shared-stage.yml
+    parameters:
+      stageName: Dev
+      dependencies:
+        - build
+      environmentName: dev
+      sharedEnvironmentId: d01
+      variableGroups:
+        - platform-dev
+        - platform-dev-matching
+      serviceConnection: $(devServiceConnection)
+    
+    
+  - template: matching-shared-stage.yml
+    parameters:
+      stageName: Dev
+      dependencies:
+        - build
+      environmentName: dev
+      sharedEnvironmentId: d02
+      variableGroups:
+        - platform-dev
+        - platform-dev-matching
+      serviceConnection: $(devServiceConnection)
 
   - template: matching-stage.yml
     parameters:
-      stageName: Test
+      stageName: Dev
       dependencies:
-        - build
-        # - Deploy_d01
-        # - Deploy_d02
-      environmentName: test
-      environmentId: t01
-      sharedEnvironmentId: t01
+        - Deploy_Shared_d01
+      environmentName: dev
+      environmentId: d01
+      sharedEnvironmentId: d01
       variableGroups:
-        - platform-test
-        - platform-test-matching
-      serviceConnection: $(testServiceConnection)
+        - platform-dev
+        - platform-dev-matching
+      serviceConnection: $(devServiceConnection)
 
+  - template: matching-stage.yml
+    parameters:
+      stageName: Dev
+      dependencies:
+        - Deploy_Shared_d01
+      environmentName: dev
+      environmentId: d02
+      sharedEnvironmentId: d01
+      variableGroups:
+        - platform-dev
+        - platform-dev-matching
+      serviceConnection: $(devServiceConnection)
+  
+  - template: matching-stage.yml
+    parameters:
+      stageName: Dev
+      dependencies:
+        - Deploy_Shared_d02
+      environmentName: dev
+      environmentId: d03
+      sharedEnvironmentId: d02
+      variableGroups:
+        - platform-dev
+        - platform-dev-matching
+      serviceConnection: $(devServiceConnection)
+  # - template: matching-stage.yml
+  #   parameters:
+  #     stageName: Test
+  #     dependencies:
+  #       - build
+  #       # - Deploy_d01
+  #       # - Deploy_d02
+  #     environmentName: test
+  #     environmentId: t01
+  #     sharedEnvironmentId: t01
+  #     variableGroups:
+  #       - platform-test
+  #       - platform-test-matching
+  #     serviceConnection: $(testServiceConnection)
   # - template: matching-stage.yml
   #   parameters:
   #     stageName: PreProd
@@ -62,7 +98,6 @@ stages:
   #     variableGroups:
   #       - platform-prod
   #     serviceConnection: $(prodServiceConnection)
-
   # - template: matching-stage.yml
   #   parameters:
   #     stageName: Prod
@@ -73,9 +108,6 @@ stages:
   #     variableGroups:
   #       - platform-prod
   #     serviceConnection: $(prodServiceConnection)
-      
-
-
   #deploy at
   # - stage: deployAT
   #

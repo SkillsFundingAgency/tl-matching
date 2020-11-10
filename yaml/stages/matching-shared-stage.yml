@@ -5,8 +5,6 @@ parameters:
   type: object
 - name: environmentName
   type: string
-- name: environmentId
-  type: string
 - name: sharedEnvironmentId
   type: string
 - name: variableGroups
@@ -15,28 +13,26 @@ parameters:
   type: string
 
 stages:
-- stage: Deploy_${{parameters.environmentId}}
+- stage: Deploy_Shared_${{parameters.sharedEnvironmentId}}
   dependsOn: 
     - '${{ each dependency in parameters.dependencies }}':
       - '${{dependency}}'
   variables:
     - '${{ each variableGroup in parameters.variableGroups }}':
       - group: '${{variableGroup}}'
-    - name: BaseName
-      value: "s126${{parameters.environmentId}}-matching"
-    - name: ResourceGroupName
-      value: '$(BaseName)'
+    - name: SharedBaseName
+      value: "s126${{parameters.sharedEnvironmentId}}-matching"
+    - name: SharedResourceGroup
+      value: '$(SharedBaseName)-shared'
+    - name: SharedSQLServerName
+      value: '$(SharedBaseName)-shared-sqlsvr'
     - name: ConfigStorageAccountName
-      value: '$(BaseName)configstr'
+      value: '$(SharedBaseName)configstr'
   
       
   displayName: '${{parameters.environmentName}} [${{parameters.environmentId}}]'
-  jobs:  
-  - template: ../jobs/matching-infrastructure-job.yml
+  jobs:
+  - template: ../jobs/matching-shared-infrastructure-job.yml
     parameters:
-      BaseName: $(BaseName)
+      baseName: $(SharedBaseName)
       serviceConnection: ${{ parameters.serviceConnection }}
-      sharedEnvironmentId: ${{ parameters.sharedEnvironmentId }}
-
-
-  - template: ../jobs/matching-publish-site-job.yml

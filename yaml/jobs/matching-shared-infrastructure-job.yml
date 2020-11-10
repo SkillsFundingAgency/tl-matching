@@ -3,8 +3,10 @@ parameters:
   type: string
 - name: serviceConnection
   type: string
+- name: sharedEnvironmentId
+  type: string
 jobs:
-- job: DeploySharedInfrastructure
+- job: DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}
   steps:
   - checkout: self
 
