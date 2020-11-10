@@ -42,5 +42,7 @@ stages:
   - template: ../jobs/matching-infrastructure-job.yml
     parameters:
       BaseName: $(BaseName)
+      serviceConnection: ${{ parameters.serviceConnection }}
+
   
   - template: ../jobs/matching-publish-site-job.yml
