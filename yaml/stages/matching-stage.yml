@@ -12,7 +12,7 @@ parameters:
 - name: serviceConnection
   type: string
 stages:
-- stage: Deploy_${{parameters.stageName}}
+- stage: Deploy_${{parameters.environmentId}}
   dependsOn: 
     - '${{ each dependency in parameters.dependencies }}':
       - '${{dependency}}'

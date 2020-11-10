@@ -22,12 +22,25 @@ stages:
         - platform-dev
         - platform-dev-matching
       serviceConnection: $(devServiceConnection)
+  
+  - template: matching-stage.yml
+    parameters:
+      stageName: Dev
+      dependencies:
+        - build        
+      environmentName: dev
+      environmentId: d02
+      variableGroups:
+        - platform-dev
+        - platform-dev-matching
+      serviceConnection: $(devServiceConnection)
 
   - template: matching-stage.yml
     parameters:
       stageName: Test
       dependencies:
-        - Deploy_Dev
+        - Deploy_d01
+        - Deploy_d02
       environmentName: test
       environmentId: t01
       variableGroups:
