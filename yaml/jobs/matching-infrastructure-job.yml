@@ -7,8 +7,6 @@ parameters:
   type: string
 jobs:
 - job: DeployMatchingInfrastructure
-  # dependsOn: 
-  #   - DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}
   variables:
     SharedInfrastructureBase: DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}
     SharedASPName: $[ stageDependencies.$(SharedInfrastructureBase).outputs['armOutputs.armOutput.sharedASPName'] ]

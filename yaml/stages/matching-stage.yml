@@ -39,3 +39,5 @@ stages:
       sharedEnvironmentId: ${{ parameters.sharedEnvironmentId }}
       
   - template: ../jobs/matching-publish-site-job.yml
+    dependencies:
+      - DeployMatchingInfrastructure
