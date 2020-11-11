@@ -7,11 +7,11 @@ parameters:
   type: string
 jobs:
 - job: DeployMatchingInfrastructure
-  dependsOn: 
-    - DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}
+  # dependsOn: 
+  #   - DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}
   variables:
-    SharedInfrastructureBase: DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}
-    SharedASPName: $[ dependencies.$(SharedInfrastructureBase).outputs['armOutputs.armOutput.sharedASPName'] ]
+    SharedInfrastructureBase: DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}
+    SharedASPName: $[ stageDependencies.$(SharedInfrastructureBase).outputs['armOutputs.armOutput.sharedASPName'] ]
     SharedKeyVaultName: $[ dependencies.$(SharedInfrastructureBase).outputs['armOutputs.armOutput.sharedKeyVaultName'] ] 
     SharedSQLServerName: $[ dependencies.$(SharedInfrastructureBase).outputs['armOutputs.armOutput.sharedSQLServerName'] ] 
     ConfigurationStorageConnectionString: $[ dependencies.$(SharedInfrastructureBase).outputs['armOutputs.armOutput.configStorageConnectionString'] ] 

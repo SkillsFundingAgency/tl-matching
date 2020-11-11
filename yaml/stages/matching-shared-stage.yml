@@ -13,7 +13,7 @@ parameters:
   type: string
 
 stages:
-- stage: Deploy_Shared_${{parameters.sharedEnvironmentId}}
+- stage: DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}
   dependsOn: 
     - '${{ each dependency in parameters.dependencies }}':
       - '${{dependency}}'
