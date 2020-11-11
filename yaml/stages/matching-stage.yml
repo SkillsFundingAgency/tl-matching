@@ -37,6 +37,5 @@ stages:
       BaseName: $(BaseName)
       serviceConnection: ${{ parameters.serviceConnection }}
       sharedEnvironmentId: ${{ parameters.sharedEnvironmentId }}
-
-
+      
   - template: ../jobs/matching-publish-site-job.yml
