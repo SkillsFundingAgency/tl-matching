@@ -37,3 +37,7 @@ stages:
       baseName: $(SharedBaseName)
       serviceConnection: ${{ parameters.serviceConnection }}
       sharedEnvironmentId: ${{ parameters.sharedEnvironmentId }}
+  - job: Save_Variable
+    steps:
+      - pwsh: Write-Host "##vso[task.setvariable variable=SharedResourceGroup;isOutput=true]SharedResourceGroup"
+        name: SharedVariables

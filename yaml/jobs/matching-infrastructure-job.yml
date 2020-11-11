@@ -10,11 +10,13 @@ jobs:
     variables:
       #SharedInfrastructureBase: DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}
       SharedASPName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['armOutputs.armOutput.sharedASPName'] ]
-      SharedKeyVaultName: $[ dependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['armOutputs.armOutput.sharedKeyVaultName'] ]
-      SharedSQLServerName: $[ dependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['armOutputs.armOutput.sharedSQLServerName'] ]
-      ConfigurationStorageConnectionString: $[ dependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['armOutputs.armOutput.configStorageConnectionString'] ]
+      SharedKeyVaultName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['armOutputs.armOutput.sharedKeyVaultName'] ]
+      SharedSQLServerName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['armOutputs.armOutput.sharedSQLServerName'] ]
+      ConfigurationStorageConnectionString: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['armOutputs.armOutput.configStorageConnectionString'] ]
+      SharedResourceGroup: $[stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['SharedVariables.SharedResourceGroup']]
     steps:
       - checkout: self
+      - pwsh: 'Write-Host "Get Stage variable: $(SharedResourceGroup)"'
 
       - template: ./Infrastructure/steps/deploy-template.yml@devopsTemplates
         parameters:
