@@ -8,11 +8,11 @@ parameters:
 jobs:
   - job: DeployMatchingInfrastructure
     variables:
-      SharedInfrastructureBase: DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}
-      SharedASPName: $[ stageDependencies.$[variables.SharedInfrastructureBase].outputs['armOutputs.armOutput.sharedASPName'] ]
-      SharedKeyVaultName: $[ dependencies.$[variables.SharedInfrastructureBase].outputs['armOutputs.armOutput.sharedKeyVaultName'] ]
-      SharedSQLServerName: $[ dependencies.$[variables.SharedInfrastructureBase].outputs['armOutputs.armOutput.sharedSQLServerName'] ]
-      ConfigurationStorageConnectionString: $[ dependencies.$[variables.SharedInfrastructureBase].outputs['armOutputs.armOutput.configStorageConnectionString'] ]
+      #SharedInfrastructureBase: DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}
+      SharedASPName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['armOutputs.armOutput.sharedASPName'] ]
+      SharedKeyVaultName: $[ dependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['armOutputs.armOutput.sharedKeyVaultName'] ]
+      SharedSQLServerName: $[ dependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['armOutputs.armOutput.sharedSQLServerName'] ]
+      ConfigurationStorageConnectionString: $[ dependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['armOutputs.armOutput.configStorageConnectionString'] ]
     steps:
       - checkout: self
 
