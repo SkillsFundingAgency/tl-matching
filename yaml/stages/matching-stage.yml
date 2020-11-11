@@ -30,7 +30,7 @@ stages:
       value: '$(BaseName)configstr'
   
       
-  displayName: Matching Deployment '${{parameters.environmentName}} [${{parameters.environmentId}}]'
+  displayName: '${{parameters.environmentName}} [${{parameters.environmentId}}] deployment'
   jobs:  
   - template: ../jobs/matching-infrastructure-job.yml
     parameters:

@@ -30,7 +30,7 @@ stages:
       value: '$(SharedBaseName)configstr'
   
       
-  displayName: Shared Infrastructure '${{parameters.environmentName}} [${{parameters.sharedEnvironmentId}}]'
+  displayName: '${{parameters.environmentName}} [${{parameters.sharedEnvironmentId}}] Shared' 
   jobs:
   - template: ../jobs/matching-shared-infrastructure-job.yml
     parameters:
