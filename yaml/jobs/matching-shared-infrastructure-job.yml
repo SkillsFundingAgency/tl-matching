@@ -16,16 +16,14 @@ jobs:
         deploy:
           steps:
             - checkout: self
-
             - template: ./Infrastructure/steps/deploy-template.yml@devopsTemplates
               parameters:
                 serviceConnection: ${{ parameters.serviceConnection }}
                 subscriptionId: $(subscriptionId)
                 resourceGroupName: $(SharedResourceGroup)
-                location: "West Europe"
-                templateFilePath: "./azure/matching-shared.json"
-                armParameterOverrideString:
-                  '-environmentNameAbbreviation "${{parameters.baseName}}"
+                location: 'West Europe'
+                templateFilePath: './azure/matching-shared.json'
+                armParameterOverrideString: '-environmentNameAbbreviation "${{parameters.baseName}}" 
                   -sqlServerAdminUsername "$(SQLServerAdminUsername)"
                   -sqlServerAdminPassword "$(SQLServerAdminPassword)"
                   -sqlServerActiveDirectoryAdminLogin "$(SQLServerActiveDirectoryAdminLogin)"

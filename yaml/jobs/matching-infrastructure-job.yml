@@ -13,14 +13,15 @@ jobs:
       SharedKeyVaultName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['armOutputs.armOutput.sharedKeyVaultName'] ]
       SharedSQLServerName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['armOutputs.armOutput.sharedSQLServerName'] ]
       ConfigurationStorageConnectionString: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['armOutputs.armOutput.configStorageConnectionString'] ]
-      SharedResourceGroup: $[stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['SharedVariables.SharedResourceGroup']]
+      SharedResourceGroup: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['SharedVariables.SharedResourceGroup'] ]
     steps:
       - checkout: self
-      - pwsh: 'Write-Host "SharedResourceGroup variable: $(SharedResourceGroup)"'
-          # 'Write-Host "SharedASPName variable: $(SharedASPName)"'
-          # 'Write-Host "SharedKeyVaultName variable: $(SharedKeyVaultName)"'
-          # 'Write-Host "SharedSQLServerName variable: $(SharedSQLServerName)"'
-          # 'Write-Host "ConfigurationStorageConnectionString variable: $(ConfigurationStorageConnectionString)"'
+      - pwsh: |
+          'Write-Host "SharedResourceGroup variable: $(SharedResourceGroup)"'
+          'Write-Host "SharedASPName variable: $(SharedASPName)"'
+          'Write-Host "SharedKeyVaultName variable: $(SharedKeyVaultName)"'
+          'Write-Host "SharedSQLServerName variable: $(SharedSQLServerName)"'
+          'Write-Host "ConfigurationStorageConnectionString variable: $(ConfigurationStorageConnectionString)"'
         displayName: 'Show Variables'
 
       - template: ./Infrastructure/steps/deploy-template.yml@devopsTemplates
