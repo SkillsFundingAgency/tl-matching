@@ -1,42 +1,43 @@
 parameters:
-- name: BaseName
-  type: string
-- name: serviceConnection
-  type: string
-- name: sharedEnvironmentId
-  type: string
+  - name: BaseName
+    type: string
+  - name: serviceConnection
+    type: string
+  - name: sharedEnvironmentId
+    type: string
 jobs:
-- job: DeployMatchingInfrastructure
-  variables:
-    SharedInfrastructureBase: DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}
-    SharedASPName: $[ stageDependencies.$(SharedInfrastructureBase).outputs['armOutputs.armOutput.sharedASPName'] ]
-    SharedKeyVaultName: $[ dependencies.$(SharedInfrastructureBase).outputs['armOutputs.armOutput.sharedKeyVaultName'] ] 
-    SharedSQLServerName: $[ dependencies.$(SharedInfrastructureBase).outputs['armOutputs.armOutput.sharedSQLServerName'] ] 
-    ConfigurationStorageConnectionString: $[ dependencies.$(SharedInfrastructureBase).outputs['armOutputs.armOutput.configStorageConnectionString'] ] 
-  steps:
-  - checkout: self
+  - job: DeployMatchingInfrastructure
+    variables:
+      SharedInfrastructureBase: DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}
+      SharedASPName: $[ stageDependencies.$[variables.SharedInfrastructureBase].outputs['armOutputs.armOutput.sharedASPName'] ]
+      SharedKeyVaultName: $[ dependencies.$[variables.SharedInfrastructureBase].outputs['armOutputs.armOutput.sharedKeyVaultName'] ]
+      SharedSQLServerName: $[ dependencies.$[variables.SharedInfrastructureBase].outputs['armOutputs.armOutput.sharedSQLServerName'] ]
+      ConfigurationStorageConnectionString: $[ dependencies.$[variables.SharedInfrastructureBase].outputs['armOutputs.armOutput.configStorageConnectionString'] ]
+    steps:
+      - checkout: self
 
-  - template: ./Infrastructure/steps/deploy-template.yml@devopsTemplates
-    parameters:
-      serviceConnection: ${{ parameters.serviceConnection }}
-      subscriptionId: $(subscriptionId)
-      resourceGroupName: $(ResourceGroupName)
-      location: 'West Europe'
-      templateFilePath: './azure/matching-environmant.json'
-      armParameterOverrideString: '-environmentNameAbbreviation "${{parameters.BaseName}}"         
-        -workerASPSize "$(WorkerASPSize)" 
-        -workerASPInstances "$(WorkerASPInstances)" 
-        -sharedASPName "$(SharedASPName)" 
-        -sharedEnvResourceGroup "$(SharedResourceGroup)" 
-        -sharedKeyVaultName "$(SharedKeyVaultName)" 
-        -sharedSQLServerName "$(SharedSQLServerName)" 
-        -sqlDatabaseSkuName "$(SQLDatabaseSkuName)" 
-        -sqlDatabaseTier "$(SQLDatabaseTier)" 
-        -configurationStorageConnectionString "$(ConfigurationStorageConnectionString)" 
-        -uiCustomHostName "$(UICustomHostName)" 
-        -certificateName "$(CertificateName)" 
-        -bankHolidayGeneratorTrigger "$(BankHolidayGeneratorTrigger)" 
-        -employerFeedbackTrigger "$(EmployerFeedbackTrigger)" 
-        -providerFeedbackTrigger "$(ProviderFeedbackTrigger)" 
-        -providerReferenceTrigger "$(ProviderReferenceTrigger)"'
-      processOutputs: true
+      - template: ./Infrastructure/steps/deploy-template.yml@devopsTemplates
+        parameters:
+          serviceConnection: ${{ parameters.serviceConnection }}
+          subscriptionId: $(subscriptionId)
+          resourceGroupName: $(ResourceGroupName)
+          location: "West Europe"
+          templateFilePath: "./azure/matching-environmant.json"
+          armParameterOverrideString:
+            '-environmentNameAbbreviation "${{parameters.BaseName}}"
+            -workerASPSize "$(WorkerASPSize)"
+            -workerASPInstances "$(WorkerASPInstances)"
+            -sharedASPName "$(SharedASPName)"
+            -sharedEnvResourceGroup "$(SharedResourceGroup)"
+            -sharedKeyVaultName "$(SharedKeyVaultName)"
+            -sharedSQLServerName "$(SharedSQLServerName)"
+            -sqlDatabaseSkuName "$(SQLDatabaseSkuName)"
+            -sqlDatabaseTier "$(SQLDatabaseTier)"
+            -configurationStorageConnectionString "$(ConfigurationStorageConnectionString)"
+            -uiCustomHostName "$(UICustomHostName)"
+            -certificateName "$(CertificateName)"
+            -bankHolidayGeneratorTrigger "$(BankHolidayGeneratorTrigger)"
+            -employerFeedbackTrigger "$(EmployerFeedbackTrigger)"
+            -providerFeedbackTrigger "$(ProviderFeedbackTrigger)"
+            -providerReferenceTrigger "$(ProviderReferenceTrigger)"'
+          processOutputs: true
