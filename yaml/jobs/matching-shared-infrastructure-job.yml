@@ -5,10 +5,12 @@ parameters:
     type: string
   - name: sharedEnvironmentId
     type: string
+  - name: environmentName
+    type: string
 jobs:
   - deployment: DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}
     displayName: Deploy Shared Infrastructure
-    environment: "matching-dev"
+    environment: "${{parameters.environmentName}}"
     strategy:
       runOnce:
         deploy:
@@ -20,8 +22,8 @@ jobs:
                 serviceConnection: ${{ parameters.serviceConnection }}
                 subscriptionId: $(subscriptionId)
                 resourceGroupName: $(SharedResourceGroup)
-                location: 'West Europe'
-                templateFilePath: './azure/matching-shared.json'
+                location: "West Europe"
+                templateFilePath: "./azure/matching-shared.json"
                 armParameterOverrideString:
                   '-environmentNameAbbreviation "${{parameters.baseName}}"
                   -sqlServerAdminUsername "$(SQLServerAdminUsername)"
