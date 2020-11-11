@@ -110,8 +110,8 @@ stages:
       environmentName: preprod
       sharedEnvironmentId: p02
       variableGroups:
-        - platform-prod
-        - platform-prod-matching
+        - platform-preprod
+        - platform-preprod-matching
       serviceConnection: $(prodServiceConnection)
     
   - template: matching-stage.yml
@@ -123,8 +123,8 @@ stages:
       environmentId: p02
       sharedEnvironmentId: p02
       variableGroups:
-        - platform-prod
-        - platform-prod-matching
+        - platform-preprod
+        - platform-preprod-matching
       serviceConnection: $(prodServiceConnection)
 
 ######################## Prod ##############################################
