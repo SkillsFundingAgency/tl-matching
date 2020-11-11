@@ -9,11 +9,11 @@ jobs:
   - job: DeployMatchingInfrastructure
     variables:
       #SharedInfrastructureBase: DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}
-      SharedASPName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['armOutputs.armOutput.sharedASPName'] ]
-      SharedKeyVaultName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['armOutputs.armOutput.sharedKeyVaultName'] ]
-      SharedSQLServerName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['armOutputs.armOutput.sharedSQLServerName'] ]
-      ConfigurationStorageConnectionString: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['armOutputs.armOutput.configStorageConnectionString'] ]
-      SharedResourceGroup: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['SharedVariables.SharedResourceGroup'] ]
+      SharedASPName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.armOutputs.armOutput.sharedASPName'] ]
+      SharedKeyVaultName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.armOutputs.armOutput.sharedKeyVaultName'] ]
+      SharedSQLServerName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.armOutputs.armOutput.sharedSQLServerName'] ]
+      ConfigurationStorageConnectionString: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}outputs['.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.armOutputs.armOutput.configStorageConnectionString'] ]
+      SharedResourceGroup: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.SharedVariables.SharedResourceGroup'] ]
     steps:
       - checkout: self
       - pwsh: |
