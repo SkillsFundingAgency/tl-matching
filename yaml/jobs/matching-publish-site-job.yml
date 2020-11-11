@@ -1,7 +1,6 @@
   jobs:
   - job: PublishSite
     dependsOn: 
-      - DeploySharedInfrastructure
       - DeployMatchingInfrastructure
     steps:
     - pwsh: Write-Host Testing
