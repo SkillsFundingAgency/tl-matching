@@ -24,17 +24,17 @@ stages:
       serviceConnection: $(devServiceConnection)
     
     
-  # - template: matching-shared-stage.yml
-  #   parameters:
-  #     stageName: Dev
-  #     dependencies:
-  #       - build
-  #     environmentName: dev
-  #     sharedEnvironmentId: d02
-  #     variableGroups:
-  #       - platform-dev
-  #       - platform-dev-matching
-  #     serviceConnection: $(devServiceConnection)
+  - template: matching-shared-stage.yml
+    parameters:
+      stageName: Dev
+      dependencies:
+        - build
+      environmentName: dev
+      sharedEnvironmentId: d02
+      variableGroups:
+        - platform-dev
+        - platform-dev-matching
+      serviceConnection: $(devServiceConnection)
 
   - template: matching-stage.yml
     parameters:
@@ -49,31 +49,31 @@ stages:
         - platform-dev-matching
       serviceConnection: $(devServiceConnection)
 
-  # - template: matching-stage.yml
-  #   parameters:
-  #     stageName: Dev
-  #     dependencies:
-  #       - DeploySharedInfrastructure_d01
-  #     environmentName: dev
-  #     environmentId: d02
-  #     sharedEnvironmentId: d01
-  #     variableGroups:
-  #       - platform-dev
-  #       - platform-dev-matching
-  #     serviceConnection: $(devServiceConnection)
+  - template: matching-stage.yml
+    parameters:
+      stageName: Dev
+      dependencies:
+        - DeploySharedInfrastructure_d01
+      environmentName: dev
+      environmentId: d02
+      sharedEnvironmentId: d01
+      variableGroups:
+        - platform-dev
+        - platform-dev-matching
+      serviceConnection: $(devServiceConnection)
   
-  # - template: matching-stage.yml
-  #   parameters:
-  #     stageName: Dev
-  #     dependencies:
-  #       - DeploySharedInfrastructure_d02
-  #     environmentName: dev
-  #     environmentId: d03
-  #     sharedEnvironmentId: d02
-  #     variableGroups:
-  #       - platform-dev
-  #       - platform-dev-matching
-  #     serviceConnection: $(devServiceConnection)
+  - template: matching-stage.yml
+    parameters:
+      stageName: Dev
+      dependencies:
+        - DeploySharedInfrastructure_d02
+      environmentName: dev
+      environmentId: d03
+      sharedEnvironmentId: d02
+      variableGroups:
+        - platform-dev
+        - platform-dev-matching
+      serviceConnection: $(devServiceConnection)
 
 
   
