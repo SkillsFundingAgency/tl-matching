@@ -38,3 +38,17 @@ jobs:
                 processOutputs: true
             - pwsh: Write-Host "##vso[task.setvariable variable=SharedResourceGroup;isOutput=true]$(SharedResourceGroup)"
               name: SharedVariables
+
+            - task: AzurePowerShell@5
+              displayName: 'Create Configuration Table'
+              inputs:
+                azureSubscription: $(subscriptionId)
+                ScriptType: InlineScript
+                Inline: |
+                  $account = Get-AzStorageAccount -ResourceGroupName $(SharedResourceGroup) -Name $(ConfigStorageAccountName)
+                  $table = Get-AzStorageTable -Context $account.Context -Name Configuration -ErrorAction SilentlyContinue
+                  if (!$table) {
+                      New-AzStorageTable -Context $account.Context -Name Configuration
+                  }
+                azurePowerShellVersion: LatestVersion
+                pwsh: true
