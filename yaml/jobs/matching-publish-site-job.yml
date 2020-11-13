@@ -8,11 +8,9 @@ parameters:
     default: 'configuration'
 jobs:
 - job: PublishSite
-  dependsOn: 
-    - DeployMatchingInfrastructure
-    
-  steps:
-    
+  # dependsOn: 
+  #   - DeployMatchingInfrastructure 
+  steps:    
     - pwsh: Get-ChildItem -Recurse
       displayName: Show Files
     # - task: GenerateEnvironmentConfiguration@3

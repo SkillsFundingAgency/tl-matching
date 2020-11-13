@@ -42,7 +42,7 @@ jobs:
             - task: AzurePowerShell@5
               displayName: 'Create Configuration Table'
               inputs:
-                azureSubscription: $(subscriptionId)
+                azureSubscription: ${{ parameters.serviceConnection }}
                 ScriptType: InlineScript
                 Inline: |
                   $account = Get-AzStorageAccount -ResourceGroupName $(SharedResourceGroup) -Name $(ConfigStorageAccountName)
