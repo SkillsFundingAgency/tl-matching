@@ -25,3 +25,6 @@
       displayName: 'Publish Artifact'
       inputs:
           pathtoPublish: '$(build.artifactstagingdirectory)/publish'
+          ArtifactName: 'sqldrop'
+          publishLocation: 'Container'
+
