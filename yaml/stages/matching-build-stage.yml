@@ -7,8 +7,8 @@ stages:
     - '${{ each dependency in parameters.dependencies }}':
       - '${{dependency}}'
   jobs:
-  - job:
-    steps:
-    - pwsh: Write-Host "build Stage" 
-  # - template: ../jobs/matching-build-application-job.yml
-  # - template: ../jobs/matching-build-dacpac-job.yml
+  # - job:
+  #   steps:
+  #   - pwsh: Write-Host "build Stage" 
+  - template: ../jobs/matching-build-application-job.yml
+  - template: ../jobs/matching-build-dacpac-job.yml
