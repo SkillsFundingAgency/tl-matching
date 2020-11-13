@@ -1,6 +1,23 @@
-  jobs:
-  - job: PublishSite
-    dependsOn: 
-      - DeployMatchingInfrastructure
-    steps:
-    - pwsh: Write-Host Testing
+parameters:
+  - name: serviceConnection
+    type: string
+  - name: configStorageAccountName
+    type: string
+  - name: tableName
+    type: string
+    default: 'configuration'
+jobs:
+- job: PublishSite
+  dependsOn: 
+    - DeployMatchingInfrastructure
+    - Build
+  steps:
+  - pwsh: Get-ChildItem -Recurse
+    displayName: Show Files
+  # - task: GenerateEnvironmentConfiguration@3
+  #   inputs:
+  #     SourcePath: '$(System.DefaultWorkingDirectory)'
+  #     TargetFilename: '*.schema.json'
+  #     ServiceConnectionName: ${{ parameters.serviceConnection }}
+  #     StorageAccountName: ${{ parameters.configStorageAccountName }}
+  #     TableName: ${{ parameters.tableName }}
