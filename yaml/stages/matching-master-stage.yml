@@ -23,19 +23,6 @@ stages:
         - platform-dev-matching
       serviceConnection: $(devServiceConnection)
     
-    
-  # - template: matching-shared-stage.yml
-  #   parameters:
-  #     stageName: Dev
-  #     dependencies:
-  #       - build
-  #     environmentName: dev
-  #     sharedEnvironmentId: d02
-  #     variableGroups:
-  #       - platform-dev
-  #       - platform-dev-matching
-  #     serviceConnection: $(devServiceConnection)
-
   - template: matching-stage.yml
     parameters:
       stageName: Dev
@@ -47,33 +34,9 @@ stages:
       variableGroups:
         - platform-dev
         - platform-dev-matching
+        - platform-global-matching
       serviceConnection: $(devServiceConnection)
 
-  # - template: matching-stage.yml
-  #   parameters:
-  #     stageName: Dev
-  #     dependencies:
-  #       - DeploySharedInfrastructure_d01
-  #     environmentName: dev
-  #     environmentId: d02
-  #     sharedEnvironmentId: d01
-  #     variableGroups:
-  #       - platform-dev
-  #       - platform-dev-matching
-  #     serviceConnection: $(devServiceConnection)
-  
-  # - template: matching-stage.yml
-  #   parameters:
-  #     stageName: Dev
-  #     dependencies:
-  #       - DeploySharedInfrastructure_d02
-  #     environmentName: dev
-  #     environmentId: d03
-  #     sharedEnvironmentId: d02
-  #     variableGroups:
-  #       - platform-dev
-  #       - platform-dev-matching
-  #     serviceConnection: $(devServiceConnection)
 
 ######################## TEST ##############################################
   - template: matching-shared-stage.yml
@@ -154,70 +117,3 @@ stages:
         - platform-prod
         - platform-prod-matching
       serviceConnection: $(prodServiceConnection)
-
-
-  # - template: matching-stage.yml
-  #   parameters:
-  #     stageName: Test
-  #     dependencies:
-  #       - build
-  #       # - Deploy_d01
-  #       # - Deploy_d02
-  #     environmentName: test
-  #     environmentId: t01
-  #     sharedEnvironmentId: t01
-  #     variableGroups:
-  #       - platform-test
-  #       - platform-test-matching
-  #     serviceConnection: $(testServiceConnection)
-  # - template: matching-stage.yml
-  #   parameters:
-  #     stageName: PreProd
-  #     dependencies:
-  #       - Deploy_Test
-  #     environmentName: preprod
-  #     environmentId: p02
-  #     variableGroups:
-  #       - platform-prod
-  #     serviceConnection: $(prodServiceConnection)
-  # - template: matching-stage.yml
-  #   parameters:
-  #     stageName: Prod
-  #     dependencies:
-  #       - Deploy_PreProd
-  #     environmentName: prod
-  #     environmentId: p01
-  #     variableGroups:
-  #       - platform-prod
-  #     serviceConnection: $(prodServiceConnection)
-  #deploy at
-  # - stage: deployAT
-  #
-  #   jobs:
-  #   - template: ../jobs/matching-shared-infrastructure.yml
-  #     parameters:
-  #       environmentId: d01
-  #   - template: ../jobs/matching-infrastructure.yml
-  #     parameters:
-  #       SharedInfrastructureDependency: DeploySharedInfrastructure
-  #       SharedEnvResourceGroupName: $(SharedResourceGroup)
-  #       UICustomHostName: $(UICustomHostName)
-  #       CertificateName: $(CertificateName)
-  #       ResourceGroupName: $(ResourceGroupName)
-  #   - job: TagResouceGroup
-  #     dependsOn:
-  #       - DeploySharedInfrastructure
-  #       - DeployMatchingInfrastructure
-  #     steps:
-  #     - task: AzurePowerShell@5
-  #       inputs:
-  #         azureSubscription: 'S126-TL-Dev-Service-Connection'
-  #         ScriptType: 'InlineScript'
-  #         Inline: |
-  #           $Tags = @{'Parent Business' = 'Apprenticeships'; 'Service Offering' = 'ESFA T Level Service' }
-  #           Get-AzResourceGroup | Where-Object ResourceGroupName -Like "*matching*" | ForEach-Object {
-  #               Update-AzTag -ResourceId $_.ResourceId -Tag $Tags -Operation Merge
-  #           }
-  #         azurePowerShellVersion: 'LatestVersion'
-  #         pwsh: true
-  #   # - template: ../jobs/matching-deploy.yml

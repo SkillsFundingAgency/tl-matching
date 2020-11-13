@@ -23,7 +23,7 @@ pr: none
 variables:
   buildConfiguration: 'release'
   buildPlatform: 'anycpu'
-  dotnetVersion: '3.x'
+  # dotnetVersion: '3.x'
   SQLServerActiveDirectoryAdminLogin: 'TL DEV SQL ADM'
   SQLServerActiveDirectoryAdminObjectId: '56f27acd-6ea8-4526-a25c-29436d62826c'
   ThreatDetectionEmailAddress: 'tlevelsdevops@education.gov.uk'
