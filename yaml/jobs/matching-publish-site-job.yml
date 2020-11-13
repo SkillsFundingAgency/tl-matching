@@ -1,8 +1,6 @@
 parameters:
   - name: serviceConnection
     type: string
-  - name: configStorageAccountName
-    type: string
   - name: tableName
     type: string
     default: 'configuration'

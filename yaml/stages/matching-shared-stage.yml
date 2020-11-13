@@ -25,10 +25,7 @@ stages:
     - name: SharedResourceGroup
       value: '$(SharedBaseName)-shared'
     - name: SharedSQLServerName
-      value: '$(SharedBaseName)-shared-sqlsvr'
-    - name: ConfigStorageAccountName
-      value: '$(SharedBaseName)configstr'
-  
+      value: '$(SharedBaseName)-shared-sqlsvr'  
       
   displayName: '${{parameters.environmentName}} [${{parameters.sharedEnvironmentId}}] Shared' 
   jobs:

@@ -25,10 +25,7 @@ stages:
     - name: BaseName
       value: "s126${{parameters.environmentId}}-matching"
     - name: ResourceGroupName
-      value: '$(BaseName)'
-    - name: ConfigStorageAccountName
-      value: 's126${{parameters.environmentId}}configstr'
-  
+      value: '$(BaseName)'  
       
   displayName: '${{parameters.environmentName}} [${{parameters.environmentId}}] deployment'
   jobs:  
@@ -41,4 +38,3 @@ stages:
   - template: ../jobs/matching-publish-site-job.yml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
-      configStorageAccountName: $(ConfigStorageAccountName) 
