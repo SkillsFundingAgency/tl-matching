@@ -39,4 +39,6 @@ stages:
       sharedEnvironmentId: ${{ parameters.sharedEnvironmentId }}
       
   - template: ../jobs/matching-publish-site-job.yml
-    
+    parameters:
+      serviceConnection: ${{ parameters.serviceConnection }}
+      configStorageAccountName: $(ConfigStorageAccountName) 
