@@ -287,6 +287,10 @@
         "configStorageConnectionString": {
             "type": "securestring",
             "value": "[reference('config-storage-account').outputs.storageConnectionString.value]"
+        },
+        "ConfigStorageAccountName":{
+            "type": "string",
+            "value": "[variables('configStorageAccountName')]"
         }
     }
 }
