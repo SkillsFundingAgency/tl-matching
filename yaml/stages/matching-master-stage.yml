@@ -10,6 +10,8 @@ stages:
     parameters:
       dependencies:
         - start
+      variableGroups:
+        - platform-global-matching 
 ######################## DEV ##############################################
   - template: matching-shared-stage.yml
     parameters:
