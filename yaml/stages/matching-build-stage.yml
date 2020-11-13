@@ -1,11 +1,16 @@
 parameters:
 - name: dependencies
   type: object
+- name: variableGroups
+  type: object
 stages:
 - stage: build
   dependsOn: 
     - '${{ each dependency in parameters.dependencies }}':
       - '${{dependency}}'
+  variables:
+    - '${{ each variableGroup in parameters.variableGroups }}':
+      - group: '${{variableGroup}}'
   jobs:
   # - job:
   #   steps:
