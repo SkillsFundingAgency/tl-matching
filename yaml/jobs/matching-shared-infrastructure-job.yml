@@ -45,7 +45,7 @@ jobs:
                 azureSubscription: ${{ parameters.serviceConnection }}
                 ScriptType: InlineScript
                 Inline: |
-                  $account = Get-AzStorageAccount -ResourceGroupName $(SharedResourceGroup) -Name $(armOutput.configStorageAccountName)
+                  $account = Get-AzStorageAccount -ResourceGroupName $(SharedResourceGroup) -Name $(ConfigStorageAccountName)
                   $table = Get-AzStorageTable -Context $account.Context -Name Configuration -ErrorAction SilentlyContinue
                   if (!$table) {
                       New-AzStorageTable -Context $account.Context -Name Configuration
