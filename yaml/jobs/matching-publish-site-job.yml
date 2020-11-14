@@ -22,8 +22,10 @@ jobs:
         artifactName: 'sqldrop'
         downloadPath: '$(System.ArtifactsDirectory)'
   
-    - pwsh: Get-ChildItem -Recurse
+    - pwsh: |
+        Get-ChildItem -Recurse
       displayName: Show Files
+      workingDirectory: $(System.ArtifactsDirectory)
     
     # - task: GenerateEnvironmentConfiguration@3
     #   inputs:
