@@ -8,9 +8,23 @@ jobs:
 - job: PublishSite
   # dependsOn: 
   #   - DeployMatchingInfrastructure 
-  steps:    
+  steps:   
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'appdrop'
+        downloadPath: '$(System.ArtifactsDirectory)'
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'sqldrop'
+        downloadPath: '$(System.ArtifactsDirectory)'
+  
     - pwsh: Get-ChildItem -Recurse
       displayName: Show Files
+    
     # - task: GenerateEnvironmentConfiguration@3
     #   inputs:
     #     SourcePath: '$(System.DefaultWorkingDirectory)'
