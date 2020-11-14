@@ -43,7 +43,6 @@ jobs:
               name: SharedVariables
             
             - pwsh: 
-                Write-Host "armOutputs.configStorageAccountName $(armOutputs.configStorageAccountName)"
                 Write-Host "armOutputs.armOutput.configStorageAccountName $(armOutputs.armOutput.configStorageAccountName)"
 
 
