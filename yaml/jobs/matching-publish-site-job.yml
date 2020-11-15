@@ -27,6 +27,15 @@ jobs:
       displayName: Show Files
       workingDirectory: $(System.ArtifactsDirectory)
     
+
+    - task: GenerateEnvironmentConfiguration@3
+      displayName: 'Process schemas in $(System.ArtifactsDirectory)/appdrop/config'
+      inputs:
+        SourcePath: '$(System.ArtifactsDirectory)/appdrop/config'
+        ServiceConnectionName: ${{ parameters.serviceConnection}}
+        StorageAccountName: '$(ConfigStorageAccountName)'
+        TableName: Configuration
+
     # - task: GenerateEnvironmentConfiguration@3
     #   inputs:
     #     SourcePath: '$(System.DefaultWorkingDirectory)'
