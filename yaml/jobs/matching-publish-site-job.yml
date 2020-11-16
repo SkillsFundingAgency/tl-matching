@@ -8,7 +8,7 @@ jobs:
 - job: PublishSite
   pool:
     name: 'Azure Pipelines'
-    vmImage: 'windows-2019'
+    vmImage: 'vs2017-win2016'
   # dependsOn: 
   #   - DeployMatchingInfrastructure 
   steps:   
