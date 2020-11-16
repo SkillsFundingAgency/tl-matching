@@ -9,8 +9,6 @@ parameters:
   type: string
 - name: sharedEnvironmentId
   type: string
-- name: variableGroups
-  type: object
 - name: serviceConnection
   type: string
 
@@ -20,8 +18,9 @@ stages:
     - '${{ each dependency in parameters.dependencies }}':
       - '${{dependency}}'
   variables:
-    - '${{ each variableGroup in parameters.variableGroups }}':
-      - group: '${{variableGroup}}'
+    - group: platform-global-matching
+    - group: platform-${{parameters.environmentName}}
+    - group: platform-${{parameters.environmentName}}-matching
     - name: BaseName
       value: "s126${{parameters.environmentId}}-matching"
     - name: ResourceGroupName
@@ -41,3 +40,4 @@ stages:
   - template: ../jobs/matching-publish-site-job.yml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
+      sharedEnvironmentId: ${{ parameters.sharedEnvironmentId }}

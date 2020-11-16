@@ -20,9 +20,6 @@ stages:
         - build
       environmentName: dev
       sharedEnvironmentId: d01
-      variableGroups:
-        - platform-dev
-        - platform-dev-matching
       serviceConnection: $(devServiceConnection)
     
   - template: matching-stage.yml
@@ -33,10 +30,6 @@ stages:
       environmentName: dev
       environmentId: d01
       sharedEnvironmentId: d01
-      variableGroups:
-        - platform-dev
-        - platform-dev-matching
-        - platform-global-matching
       serviceConnection: $(devServiceConnection)
 
 
@@ -49,9 +42,6 @@ stages:
         - Deploy_d01
       environmentName: test
       sharedEnvironmentId: t01
-      variableGroups:
-        - platform-test
-        - platform-test-matching
       serviceConnection: $(testServiceConnection)
     
   - template: matching-stage.yml
@@ -62,9 +52,6 @@ stages:
       environmentName: test
       environmentId: t01
       sharedEnvironmentId: t01
-      variableGroups:
-        - platform-test
-        - platform-test-matching
       serviceConnection: $(testServiceConnection)
 
 ######################## Pre Prod ##############################################
@@ -76,9 +63,6 @@ stages:
         - Deploy_t01
       environmentName: preprod
       sharedEnvironmentId: p02
-      variableGroups:
-        - platform-preprod
-        - platform-preprod-matching
       serviceConnection: $(prodServiceConnection)
     
   - template: matching-stage.yml
@@ -89,9 +73,6 @@ stages:
       environmentName: preprod
       environmentId: p02
       sharedEnvironmentId: p02
-      variableGroups:
-        - platform-preprod
-        - platform-preprod-matching
       serviceConnection: $(prodServiceConnection)
 
 # ######################## Prod ##############################################
@@ -99,12 +80,10 @@ stages:
     parameters:
       stageName: Prod
       dependencies:
+        - DeploySharedInfrastructure_p02
         - Deploy_p02
       environmentName: prod
       sharedEnvironmentId: p01
-      variableGroups:
-        - platform-prod
-        - platform-prod-matching
       serviceConnection: $(prodServiceConnection)
     
   - template: matching-stage.yml
@@ -115,7 +94,4 @@ stages:
       environmentName: prod
       environmentId: p01
       sharedEnvironmentId: p01
-      variableGroups:
-        - platform-prod
-        - platform-prod-matching
       serviceConnection: $(prodServiceConnection)

@@ -1,11 +1,16 @@
 parameters:
   - name: serviceConnection
     type: string
+  - name: sharedEnvironmentId
+    type: string
   - name: tableName
     type: string
     default: 'configuration'
 jobs:
 - job: PublishSite
+  variables:
+    SharedSQLServerName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.armOutputs.armOutput.sharedSQLServerName'] ]
+    DatabaseName: $[ dependencies.DeployMatchingInfrastructure.outputs['armOutputs.armOutput.DatabaseName'] ]
   pool:
     name: 'Azure Pipelines'
     vmImage: 'windows-2019'
@@ -45,14 +50,14 @@ jobs:
     #Your build pipeline references an undefined variable named ‘SQLServerAdminPassword’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
 
 
-    # - task: SqlAzureDacpacDeployment@1
-    #   displayName: 'Azure SQL Publish'
-    #   inputs:
-    #     azureSubscription: 'SFA-TL-Dev/Test'
-    #     ServerName: '$(SharedSQLServerName).database.windows.net'
-    #     DatabaseName: '$(SQLDatabaseName)'
-    #     SqlUsername: '$(SQLServerAdminUsername)'
-    #     SqlPassword: '$(SQLServerAdminPassword)'
-    #     DacpacFile: '$(System.DefaultWorkingDirectory)/tl-matching/drop/src/Sfa.Tl.Matching.Database/bin/Release/Sfa.Tl.Matching.Database.dacpac'
-    #     AdditionalArguments: '/p:GenerateSmartDefaults=True'
+    - task: SqlAzureDacpacDeployment@1
+      displayName: 'Azure SQL Publish'
+      inputs:
+        azureSubscription: ${{ parameters.serviceConnection }}
+        ServerName: '$(SharedSQLServerName).database.windows.net'
+        DatabaseName: '$(SQLDatabaseName)'
+        SqlUsername: '$(SQLServerAdminUsername)'
+        SqlPassword: '$(SQLServerAdminPassword)'
+        DacpacFile: '$(System.ArtifactsDirectory)/sqldrop/src/Sfa.Tl.Matching.Database/bin/Release/Sfa.Tl.Matching.Database.dacpac'
+        AdditionalArguments: '/p:GenerateSmartDefaults=True'
 
