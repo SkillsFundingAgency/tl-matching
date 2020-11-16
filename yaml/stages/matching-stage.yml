@@ -25,7 +25,10 @@ stages:
     - name: BaseName
       value: "s126${{parameters.environmentId}}-matching"
     - name: ResourceGroupName
-      value: '$(BaseName)'  
+      value: '$(BaseName)'
+    - name: EnvironmentName
+      value: ${{ parameters.environmentName }} 
+      
       
   displayName: '${{parameters.environmentName}} [${{parameters.environmentId}}] deployment'
   jobs:  

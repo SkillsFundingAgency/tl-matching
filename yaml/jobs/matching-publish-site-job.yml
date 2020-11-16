@@ -39,18 +39,12 @@ jobs:
         StorageAccountName: '$(ConfigStorageAccountName)'
         TableName: Configuration
 
-    # - task: GenerateEnvironmentConfiguration@3
-    #   inputs:
-    #     SourcePath: '$(System.DefaultWorkingDirectory)'
-    #     TargetFilename: '*.schema.json'
-    #     ServiceConnectionName: ${{ parameters.serviceConnection }}
-    #     StorageAccountName: ${{ parameters.configStorageAccountName }}
-    #     TableName: ${{ parameters.tableName }}
-
     #Your build pipeline references an undefined variable named ‘SharedSQLServerName’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
     #Your build pipeline references an undefined variable named ‘SQLDatabaseName’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
     #Your build pipeline references an undefined variable named ‘SQLServerAdminUsername’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
     #Your build pipeline references an undefined variable named ‘SQLServerAdminPassword’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+
+
     # - task: SqlAzureDacpacDeployment@1
     #   displayName: 'Azure SQL Publish'
     #   inputs:
@@ -61,3 +55,4 @@ jobs:
     #     SqlPassword: '$(SQLServerAdminPassword)'
     #     DacpacFile: '$(System.DefaultWorkingDirectory)/tl-matching/drop/src/Sfa.Tl.Matching.Database/bin/Release/Sfa.Tl.Matching.Database.dacpac'
     #     AdditionalArguments: '/p:GenerateSmartDefaults=True'
+
