@@ -38,8 +38,7 @@ stages:
     parameters:
       stageName: Test
       dependencies:
-        - DeploySharedInfrastructure_d01
-        - Deploy_d01
+        - build
       environmentName: test
       sharedEnvironmentId: t01
       serviceConnection: $(testServiceConnection)
