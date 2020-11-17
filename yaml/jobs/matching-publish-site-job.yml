@@ -9,7 +9,6 @@ parameters:
 jobs:
 - job: PublishSite
   variables:
-    SharedSQLServerName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.armOutputs.armOutput.sharedSQLServerName'] ]
     ConfigStorageAccountName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.armOutputs.armOutput.ConfigStorageAccountName'] ]
   pool:
     name: 'Azure Pipelines'
@@ -45,6 +44,7 @@ jobs:
     - DeployMatchingInfrastructure 
 
   variables:
+    SharedSQLServerName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.armOutputs.armOutput.sharedSQLServerName'] ]
     DatabaseName: $[ dependencies.DeployMatchingInfrastructure.outputs['armOutputs.armOutput.sqlDatabaseName'] ]
   steps:
     - task: DownloadBuildArtifacts@0
