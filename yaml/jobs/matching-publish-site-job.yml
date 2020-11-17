@@ -56,7 +56,7 @@ jobs:
       inputs:
         azureSubscription: ${{ parameters.serviceConnection }}
         ServerName: '$(SharedSQLServerName).database.windows.net'
-        DatabaseName: '$(SQLDatabaseName)'
+        DatabaseName: '$(DatabaseName)'
         SqlUsername: '$(SQLServerAdminUsername)'
         SqlPassword: '$(SQLServerAdminPassword)'
         DacpacFile: '$(System.ArtifactsDirectory)/sqldrop/src/Sfa.Tl.Matching.Database/bin/Release/Sfa.Tl.Matching.Database.dacpac'
