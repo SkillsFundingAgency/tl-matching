@@ -23,13 +23,6 @@ jobs:
         downloadType: 'single'
         artifactName: 'appdrop'
         downloadPath: '$(System.ArtifactsDirectory)'
-    - task: DownloadBuildArtifacts@0
-      inputs:
-        buildType: 'current'
-        downloadType: 'single'
-        artifactName: 'sqldrop'
-        downloadPath: '$(System.ArtifactsDirectory)'
-  
     - pwsh: |
         Get-ChildItem -Recurse
       displayName: Show Files
@@ -54,6 +47,18 @@ jobs:
   variables:
     DatabaseName: $[ dependencies.DeployMatchingInfrastructure.outputs['armOutputs.armOutput.sqlDatabaseName'] ]
   steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'sqldrop'
+        downloadPath: '$(System.ArtifactsDirectory)'
+  
+    - pwsh: |
+        Get-ChildItem -Recurse
+      displayName: Show Files
+      workingDirectory: $(System.ArtifactsDirectory)
+    
     - task: SqlAzureDacpacDeployment@1
       displayName: 'Azure SQL Publish'
       inputs:
