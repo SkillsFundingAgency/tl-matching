@@ -10,8 +10,6 @@ parameters:
 jobs:
 
   - deployment: DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}
-    variables:
-      ConfigStorageAccountName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.armOutputs.armOutput.ConfigStorageAccountName'] ]
     displayName: Deploy Shared Infrastructure
     environment: "${{parameters.environmentName}}"
     strategy:
