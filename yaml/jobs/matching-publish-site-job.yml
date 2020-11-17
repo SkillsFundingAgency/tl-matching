@@ -10,7 +10,6 @@ jobs:
 - job: PublishSite
   variables:
     SharedSQLServerName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.armOutputs.armOutput.sharedSQLServerName'] ]
-    DatabaseName: $[ dependencies.DeployMatchingInfrastructure.outputs['armOutputs.armOutput.DatabaseName'] ]
     ConfigStorageAccountName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.armOutputs.armOutput.ConfigStorageAccountName'] ]
   pool:
     name: 'Azure Pipelines'
@@ -45,12 +44,13 @@ jobs:
         StorageAccountName: '$(ConfigStorageAccountName)'
         TableName: Configuration
 
-    #Your build pipeline references an undefined variable named ‘SharedSQLServerName’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
-    #Your build pipeline references an undefined variable named ‘SQLDatabaseName’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
-    #Your build pipeline references an undefined variable named ‘SQLServerAdminUsername’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
-    #Your build pipeline references an undefined variable named ‘SQLServerAdminPassword’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+- job: DeploySQLDatabase
+  dependsOn:
+    - DeployMatchingInfrastructure 
 
-
+  variables:
+    DatabaseName: $[ dependencies.DeployMatchingInfrastructure.outputs['armOutputs.armOutput.sqlDatabaseName'] ]
+  steps:
     - task: SqlAzureDacpacDeployment@1
       displayName: 'Azure SQL Publish'
       inputs:
