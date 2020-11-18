@@ -60,7 +60,7 @@ stages:
       dependencies:
         - DeploySharedInfrastructure_t01
         - Deploy_t01
-      environmentName: preprod
+      environmentName: pp
       sharedEnvironmentId: p02
       serviceConnection: $(prodServiceConnection)
     
@@ -69,7 +69,7 @@ stages:
       stageName: PreProd
       dependencies:
         - DeploySharedInfrastructure_p02
-      environmentName: preprod
+      environmentName: pp
       environmentId: p02
       sharedEnvironmentId: p02
       serviceConnection: $(prodServiceConnection)
@@ -81,7 +81,7 @@ stages:
       dependencies:
         - DeploySharedInfrastructure_p02
         - Deploy_p02
-      environmentName: prod
+      environmentName: pr
       sharedEnvironmentId: p01
       serviceConnection: $(prodServiceConnection)
     
@@ -90,7 +90,7 @@ stages:
       stageName: Prod
       dependencies:
         - DeploySharedInfrastructure_p01
-      environmentName: prod
+      environmentName: pr
       environmentId: p01
       sharedEnvironmentId: p01
       serviceConnection: $(prodServiceConnection)
