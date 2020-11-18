@@ -3,70 +3,31 @@ parameters:
     type: string
   - name: sharedEnvironmentId
     type: string
-  - name: tableName
-    type: string
-    default: 'configuration'
 jobs:
 - job: PublishSite
   variables:
     ConfigStorageAccountName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.armOutputs.armOutput.ConfigStorageAccountName'] ]
+    uiAppName: $[ dependencies.DeployMatchingInfrastructure.outputs['armOutputs.armOutput.uiAppName'] ]
   pool:
     name: 'Azure Pipelines'
     vmImage: 'windows-2019'
   dependsOn: 
     - DeployMatchingInfrastructure 
-  steps:   
-    - task: DownloadBuildArtifacts@0
-      inputs:
-        buildType: 'current'
-        downloadType: 'single'
-        artifactName: 'appdrop'
-        downloadPath: '$(System.ArtifactsDirectory)'
-    - pwsh: |
-        Get-ChildItem -Recurse
-      displayName: Show Files
-      workingDirectory: $(System.ArtifactsDirectory)
-    
-
-    - task: GenerateEnvironmentConfiguration@3
-      displayName: 'Process schemas in $(System.ArtifactsDirectory)/appdrop/config'
-      inputs:
-        SourcePath: '$(System.ArtifactsDirectory)/appdrop/config'
-        ServiceConnectionName: ${{ parameters.serviceConnection}}
-        StorageAccountName: '$(ConfigStorageAccountName)'
-        TableName: Configuration
-
-- job: DeploySQLDatabase
-  pool:
-    name: 'Azure Pipelines'
-    vmImage: 'windows-2019'
-  dependsOn:
-    - DeployMatchingInfrastructure 
-
-  variables:
-    SharedSQLServerName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.armOutputs.armOutput.sharedSQLServerName'] ]
-    DatabaseName: $[ dependencies.DeployMatchingInfrastructure.outputs['armOutputs.armOutput.sqlDatabaseName'] ]
   steps:
-    - task: DownloadBuildArtifacts@0
-      inputs:
-        buildType: 'current'
-        downloadType: 'single'
-        artifactName: 'sqldrop'
-        downloadPath: '$(System.ArtifactsDirectory)'
-  
-    - pwsh: |
-        Get-ChildItem -Recurse
-      displayName: Show Files
-      workingDirectory: $(System.ArtifactsDirectory)
-    
-    - task: SqlAzureDacpacDeployment@1
-      displayName: 'Azure SQL Publish'
-      inputs:
-        azureSubscription: ${{ parameters.serviceConnection }}
-        ServerName: '$(SharedSQLServerName).database.windows.net'
-        DatabaseName: '$(DatabaseName)'
-        SqlUsername: '$(SQLServerAdminUsername)'
-        SqlPassword: '$(SQLServerAdminPassword)'
-        DacpacFile: '$(System.ArtifactsDirectory)/sqldrop/src/Sfa.Tl.Matching.Database/bin/Release/Sfa.Tl.Matching.Database.dacpac'
-        AdditionalArguments: '/p:GenerateSmartDefaults=True'
+  - task: DownloadBuildArtifacts@0
+    inputs:
+      buildType: 'current'
+      downloadType: 'single'
+      artifactName: 'appdrop'
+      downloadPath: '$(System.ArtifactsDirectory)'
 
+  - task: AzureWebApp@1
+    inputs:
+      azureSubscription: ${{ parameters.serviceConnection}}
+      appType: 'webApp'
+      appName: '$(uiAppName)'
+      deployToSlotOrASE: true
+      resourceGroupName: '$(ResourceGroupName)'
+      slotName: 'staging'
+      package: '$(System.ArtifactsDirectory)/appdrop/Sfa.Tl.Matching.Web.zip'
+      deploymentMethod: 'auto'

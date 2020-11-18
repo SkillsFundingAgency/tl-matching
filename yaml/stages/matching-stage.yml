@@ -37,6 +37,16 @@ stages:
       serviceConnection: ${{ parameters.serviceConnection }}
       sharedEnvironmentId: ${{ parameters.sharedEnvironmentId }}
       
+  - template: ../jobs/matching-generate-configs-job.yml
+    parameters:
+      serviceConnection: ${{ parameters.serviceConnection }}
+      sharedEnvironmentId: ${{ parameters.sharedEnvironmentId }}
+
+  - template: ../jobs/matching-publish-dacpac-job.yml
+    parameters:
+      serviceConnection: ${{ parameters.serviceConnection }}
+      sharedEnvironmentId: ${{ parameters.sharedEnvironmentId }}
+
   - template: ../jobs/matching-publish-site-job.yml
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}

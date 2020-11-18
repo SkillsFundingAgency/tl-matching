@@ -1,0 +1,36 @@
+parameters:
+  - name: serviceConnection
+    type: string
+  - name: sharedEnvironmentId
+    type: string
+  - name: tableName
+    type: string
+    default: 'configuration'
+jobs:
+- job: PublishSite
+  variables:
+    ConfigStorageAccountName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.armOutputs.armOutput.ConfigStorageAccountName'] ]
+  pool:
+    name: 'Azure Pipelines'
+    vmImage: 'windows-2019'
+  dependsOn: 
+    - DeployMatchingInfrastructure 
+  steps:   
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'appdrop'
+        downloadPath: '$(System.ArtifactsDirectory)'
+    - pwsh: |
+        Get-ChildItem -Recurse
+      displayName: Show Files
+      workingDirectory: $(System.ArtifactsDirectory)
+
+    - task: GenerateEnvironmentConfiguration@3
+      displayName: 'Process schemas in $(System.ArtifactsDirectory)/appdrop/config'
+      inputs:
+        SourcePath: '$(System.ArtifactsDirectory)/appdrop/config'
+        ServiceConnectionName: ${{ parameters.serviceConnection}}
+        StorageAccountName: '$(ConfigStorageAccountName)'
+        TableName: Configuration
