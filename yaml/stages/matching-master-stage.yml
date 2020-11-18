@@ -31,6 +31,16 @@ stages:
       environmentId: d01
       sharedEnvironmentId: d01
       serviceConnection: $(devServiceConnection)
+  
+  - template: matching-stage.yml
+    parameters:
+      stageName: AS
+      dependencies:
+        - DeploySharedInfrastructure_d01
+      environmentName: as
+      environmentId: d02
+      sharedEnvironmentId: d01
+      serviceConnection: $(devServiceConnection)
 
 
 ######################## TEST ##############################################
@@ -60,7 +70,7 @@ stages:
       dependencies:
         - DeploySharedInfrastructure_t01
         - Deploy_t01
-      environmentName: pp
+      environmentName: preprod
       sharedEnvironmentId: p02
       serviceConnection: $(prodServiceConnection)
     
@@ -69,7 +79,7 @@ stages:
       stageName: PreProd
       dependencies:
         - DeploySharedInfrastructure_p02
-      environmentName: pp
+      environmentName: preprod
       environmentId: p02
       sharedEnvironmentId: p02
       serviceConnection: $(prodServiceConnection)
@@ -81,7 +91,7 @@ stages:
       dependencies:
         - DeploySharedInfrastructure_p02
         - Deploy_p02
-      environmentName: pr
+      environmentName: prod
       sharedEnvironmentId: p01
       serviceConnection: $(prodServiceConnection)
     
@@ -90,7 +100,7 @@ stages:
       stageName: Prod
       dependencies:
         - DeploySharedInfrastructure_p01
-      environmentName: pr
+      environmentName: prod
       environmentId: p01
       sharedEnvironmentId: p01
       serviceConnection: $(prodServiceConnection)
