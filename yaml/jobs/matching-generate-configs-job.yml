@@ -7,7 +7,7 @@ parameters:
     type: string
     default: 'configuration'
 jobs:
-- job: PublishSite
+- job: GenerateConfigs
   variables:
     ConfigStorageAccountName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.armOutputs.armOutput.ConfigStorageAccountName'] ]
   pool:
