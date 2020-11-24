@@ -22,7 +22,7 @@ stages:
     - group: platform-${{parameters.environmentName}}
     - group: platform-${{parameters.environmentName}}-matching
     - name: BaseName
-      value: "s126${{parameters.environmentId}}-${{parameters.environmentName}}-matching"
+      value: "s126${{parameters.environmentId}}-matching-${{parameters.environmentName}}"
     - name: ResourceGroupName
       value: '$(BaseName)'
     - name: EnvironmentName
