@@ -21,12 +21,7 @@ jobs:
         downloadType: 'single'
         artifactName: 'sqldrop'
         downloadPath: '$(System.ArtifactsDirectory)'
-  
-    - pwsh: |
-        Get-ChildItem -Recurse
-      displayName: Show Files
-      workingDirectory: $(System.ArtifactsDirectory)
-    
+   
     - task: SqlAzureDacpacDeployment@1
       displayName: 'Azure SQL Publish'
       inputs:

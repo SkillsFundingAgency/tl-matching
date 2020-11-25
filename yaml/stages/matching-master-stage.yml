@@ -1,15 +1,13 @@
 stages:
   #Build
-  - stage: start
-    jobs:
-      - job: start
-        steps:
-          - pwsh: Write-Host "Starting"
+  # - stage: start
+  #   jobs:
+  #     - job: start
+  #       steps:
+  #         - pwsh: Write-Host "Starting"
 
   - template: matching-build-stage.yml
-    parameters:
-      dependencies:
-        - start
+    parameters:        
       variableGroups:
         - platform-global-matching 
 ######################## DEV ##############################################
@@ -34,10 +32,10 @@ stages:
   
   - template: matching-stage.yml
     parameters:
-      stageName: AS
+      stageName: AT
       dependencies:
         - DeploySharedInfrastructure_d01
-      environmentName: as
+      environmentName: at
       environmentId: d02
       sharedEnvironmentId: d01
       serviceConnection: $(devServiceConnection)

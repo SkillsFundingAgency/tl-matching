@@ -16,13 +16,13 @@ jobs:
       SharedResourceGroup: $[stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.SharedVariables.SharedResourceGroup']]
     steps:
       - checkout: self
-      - pwsh: |
-          'Write-Host "SharedResourceGroup variable: $(SharedResourceGroup)"'
-          'Write-Host "SharedASPName variable: $(SharedASPName)"'
-          'Write-Host "SharedKeyVaultName variable: $(SharedKeyVaultName)"'
-          'Write-Host "SharedSQLServerName variable: $(SharedSQLServerName)"'
-          'Write-Host "ConfigurationStorageConnectionString variable: $(ConfigurationStorageConnectionString)"'
-        displayName: 'Show Variables'
+      # - pwsh: |
+      #     'Write-Host "SharedResourceGroup variable: $(SharedResourceGroup)"'
+      #     'Write-Host "SharedASPName variable: $(SharedASPName)"'
+      #     'Write-Host "SharedKeyVaultName variable: $(SharedKeyVaultName)"'
+      #     'Write-Host "SharedSQLServerName variable: $(SharedSQLServerName)"'
+      #     'Write-Host "ConfigurationStorageConnectionString variable: $(ConfigurationStorageConnectionString)"'
+      #   displayName: 'Show Variables'
 
       - template: ./Infrastructure/steps/deploy-template.yml@devopsTemplates
         parameters:
