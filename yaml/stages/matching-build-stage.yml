@@ -1,7 +1,7 @@
 parameters:
 - name: dependencies
   type: object
-  default: ''
+  default: []
 - name: variableGroups
   type: object
 stages:
