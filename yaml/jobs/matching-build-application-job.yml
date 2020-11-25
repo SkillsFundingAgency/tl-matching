@@ -30,7 +30,7 @@ jobs:
       inputs:
         command: restore
         projects: 'src/**/*.csproj'
-        noCache: true
+        noCache: false
         feedsToUse: config
         nugetConfigPath: src/NuGet.config
     
