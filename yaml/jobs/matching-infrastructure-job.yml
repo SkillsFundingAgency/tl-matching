@@ -14,6 +14,7 @@ jobs:
       SharedSQLServerName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.armOutputs.armOutput.sharedSQLServerName'] ]
       ConfigurationStorageConnectionString: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.armOutputs.armOutput.configStorageConnectionString'] ]
       SharedResourceGroup: $[stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.SharedVariables.SharedResourceGroup']]
+      CertificateName: "${{ parameters.sharedEnvironmentId }}-$(CertificateSuffix)"
     steps:
       - checkout: self
       - pwsh: |
@@ -22,6 +23,10 @@ jobs:
           'Write-Host "SharedKeyVaultName variable: $(SharedKeyVaultName)"'
           'Write-Host "SharedSQLServerName variable: $(SharedSQLServerName)"'
           'Write-Host "ConfigurationStorageConnectionString variable: $(ConfigurationStorageConnectionString)"'
+          'Write-Host "CertificateSuffix variable: $(CertificateSuffix)"'
+          'Write-Host "CertificateName variable: $(CertificateName)"'
+
+
         displayName: 'Show Variables'
 
       - template: ./Infrastructure/steps/deploy-template.yml@devopsTemplates
