@@ -10,23 +10,21 @@ jobs:
 - job: GenerateConfigs
   variables:
     ConfigStorageAccountName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.armOutputs.armOutput.ConfigStorageAccountName'] ]
+    SqlConnectionString: $[ dependencies.DeploySQLDatabase.outputs['SqlVariables.SqlConnectionString'] ]
   pool:
     name: 'Azure Pipelines'
     vmImage: 'windows-2019'
   dependsOn: 
-    - DeployMatchingInfrastructure 
-  steps:   
+    - DeployMatchingInfrastructure
+    - DeploySQLDatabase 
+  steps:
     - task: DownloadBuildArtifacts@0
       inputs:
         buildType: 'current'
         downloadType: 'single'
         artifactName: 'appdrop'
         downloadPath: '$(System.ArtifactsDirectory)'
-    - pwsh: |
-        Get-ChildItem -Recurse
-      displayName: Show Files
-      workingDirectory: $(System.ArtifactsDirectory)
-
+    
     - task: GenerateEnvironmentConfiguration@3
       displayName: 'Process schemas in $(System.ArtifactsDirectory)/appdrop/config'
       inputs:

@@ -33,3 +33,11 @@ jobs:
         DacpacFile: '$(System.ArtifactsDirectory)/sqldrop/src/Sfa.Tl.Matching.Database/bin/Release/Sfa.Tl.Matching.Database.dacpac'
         AdditionalArguments: '/p:GenerateSmartDefaults=True'
 
+    - pwsh: | 
+        $SqlConnectionString = az sql db show-connection-string -s $(SharedSQLServerName) -n $(DatabaseName) -c ado.net
+        $SqlConnectionString = $SqlConnectionString -replace "<username>", '$(SQLServerAdminUsername)'
+        $SqlConnectionString = $SqlConnectionString -replace "<password>", '$(SQLServerAdminPassword)'
+        Write-Host "##vso[task.setvariable variable=SqlConnectionString;isOutput=true]$(SqlConnectionString)"
+        
+      name: SqlVariables
+

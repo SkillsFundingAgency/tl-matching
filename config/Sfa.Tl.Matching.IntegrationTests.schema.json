@@ -65,7 +65,7 @@
     "SqlConnectionString": {
       "minLength": 1,
       "type": "string",
-      "environmentVariable": "SqlConnectionStringAT"
+      "environmentVariable": "SqlConnectionString"
     },
 	"SupportInboxEmail": {
       "minLength": 1,
