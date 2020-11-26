@@ -27,6 +27,8 @@ stages:
       value: '$(BaseName)'
     - name: EnvironmentName
       value: ${{ parameters.environmentName }} 
+    - name: CertificateName
+      value: "${{ parameters.environmentName }}-$(CertificateSuffix)"
       
       
   displayName: '${{parameters.environmentName}} [${{parameters.environmentId}}] deployment'
