@@ -20,6 +20,10 @@ jobs:
     - DeploySQLDatabase
   steps:
     - pwsh: | 
+        'Write-Host "ConfigStorageAccountName variable: $(ConfigStorageAccountName)"'
+        'Write-Host "SqlConnectionString variable: $(SqlConnectionString)"'
+        'Write-Host "BlobStorageConnectionString variable: $(BlobStorageConnectionString)"'
+
         Write-Host "##vso[task.setvariable variable=BlobStorageConnectionString;isOutput=true]$(BlobStorageConnectionString)"
       name: SetVariables
 

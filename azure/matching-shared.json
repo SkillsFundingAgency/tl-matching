@@ -281,11 +281,11 @@
             "value": "[variables('sqlServerName')]"
         },
         "sharedStorageConnectionString": {
-            "type": "securestring",
+            "type": "string",
             "value": "[reference('shared-storage-account').outputs.storageConnectionString.value]"
         },
         "configStorageConnectionString": {
-            "type": "securestring",
+            "type": "string",
             "value": "[reference('config-storage-account').outputs.storageConnectionString.value]"
         },
         "ConfigStorageAccountName":{
