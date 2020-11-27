@@ -67,8 +67,4 @@
     <TypeScriptSourceRoot />
   </PropertyGroup>
 
-  <PropertyGroup>
-    <DefaultItemExcludes>.git\**;.\node_modules\**;$(DefaultItemExcludes)</DefaultItemExcludes>
-  </PropertyGroup>
-
 </Project>
