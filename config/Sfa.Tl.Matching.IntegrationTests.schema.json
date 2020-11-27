@@ -58,10 +58,6 @@
       "type": "string",
       "environmentVariable": "BlobStorageConnectionString"
     },
-    "ServiceBusConnectionString": {
-      "type": "string",
-      "environmentVariable": "ServiceBusConnectionString"
-    },
     "SqlConnectionString": {
       "minLength": 1,
       "type": "string",
