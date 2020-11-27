@@ -376,6 +376,10 @@
         "workerFunctionAppName": {
             "type": "string",
             "value": "[variables('workerFunctionAppName')]"
+        },
+        "BlobStorageConnectionString": {
+            "type": "securestring",
+            "value": "[reference('storage-account').outputs.storageConnectionString.value]"
         }
     }
 }
