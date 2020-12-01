@@ -35,8 +35,8 @@ variables:
   #keyVaultFullAccessObjectIds: '["0316d3ae-e503-4dae-9665-c999fca7cf10", "a6621090-e704-45ec-b65f-50257f9d4dcd"]' #azdo.cip.pipelines.S126D.arm7c001fc5-7117-47b7-8073-04f513a7b823, Microsoft Azure App Service
   #CertificateName: 'wildcard-industryplacementmatching-education-gov-uk'
   UICustomHostName: '' #'dev.industryplacementmatching.education.gov.uk'    
-  WorkerASPSize: '1'
-  WorkerASPInstances: '1'
+  # WorkerASPSize: '1'
+  # WorkerASPInstances: '1'
   SQLDatabaseSkuName: 'S0'
   SQLDatabaseTier: 'Standard'
   BankHolidayGeneratorTrigger: '0 45 9  * * WED'

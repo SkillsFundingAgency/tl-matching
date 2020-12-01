@@ -5,6 +5,8 @@ parameters:
     type: string
   - name: sharedEnvironmentId
     type: string
+  - name: environmentName
+    type: string
 jobs:
   - job: DeployMatchingInfrastructure
     variables:
@@ -34,9 +36,7 @@ jobs:
           location: "West Europe"
           templateFilePath: "./azure/matching-environmant.json"
           armParameterOverrideString:
-            '-environmentNameAbbreviation "${{parameters.BaseName}}"
-            -workerASPSize "$(WorkerASPSize)"
-            -workerASPInstances "$(WorkerASPInstances)"
+            '-environmentNameAbbreviation "${{parameters.environmentName}}"
             -sharedASPName "$(SharedASPName)"
             -sharedEnvResourceGroup "$(SharedResourceGroup)"
             -sharedKeyVaultName "$(SharedKeyVaultName)"

@@ -38,6 +38,7 @@ stages:
       BaseName: $(BaseName)
       serviceConnection: ${{ parameters.serviceConnection }}
       sharedEnvironmentId: ${{ parameters.sharedEnvironmentId }}
+      environmentName: ${{parameters.environmentName}}
   
   - template: ../jobs/matching-publish-dacpac-job.yml
     parameters:

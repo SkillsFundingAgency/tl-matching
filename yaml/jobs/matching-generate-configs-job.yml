@@ -11,7 +11,8 @@ jobs:
   variables:
     ConfigStorageAccountName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.armOutputs.armOutput.ConfigStorageAccountName'] ]
     SqlConnectionString: $[ dependencies.DeploySQLDatabase.outputs['SqlVariables.SqlConnectionString'] ]
-    # BlobStorageConnectionString : $[ dependencies.DeployMatchingInfrastructure.outputs['armOutputs.armOutput.BlobStorageConnectionString'] ]
+    BlobStorageConnectionString : $[ dependencies.DeployMatchingInfrastructure.outputs['armOutputs.armOutput.BlobStorageConnectionString'] ]
+    
   pool:
     name: 'Azure Pipelines'
     vmImage: 'windows-2019'
@@ -19,13 +20,11 @@ jobs:
     - DeployMatchingInfrastructure
     - DeploySQLDatabase
   steps:
-    # - pwsh: | 
-    #     'Write-Host "ConfigStorageAccountName variable: $(ConfigStorageAccountName)"'
-    #     'Write-Host "SqlConnectionString variable: $(SqlConnectionString)"'
-    #     'Write-Host "BlobStorageConnectionString variable: $(BlobStorageConnectionString)"'
-
-    #     Write-Host "##vso[task.setvariable variable=BlobStorageConnectionString;isOutput=true]$(BlobStorageConnectionString)"
-    #   name: SetVariables
+    - pwsh: | 
+        'Write-Host "ConfigStorageAccountName variable: $(ConfigStorageAccountName)"'
+        'Write-Host "SqlConnectionString variable: $(SqlConnectionString)"'
+        'Write-Host "BlobStorageConnectionString variable: $(BlobStorageConnectionString)"'
+      name: SetVariables
 
     - task: DownloadBuildArtifacts@0
       inputs:
