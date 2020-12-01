@@ -37,6 +37,7 @@ jobs:
           templateFilePath: "./azure/matching-environmant.json"
           armParameterOverrideString:
             '-environmentNameAbbreviation "${{parameters.environmentName}}"
+            -resourceNamePrefix "${{parameters.BaseName}}"
             -sharedASPName "$(SharedASPName)"
             -sharedEnvResourceGroup "$(SharedResourceGroup)"
             -sharedKeyVaultName "$(SharedKeyVaultName)"

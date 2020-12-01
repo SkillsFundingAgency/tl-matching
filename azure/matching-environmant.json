@@ -4,7 +4,10 @@
     "parameters": {
         "environmentNameAbbreviation": {
             "type": "string"
-        },       
+        },
+        "resourceNamePrefix":{
+            "type": "string"
+        },
         "sharedASPName": {
             "type": "string"
         },
@@ -47,11 +50,10 @@
     },
     "variables": {
         "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/operations-devops-deployment/master/ArmTemplates/",
-        "resourceNamePrefix": "[toLower(parameters('environmentNameAbbreviation'))]",
-        "uiAppName": "[concat(variables('resourceNamePrefix'), '-web')]",
-        "workerFunctionAppName": "[concat(variables('resourceNamePrefix'), '-func-worker')]",
-        "sqlDatabaseName": "[concat(variables('resourceNamePrefix'), '-sqldb')]",
-        "storageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'str'), '-', '')]"
+        "uiAppName": "[concat(parameters('resourceNamePrefix'), '-web')]",
+        "workerFunctionAppName": "[concat(parameters('resourceNamePrefix'), '-func-worker')]",
+        "sqlDatabaseName": "[concat(parameters('resourceNamePrefix'), '-sqldb')]",
+        "storageAccountName": "[replace(concat(parameters('resourceNamePrefix'), 'str'), '-', '')]"
     },
     "resources": [
         {
@@ -137,8 +139,8 @@
                     "appServiceAppSettings": {
                         "value": [
                             {
-                                "name": "EnvironmentName",
-                                "value": "[parameters('environmentNameAbbreviation')]"
+                                "name": "EnvironmentName",                                
+                                "value": "[toUpper(parameters('environmentNameAbbreviation'))]"
                             },
                             {
                                 "name": "ConfigurationStorageConnectionString",
@@ -214,7 +216,7 @@
                         "value": [
                             {
                                 "name": "EnvironmentName",
-                                "value": "[parameters('environmentNameAbbreviation')]"
+                                "value": "[toUpper(parameters('environmentNameAbbreviation'))]"
                             },
                             {
                                 "name": "ConfigurationStorageConnectionString",
