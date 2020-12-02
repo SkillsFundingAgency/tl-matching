@@ -35,6 +35,7 @@ jobs:
 
     - pwsh: | 
         $SqlConnectionString = az sql db show-connection-string -s $(SharedSQLServerName) -n $(DatabaseName) -c ado.net
+        $SqlConnectionString = $SqlConnectionString -replace '"', ""
         $SqlConnectionString = $SqlConnectionString -replace "<username>", '$(SQLServerAdminUsername)'
         $SqlConnectionString = $SqlConnectionString -replace "<password>", '$(SQLServerAdminPassword)'
         Write-Host "##vso[task.setvariable variable=SqlConnectionString;isOutput=true]$SqlConnectionString"
