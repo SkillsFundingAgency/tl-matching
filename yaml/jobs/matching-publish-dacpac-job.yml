@@ -34,11 +34,7 @@ jobs:
         AdditionalArguments: '/p:GenerateSmartDefaults=True'
 
     - pwsh: | 
-        $SqlConnectionString = az sql db show-connection-string -s $(SharedSQLServerName) -n $(DatabaseName) -c ado.net
-        $SqlConnectionString = $SqlConnectionString -replace '"', ""
-        $SqlConnectionString = $SqlConnectionString -replace "<username>", '$(SQLServerAdminUsername)'
-        $SqlConnectionString = $SqlConnectionString -replace "<password>", '$(SQLServerAdminPassword)'
-        Write-Host "##vso[task.setvariable variable=SqlConnectionString;isOutput=true]$SqlConnectionString"
-        
+        $SqlConnectionString = "Server=tcp:$($SharedSQLServerName).database.windows.net,1433;Initial Catalog=$($DatabaseName);Persist Security Info=False;User ID=$($SQLServerAdminUsername);Password=$($SQLServerAdminPassword);MultipleActiveResultSets=True;Encrypt=true;TrustServerCertificate=False;Connection Timeout=1200;"
+        Write-Host "##vso[task.setvariable variable=SqlConnectionString;isOutput=true]$SqlConnectionString"        
       name: SqlVariables
 
