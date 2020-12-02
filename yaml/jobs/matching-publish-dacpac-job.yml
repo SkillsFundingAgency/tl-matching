@@ -34,7 +34,7 @@ jobs:
         AdditionalArguments: '/p:GenerateSmartDefaults=True'
 
     - pwsh: | 
-        $SqlConnectionString = "Server=tcp:$($SharedSQLServerName).database.windows.net,1433;Initial Catalog=$($DatabaseName);Persist Security Info=False;User ID=$($SQLServerAdminUsername);Password=$($SQLServerAdminPassword);MultipleActiveResultSets=True;Encrypt=true;TrustServerCertificate=False;Connection Timeout=1200;"
+        $SqlConnectionString = "Server=tcp:$(SharedSQLServerName).database.windows.net,1433;Initial Catalog=$(DatabaseName);Persist Security Info=False;User ID=$(SQLServerAdminUsername);Password=$(SQLServerAdminPassword);MultipleActiveResultSets=True;Encrypt=true;TrustServerCertificate=False;Connection Timeout=1200;"
         Write-Host "##vso[task.setvariable variable=SqlConnectionString;isOutput=true]$SqlConnectionString"        
       name: SqlVariables
 

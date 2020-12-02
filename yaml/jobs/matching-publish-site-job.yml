@@ -64,14 +64,14 @@ jobs:
       ResourceGroupName: '$(ResourceGroupName)'
       SourceSlot: staging
   
-  # - task: AzureAppServiceManage@0
-  #   displayName: 'Delete swap Slot: $(uiAppName)'
-  #   inputs:
-  #     azureSubscription: ${{ parameters.serviceConnection }}
-  #     Action: 'Delete Slot'
-  #     WebAppName: '$(uiAppName)'
-  #     ResourceGroupName: '$(ResourceGroupName)'
-  #     Slot: 'staging'
+  - task: AzureAppServiceManage@0
+    displayName: 'Delete swap Slot: $(uiAppName)'
+    inputs:
+      azureSubscription: ${{ parameters.serviceConnection }}
+      Action: 'Delete Slot'
+      WebAppName: '$(uiAppName)'
+      ResourceGroupName: '$(ResourceGroupName)'
+      Slot: 'staging'
 
   - task: AzureFunctionApp@1
     inputs:
