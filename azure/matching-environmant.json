@@ -158,11 +158,11 @@
                             {
                                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                                 "value": "[reference('ui-app-insights').outputs.InstrumentationKey.value]"
-                            },
-                            {
-                                "name": "ANCM_ADDITIONAL_ERROR_PAGE_LINK",
-                                "value": "[variables('errorLink')]"
                             }
+                            // {
+                            //     "name": "ANCM_ADDITIONAL_ERROR_PAGE_LINK",
+                            //     "value": "[variables('errorLink')]"
+                            // }
                         ]
                     },
                     "customHostName": {
