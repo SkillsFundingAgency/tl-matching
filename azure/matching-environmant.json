@@ -5,7 +5,7 @@
         "environmentNameAbbreviation": {
             "type": "string"
         },
-        "resourceNamePrefix":{
+        "resourceNamePrefix": {
             "type": "string"
         },
         "sharedASPName": {
@@ -53,7 +53,8 @@
         "uiAppName": "[concat(parameters('resourceNamePrefix'), '-web')]",
         "workerFunctionAppName": "[concat(parameters('resourceNamePrefix'), '-func-worker')]",
         "sqlDatabaseName": "[concat(parameters('resourceNamePrefix'), '-sqldb')]",
-        "storageAccountName": "[replace(concat(parameters('resourceNamePrefix'), 'str'), '-', '')]"
+        "storageAccountName": "[replace(concat(parameters('resourceNamePrefix'), 'str'), '-', '')]",
+        "errorLink": "[concat('https://', variables('uiAppName'), '.scm.azurewebsites.net/detectors?type=tools&name=eventviewer')]"
     },
     "resources": [
         {
@@ -72,7 +73,7 @@
                     }
                 }
             }
-        },        
+        },
         {
             "apiVersion": "2017-05-10",
             "name": "ui-app-insights",
@@ -139,7 +140,7 @@
                     "appServiceAppSettings": {
                         "value": [
                             {
-                                "name": "EnvironmentName",                                
+                                "name": "EnvironmentName",
                                 "value": "[toUpper(parameters('environmentNameAbbreviation'))]"
                             },
                             {
@@ -157,6 +158,10 @@
                             {
                                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                                 "value": "[reference('ui-app-insights').outputs.InstrumentationKey.value]"
+                            },
+                            {
+                                "name": "ANCM_ADDITIONAL_ERROR_PAGE_LINK",
+                                "value": "[variables('errorLink')]"
                             }
                         ]
                     },
@@ -165,6 +170,12 @@
                     },
                     "certificateThumbprint": {
                         "value": "[reference('ui-app-service-certificate').outputs.certificateThumbprint.value]"
+                    },
+                    "currentStack": {
+                        "value": "dotnetcore"
+                    },
+                    "netFrameworkVersion": {
+                        "value": ""
                     }
                 }
             },
@@ -273,7 +284,7 @@
                         ]
                     }
                 }
-            }            
+            }
         },
         {
             "apiVersion": "2017-05-10",
