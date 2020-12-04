@@ -53,8 +53,8 @@
         "uiAppName": "[concat(parameters('resourceNamePrefix'), '-web')]",
         "workerFunctionAppName": "[concat(parameters('resourceNamePrefix'), '-func-worker')]",
         "sqlDatabaseName": "[concat(parameters('resourceNamePrefix'), '-sqldb')]",
-        "storageAccountName": "[replace(concat(parameters('resourceNamePrefix'), 'str'), '-', '')]",
-        "errorLink": "[concat('https://', variables('uiAppName'), '.scm.azurewebsites.net/detectors?type=tools&name=eventviewer')]"
+        "storageAccountName": "[replace(concat(parameters('resourceNamePrefix'), 'str'), '-', '')]"
+        // "errorLink": "[concat('https://', variables('uiAppName'), '.scm.azurewebsites.net/detectors?type=tools&name=eventviewer')]"
     },
     "resources": [
         {
@@ -170,13 +170,13 @@
                     },
                     "certificateThumbprint": {
                         "value": "[reference('ui-app-service-certificate').outputs.certificateThumbprint.value]"
-                    },
-                    "currentStack": {
-                        "value": "dotnetcore"
-                    },
-                    "netFrameworkVersion": {
-                        "value": ""
                     }
+                    // "currentStack": {
+                    //     "value": "dotnetcore"
+                    // },
+                    // "netFrameworkVersion": {
+                    //     "value": ""
+                    // }
                 }
             },
             "dependsOn": [
