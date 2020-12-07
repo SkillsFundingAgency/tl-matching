@@ -24,8 +24,6 @@ jobs:
           'Write-Host "SharedKeyVaultName variable: $(SharedKeyVaultName)"'
           'Write-Host "SharedSQLServerName variable: $(SharedSQLServerName)"'
           'Write-Host "ConfigurationStorageConnectionString variable: $(ConfigurationStorageConnectionString)"'
-          'Write-Host "CertificateSuffix variable: $(CertificateSuffix)"'
-          'Write-Host "CertificateName variable: $(CertificateName)"'
         displayName: 'Show Variables'
 
       - template: ./Infrastructure/steps/deploy-template.yml@devopsTemplates
