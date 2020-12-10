@@ -36,7 +36,7 @@ stages:
       stageName: Test
       dependencies:
         - build
-      environmentName: test
+      environmentName: tst
       sharedEnvironmentId: t01
       serviceConnection: $(testServiceConnection)
     
@@ -45,7 +45,7 @@ stages:
       stageName: Test
       dependencies:
         - DeploySharedInfrastructure_t01
-      environmentName: test
+      environmentName: tst
       environmentId: t01
       sharedEnvironmentId: t01
       serviceConnection: $(testServiceConnection)
@@ -57,7 +57,7 @@ stages:
       dependencies:
         - DeploySharedInfrastructure_t01
         - Deploy_t01
-      environmentName: preprod
+      environmentName: pp
       sharedEnvironmentId: p02
       serviceConnection: $(prodServiceConnection)
     
@@ -66,7 +66,7 @@ stages:
       stageName: PreProd
       dependencies:
         - DeploySharedInfrastructure_p02
-      environmentName: preprod
+      environmentName: pp
       environmentId: p02
       sharedEnvironmentId: p02
       serviceConnection: $(prodServiceConnection)
@@ -78,7 +78,7 @@ stages:
       dependencies:
         - DeploySharedInfrastructure_p02
         - Deploy_p02
-      environmentName: prod
+      environmentName: prd
       sharedEnvironmentId: p01
       serviceConnection: $(prodServiceConnection)
     
@@ -87,7 +87,7 @@ stages:
       stageName: Prod
       dependencies:
         - DeploySharedInfrastructure_p01
-      environmentName: prod
+      environmentName: prd
       environmentId: p01
       sharedEnvironmentId: p01
       serviceConnection: $(prodServiceConnection)
