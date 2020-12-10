@@ -76,7 +76,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "ui-app-insights",
+            "name": "app-insights",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -157,7 +157,7 @@
                             },
                             {
                                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                                "value": "[reference('ui-app-insights').outputs.InstrumentationKey.value]"
+                                "value": "[reference('app-insights').outputs.InstrumentationKey.value]"
                             }
                             // {
                             //     "name": "ANCM_ADDITIONAL_ERROR_PAGE_LINK",
@@ -182,27 +182,7 @@
             "dependsOn": [
                 "ui-app-service-certificate"
             ]
-        },
-        {
-            "apiVersion": "2017-05-10",
-            "name": "function-app-insights",
-            "type": "Microsoft.Resources/deployments",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[concat(variables('deploymentUrlBase'),'application-insights.json')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "appInsightsName": {
-                        "value": "[variables('workerFunctionAppName')]"
-                    },
-                    "attachedService": {
-                        "value": "[variables('workerFunctionAppName')]"
-                    }
-                }
-            }
-        },
+        },        
         {
             "apiVersion": "2017-05-10",
             "name": "function-app",
@@ -259,7 +239,7 @@
                             },
                             {
                                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                                "value": "[reference('function-app-insights').outputs.InstrumentationKey.value]"
+                                "value": "[reference('app-insights').outputs.InstrumentationKey.value]"
                             },
                             {
                                 "name": "BlobStorageConnectionString",
