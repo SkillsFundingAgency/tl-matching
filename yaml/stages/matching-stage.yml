@@ -52,3 +52,8 @@ stages:
     parameters:
       serviceConnection: ${{ parameters.serviceConnection }}
       sharedEnvironmentId: ${{ parameters.sharedEnvironmentId }}
+  
+  - template: ../jobs/matching-publish-function-job.yml
+    parameters:
+      serviceConnection: ${{ parameters.serviceConnection }}
+      sharedEnvironmentId: ${{ parameters.sharedEnvironmentId }}
