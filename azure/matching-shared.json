@@ -57,7 +57,7 @@
         "sharedStorageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'sharedstr'), '-', '')]",
         "appServicePlanName": "[concat(variables('resourceNamePrefix'), '-shared-asp')]",
         "configStorageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'configstr'), '-', '')]",
-        "keyVaultName": "[concat(variables('resourceNamePrefix'), 'shared-kv')]",
+        "keyVaultName": "[replace(concat(variables('resourceNamePrefix'), 'sharedkv'), '-', '')]",
         "keyVaultAccessPolicies": [
             {
                 "objectId": "[parameters('azureWebsitesRPObjectId')]",
@@ -288,7 +288,7 @@
             "type": "string",
             "value": "[reference('config-storage-account').outputs.storageConnectionString.value]"
         },
-        "ConfigStorageAccountName":{
+        "ConfigStorageAccountName": {
             "type": "string",
             "value": "[variables('configStorageAccountName')]"
         }
