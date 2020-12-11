@@ -4,10 +4,8 @@ parameters:
   - name: sharedEnvironmentId
     type: string
 jobs:
-- job: PublishSite
+- job: PublishFunction
   variables:
-    ConfigStorageAccountName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.armOutputs.armOutput.ConfigStorageAccountName'] ]
-    uiAppName: $[ dependencies.DeployMatchingInfrastructure.outputs['armOutputs.armOutput.uiAppName'] ]
     WorkerFunctionAppName: $[ dependencies.DeployMatchingInfrastructure.outputs['armOutputs.armOutput.WorkerFunctionAppName'] ]
 
   pool:

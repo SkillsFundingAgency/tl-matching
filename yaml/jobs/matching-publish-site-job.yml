@@ -8,7 +8,6 @@ jobs:
   variables:
     ConfigStorageAccountName: $[ stageDependencies.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.outputs['DeploySharedInfrastructure_${{parameters.sharedEnvironmentId}}.armOutputs.armOutput.ConfigStorageAccountName'] ]
     uiAppName: $[ dependencies.DeployMatchingInfrastructure.outputs['armOutputs.armOutput.uiAppName'] ]
-    WorkerFunctionAppName: $[ dependencies.DeployMatchingInfrastructure.outputs['armOutputs.armOutput.WorkerFunctionAppName'] ]
 
   pool:
     name: 'Azure Pipelines'
@@ -73,11 +72,3 @@ jobs:
       WebAppName: '$(uiAppName)'
       ResourceGroupName: '$(ResourceGroupName)'
       Slot: 'staging'
-
-  - task: AzureFunctionApp@1
-    inputs:
-      azureSubscription: ${{ parameters.serviceConnection }}
-      appType: 'functionApp'
-      appName: '$(WorkerFunctionAppName)'
-      package: '$(System.ArtifactsDirectory)/appdrop/Sfa.Tl.Matching.Functions.zip'
-      deploymentMethod: 'auto'
