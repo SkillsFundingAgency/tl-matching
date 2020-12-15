@@ -30,6 +30,15 @@ stages:
       sharedEnvironmentId: d01
       serviceConnection: $(devServiceConnection)
 
+  - template: matching-stage.yml
+    parameters:
+      stageName: AT
+      dependencies:
+        - DeploySharedInfrastructure_d01
+      environmentName: at
+      environmentId: d02
+      sharedEnvironmentId: d01
+      serviceConnection: $(devServiceConnection)
 ######################## TEST ##############################################
   - template: matching-shared-stage.yml
     parameters:
