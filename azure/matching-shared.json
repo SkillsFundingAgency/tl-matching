@@ -199,7 +199,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "app-service-plan",
+            "name": "[concat('app-service-plan-', parameters('environmentNameAbbreviation'))]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -242,7 +242,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "[concat('key-vault', parameters('environmentNameAbbreviation'))]",
+            "name": "[concat('key-vault-', parameters('environmentNameAbbreviation'))]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -282,11 +282,11 @@
         },
         "sharedStorageConnectionString": {
             "type": "string",
-            "value": "[reference(concat('shared-storage-account', parameters('environmentNameAbbreviation'))).outputs.storageConnectionString.value]"
+            "value": "[reference(concat('shared-storage-account-', parameters('environmentNameAbbreviation'))).outputs.storageConnectionString.value]"
         },
         "configStorageConnectionString": {
             "type": "string",
-            "value": "[reference(concat('config-storage-account', parameters('environmentNameAbbreviation'))).outputs.storageConnectionString.value]"
+            "value": "[reference(concat('config-storage-account-', parameters('environmentNameAbbreviation'))).outputs.storageConnectionString.value]"
         },
         "ConfigStorageAccountName": {
             "type": "string",
