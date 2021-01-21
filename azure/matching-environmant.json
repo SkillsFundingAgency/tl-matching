@@ -1,22 +1,12 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "environmentNameAbbreviation": {
-            "type": "string",
-            "maxLength": 4
+            "type": "string"
         },
-        "workerASPSize": {
-            "type": "string",
-            "allowedValues": [
-                "1",
-                "2",
-                "3"
-            ]
-        },
-        "workerASPInstances": {
-            "type": "int",
-            "minValue": 1
+        "resourceNamePrefix": {
+            "type": "string"
         },
         "sharedASPName": {
             "type": "string"
@@ -59,18 +49,18 @@
         }
     },
     "variables": {
-        "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/tl-platform-building-blocks/master/templates/",
-        "resourceNamePrefix": "[concat('tl-', toLower(parameters('environmentNameAbbreviation')))]",
-        "workerASPName": "[concat(variables('resourceNamePrefix'), '-mtchwkr-asp')]",
-        "uiAppName": "[concat(variables('resourceNamePrefix'), '-mtchui-as')]",
-        "workerFunctionAppName": "[concat(variables('resourceNamePrefix'), '-mtchwkr-fa')]",        
-        "sqlDatabaseName": "[concat(variables('resourceNamePrefix'), '-mtch-db')]",
-        "storageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'mtchstr'), '-', '')]"
+        "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/operations-devops-deployment/master/ArmTemplates/",
+        "uiAppName": "[concat(parameters('resourceNamePrefix'), '-web')]",
+        "appInsightName": "[concat(parameters('resourceNamePrefix'), '-ai')]",
+        "workerFunctionAppName": "[concat(parameters('resourceNamePrefix'), '-func-worker')]",
+        "sqlDatabaseName": "[concat(parameters('resourceNamePrefix'), '-sqldb')]",
+        "storageAccountName": "[replace(concat(parameters('resourceNamePrefix'), 'str'), '-', '')]"
+        // "errorLink": "[concat('https://', variables('uiAppName'), '.scm.azurewebsites.net/detectors?type=tools&name=eventviewer')]"
     },
     "resources": [
         {
             "apiVersion": "2017-05-10",
-            "name": "storage-account",
+            "name": "[concat('storage-account','-', parameters('environmentNameAbbreviation'))]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -87,30 +77,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "worker-app-service-plan",
-            "type": "Microsoft.Resources/deployments",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[concat(variables('deploymentUrlBase'),'app-service-plan.json')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "appServicePlanName": {
-                        "value": "[variables('workerASPName')]"
-                    },
-                    "aspSize": {
-                        "value": "[parameters('workerASPSize')]"
-                    },
-                    "aspInstances": {
-                        "value": "[parameters('workerASPInstances')]"
-                    }
-                }
-            }
-        },
-        {
-            "apiVersion": "2017-05-10",
-            "name": "ui-app-insights",
+            "name": "[concat('app-insights','-', parameters('environmentNameAbbreviation'))]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -120,7 +87,7 @@
                 },
                 "parameters": {
                     "appInsightsName": {
-                        "value": "[variables('uiAppName')]"
+                        "value": "[variables('appInsightName')]"
                     },
                     "attachedService": {
                         "value": "[variables('uiAppName')]"
@@ -130,8 +97,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "ui-app-service-certificate",
-            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
+            "name": "[concat('ui-app-service-certificate','-', parameters('environmentNameAbbreviation'))]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -154,7 +120,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "ui-app-service",
+            "name": "[concat('ui-app-service','-', parameters('environmentNameAbbreviation'))]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -176,7 +142,7 @@
                         "value": [
                             {
                                 "name": "EnvironmentName",
-                                "value": "[parameters('environmentNameAbbreviation')]"
+                                "value": "[toUpper(parameters('environmentNameAbbreviation'))]"
                             },
                             {
                                 "name": "ConfigurationStorageConnectionString",
@@ -192,7 +158,7 @@
                             },
                             {
                                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                                "value": "[reference('ui-app-insights').outputs.InstrumentationKey.value]"
+                                "value": "[reference(concat('app-insights','-',parameters('environmentNameAbbreviation'))).outputs.InstrumentationKey.value]"
                             }
                         ]
                     },
@@ -200,34 +166,17 @@
                         "value": "[parameters('uiCustomHostName')]"
                     },
                     "certificateThumbprint": {
-                        "value": "[reference('ui-app-service-certificate').outputs.certificateThumbprint.value]"
+                        "value": "[reference(concat('ui-app-service-certificate','-',parameters('environmentNameAbbreviation'))).outputs.certificateThumbprint.value]"
                     }
                 }
-            }
+            },
+            "dependsOn": [
+                "[concat('ui-app-service-certificate','-', parameters('environmentNameAbbreviation'))]"
+            ]
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "function-app-insights",
-            "type": "Microsoft.Resources/deployments",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[concat(variables('deploymentUrlBase'),'application-insights.json')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "appInsightsName": {
-                        "value": "[variables('workerFunctionAppName')]"
-                    },
-                    "attachedService": {
-                        "value": "[variables('workerFunctionAppName')]"
-                    }
-                }
-            }
-        },
-        {
-            "apiVersion": "2017-05-10",
-            "name": "function-app",
+            "name": "[concat('function-app','-', parameters('environmentNameAbbreviation'))]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -240,16 +189,16 @@
                         "value": "[variables('workerFunctionAppName')]"
                     },
                     "appServicePlanName": {
-                        "value": "[variables('workerASPName')]"
+                        "value": "[parameters('sharedASPName')]"
                     },
                     "appServicePlanResourceGroup": {
-                        "value": "[resourceGroup().name]"
+                        "value": "[parameters('sharedEnvResourceGroup')]"
                     },
                     "functionAppAppSettings": {
                         "value": [
                             {
                                 "name": "EnvironmentName",
-                                "value": "[parameters('environmentNameAbbreviation')]"
+                                "value": "[toUpper(parameters('environmentNameAbbreviation'))]"
                             },
                             {
                                 "name": "ConfigurationStorageConnectionString",
@@ -281,19 +230,19 @@
                             },
                             {
                                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                                "value": "[reference('function-app-insights').outputs.InstrumentationKey.value]"
+                                "value": "[reference(concat('app-insights','-',parameters('environmentNameAbbreviation'))).outputs.InstrumentationKey.value]"
                             },
                             {
                                 "name": "BlobStorageConnectionString",
-                                "value": "[reference('storage-account').outputs.storageConnectionString.value]"
+                                "value": "[reference(concat('storage-account','-',parameters('environmentNameAbbreviation'))).outputs.storageConnectionString.value]"
                             },
                             {
                                 "name": "AzureWebJobsStorage",
-                                "value": "[reference('storage-account').outputs.storageConnectionString.value]"
+                                "value": "[reference(concat('storage-account','-',parameters('environmentNameAbbreviation'))).outputs.storageConnectionString.value]"
                             },
                             {
                                 "name": "AzureWebJobsDashboard",
-                                "value": "[reference('storage-account').outputs.storageConnectionString.value]"
+                                "value": "[reference(concat('storage-account','-',parameters('environmentNameAbbreviation'))).outputs.storageConnectionString.value]"
                             },
                             {
                                 "name": "WEBSITE_TIME_ZONE",
@@ -306,14 +255,11 @@
                         ]
                     }
                 }
-            },
-            "dependsOn": [
-                "worker-app-service-plan"
-            ]
+            }
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "sql-database",
+            "name": "[concat('sql-database','-', parameters('environmentNameAbbreviation'))]",
             "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
@@ -340,7 +286,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "sql-server-firewall-rules",
+            "name": "[concat('sql-server-firewall-rules','-', parameters('environmentNameAbbreviation'))]",
             "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
@@ -354,7 +300,7 @@
                         "value": "AZURE_IP-"
                     },
                     "ipAddresses": {
-                        "value": "[union(reference('ui-app-service').outputs.possibleOutboundIpAddresses.value, reference('function-app').outputs.possibleOutboundIpAddresses.value)]"
+                        "value": "[union(reference(concat('ui-app-service','-',parameters('environmentNameAbbreviation'))).outputs.possibleOutboundIpAddresses.value, reference(concat('function-app','-',parameters('environmentNameAbbreviation'))).outputs.possibleOutboundIpAddresses.value)]"
                     },
                     "serverName": {
                         "value": "[parameters('sharedSQLServerName')]"
@@ -375,6 +321,10 @@
         "workerFunctionAppName": {
             "type": "string",
             "value": "[variables('workerFunctionAppName')]"
+        },
+        "BlobStorageConnectionString": {
+            "type": "string",
+            "value": "[reference(concat('storage-account','-', parameters('environmentNameAbbreviation'))).outputs.storageConnectionString.value]"
         }
     }
 }

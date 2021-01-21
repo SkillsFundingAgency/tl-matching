@@ -1,29 +1,10 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "metadata": {
-        "comments": "This template is part a temporary solution while the project gains confidence in it's integration tests, this will then be removed"
-    },
     "parameters": {
         "environmentNameAbbreviation": {
             "type": "string"
         },
-        "sharedEnvResourceGroup": {
-            "type": "string"
-        },
-        "sharedSQLServerName": {
-            "type": "string"
-        },
-        "sqlDatabaseSkuName": {
-            "type": "string"
-        },
-        "sqlDatabaseTier": {
-            "type": "string"
-        },
-        "testRunnerOutboundIp": {
-            "type": "string"
-        },
-
         "sqlServerAdminUsername": {
             "type": "string"
         },
@@ -64,17 +45,19 @@
         },
         "keyVaultReadWriteObjectIds": {
             "type": "array"
+        },
+        "keyVaultFullAccessObjectIds": {
+            "type": "array"
         }
     },
     "variables": {
-        "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/tl-platform-building-blocks/master/templates/",
-        "resourceNamePrefix": "[concat('tl-', toLower(parameters('environmentNameAbbreviation')))]",
-        "testSqlDatabaseName": "[concat(variables('resourceNamePrefix'), '-mtchinttest-db')]",
+        "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/operations-devops-deployment/master/ArmTemplates/",
+        "resourceNamePrefix": "[toLower(parameters('environmentNameAbbreviation'))]",
         "sqlServerName": "[concat(variables('resourceNamePrefix'), '-shared-sql')]",
         "sharedStorageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'sharedstr'), '-', '')]",
         "appServicePlanName": "[concat(variables('resourceNamePrefix'), '-shared-asp')]",
         "configStorageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'configstr'), '-', '')]",
-        "keyVaultName": "[concat(variables('resourceNamePrefix'), '-shared-kv')]",
+        "keyVaultName": "[replace(concat(variables('resourceNamePrefix'), 'sharedkv'), '-', '')]",
         "keyVaultAccessPolicies": [
             {
                 "objectId": "[parameters('azureWebsitesRPObjectId')]",
@@ -86,28 +69,82 @@
                 }
             }
         ],
-        "copy": [
-            {
-                "name": "readWriteAccessPolicies",
-                "count": "[length(parameters('keyVaultReadWriteObjectIds'))]",
-                "input": {
-                    "objectId": "[parameters('keyVaultReadWriteObjectIds')[copyIndex('readWriteAccessPolicies')]]",
-                    "tenantId": "[subscription().tenantId]",
-                    "permissions": {
-                        "secrets": [
-                            "Get",
-                            "List",
-                            "Set"
-                        ]
+        "readWriteAccessPolicies": {
+            "copy": [
+                {
+                    "name": "readWriteAccessPolicies",
+                    "count": "[length(parameters('keyVaultReadWriteObjectIds'))]",
+                    "input": {
+                        "objectId": "[parameters('keyVaultReadWriteObjectIds')[copyIndex('readWriteAccessPolicies')]]",
+                        "tenantId": "[subscription().tenantId]",
+                        "permissions": {
+                            "secrets": [
+                                "Get",
+                                "List",
+                                "Set"
+                            ]
+                        }
                     }
                 }
-            }
-        ]
+            ]
+        },
+        "fullAccessPolicies": {
+            "copy": [
+                {
+                    "name": "fullAccessPolicies",
+                    "count": "[length(parameters('keyVaultFullAccessObjectIds'))]",
+                    "input": {
+                        "objectId": "[parameters('keyVaultFullAccessObjectIds')[copyIndex('fullAccessPolicies')]]",
+                        "tenantId": "[subscription().tenantId]",
+                        "permissions": {
+                            "keys": [
+                                "Get",
+                                "List",
+                                "Update",
+                                "Create",
+                                "Import",
+                                "Delete",
+                                "Recover",
+                                "Backup",
+                                "Restore"
+                            ],
+                            "secrets": [
+                                "Get",
+                                "List",
+                                "Set",
+                                "Delete",
+                                "Recover",
+                                "Backup",
+                                "Restore"
+                            ],
+                            "certificates": [
+                                "Get",
+                                "List",
+                                "Update",
+                                "Create",
+                                "Import",
+                                "Delete",
+                                "Recover",
+                                "Backup",
+                                "Restore",
+                                "ManageContacts",
+                                "ManageIssuers",
+                                "GetIssuers",
+                                "ListIssuers",
+                                "SetIssuers",
+                                "DeleteIssuers"
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+
     },
     "resources": [
         {
             "apiVersion": "2017-05-10",
-            "name": "shared-storage-account",
+            "name": "[concat('shared-storage-account','-', parameters('environmentNameAbbreviation'))]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -124,7 +161,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "sql-server",
+            "name": "[concat('sql-server','-', parameters('environmentNameAbbreviation'))]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -157,12 +194,12 @@
                 }
             },
             "dependsOn": [
-                "shared-storage-account"
+                "[concat('shared-storage-account','-', parameters('environmentNameAbbreviation'))]"
             ]
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "app-service-plan",
+            "name": "[concat('app-service-plan','-', parameters('environmentNameAbbreviation'))]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -188,7 +225,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "config-storage-account",
+            "name": "[concat('config-storage-account','-', parameters('environmentNameAbbreviation'))]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -205,7 +242,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "key-vault",
+            "name": "[concat('key-vault','-', parameters('environmentNameAbbreviation'))]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -224,73 +261,36 @@
                         "value": true
                     },
                     "keyVaultAccessPolicies": {
-                        "value": "[concat(variables('keyVaultAccessPolicies'), variables('readWriteAccessPolicies'))]"
-                    }
-                }
-            }
-        },
-        {
-
-            "apiVersion": "2017-05-10",
-            "name": "sql-database-test",
-            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
-            "type": "Microsoft.Resources/deployments",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[concat(variables('deploymentUrlBase'),'sql-database.json')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "databaseName": {
-                        "value": "[variables('testSqlDatabaseName')]"
-                    },
-                    "sqlServerName": {
-                        "value": "[parameters('sharedSQLServerName')]"
-                    },
-                    "databaseSkuName": {
-                        "value": "[parameters('sqlDatabaseSkuName')]"
-                    },
-                    "databaseTier": {
-                        "value": "[parameters('sqlDatabaseTier')]"
-                    },
-                    "serverlessMinCapacity": {
-                        "value": "0.5"
-                    }
-                }
-            }
-        },
-        {
-            "apiVersion": "2017-05-10",
-            "name": "sql-server-firewall-rules-test",
-            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
-            "type": "Microsoft.Resources/deployments",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[concat(variables('deploymentUrlBase'),'sql-server-firewall-rules.json')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "firewallRuleNamePrefix": {
-                        "value": "AZURE_IP-"
-                    },
-                    "ipAddresses": {
-                        "value": [
-                            "[parameters('testRunnerOutboundIp')]"
-                        ]
-                    },
-                    "serverName": {
-                        "value": "[parameters('sharedSQLServerName')]"
+                        "value": "[concat(variables('keyVaultAccessPolicies'), variables('readWriteAccessPolicies').readWriteAccessPolicies, variables('fullAccessPolicies').fullAccessPolicies)]"
                     }
                 }
             }
         }
     ],
     "outputs": {
-        "testSqlDatabaseName": {
+        "sharedASPName": {
             "type": "string",
-            "value": "[variables('testSqlDatabaseName')]"
+            "value": "[variables('appServicePlanName')]"
+        },
+        "sharedKeyVaultName": {
+            "type": "string",
+            "value": "[variables('keyVaultName')]"
+        },
+        "sharedSQLServerName": {
+            "type": "string",
+            "value": "[variables('sqlServerName')]"
+        },
+        "sharedStorageConnectionString": {
+            "type": "string",
+            "value": "[reference(concat('shared-storage-account','-', parameters('environmentNameAbbreviation'))).outputs.storageConnectionString.value]"
+        },
+        "configStorageConnectionString": {
+            "type": "string",
+            "value": "[reference(concat('config-storage-account','-', parameters('environmentNameAbbreviation'))).outputs.storageConnectionString.value]"
+        },
+        "ConfigStorageAccountName": {
+            "type": "string",
+            "value": "[variables('configStorageAccountName')]"
         }
     }
 }

@@ -191,8 +191,7 @@ namespace Sfa.Tl.Matching.Web
 
         protected virtual bool ConfigurationIsLocalOrDev()
         {
-            return Configuration[Constants.EnvironmentNameConfigKey].Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase) ||
-                   Configuration[Constants.EnvironmentNameConfigKey].Equals("DEV", StringComparison.CurrentCultureIgnoreCase);
+            return Configuration[Constants.EnvironmentNameConfigKey].Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase);
         }
 
         private void AddAuthentication(IServiceCollection services)

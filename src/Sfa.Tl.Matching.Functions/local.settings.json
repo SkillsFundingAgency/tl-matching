@@ -8,7 +8,6 @@
         "EmployerFeedbackTrigger": "0 0 9 * * MON-FRI",
         "ProviderFeedbackTrigger": "0 0 9 * * MON-FRI",
         "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-        "ServiceBusConnectionString": "UseDevelopmentStorage=true;",
         "BlobStorageConnectionString": "UseDevelopmentStorage=true;",
         "ConfigurationStorageConnectionString": "UseDevelopmentStorage=true;",
         "EnvironmentName": "LOCAL",
