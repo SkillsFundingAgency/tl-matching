@@ -71,6 +71,7 @@
     <None Include="PostDeployment\Seed UserProfile.sql" />
     <None Include="Indexes\IX_OpportunityBaskekItem.sql" />
     <None Include="PostDeployment\Update Qualification Titles.sql" />
+    <None Include="PostDeployment\Delete Pipeline Opportunities.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Employer.sql" />
