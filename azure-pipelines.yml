@@ -15,11 +15,9 @@ trigger:
     - master
     - feature/*
     - bugs/*
-    exclude:
-    - "*"
 pr:
   - master
-  
+
 variables:
   applicationName: matching
 stages:
