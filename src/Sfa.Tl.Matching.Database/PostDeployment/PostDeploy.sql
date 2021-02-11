@@ -13,3 +13,4 @@ DECLARE @TicketNo VARCHAR(32)
 :r ".\Seed UserProfile.sql"
 :r ".\Update Qualification Titles.sql"
 :r ".\Delete Pipeline Opportunities.sql"
+:r ".\Delete Pipeline Opportunities 2.sql"
