@@ -32,8 +32,6 @@ jobs:
         command: restore
         projects: 'src/**/*.csproj'
         noCache: false
-        feedsToUse: config
-        nugetConfigPath: src/NuGet.config
     
     - task: Npm@1
       displayName: 'npm install'
