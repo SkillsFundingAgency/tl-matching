@@ -49,4 +49,5 @@ jobs:
             -employerFeedbackTrigger "$(EmployerFeedbackTrigger)"
             -providerFeedbackTrigger "$(ProviderFeedbackTrigger)"
             -providerReferenceTrigger "$(ProviderReferenceTrigger)"'
+          tags: $(Tags)          
           processOutputs: true
