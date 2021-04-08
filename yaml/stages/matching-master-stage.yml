@@ -47,6 +47,7 @@ stages:
     parameters:
       environmentTagName: PreProd
       dependencies:
+        - build
       #   - DeploySharedInfrastructure_t01
       #   - Deploy_t01
       environmentName: pp
