@@ -3,52 +3,52 @@ stages:
     parameters:        
       variableGroups:
         - platform-global-matching 
-######################## DEV ##############################################
-  - template: matching-shared-stage.yml
-    parameters:
-      environmentTagName: Dev
-      dependencies:
-        - build
-      environmentName: dev
-      sharedEnvironmentId: d01
-      serviceConnection: $(devServiceConnection)
+# ######################## DEV ##############################################
+#   - template: matching-shared-stage.yml
+#     parameters:
+#       environmentTagName: Dev
+#       dependencies:
+#         - build
+#       environmentName: dev
+#       sharedEnvironmentId: d01
+#       serviceConnection: $(devServiceConnection)
     
-  - template: matching-stage.yml
-    parameters:
-      environmentTagName: Dev
-      dependencies:
-        - DeploySharedInfrastructure_d01
-      environmentName: dev
-      environmentId: d01
-      sharedEnvironmentId: d01
-      serviceConnection: $(devServiceConnection)
-######################## TEST ##############################################
-  - template: matching-shared-stage.yml
-    parameters:
-      environmentTagName: Test
-      dependencies:
-        - build
-      environmentName: tst
-      sharedEnvironmentId: t01
-      serviceConnection: $(testServiceConnection)
+#   - template: matching-stage.yml
+#     parameters:
+#       environmentTagName: Dev
+#       dependencies:
+#         - DeploySharedInfrastructure_d01
+#       environmentName: dev
+#       environmentId: d01
+#       sharedEnvironmentId: d01
+#       serviceConnection: $(devServiceConnection)
+# ######################## TEST ##############################################
+#   - template: matching-shared-stage.yml
+#     parameters:
+#       environmentTagName: Test
+#       dependencies:
+#         - build
+#       environmentName: tst
+#       sharedEnvironmentId: t01
+#       serviceConnection: $(testServiceConnection)
     
-  - template: matching-stage.yml
-    parameters:
-      environmentTagName: Test
-      dependencies:
-        - DeploySharedInfrastructure_t01
-      environmentName: tst
-      environmentId: t01
-      sharedEnvironmentId: t01
-      serviceConnection: $(testServiceConnection)
+#   - template: matching-stage.yml
+#     parameters:
+#       environmentTagName: Test
+#       dependencies:
+#         - DeploySharedInfrastructure_t01
+#       environmentName: tst
+#       environmentId: t01
+#       sharedEnvironmentId: t01
+#       serviceConnection: $(testServiceConnection)
 
 ######################## Pre Prod ##############################################
   - template: matching-shared-stage.yml
     parameters:
       environmentTagName: PreProd
-      dependencies:
-        - DeploySharedInfrastructure_t01
-        - Deploy_t01
+      # dependencies:
+      #   - DeploySharedInfrastructure_t01
+      #   - Deploy_t01
       environmentName: pp
       sharedEnvironmentId: p02
       serviceConnection: $(prodServiceConnection)
