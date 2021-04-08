@@ -1,5 +1,5 @@
 parameters:
-- name: stageName
+- name: environmentTagName
   type: string
 - name: dependencies
   type: object
@@ -24,7 +24,9 @@ stages:
     - name: SharedResourceGroup
       value: '$(SharedBaseName)-shared'
     - name: SharedSQLServerName
-      value: '$(SharedBaseName)-shared-sqlsvr'  
+      value: '$(SharedBaseName)-shared-sqlsvr'
+    - name: environmentTagName
+      value: ${{parameters.environmentTagName}}
       
   displayName: '${{parameters.environmentName}} [${{parameters.sharedEnvironmentId}}] Shared' 
   jobs:

@@ -6,7 +6,7 @@ stages:
 ######################## DEV ##############################################
   - template: matching-shared-stage.yml
     parameters:
-      stageName: Dev
+      environmentTagName: Dev
       dependencies:
         - build
       environmentName: dev
@@ -15,7 +15,7 @@ stages:
     
   - template: matching-stage.yml
     parameters:
-      stageName: Dev
+      environmentTagName: Dev
       dependencies:
         - DeploySharedInfrastructure_d01
       environmentName: dev
@@ -25,7 +25,7 @@ stages:
 ######################## TEST ##############################################
   - template: matching-shared-stage.yml
     parameters:
-      stageName: Test
+      environmentTagName: Test
       dependencies:
         - build
       environmentName: tst
@@ -34,7 +34,7 @@ stages:
     
   - template: matching-stage.yml
     parameters:
-      stageName: Test
+      environmentTagName: Test
       dependencies:
         - DeploySharedInfrastructure_t01
       environmentName: tst
@@ -45,7 +45,7 @@ stages:
 ######################## Pre Prod ##############################################
   - template: matching-shared-stage.yml
     parameters:
-      stageName: PreProd
+      environmentTagName: PreProd
       dependencies:
         - DeploySharedInfrastructure_t01
         - Deploy_t01
@@ -55,7 +55,7 @@ stages:
     
   - template: matching-stage.yml
     parameters:
-      stageName: PreProd
+      environmentTagName: PreProd
       dependencies:
         - DeploySharedInfrastructure_p02
       environmentName: pp
@@ -66,7 +66,7 @@ stages:
 # ######################## Prod ##############################################
   - template: matching-shared-stage.yml
     parameters:
-      stageName: Prod
+      environmentTagName: Prod
       dependencies:
         - DeploySharedInfrastructure_p02
         - Deploy_p02
@@ -76,7 +76,7 @@ stages:
     
   - template: matching-stage.yml
     parameters:
-      stageName: Prod
+      environmentTagName: Prod
       dependencies:
         - DeploySharedInfrastructure_p01
       environmentName: prd

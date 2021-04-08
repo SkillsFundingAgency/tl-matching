@@ -1,5 +1,5 @@
 parameters:
-- name: stageName
+- name: environmentTagName
   type: string
 - name: dependencies
   type: object
@@ -26,7 +26,9 @@ stages:
     - name: ResourceGroupName
       value: '$(BaseName)'
     - name: EnvironmentName
-      value: ${{ parameters.environmentName }} 
+      value: ${{ parameters.environmentName }}
+    - name: environmentTagName
+      value: ${{parameters.environmentTagName}}
       
       
   displayName: '${{parameters.environmentName}} [${{parameters.environmentId}}] deployment'
