@@ -46,7 +46,7 @@ stages:
   - template: matching-shared-stage.yml
     parameters:
       environmentTagName: PreProd
-      # dependencies:
+      dependencies:
       #   - DeploySharedInfrastructure_t01
       #   - Deploy_t01
       environmentName: pp
