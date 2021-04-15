@@ -61,5 +61,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail.Builders
 
             return this;
         }
+
+        public ValidEmployerReferralDtoBuilder ClearWorkplaceDetails()
+        {
+            (_dto.WorkplaceDetails as List<WorkplaceDto>)?.Clear();
+
+            return this;
+        }
     }
 }

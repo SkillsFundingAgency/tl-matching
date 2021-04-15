@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
             return this;
         }
 
-        public ValidOpportunityBuilder AddReferrals(bool isCompleted = false, bool isSelectedForReferral = false)
+        public ValidOpportunityBuilder AddReferrals(bool isCompleted = false, bool isSelectedForReferral = false, bool isCdfProvider = true)
         {
             _opportunity.OpportunityItem ??= new List<Domain.Models.OpportunityItem>();
             _opportunity.OpportunityItem.Add(
@@ -100,7 +100,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                                     SecondaryContact = "SecondaryContact",
                                     SecondaryContactEmail = "secondary@contact.co.uk",
                                     SecondaryContactPhone = "01777757777",
-                                    IsCdfProvider = true,
+                                    IsCdfProvider = isCdfProvider,
                                     IsEnabledForReferral = true,
                                     Source = "PMF_1018",
                                     CreatedBy = EntityCreationConstants.CreatedByUser,

@@ -11,11 +11,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
 {
-    public class When_OpportunityRepository_GetEmployerReferrals_Is_Called_With_On_Cdf_Provider
+    public class When_OpportunityRepository_GetEmployerReferrals_Is_Called_With_One_Cdf_Provider
     {
         private readonly EmployerReferralDto _result;
 
-        public When_OpportunityRepository_GetEmployerReferrals_Is_Called_With_On_Cdf_Provider()
+        public When_OpportunityRepository_GetEmployerReferrals_Is_Called_With_One_Cdf_Provider()
         {
             var logger = Substitute.For<ILogger<OpportunityRepository>>();
 
@@ -43,9 +43,6 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
             _result.Phone.Should().BeEquivalentTo("020 123 4567");
             _result.Email.Should().BeEquivalentTo("employer.contact@employer.co.uk");
             _result.CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
-
-            _result.WorkplaceDetails.Should().NotBeNull();
-            _result.WorkplaceDetails.Count().Should().Be(1);
 
             _result.WorkplaceDetails.Should().NotBeNull();
             _result.WorkplaceDetails.Count().Should().Be(1);
