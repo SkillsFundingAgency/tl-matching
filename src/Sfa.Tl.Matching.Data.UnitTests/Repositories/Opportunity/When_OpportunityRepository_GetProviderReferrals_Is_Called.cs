@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
             dto.OpportunityId.Should().Be(_opportunityId);
             dto.OpportunityItemId.Should().Be(_opportunityItemId);
             dto.ReferralId.Should().Be(_referralId);
-            dto.ProviderName.Should().BeEquivalentTo("ProviderName");
+            dto.ProviderName.Should().BeEquivalentTo("Provider Name");
             dto.ProviderPrimaryContact.Should().BeEquivalentTo("PrimaryContact");
             dto.ProviderPrimaryContactEmail.Should().BeEquivalentTo("primary@contact.co.uk");
             dto.ProviderSecondaryContactEmail.Should().BeEquivalentTo("secondary@contact.co.uk");

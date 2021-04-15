@@ -11,11 +11,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
 {
-    public class When_OpportunityRepository_GetEmployerReferrals_Is_Called
+    public class When_OpportunityRepository_GetEmployerReferrals_Is_Called_With_On_Cdf_Provider
     {
         private readonly EmployerReferralDto _result;
 
-        public When_OpportunityRepository_GetEmployerReferrals_Is_Called()
+        public When_OpportunityRepository_GetEmployerReferrals_Is_Called_With_On_Cdf_Provider()
         {
             var logger = Substitute.For<ILogger<OpportunityRepository>>();
 
@@ -23,13 +23,14 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
             dbContext.Add(
                 new ValidOpportunityBuilder()
                     .AddEmployer()
-                    .AddReferrals(isSelectedForReferral: true)
-                    .AddProvisionGaps()
+                    .AddReferralsWithOneNonCdfProvider(isSelectedForReferral: true)
                     .Build());
             dbContext.SaveChanges();
-
+                
             var repository = new OpportunityRepository(logger, dbContext);
-            _result = repository.GetEmployerReferralsAsync(1, new[] { 1 })
+            _result = repository.GetEmployerReferralsAsync(
+                    1, 
+                    new[] { 1, 2 })
                 .GetAwaiter().GetResult();
         }
 
@@ -46,20 +47,23 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
             _result.WorkplaceDetails.Should().NotBeNull();
             _result.WorkplaceDetails.Count().Should().Be(1);
 
+            _result.WorkplaceDetails.Should().NotBeNull();
+            _result.WorkplaceDetails.Count().Should().Be(1);
+
             var workplaceDetail = _result.WorkplaceDetails.First();
             workplaceDetail.WorkplaceTown.Should().Be("Coventry");
             workplaceDetail.WorkplacePostcode.Should().Be("CV1 2WT");
-            workplaceDetail.JobRole.Should().Be("Automation Tester");
+            workplaceDetail.JobRole.Should().Be("Tea Taster");
             workplaceDetail.PlacementsKnown.Should().Be(true);
-            workplaceDetail.Placements.Should().Be(5);
+            workplaceDetail.Placements.Should().Be(2);
             workplaceDetail.ProviderAndVenueDetails.Should().NotBeNull();
             workplaceDetail.ProviderAndVenueDetails.Count().Should().Be(1);
 
             var providerReferral = workplaceDetail.ProviderAndVenueDetails.First();
             providerReferral.Town.Should().Be("Town");
-            providerReferral.Postcode.Should().Be("AA1 1AA");
-            providerReferral.ProviderName.Should().Be("Provider Name");
-            providerReferral.DisplayName.Should().Be("Provider display name");
+            providerReferral.Postcode.Should().Be("BB2 2BB");
+            providerReferral.ProviderName.Should().Be("Provider Name 2");
+            providerReferral.DisplayName.Should().Be("Provider display name 2");
             providerReferral.PrimaryContact.Should().Be("PrimaryContact");
             providerReferral.PrimaryContactEmail.Should().Be("primary@contact.co.uk");
             providerReferral.PrimaryContactPhone.Should().Be("01777757777");
