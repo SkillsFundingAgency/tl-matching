@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
 {
     public class OpportunityRepository : GenericRepository<Opportunity>, IOpportunityRepository
     {
-        public OpportunityRepository(ILogger<OpportunityRepository> logger, MatchingDbContext dbContext) 
+        public OpportunityRepository(ILogger<OpportunityRepository> logger, MatchingDbContext dbContext)
             : base(logger, dbContext)
         {
         }
@@ -84,15 +84,20 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                   CreatedBy = op.CreatedBy,
                                   WorkplaceDetails =
                                       from oi in _dbContext.OpportunityItem
-                                      join r in _dbContext.Referral on oi.Id equals r.OpportunityItemId
-                                      join pv in _dbContext.ProviderVenue on r.ProviderVenueId equals pv.Id
-                                      join p in _dbContext.Provider on pv.ProviderId equals p.Id
                                       where oi.OpportunityId == opportunityId
                                             && itemIds.Contains(oi.Id)
                                             && oi.IsSaved
                                             && !oi.IsCompleted
-                                            && p.IsCdfProvider
-                                            && p.IsEnabledForReferral
+                                            //Filter out cases where there are no CDF providers
+                                            && (from r2 in _dbContext.Referral
+                                                join pv2 in _dbContext.ProviderVenue on r2.ProviderVenueId equals pv2.Id
+                                                join p2 in _dbContext.Provider on pv2.ProviderId equals p2.Id
+                                                where r2.OpportunityItemId == oi.Id
+                                                      && !pv2.IsRemoved
+                                                      && pv2.IsEnabledForReferral
+                                                      && p2.IsCdfProvider
+                                                      && p2.IsEnabledForReferral
+                                                select p2.Id).Any()
                                       select new WorkplaceDto
                                       {
                                           PlacementsKnown = oi.PlacementsKnown,
@@ -100,29 +105,29 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                           JobRole = oi.JobRole,
                                           WorkplacePostcode = oi.Postcode,
                                           WorkplaceTown = oi.Town,
-                                          ProviderAndVenueDetails =
-                                            from r2 in _dbContext.Referral
-                                            join pv2 in _dbContext.ProviderVenue on r2.ProviderVenueId equals pv2.Id
-                                            join p2 in _dbContext.Provider on pv2.ProviderId equals p2.Id
-                                            where r2.OpportunityItemId == oi.Id
-                                                      && !pv2.IsRemoved
-                                                      && pv2.IsEnabledForReferral
-                                                      && p2.IsCdfProvider
-                                                      && p2.IsEnabledForReferral
+                                          ProviderAndVenueDetails = (
+                                            from r in _dbContext.Referral
+                                            join pv in _dbContext.ProviderVenue on r.ProviderVenueId equals pv.Id
+                                            join p in _dbContext.Provider on pv.ProviderId equals p.Id
+                                            where r.OpportunityItemId == oi.Id
+                                                      && !pv.IsRemoved
+                                                      && pv.IsEnabledForReferral
+                                                      && p.IsCdfProvider
+                                                      && p.IsEnabledForReferral
                                             select new ProviderReferralDto
                                             {
-                                                ProviderName = p2.Name,
-                                                DisplayName = p2.DisplayName,
-                                                ProviderVenueName = pv2.Name,
-                                                PrimaryContact = p2.PrimaryContact,
-                                                PrimaryContactEmail = p2.PrimaryContactEmail,
-                                                PrimaryContactPhone = p2.PrimaryContactPhone,
-                                                SecondaryContact = p2.SecondaryContact,
-                                                SecondaryContactEmail = p2.SecondaryContactEmail,
-                                                SecondaryContactPhone = p2.SecondaryContactPhone,
-                                                Town = pv2.Town,
-                                                Postcode = pv2.Postcode
-                                            }
+                                                ProviderName = p.Name,
+                                                DisplayName = p.DisplayName,
+                                                ProviderVenueName = pv.Name,
+                                                PrimaryContact = p.PrimaryContact,
+                                                PrimaryContactEmail = p.PrimaryContactEmail,
+                                                PrimaryContactPhone = p.PrimaryContactPhone,
+                                                SecondaryContact = p.SecondaryContact,
+                                                SecondaryContactEmail = p.SecondaryContactEmail,
+                                                SecondaryContactPhone = p.SecondaryContactPhone,
+                                                Town = pv.Town,
+                                                Postcode = pv.Postcode
+                                            })
                                       }
                               }).SingleOrDefaultAsync();
 
