@@ -87,7 +87,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                       where oi.OpportunityId == opportunityId
                                             && itemIds.Contains(oi.Id)
                                             && oi.IsSaved
-                                            && !oi.IsCompleted
                                             //Filter out cases where there are no CDF providers
                                             && (from r2 in _dbContext.Referral
                                                 join pv2 in _dbContext.ProviderVenue on r2.ProviderVenueId equals pv2.Id
