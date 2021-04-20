@@ -22,7 +22,9 @@
     "govuk-frontend": "^2.13.0",
     "govuk_frontend_toolkit": "^7.6.0",
     "govuk_template_mustache": "^0.24.1",
-    "jquery": "^3.6.0"
+    "jquery": "^3.6.0",
+    "lodash": "^4.17.21",
+    "lodash.template": "^4.5.0"
   },
   "devDependencies": {
     "gulp": "^4.0.2",
