@@ -1,8 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Azure.Storage;
-using Microsoft.Azure.Storage.Blob;
-using Sfa.Tl.Matching.Application.Extensions;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using Sfa.Tl.Matching.Application.Constants;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
@@ -22,44 +24,58 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task UploadAsync(DataUploadDto dto)
         {
-            var blockBlob = await GetBlockBlobReference(
+            var blobClient = await GetBlobClient(
                 dto.ImportType.ToString().ToLowerInvariant(),
-                dto.FileName, dto.ContentType, dto.UserName);
+                dto.FileName);
+           
+            await using var uploadFileStream = new MemoryStream(dto.Data);
 
-            await blockBlob.UploadFromByteArrayAsync(dto.Data, 0, dto.Data.Length);
+            var metadata = new Dictionary<string, string> 
+            {
+                { ApplicationConstants.CreatedByMetadataKey, dto.UserName }
+            };
+
+            await blobClient.UploadAsync(uploadFileStream, //overwrite:true
+                metadata: metadata,
+                httpHeaders: new BlobHttpHeaders { ContentType = dto.ContentType });
+
+            uploadFileStream.Close();
 
             _logger.LogInformation($"Successfully uploaded {dto.FileName} to {dto.ImportType} folder");
         }
-
-        public async Task UploadFromStreamAsync(DataStreamUploadDto dto)
+        
+        private async Task<BlobClient> GetBlobClient(
+            string containerName, 
+            string fileName)
         {
-            var blockBlob = await GetBlockBlobReference(dto.ContainerName, dto.FileName, dto.ContentType, dto.UserName);
+            var blobContainerClient = await GetContainerAsync(containerName);
 
-            await blockBlob.UploadFromStreamAsync(dto.DataStream);
-
-            _logger.LogInformation($"Successfully uploaded {dto.FileName} to {dto.ContainerName} folder");
+            var blobClient = blobContainerClient.GetBlobClient(fileName);
+            return blobClient;
         }
 
-        private async Task<CloudBlockBlob> GetBlockBlobReference(string containerName, string fileName,
-            string contentType, string createdByUserName)
+        private async Task<BlobContainerClient> GetContainerAsync(string containerName)
         {
-            var blobContainer = await GetContainerAsync(containerName);
+            //https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blob-containers-list?tabs=dotnet
+            //https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-dotnet#create-a-container
+            var blobServiceClient = new BlobServiceClient(_configuration.BlobStorageConnectionString);
 
-            var blockBlob = blobContainer.GetBlockBlobReference(fileName);
-            blockBlob.AddCreatedByMetadata(createdByUserName);
-            blockBlob.Properties.ContentType = contentType;
-            return blockBlob;
-        }
+            var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+            await containerClient.CreateIfNotExistsAsync();
 
-        private async Task<CloudBlobContainer> GetContainerAsync(string containerName)
-        {
-            var storageAccount = CloudStorageAccount.Parse(_configuration.BlobStorageConnectionString);
-            var client = storageAccount.CreateCloudBlobClient();
+            //var containerClient = await blobServiceClient.CreateBlobContainerAsync(containerName);
+            return containerClient;
 
-            var blobContainer = client.GetContainerReference(containerName);
-            await blobContainer.CreateIfNotExistsAsync();
+            //var containerClient = new BlobContainerClient(connectionString, containerName);
+            //containerClient.CreateIfNotExists();
 
-            return blobContainer;
+            //var storageAccount = CloudStorageAccount.Parse(_configuration.BlobStorageConnectionString);
+            //var client = storageAccount.CreateCloudBlobClient();
+
+            //var blobContainer = client.GetContainerReference(containerName);
+            //await blobContainer.CreateIfNotExistsAsync();
+
+            //return blobContainer;
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.Azure.Storage;
-using Microsoft.Azure.Storage.Queue;
+using Azure.Storage.Queues;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -57,20 +56,35 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task PushMessageAsync(string message, string queueName)
         {
-            var queue = await GetQueueAsync(queueName);
-            await queue.AddMessageAsync(new CloudQueueMessage(message));
+            //var queue = await GetQueueAsync(queueName);
+            //await queue.AddMessageAsync(new CloudQueueMessage(message));
+
+            var queueClient = await CreateQueueClient(queueName);
+            await queueClient.SendMessageAsync(message);
+
             _logger.LogInformation($"Added Message to Message Queue {queueName} => {message}");
         }
 
-        private async Task<CloudQueue> GetQueueAsync(string queueName)
+        //private async Task<CloudQueue> GetQueueAsync(string queueName)
+        //{
+        //    var storageAccount = CloudStorageAccount.Parse(_configuration.BlobStorageConnectionString);
+        //    var client = storageAccount.CreateCloudQueueClient();
+
+        //    var queueReference = client.GetQueueReference(queueName);
+        //    await queueReference.CreateIfNotExistsAsync();
+
+        //    return queueReference;
+        //}
+
+        public async Task<QueueClient> CreateQueueClient(string queueName)
         {
-            var storageAccount = CloudStorageAccount.Parse(_configuration.BlobStorageConnectionString);
-            var client = storageAccount.CreateCloudQueueClient();
+            // https://docs.microsoft.com/en-us/azure/storage/queues/storage-dotnet-how-to-use-queues?tabs=dotnet
+            // Instantiate a QueueClient which will be used to create and manipulate the queue
+            var queueClient = new QueueClient(_configuration.BlobStorageConnectionString, queueName);
 
-            var queueReference = client.GetQueueReference(queueName);
-            await queueReference.CreateIfNotExistsAsync();
+            await queueClient.CreateIfNotExistsAsync();
 
-            return queueReference;
+            return queueClient;
         }
     }
 }

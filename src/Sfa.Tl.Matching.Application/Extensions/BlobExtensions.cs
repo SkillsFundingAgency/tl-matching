@@ -1,23 +1,40 @@
-﻿using Microsoft.Azure.Storage.Blob;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using Azure;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using Sfa.Tl.Matching.Application.Constants;
 
 namespace Sfa.Tl.Matching.Application.Extensions
 {
     public static class BlobExtensions
     {
-        private const string MetadataKeyCreatedBy = "createdBy";
-
-        public static void AddCreatedByMetadata(this ICloudBlob cloudBlob, string createdBy)
+        public static async Task<string> GetCreatedByMetadata(this BlobClient blobClient)
         {
-            cloudBlob.Metadata[MetadataKeyCreatedBy] = createdBy;
-        }
+            try
+            {
+                var properties = await blobClient.GetPropertiesAsync();
 
-        public static string GetCreatedByMetadata(this ICloudBlob cloudBlob)
-        {
-            var createdBy = cloudBlob.Metadata.ContainsKey(MetadataKeyCreatedBy)
-                ? cloudBlob.Metadata[MetadataKeyCreatedBy]
-                : string.Empty;
+                // Enumerate the blob's metadata.
+                foreach (var metadataItem in properties.Value.Metadata)
+                {
+                    Debug.WriteLine($"\tKey: {metadataItem.Key}");
+                    Debug.WriteLine($"\tValue: {metadataItem.Value}");
+                }
 
-            return createdBy;
+                var createdBy = properties.Value.Metadata.ContainsKey(ApplicationConstants.CreatedByMetadataKey)
+                    ? properties.Value.Metadata[ApplicationConstants.CreatedByMetadataKey]
+                    : string.Empty;
+
+                return createdBy;
+            }
+            catch (RequestFailedException e)
+            {
+                Debug.WriteLine($"HTTP error code {e.Status}: {e.ErrorCode}");
+                return null;
+            }
         }
     }
 }
