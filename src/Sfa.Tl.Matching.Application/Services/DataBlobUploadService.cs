@@ -56,26 +56,12 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task<BlobContainerClient> GetContainerAsync(string containerName)
         {
-            //https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blob-containers-list?tabs=dotnet
-            //https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-dotnet#create-a-container
             var blobServiceClient = new BlobServiceClient(_configuration.BlobStorageConnectionString);
 
             var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
             await containerClient.CreateIfNotExistsAsync();
 
-            //var containerClient = await blobServiceClient.CreateBlobContainerAsync(containerName);
             return containerClient;
-
-            //var containerClient = new BlobContainerClient(connectionString, containerName);
-            //containerClient.CreateIfNotExists();
-
-            //var storageAccount = CloudStorageAccount.Parse(_configuration.BlobStorageConnectionString);
-            //var client = storageAccount.CreateCloudBlobClient();
-
-            //var blobContainer = client.GetContainerReference(containerName);
-            //await blobContainer.CreateIfNotExistsAsync();
-
-            //return blobContainer;
         }
     }
 }
