@@ -64,7 +64,11 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task<QueueClient> CreateQueueClient(string queueName)
         {
-            var queueClient = new QueueClient(_configuration.BlobStorageConnectionString, queueName);
+            var queueClient = new QueueClient(_configuration.BlobStorageConnectionString, queueName,
+                new QueueClientOptions
+                {
+                    MessageEncoding = QueueMessageEncoding.Base64
+                });
 
             await queueClient.CreateIfNotExistsAsync();
 

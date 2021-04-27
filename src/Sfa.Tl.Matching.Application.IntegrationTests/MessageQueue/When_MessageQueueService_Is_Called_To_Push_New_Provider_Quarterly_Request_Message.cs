@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Text;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
 using Azure.Storage.Queues;
@@ -37,7 +39,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MessageQueue
                 retrievedMessage = await _queueClient.ReceiveMessageAsync();
 
                 retrievedMessage.Should().NotBeNull();
-                retrievedMessage.MessageText.Should().Contain("1001");
+
+                //Message is base-64 encoded
+                var base64EncodedBytes = Convert.FromBase64String(retrievedMessage.MessageText);
+                var messageText = Encoding.UTF8.GetString(base64EncodedBytes);
+                messageText.Should().Contain("1001");
             }
             finally
             {
