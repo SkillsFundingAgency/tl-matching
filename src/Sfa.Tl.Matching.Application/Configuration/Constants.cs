@@ -5,6 +5,7 @@ namespace Sfa.Tl.Matching.Application.Configuration
     {
         public const string EnvironmentNameConfigKey = "EnvironmentName";
         public const string ConfigurationStorageConnectionStringConfigKey = "ConfigurationStorageConnectionString";
+        public const string MetadataKeyCreatedBy = "createdBy";
         public const string VersionConfigKey = "Version";
         public const string ServiceNameConfigKey = "ServiceName";
     }
