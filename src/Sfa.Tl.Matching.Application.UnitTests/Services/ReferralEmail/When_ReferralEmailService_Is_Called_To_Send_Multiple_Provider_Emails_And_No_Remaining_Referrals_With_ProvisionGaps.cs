@@ -93,10 +93,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
         }
 
         [Fact]
-        public void Then_UpdateManyWithSpecifiedColumnsOnly_Is_Called_Exactly_Four_Times_With_Expected_Values()
+        public void Then_UpdateManyWithSpecifiedColumnsOnly_Is_Called_Exactly_Once_With_Four_Expected_Values()
         {
-            _opportunityItemRepository.Received(4)
-                .UpdateManyWithSpecifiedColumnsOnlyAsync(Arg.Any<IList<OpportunityItem>>(),
+            _opportunityItemRepository.Received(1)
+                .UpdateManyWithSpecifiedColumnsOnlyAsync(Arg.Is<IList<OpportunityItem>>(
+                        o => o.Count == 4),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>());
@@ -107,7 +108,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
         {
             _opportunityItemRepository.Received(1)
                 .UpdateManyWithSpecifiedColumnsOnlyAsync(Arg.Is<IList<OpportunityItem>>(
-                        o => o.Count == 1
+                        o => o.Count >= 1
                              && o[0].Id == 1
                              && o[0].IsCompleted
                              && o.All(x => x.ModifiedBy == "TestUser")
@@ -123,9 +124,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
         {
             _opportunityItemRepository.Received(1)
                 .UpdateManyWithSpecifiedColumnsOnlyAsync(Arg.Is<IList<OpportunityItem>>(
-                        o => o.Count == 1
-                             && o[0].Id == 2
-                             && o[0].IsCompleted
+                        o => o.Count >= 2
+                             && o[1].Id == 2
+                             && o[1].IsCompleted
                              && o.All(x => x.ModifiedBy == "TestUser")
                              && o.All(x => x.ModifiedOn == new DateTime(2019, 1, 1))
                     ),
@@ -139,9 +140,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
         {
             _opportunityItemRepository.Received(1)
                 .UpdateManyWithSpecifiedColumnsOnlyAsync(Arg.Is<IList<OpportunityItem>>(
-                        o => o.Count == 1
-                             && o[0].Id == 3
-                             && o[0].IsCompleted
+                        o => o.Count >= 3
+                             && o[2].Id == 3
+                             && o[2].IsCompleted
                              && o.All(x => x.ModifiedBy == "TestUser")
                              && o.All(x => x.ModifiedOn == new DateTime(2019, 1, 1))
                     ),
@@ -155,9 +156,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
         {
             _opportunityItemRepository.Received(1)
                 .UpdateManyWithSpecifiedColumnsOnlyAsync(Arg.Is<IList<OpportunityItem>>(
-                        o => o.Count == 1
-                             && o[0].Id == 4
-                             && o[0].IsCompleted
+                        o => o.Count >= 4
+                             && o[3].Id == 4
+                             && o[3].IsCompleted
                              && o.All(x => x.ModifiedBy == "TestUser")
                              && o.All(x => x.ModifiedOn == new DateTime(2019, 1, 1))
                     ),

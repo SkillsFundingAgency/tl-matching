@@ -214,10 +214,10 @@ namespace Sfa.Tl.Matching.Application.Services
                                     referral.CreatedBy, referral.OpportunityItemId);
                             }
                         }
-
-                        await SetOpportunityItemsAsCompletedAsync(new[] { opportunityItem.OpportunityItemId }, username);
                     }
                 }
+
+                await SetOpportunityItemsAsCompletedAsync(itemIdList, username);
 
                 await CompleteRemainingProvisionGapsAsync(opportunityId, username);
 
