@@ -59,7 +59,9 @@ namespace Sfa.Tl.Matching.Application.Services
                 var itemIdList = itemIds.ToList();
                 var employerReferral = await _opportunityRepository.GetEmployerReferralsAsync(opportunityId, itemIdList);
 
-                if (employerReferral == null || !itemIdList.Any())
+                if (employerReferral == null ||
+                    !employerReferral.WorkplaceDetails.Any() ||
+                    !itemIdList.Any())
                 {
                     await _functionLogRepository.CreateAsync(new FunctionLog
                     {
@@ -114,8 +116,8 @@ namespace Sfa.Tl.Matching.Application.Services
                         tokens, employerReferral.CreatedBy);
                 }
 
-                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId, 
-                    employerReferral != null && itemIdList.Any() ? 1 : 0, 
+                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId,
+                    employerReferral != null && itemIdList.Any() ? 1 : 0,
                     BackgroundProcessHistoryStatus.Complete, username);
             }
             catch (Exception ex)
@@ -123,8 +125,8 @@ namespace Sfa.Tl.Matching.Application.Services
                 var errorMessage = $"Error sending employer referral emails. {ex.Message} " +
                                    $"Opportunity id {opportunityId}";
 
-                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId, 
-                    1, 
+                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId,
+                    1,
                     BackgroundProcessHistoryStatus.Error, username, errorMessage);
             }
         }
@@ -219,8 +221,8 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 await CompleteRemainingProvisionGapsAsync(opportunityId, username);
 
-                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId, 
-                    referrals?.Count ?? 0, 
+                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId,
+                    referrals?.Count ?? 0,
                     BackgroundProcessHistoryStatus.Complete, username);
             }
             catch (Exception ex)
@@ -237,8 +239,8 @@ namespace Sfa.Tl.Matching.Application.Services
                     RowNumber = -1
                 });
 
-                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId, 
-                    referrals?.Count ?? 0, 
+                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId,
+                    referrals?.Count ?? 0,
                     BackgroundProcessHistoryStatus.Error, username, errorMessage);
             }
         }

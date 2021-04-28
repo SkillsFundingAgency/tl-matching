@@ -17,10 +17,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail.Builders
                 PrimaryContact = "Employer Contact",
                 Phone = "020 123 4567",
                 Email = "employer.contact@employer.co.uk",
-                JobRole = "Testing Job Title",
-                PlacementsKnown = false,
-                Placements = 1,
-                RouteName = "Agriculture, environmental and animal care",
                 WorkplaceDetails = new List<WorkplaceDto>
                 {
                     new WorkplaceDto
@@ -62,6 +58,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail.Builders
             provider.SecondaryContact = "Secondary Contact";
             provider.SecondaryContactPhone = includePhone ? "021 456 0987" : null;
             provider.SecondaryContactEmail = includeEmail ? "secondary.contact@provider.ac.uk" : null;
+
+            return this;
+        }
+
+        public ValidEmployerReferralDtoBuilder ClearWorkplaceDetails()
+        {
+            (_dto.WorkplaceDetails as List<WorkplaceDto>)?.Clear();
 
             return this;
         }

@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
                 c.AddMaps(typeof(ProviderMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserNameResolver")
-                        ? (object) new LoggedInUserNameResolver<ProviderDetailViewModel, Provider>(httpContextAccessor)
+                        ? new LoggedInUserNameResolver<ProviderDetailViewModel, Provider>(httpContextAccessor)
                         : type.Name.Contains("UtcNowResolver")
                             ? (object) new
                                 UtcNowResolver<OpportunityItemIsSelectedWithUsernameForCompleteDto, OpportunityItem>(

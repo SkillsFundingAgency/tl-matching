@@ -14,7 +14,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
 {
     public class OpportunityRepository : GenericRepository<Opportunity>, IOpportunityRepository
     {
-        public OpportunityRepository(ILogger<OpportunityRepository> logger, MatchingDbContext dbContext) : base(logger, dbContext)
+        public OpportunityRepository(ILogger<OpportunityRepository> logger, MatchingDbContext dbContext)
+            : base(logger, dbContext)
         {
         }
 
@@ -81,11 +82,21 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                   Email = op.EmployerContactEmail,
                                   Phone = op.EmployerContactPhone,
                                   CreatedBy = op.CreatedBy,
-                                  WorkplaceDetails = (
+                                  WorkplaceDetails =
                                       from oi in _dbContext.OpportunityItem
                                       where oi.OpportunityId == opportunityId
                                             && itemIds.Contains(oi.Id)
                                             && oi.IsSaved
+                                            //Filter out cases where there are no CDF providers
+                                            && (from r2 in _dbContext.Referral
+                                                join pv2 in _dbContext.ProviderVenue on r2.ProviderVenueId equals pv2.Id
+                                                join p2 in _dbContext.Provider on pv2.ProviderId equals p2.Id
+                                                where r2.OpportunityItemId == oi.Id
+                                                      && !pv2.IsRemoved
+                                                      && pv2.IsEnabledForReferral
+                                                      && p2.IsCdfProvider
+                                                      && p2.IsEnabledForReferral
+                                                select p2.Id).Any()
                                       select new WorkplaceDto
                                       {
                                           PlacementsKnown = oi.PlacementsKnown,
@@ -116,9 +127,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                 Town = pv.Town,
                                                 Postcode = pv.Postcode
                                             })
-                                      })
-                              }
-                      ).SingleOrDefaultAsync();
+                                      }
+                              }).SingleOrDefaultAsync();
 
             return data;
         }

@@ -13,17 +13,17 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
 {
-    public class When_ReferralEmailService_Is_Called_To_Send_Employer_Email_With_No_Opportunity_Item_Ids
+    public class When_ReferralEmailService_Is_Called_To_Send_Employer_Email_With_No_Workplace_Referrals
     {
         private readonly IEmailService _emailService;
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
 
-        public When_ReferralEmailService_Is_Called_To_Send_Employer_Email_With_No_Opportunity_Item_Ids()
+        public When_ReferralEmailService_Is_Called_To_Send_Employer_Email_With_No_Workplace_Referrals()
         {
             var datetimeProvider = Substitute.For<IDateTimeProvider>();
             _backgroundProcessHistoryRepository = Substitute.For<IRepository<BackgroundProcessHistory>>();
-
+            
             var mapper = Substitute.For<IMapper>();
             var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
 
@@ -42,14 +42,20 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
                 .GetEmployerReferralsAsync(
                     Arg.Any<int>(), Arg.Any<IEnumerable<int>>())
                 .Returns(new ValidEmployerReferralDtoBuilder()
+                    .ClearWorkplaceDetails()
                     .Build());
 
             var functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
+            var itemIds = new List<int>
+            {
+                1
+            };
+
             var referralEmailService = new ReferralEmailService(mapper, datetimeProvider, _emailService,
                 _opportunityRepository, opportunityItemRepository, _backgroundProcessHistoryRepository, functionLogRepository);
 
-            referralEmailService.SendEmployerReferralEmailAsync(1, new List<int>(), 1, "system").GetAwaiter().GetResult();
+            referralEmailService.SendEmployerReferralEmailAsync(1, itemIds, 1, "system").GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -75,9 +81,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
         public void Then_BackgroundProcessHistoryRepository_UpdateWithSpecifiedColumnsOnly_Is_Called_Exactly_Once()
         {
             _backgroundProcessHistoryRepository
-               .Received(1)
-               .UpdateWithSpecifiedColumnsOnlyAsync(Arg.Any<BackgroundProcessHistory>(),
-                   Arg.Any<Expression<Func<BackgroundProcessHistory, object>>[]>());
+                .Received(1)
+                .UpdateWithSpecifiedColumnsOnlyAsync(Arg.Any<BackgroundProcessHistory>(),
+                    Arg.Any<Expression<Func<BackgroundProcessHistory, object>>[]>());
         }
     }
 }

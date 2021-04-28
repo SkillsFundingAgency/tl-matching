@@ -39,13 +39,12 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
             return this;
         }
 
-        public ValidOpportunityBuilder AddReferrals(bool isCompleted = false, bool isSelectedForReferral = false)
+        public ValidOpportunityBuilder AddReferrals(bool isCompleted = false, bool isSelectedForReferral = false, bool isCdfProvider = true)
         {
             _opportunity.OpportunityItem ??= new List<Domain.Models.OpportunityItem>();
             _opportunity.OpportunityItem.Add(
                 new Domain.Models.OpportunityItem
                 {
-                    //Id = _opportunity.OpportunityItem.Count + 1,
                     OpportunityId = 1,
                     OpportunityType = "Referral",
                     JobRole = "Automation Tester",
@@ -71,7 +70,6 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                     {
                         new Referral
                         {
-                            //Id = 1,
                             ProviderVenueId = 1,
                             DistanceFromEmployer = 3.5M,
                             ProviderVenue = new Domain.Models.ProviderVenue
@@ -93,8 +91,153 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                                 {
                                     Id = 1,
                                     UkPrn = 10000546,
-                                    Name = "ProviderName",
+                                    Name = "Provider Name",
                                     DisplayName = "Provider display name",
+                                    OfstedRating = 1,
+                                    PrimaryContact = "PrimaryContact",
+                                    PrimaryContactEmail = "primary@contact.co.uk",
+                                    PrimaryContactPhone = "01777757777",
+                                    SecondaryContact = "SecondaryContact",
+                                    SecondaryContactEmail = "secondary@contact.co.uk",
+                                    SecondaryContactPhone = "01777757777",
+                                    IsCdfProvider = isCdfProvider,
+                                    IsEnabledForReferral = true,
+                                    Source = "PMF_1018",
+                                    CreatedBy = EntityCreationConstants.CreatedByUser,
+                                    CreatedOn = EntityCreationConstants.CreatedOn
+                                }
+                            }
+                        },
+                    }
+                });
+
+            return this;
+        }
+
+        public ValidOpportunityBuilder AddReferralsWithOneNonCdfProvider(bool isCompleted = false, bool isSelectedForReferral = false)
+        {
+            _opportunity.OpportunityItem ??= new List<Domain.Models.OpportunityItem>();
+
+            _opportunity.OpportunityItem.Add(
+                new Domain.Models.OpportunityItem
+                {
+                    OpportunityId = 1,
+                    OpportunityType = "Referral",
+                    JobRole = "Automation Tester",
+                    PlacementsKnown = true,
+                    Placements = 5,
+                    Town = "Coventry",
+                    Postcode = "CV1 2WT",
+                    IsSaved = true,
+                    IsCompleted = isCompleted,
+                    IsSelectedForReferral = isSelectedForReferral,
+                    CreatedBy = EntityCreationConstants.CreatedByUser,
+                    CreatedOn = EntityCreationConstants.CreatedOn,
+                    ModifiedBy = EntityCreationConstants.ModifiedByUser,
+                    ModifiedOn = EntityCreationConstants.ModifiedOn,
+                    Route = new Domain.Models.Route
+                    {
+                        Id = 1,
+                        Name = "Test Route",
+                        CreatedBy = EntityCreationConstants.CreatedByUser,
+                        CreatedOn = EntityCreationConstants.CreatedOn,
+                    },
+                    Referral = new List<Referral>
+                    {
+                        new Referral
+                        {
+                            ProviderVenueId = 1,
+                            DistanceFromEmployer = 3.5M,
+                            ProviderVenue = new Domain.Models.ProviderVenue
+                            {
+                                Id = 1,
+                                ProviderId = 1,
+                                Postcode = "AA1 1AA",
+                                Town = "Town",
+                                County = "County",
+                                Name = "Venue name",
+                                Latitude = 52.648869M,
+                                Longitude = 2.095574M,
+                                IsEnabledForReferral = true,
+                                IsRemoved = false,
+                                Source = "Test",
+                                CreatedBy = EntityCreationConstants.CreatedByUser,
+                                CreatedOn = EntityCreationConstants.CreatedOn,
+                                Provider = new Domain.Models.Provider
+                                {
+                                    Id = 1,
+                                    UkPrn = 10000546,
+                                    Name = "Provider Name",
+                                    DisplayName = "Provider display name",
+                                    OfstedRating = 1,
+                                    PrimaryContact = "PrimaryContact",
+                                    PrimaryContactEmail = "primary@contact.co.uk",
+                                    PrimaryContactPhone = "01777757777",
+                                    SecondaryContact = "SecondaryContact",
+                                    SecondaryContactEmail = "secondary@contact.co.uk",
+                                    SecondaryContactPhone = "01777757777",
+                                    IsCdfProvider = false,
+                                    IsEnabledForReferral = true,
+                                    Source = "PMF_1018",
+                                    CreatedBy = EntityCreationConstants.CreatedByUser,
+                                    CreatedOn = EntityCreationConstants.CreatedOn
+                                }
+                            }
+                        }
+                    }
+                });
+
+            _opportunity.OpportunityItem.Add(
+                new Domain.Models.OpportunityItem
+                {
+                    OpportunityId = 1,
+                    OpportunityType = "Referral",
+                    JobRole = "Tea Taster",
+                    PlacementsKnown = true,
+                    Placements = 2,
+                    Town = "Coventry",
+                    Postcode = "CV1 2WT",
+                    IsSaved = true,
+                    IsCompleted = isCompleted,
+                    IsSelectedForReferral = isSelectedForReferral,
+                    CreatedBy = EntityCreationConstants.CreatedByUser,
+                    CreatedOn = EntityCreationConstants.CreatedOn,
+                    ModifiedBy = EntityCreationConstants.ModifiedByUser,
+                    ModifiedOn = EntityCreationConstants.ModifiedOn,
+                    Route = new Domain.Models.Route
+                    {
+                        Id = 2,
+                        Name = "Test Route 2",
+                        CreatedBy = EntityCreationConstants.CreatedByUser,
+                        CreatedOn = EntityCreationConstants.CreatedOn,
+                    },
+                    Referral = new List<Referral>
+                    {
+                        new Referral
+                        {
+                            ProviderVenueId = 2,
+                            DistanceFromEmployer = 5.0M,
+                            ProviderVenue = new Domain.Models.ProviderVenue
+                            {
+                                Id = 2,
+                                ProviderId = 2,
+                                Postcode = "BB2 2BB",
+                                Town = "Town",
+                                County = "County",
+                                Name = "Venue name",
+                                Latitude = 52.648869M,
+                                Longitude = 2.095574M,
+                                IsEnabledForReferral = true,
+                                IsRemoved = false,
+                                Source = "Test",
+                                CreatedBy = EntityCreationConstants.CreatedByUser,
+                                CreatedOn = EntityCreationConstants.CreatedOn,
+                                Provider = new Domain.Models.Provider
+                                {
+                                    Id = 2,
+                                    UkPrn = 10000321,
+                                    Name = "Provider Name 2",
+                                    DisplayName = "Provider display name 2",
                                     OfstedRating = 1,
                                     PrimaryContact = "PrimaryContact",
                                     PrimaryContactEmail = "primary@contact.co.uk",
@@ -107,7 +250,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                                     Source = "PMF_1018",
                                     CreatedBy = EntityCreationConstants.CreatedByUser,
                                     CreatedOn = EntityCreationConstants.CreatedOn
-                                },
+                                }
                             }
                         }
                     }
@@ -122,7 +265,6 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
             _opportunity.OpportunityItem.Add(
                 new Domain.Models.OpportunityItem
                 {
-                    //Id = _opportunity.OpportunityItem.Count + 1,
                     OpportunityId = 1,
                     OpportunityType = "ProvisionGap",
                     JobRole = "Unknown job role",
@@ -137,7 +279,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                         new Domain.Models.ProvisionGap
                         {
                             Id = 1,
-                            
+
                             HadBadExperience = true,
                             NoSuitableStudent = true,
                             ProvidersTooFarAway = true

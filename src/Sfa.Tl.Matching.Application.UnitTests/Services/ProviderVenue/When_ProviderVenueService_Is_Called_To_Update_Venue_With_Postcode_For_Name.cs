@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<ProviderVenueDetailViewModel, Domain.Models.ProviderVenue>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<ProviderVenueDetailViewModel, Domain.Models.ProviderVenue>(httpContextAccessor) :
+                            new LoggedInUserNameResolver<ProviderVenueDetailViewModel, Domain.Models.ProviderVenue>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<ProviderVenueDetailViewModel, Domain.Models.ProviderVenue>(dateTimeProvider) :
                                 type.Name.Contains("VenueNameResolver") ?

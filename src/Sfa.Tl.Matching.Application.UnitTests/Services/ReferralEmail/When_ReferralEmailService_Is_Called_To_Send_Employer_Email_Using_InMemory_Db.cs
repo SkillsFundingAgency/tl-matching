@@ -40,7 +40,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
                         ILogger<GenericRepository<FunctionLog>> functionLogLogger
                         )
         {
-            //Arrange
             backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
@@ -56,7 +55,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
             //Act
             await sut.SendEmployerReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
-            //Assert
             await emailService.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
 
@@ -76,7 +74,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
             ILogger<GenericRepository<FunctionLog>> functionLogLogger
         )
         {
-            //Arrange
             backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
@@ -86,7 +83,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
             var functionLogRepository = new GenericRepository<FunctionLog>(functionLogLogger, dbContext);
-            
+
             var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo, functionLogRepository);
 
             var itemIds = itemRepo.GetManyAsync(oi => oi.Opportunity.Id == opportunity.Id
@@ -96,18 +93,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
 
             var expectedResult = await GetExpectedResult(repo, opportunity.Id, itemIds);
 
-            //Act
             await sut.SendEmployerReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
-            //Assert
-            await emailService.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(), 
+            await emailService.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(),
                 Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
 
-            await emailService.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(), 
+            await emailService.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(),
                 Arg.Is<IDictionary<string, string>>(tokens => tokens.ContainsKey("placements_list")), Arg.Any<string>());
 
-            await emailService.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(), 
-                Arg.Is<IDictionary<string, string>>(tokens => tokens.ContainsKey("placements_list") && tokens["placements_list"] == expectedResult), 
+            await emailService.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(),
+                Arg.Is<IDictionary<string, string>>(tokens => tokens.ContainsKey("placements_list") && tokens["placements_list"] == expectedResult),
                 Arg.Any<string>());
 
         }
@@ -128,7 +123,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
                             ILogger<GenericRepository<FunctionLog>> functionLogLogger
         )
         {
-            //Arrange
             backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
@@ -138,39 +132,37 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
             var functionLogRepository = new GenericRepository<FunctionLog>(functionLogLogger, dbContext);
-            
+
             var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo, functionLogRepository);
 
-            //Act
             await sut.SendEmployerReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
-            //Assert
-            await emailService.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(), 
-                Arg.Any<IDictionary<string, string>>(), 
+            await emailService.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(),
+                Arg.Any<IDictionary<string, string>>(),
                 Arg.Any<string>());
 
-            await emailService.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(), 
+            await emailService.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("employer_contact_name") && tokens["employer_contact_name"] == opportunity.EmployerContact.ToTitleCase()), Arg.Any<string>());
 
-            await emailService.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(), 
+            await emailService.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
-                    tokens.ContainsKey("employer_business_name") && tokens["employer_business_name"] == opportunity.Employer.CompanyName.ToTitleCase()), 
+                    tokens.ContainsKey("employer_business_name") && tokens["employer_business_name"] == opportunity.Employer.CompanyName.ToTitleCase()),
                 Arg.Any<string>());
 
-            await emailService.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(), 
+            await emailService.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
-                    tokens.ContainsKey("employer_contact_number") && tokens["employer_contact_number"] == opportunity.EmployerContactPhone), 
+                    tokens.ContainsKey("employer_contact_number") && tokens["employer_contact_number"] == opportunity.EmployerContactPhone),
                 Arg.Any<string>());
 
-            await emailService.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(), 
-                Arg.Is<IDictionary<string, string>>(tokens => 
-                    tokens.ContainsKey("employer_contact_email") && tokens["employer_contact_email"] == opportunity.EmployerContactEmail), 
+            await emailService.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(),
+                Arg.Is<IDictionary<string, string>>(tokens =>
+                    tokens.ContainsKey("employer_contact_email") && tokens["employer_contact_email"] == opportunity.EmployerContactEmail),
                 Arg.Any<string>());
         }
 
         [Theory, AutoDomainData]
-        public async Task Then_Placements_List_Should_Be_Empty_If_Opp_Items_Not_Saved(
+        public async Task Then_No_Email_Sent_If_Opp_Items_Not_Saved(
             MatchingDbContext dbContext,
             IDateTimeProvider dateTimeProvider,
             MapperConfiguration mapperConfiguration,
@@ -185,7 +177,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
             ILogger<GenericRepository<FunctionLog>> functionLogLogger
         )
         {
-            //Arrange
             backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory, false, false);
@@ -195,31 +186,18 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
             var functionLogRepository = new GenericRepository<FunctionLog>(functionLogLogger, dbContext);
-            
+
             var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo, functionLogRepository);
 
-            var itemIds = itemRepo.GetManyAsync(oi => oi.Opportunity.Id == opportunity.Id
-                                                 && oi.IsSaved
-                                                 && oi.IsSelectedForReferral
-                                                 && !oi.IsCompleted).Select(oi => oi.Id);
-
-            var expectedResult = await GetExpectedResult(repo, opportunity.Id, itemIds);
-
-            //Act
             await sut.SendEmployerReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
-            //Assert
-            await emailService.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(), 
-                Arg.Is<IDictionary<string, string>>(tokens => tokens.ContainsKey("placements_list") && tokens["placements_list"] == string.Empty), 
-                Arg.Any<string>());
-
-            await emailService.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(), 
-                Arg.Is<IDictionary<string, string>>(tokens => tokens.ContainsKey("placements_list") && tokens["placements_list"] == expectedResult), 
+            await emailService.DidNotReceive().SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(),
+                Arg.Any<IDictionary<string, string>>(),
                 Arg.Any<string>());
         }
 
         [Theory, AutoDomainData]
-        public async Task Then_Placements_List_Should_Be_Empty_If_Not_Selected_For_Referral(
+        public async Task Then_No_Email_Sent_If_Not_Selected_For_Referral(
             MatchingDbContext dbContext,
             IDateTimeProvider dateTimeProvider,
             MapperConfiguration mapperConfiguration,
@@ -234,7 +212,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
             ILogger<GenericRepository<FunctionLog>> functionLogLogger
         )
         {
-            //Arrange
             backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory, false, false);
@@ -244,28 +221,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
             var functionLogRepository = new GenericRepository<FunctionLog>(functionLogLogger, dbContext);
-            
+
             var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo, functionLogRepository);
 
-            var itemIds = itemRepo.GetManyAsync(oi => oi.Opportunity.Id == opportunity.Id
-                                                 && oi.IsSaved
-                                                 && oi.IsSelectedForReferral
-                                                 && !oi.IsCompleted).Select(oi => oi.Id);
-
-            var expectedResult = await GetExpectedResult(repo, opportunity.Id, itemIds);
-
-            //Act
             await sut.SendEmployerReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
-            //Assert
-            await emailService.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(), 
-                Arg.Is<IDictionary<string, string>>(tokens =>
-                    tokens.ContainsKey("placements_list") && tokens["placements_list"] == string.Empty), 
-                Arg.Any<string>());
-
-            await emailService.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(), 
-                Arg.Is<IDictionary<string, string>>(tokens =>
-                    tokens.ContainsKey("placements_list") && tokens["placements_list"] == expectedResult), 
+            await emailService.DidNotReceive().SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(),
+                Arg.Any<IDictionary<string, string>>(),
                 Arg.Any<string>());
         }
 
@@ -285,7 +247,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
                         ILogger<GenericRepository<FunctionLog>> functionLogLogger
                         )
         {
-            //Arrange
             backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
@@ -298,10 +259,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
 
             var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo, functionLogRepository);
 
-            //Act
             await sut.SendEmployerReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
-            //Assert
             await emailService.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
 
             var processStatus = dbContext.BackgroundProcessHistory
