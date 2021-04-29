@@ -13,13 +13,13 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.8.1" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.8.3" />
     <PackageReference Include="Azure.Storage.Queues" Version="12.6.1" />
     <PackageReference Include="CsvHelper" Version="15.0.5" />
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.12.3" />
-    <PackageReference Include="FluentValidation" Version="10.0.4" />
-    <PackageReference Include="GovukNotify" Version="4.0.0" />
-    <PackageReference Include="Humanizer.Core.uk" Version="2.8.26" />
+    <PackageReference Include="FluentValidation" Version="10.1.0" />
+    <PackageReference Include="GovukNotify" Version="4.0.1" />
+    <PackageReference Include="Humanizer.Core.uk" Version="2.9.9" />
     <PackageReference Include="JWT" Version="7.3.1" />
     <PackageReference Include="Microsoft.Azure.Cosmos.Table" Version="1.0.8" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
