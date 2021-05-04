@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using AutoMapper;
 using FluentValidation;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Azure.WebJobs;
