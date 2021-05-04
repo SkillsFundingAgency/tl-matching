@@ -27,15 +27,15 @@ namespace Sfa.Tl.Matching.Application.Services
             var blobClient = await GetBlobClient(
                 dto.ImportType.ToString().ToLowerInvariant(),
                 dto.FileName);
-           
+
             await using var uploadFileStream = new MemoryStream(dto.Data);
 
-            var metadata = new Dictionary<string, string> 
+            var metadata = new Dictionary<string, string>
             {
                 { ApplicationConstants.CreatedByMetadataKey, dto.UserName }
             };
 
-            await blobClient.UploadAsync(uploadFileStream, //overwrite:true
+            await blobClient.UploadAsync(uploadFileStream,
                 metadata: metadata,
                 httpHeaders: new BlobHttpHeaders { ContentType = dto.ContentType });
 
@@ -43,9 +43,9 @@ namespace Sfa.Tl.Matching.Application.Services
 
             _logger.LogInformation($"Successfully uploaded {dto.FileName} to {dto.ImportType} folder");
         }
-        
+
         private async Task<BlobClient> GetBlobClient(
-            string containerName, 
+            string containerName,
             string fileName)
         {
             var blobContainerClient = await GetContainerAsync(containerName);
