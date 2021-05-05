@@ -1,8 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Text;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Azure.Storage;
-using Microsoft.Azure.Storage.Queue;
+using Azure.Storage.Queues;
+using Azure.Storage.Queues.Models;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Models.Command;
 using Sfa.Tl.Matching.Models.Enums;
@@ -14,33 +16,40 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MessageQueue
     public class When_MessageQueueService_Is_Called_To_Push_New_Provider_Quarterly_Request_Message
     {
         private readonly MessageQueueService _messageQueueService;
-        private readonly CloudQueue _queue;
+        private readonly QueueClient _queueClient;
 
         public When_MessageQueueService_Is_Called_To_Push_New_Provider_Quarterly_Request_Message()
         {
-            var storageAccount = CloudStorageAccount.Parse(TestConfiguration.MatchingConfiguration.BlobStorageConnectionString);
-            var queueClient = storageAccount.CreateCloudQueueClient();
-            _queue = queueClient.GetQueueReference(QueueName.ProviderQuarterlyRequestQueue);
+            _queueClient = new QueueClient(
+                TestConfiguration.MatchingConfiguration.BlobStorageConnectionString,
+                QueueName.ProviderQuarterlyRequestQueue);
+
             _messageQueueService = new MessageQueueService(new NullLogger<MessageQueueService>(), TestConfiguration.MatchingConfiguration);
         }
 
         [Fact]
         public async Task Then_Message_Is_Queued()
         {
-            CloudQueueMessage retrievedMessage = null;
+            QueueMessage retrievedMessage = null;
+
             try
             {
                 await _messageQueueService.PushProviderQuarterlyRequestMessageAsync(new SendProviderQuarterlyUpdateEmail
-                    {BackgroundProcessHistoryId = 1001});
-                retrievedMessage = await _queue.GetMessageAsync();
+                { BackgroundProcessHistoryId = 1001 });
+                retrievedMessage = await _queueClient.ReceiveMessageAsync();
+
                 retrievedMessage.Should().NotBeNull();
-                retrievedMessage.AsString.Should().Contain("1001");
+
+                //Message is base-64 encoded
+                var base64EncodedBytes = Convert.FromBase64String(retrievedMessage.MessageText);
+                var messageText = Encoding.UTF8.GetString(base64EncodedBytes);
+                messageText.Should().Contain("1001");
             }
             finally
             {
                 if (retrievedMessage != null)
                 {
-                    await _queue.DeleteMessageAsync(retrievedMessage);
+                    await _queueClient.DeleteMessageAsync(retrievedMessage.MessageId, retrievedMessage.PopReceipt);
                 }
             }
         }
