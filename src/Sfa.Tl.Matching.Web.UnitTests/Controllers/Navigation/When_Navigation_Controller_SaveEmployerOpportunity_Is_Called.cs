@@ -16,8 +16,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Navigation
         {
             _opportunityService = Substitute.For<IOpportunityService>();
             var backLinkService = Substitute.For<INavigationService>();
-            
-            var navigationController = new NavigationController(_opportunityService,backLinkService);
+
+            var navigationController = new NavigationController(_opportunityService, backLinkService);
 
             _result = navigationController.SaveEmployerOpportunityAsync(1).GetAwaiter().GetResult();
         }
