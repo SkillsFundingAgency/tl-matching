@@ -8,29 +8,25 @@ SET @TicketNo  = 'TLWP-1471';
 IF NOT EXISTS (SELECT 1 FROM [dbo].[DBProjDeployLog] WHERE [Name] = @scriptName )
 BEGIN
 
-	DECLARE @updatedByUser NVARCHAR(50) = 'Update Script TLWP-1471'
+	--Remove incorrectly added provider
+	DECLARE @ukPrnToDelete BIGINT = 10064234
 
-	DECLARE @providersToRemove TABLE (
-	  providerId INT NOT NULL
-	)
+	DELETE ProviderQualification
+	FROM		Provider p
+	INNER JOIN	providervenue pv
+	ON			pv.ProviderId = p.Id
+	INNER JOIN	ProviderQualification pvq
+	ON			pvq.ProviderVenueId = pv.Id
+	WHERE Ukprn = @ukPrnToDelete
 
-	DECLARE @providersToRemove TABLE (
-	  providerId INT NOT NULL
-	)
+	DELETE ProviderVenue
+	FROM		Provider p
+	INNER JOIN	ProviderVenue pv
+	ON			pv.ProviderId = p.Id
+	WHERE ukprn = @ukPrnToDelete
 
-	declare @users TABLE (
-	  username NVARCHAR(50) NOT NULL
-	)
-
-	--TODO: Remove provider
-
-	--UPDATE ProviderVenue
-	--SET IsDeleted = 1,
-	--ModifiedOn = getutcdate(),
-	--ModifiedBy = @updatedByUser
-	--WHERE Id IN (SELECT ProviderId 
-	--			 FROM @providersToRemove)
-
+	DELETE FROM	Provider 
+	WHERE ukprn = @ukPrnToDelete
 
 	--Update deployment log
     INSERT INTO [dbo].[DBProjDeployLog]( [Date], [Name], [MD5], [Revision] )
