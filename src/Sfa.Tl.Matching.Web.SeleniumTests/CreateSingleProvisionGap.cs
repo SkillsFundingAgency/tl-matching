@@ -7,21 +7,19 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.SeleniumTests
 {
-    public class CreateSingleProvisionGap : IClassFixture<SeleniumServerFactory<Startup>>, IDisposable
+    public class CreateSingleProvisionGap : IClassFixture<SeleniumWebApplicationFactory<Startup>>, IDisposable
     {
         private readonly StartPage _startPage;
-        public IWebDriver Driver { get; }
+        private IWebDriver Driver { get; }
 
-        public CreateSingleProvisionGap(SeleniumServerFactory<Startup> server)
+        public CreateSingleProvisionGap(SeleniumWebApplicationFactory<Startup> server)
         {
             server.CreateClient();
-            var opts = new ChromeOptions();
-            opts.AddArgument("--headless");
-            var driver = new RemoteWebDriver(opts);
-            driver.Navigate().GoToUrl(server.RootUri + "/Start");
-            _startPage = new StartPage(driver);
-
-            Driver = driver;
+            var driverOptions = new ChromeOptions();
+            driverOptions.AddArgument("--headless");
+            Driver = new RemoteWebDriver(driverOptions);
+            Driver.Navigate().GoToUrl(server.GetServerAddressForRelativeUrl("Start"));
+            _startPage = new StartPage(Driver);
         }
 
         [Fact(DisplayName = "Create Single Referral")]

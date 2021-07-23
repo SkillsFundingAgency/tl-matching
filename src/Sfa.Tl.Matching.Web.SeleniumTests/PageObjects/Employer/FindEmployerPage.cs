@@ -10,7 +10,8 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Employer
         private readonly By _companyName = By.Id("CompanyName");
         private readonly By _continueButton = By.Id("tl-continue");
 
-        private const string Title = "Who is the employer?";
+        private const string Title = "Who is the employer? - Match employers with providers for industry placements - GOV.UK";
+        private const string HeaderText = "Who is the employer?\r\nStart typing their business name";
 
         public FindEmployerPage(IWebDriver driver) : base(driver)
         {
@@ -20,7 +21,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Employer
         {
             Driver.FindElement(_companyName).SendKeys(companyName);
             Thread.Sleep(2000);
-            
+
             return this;
         }
 
@@ -33,9 +34,8 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Employer
 
         public void AssertContent()
         {
-            // TODO FIX
-            //AssertTitle(Title);
-            //AssertHeader1(Title);
+            AssertTitle(Title);
+            AssertHeader1(HeaderText);
         }
     }
 }

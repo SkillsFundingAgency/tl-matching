@@ -20,7 +20,8 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Opportunity
         private readonly By _studentsWantedValue = By.XPath("//*[@id='main-content']/div[2]/div/form/table/tbody/tr/td[3]");
         private readonly By _providersValue = By.XPath("//*[@id='main-content']/div[2]/div/form/table/tbody/tr/td[4]");
 
-        private const string Title = "All opportunities";
+        private const string Title = "All opportunities - Match employers with providers for industry placements - GOV.UK";
+        private const string HeaderText = "All opportunities";
 
         public OpportunityBasketPage(IWebDriver driver) : base(driver)
         {
@@ -48,7 +49,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Opportunity
         public void AssertContent()
         {
             AssertTitle(Title);
-            AssertHeader1(Title);
+            AssertHeader1(HeaderText);
         }
     }
 }

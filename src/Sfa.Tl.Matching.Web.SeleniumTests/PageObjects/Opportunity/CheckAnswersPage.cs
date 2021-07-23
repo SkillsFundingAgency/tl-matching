@@ -22,7 +22,8 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Opportunity
         private readonly By _provider1Value = By.XPath("//*[@id='main-content']/div/div/p[1]");
         private readonly By _provider1DistanceValue = By.XPath("//*[@id='main-content']/div/div/p[2]");
         
-        private const string Title = "Check answers";
+        private const string Title = "Check answers - Match employers with providers for industry placements - GOV.UK";
+        private const string HeaderText = "Check answers";
 
         public CheckAnswersPage(IWebDriver driver) : base(driver)
         {
@@ -73,7 +74,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Opportunity
         public void AssertContent()
         {
             AssertTitle(Title);
-            AssertHeader1(Title);
+            AssertHeader1(HeaderText);
         }
     }
 }

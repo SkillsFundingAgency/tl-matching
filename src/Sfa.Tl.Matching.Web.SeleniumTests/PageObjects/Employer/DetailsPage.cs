@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Employer
         private readonly By _contactPhone= By.Id("EmployerContactPhone");
         private readonly By _confirmButton = By.Id("tl-confirm");
 
-        private const string Title = "Confirm contact details for industry placements";
+        private const string Title = "Confirm contact details for industry placements - Match employers with providers for industry placements - GOV.UK";
         private const string HeaderText = "Confirm that the employer’s contact details for industry placements are accurate and up-to-date";
 
         public DetailsPage(IWebDriver driver) : base(driver)

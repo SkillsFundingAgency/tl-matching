@@ -11,7 +11,8 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.OpportunityProximity
         private readonly By _postcode = By.Id("Postcode");
         private readonly By _searchButton = By.Id("tl-search");
 
-        private const string Title = "Set up placement opportunity";
+        private const string Title = "Set up placement opportunity - Match employers with providers for industry placements - GOV.UK";
+        private const string HeaderText = "Set up placement opportunity";
 
         public OpportunityProximityIndexPage(IWebDriver driver) : base(driver)
         {
@@ -39,7 +40,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.OpportunityProximity
         public void AssertContent()
         {
             AssertTitle(Title);
-            AssertHeader1(Title);
+            AssertHeader1(HeaderText);
         }
     }
 }

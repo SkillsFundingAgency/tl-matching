@@ -15,8 +15,9 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.OpportunityProximity
         private readonly By _firstProvider = By.Id("SearchResults_Results_0__IsSelected");
         private readonly By _continueButton = By.Id("tl-continue");
 
-        private const string Title = "Select providers for this opportunity";
-
+        private const string Title = "Select providers for this opportunity - Match employers with providers for industry placements - GOV.UK";
+        private const string HeaderText = "Select providers for this opportunity";
+        
         public OpportunityProximityResultsPage(IWebDriver driver) : base(driver)
         {
         }
@@ -62,7 +63,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.OpportunityProximity
         public void AssertContent()
         {
             AssertTitle(Title);
-            AssertHeader1(Title);
+            AssertHeader1(HeaderText);
         }
     }
 }
