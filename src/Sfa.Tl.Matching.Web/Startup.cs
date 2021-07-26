@@ -87,7 +87,7 @@ namespace Sfa.Tl.Matching.Web
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
 
-            services.AddControllersWithViews()
+            var mvcBuilder = services.AddControllersWithViews()
                 .AddMvcOptions(config =>
                 {
                     var policy = new AuthorizationPolicyBuilder()
@@ -108,9 +108,12 @@ namespace Sfa.Tl.Matching.Web
                 });
 
             if (!isConfigLocalOrDev)
+            {
                 AddAuthentication(services);
+            }
             else
             {
+                mvcBuilder.AddRazorRuntimeCompilation();
                 services.AddAuthentication(options =>
                     {
                         options.DefaultAuthenticateScheme = "Local Scheme";

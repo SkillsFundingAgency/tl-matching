@@ -7,21 +7,21 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.SeleniumTests
 {
-    public class CreateSingleReferral : IClassFixture<SeleniumServerFactory<Startup>>, IDisposable
+    public class CreateSingleReferral : IClassFixture<SeleniumWebApplicationFactory<Startup>>, IDisposable
     {
         private readonly StartPage _startPage;
-        public IWebDriver Driver { get; }
+        private IWebDriver Driver { get; }
 
-        public CreateSingleReferral(SeleniumServerFactory<Startup> server)
+        public CreateSingleReferral(SeleniumWebApplicationFactory<Startup> server)
         {
             server.CreateClient();
-            var opts = new ChromeOptions();
-            opts.AddArgument("--headless");
-            var driver = new RemoteWebDriver(opts);
-            driver.Navigate().GoToUrl(server.RootUri + "/Start");
-            _startPage = new StartPage(driver);
+            var driverOptions = new ChromeOptions();
+            driverOptions.AddArgument("--headless");
+            driverOptions.AddArgument("--enable-javascript");
 
-            Driver = driver;
+            Driver = new RemoteWebDriver(driverOptions);
+            Driver.Navigate().GoToUrl(server.GetServerAddressForRelativeUrl("Start"));
+            _startPage = new StartPage(Driver);
         }
 
         [Fact(DisplayName = "Create Single Referral")]
@@ -42,6 +42,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
             placementInformationPage.SelectPlacementsKnown();
 
             var findEmployerPage = placementInformationPage.ClickContinue();
+
             findEmployerPage.AssertContent();
             findEmployerPage = findEmployerPage.EnterCompanyName("Company Name For Selection");
 

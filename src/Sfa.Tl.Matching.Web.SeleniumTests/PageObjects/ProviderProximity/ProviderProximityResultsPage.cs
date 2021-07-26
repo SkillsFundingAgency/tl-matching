@@ -11,7 +11,8 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.ProviderProximity
         private readonly By _finishButton = By.Id("tl-finish");
         private readonly By _searchCount = By.Id("tl-search-count");
 
-        private const string Title = "All providers in an area";
+        private const string Title = "All providers in an area - Match employers with providers for industry placements - GOV.UK";
+        private const string HeaderText = "Providers within 30 miles of CV1 2WT";
 
         public ProviderProximityResultsPage(IWebDriver driver) : base(driver)
         {
@@ -51,7 +52,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.ProviderProximity
         public void AssertContent()
         {
             AssertTitle(Title);
-            AssertHeader1("Providers within 30 miles of CV1 2WT");
+            AssertHeader1(HeaderText);
         }
     }
 }

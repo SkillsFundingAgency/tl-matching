@@ -44,12 +44,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return opportunities.ReferralCount switch
             {
-                0 when opportunityItemCount >= 1 => RedirectToRoute("GetPlacementInformation", new {opportunityItemId}),
+                0 when opportunityItemCount >= 1 => RedirectToRoute("GetPlacementInformation", new { opportunityItemId }),
                 0 when opportunities.ProvisionGapCount == 1 => RedirectToRoute("GetEmployerDetails",
-                    new {opportunityId = viewModel.OpportunityId, opportunityItemId}),
+                    new { opportunityId = viewModel.OpportunityId, opportunityItemId }),
                 0 when opportunities.ProvisionGapCount == 0 => RedirectToRoute("GetEmployerDetails",
-                    new {opportunityId = viewModel.OpportunityId, opportunityItemId}),
-                _ => RedirectToRoute("GetPlacementInformation", new {opportunityItemId})
+                    new { opportunityId = viewModel.OpportunityId, opportunityItemId }),
+                _ => RedirectToRoute("GetPlacementInformation", new { opportunityItemId })
             };
         }
 
@@ -110,11 +110,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (prevUrl.Contains("create-provider") && viewModel.ProviderId != 0)
             {
                 await _backLinkService.GetBackLinkAsync(HttpContext.User.GetUserName());
-                return RedirectToRoute("GetProviderDetail", viewModel.ProviderId);
+                return RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });
             }
 
             return Redirect(prevUrl);
         }
-
     }
 }

@@ -14,7 +14,8 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Opportunity
         private readonly By _placements = By.Id("Placements");
         private readonly By _continueButton = By.Id("tl-continue");
 
-        private const string Title = "Placement information";
+        private const string Title = "Placement information - Match employers with providers for industry placements - GOV.UK";
+        private const string HeaderText = "Placement information";
 
         public PlacementInformationPage(IWebDriver driver) : base(driver)
         {
@@ -53,7 +54,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Opportunity
         public void AssertContent()
         {
             AssertTitle(Title);
-            AssertHeader1(Title);
+            AssertHeader1(HeaderText);
         }
     }
 }

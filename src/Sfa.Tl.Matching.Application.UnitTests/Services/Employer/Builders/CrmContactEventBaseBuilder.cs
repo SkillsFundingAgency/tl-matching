@@ -5,7 +5,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders
 {
     public static class CrmContactEventBaseBuilder
     {
-        public static CrmContactEventBase Build(bool isValid) => new CrmContactEventBase
+        public static CrmContactEventBase Build() => new CrmContactEventBase
         {
             ContactId = Guid.NewGuid().ToString(),
 

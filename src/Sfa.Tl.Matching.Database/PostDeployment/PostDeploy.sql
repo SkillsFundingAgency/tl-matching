@@ -11,6 +11,4 @@ DECLARE @TicketNo VARCHAR(32)
 :r ".\Seed Email Templates.sql"
 :r ".\Remove Obsolete Tables.sql"
 :r ".\Seed UserProfile.sql"
-:r ".\Update Qualification Titles.sql"
-:r ".\Delete Pipeline Opportunities.sql"
-:r ".\Delete Pipeline Opportunities 2.sql"
+:r ".\CDF 2021 Cleanup.sql"

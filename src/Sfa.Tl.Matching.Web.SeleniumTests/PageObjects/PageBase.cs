@@ -9,17 +9,17 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects
 
         private readonly By _header1 = By.TagName("h1");
 
-        public PageBase(IWebDriver driver)
+        protected PageBase(IWebDriver driver)
         {
             Driver = driver;
         }
 
-        public void AssertTitle(string title)
+        protected void AssertTitle(string title)
         {
-            Driver.Title.Should().Be($"{title} - Match employers with providers for industry placements - GOV.UK");
+            Driver.Title.Should().Be($"{title}");
         }
 
-        public void AssertHeader1(string header1)
+        protected void AssertHeader1(string header1)
         {
             Driver.FindElement(_header1).Text.Should().Be(header1);
         }

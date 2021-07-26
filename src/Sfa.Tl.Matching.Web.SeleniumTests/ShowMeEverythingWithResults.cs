@@ -8,21 +8,20 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.SeleniumTests
 {
-    public class ShowMeEverythingWithResults : IClassFixture<SeleniumServerFactory<Startup>>, IDisposable
+    public class ShowMeEverythingWithResults : IClassFixture<SeleniumWebApplicationFactory<Startup>>, IDisposable
     {
         private readonly StartPage _startPage;
-        public IWebDriver Driver { get; }
+        private IWebDriver Driver { get; }
 
-        public ShowMeEverythingWithResults(SeleniumServerFactory<Startup> server)
+        public ShowMeEverythingWithResults(SeleniumWebApplicationFactory<Startup> server)
         {
             server.CreateClient();
-            var opts = new ChromeOptions();
-            opts.AddArgument("--headless");
-            var driver = new RemoteWebDriver(opts);
-            driver.Navigate().GoToUrl(server.RootUri + "/Start");
-            _startPage = new StartPage(driver);
+            var driverOptions = new ChromeOptions();
+            driverOptions.AddArgument("--headless");
+            Driver = new RemoteWebDriver(driverOptions);
+            Driver.Navigate().GoToUrl(server.GetServerAddressForRelativeUrl("Start"));
 
-            Driver = driver;
+            _startPage = new StartPage(Driver);
         }
 
         [Fact(DisplayName = "Search")]
