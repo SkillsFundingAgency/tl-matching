@@ -49,9 +49,9 @@ namespace Sfa.Tl.Matching.Functions
         private void RegisterWebJobServices(IServiceCollection services)
         {
             //https://stackoverflow.com/questions/57564396/how-do-i-mix-custom-parameter-binding-with-dependency-injection-in-azure-functio
-            var webJobsBuilder = services.AddWebJobs(x => { });
-            webJobsBuilder
-                .AddAzureStorage()
+            var webJobsBuilder = services
+                .AddWebJobs(_ => { })
+                //.AddAzureStorage()
                 .AddAzureStorageCoreServices();
         }
 
@@ -170,7 +170,7 @@ namespace Sfa.Tl.Matching.Functions
 
         private static void RegisterNotificationsApi(IServiceCollection services, string apiKey)
         {
-            services.AddTransient<IAsyncNotificationClient, NotificationClient>(provider => new NotificationClient(apiKey));
+            services.AddTransient<IAsyncNotificationClient, NotificationClient>(_ => new NotificationClient(apiKey));
         }
 
         private static void RegisterApiClient(IServiceCollection services)
@@ -179,7 +179,7 @@ namespace Sfa.Tl.Matching.Functions
             services.AddHttpClient<ILocationApiClient, LocationApiClient>();
             services.AddHttpClient<ICalendarApiClient, CalendarApiClient>();
 
-            services.AddTransient<IProviderQueryPortTypeClient>(svcProvider =>
+            services.AddTransient<IProviderQueryPortTypeClient>(_ =>
             {
                 var client = new ProviderQueryPortTypeClient();
 
