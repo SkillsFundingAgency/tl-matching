@@ -1,11 +1,15 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using Azure;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using Microsoft.Azure.Storage.Blob;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Functions.UnitTests.Builders;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
@@ -18,8 +22,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.LearningAimReference
 
         public When_ImportLearningAimReference_Function_Blob_Trigger_Fires()
         {
-            var blobStream = Substitute.For<ICloudBlob>();
-            blobStream.OpenReadAsync(null, null, null).Returns(new MemoryStream());
+            var blobClient = new BlobClientBuilder().Build();
             var context = new ExecutionContext();
             var logger = Substitute.For<ILogger>();
 
@@ -30,7 +33,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.LearningAimReference
                 _functionLogRepository);
 
             learningAimReferenceFunctions.ImportLearningAimReferenceAsync(
-                blobStream,
+                blobClient,
                 "test",
                 context,
                 logger).GetAwaiter().GetResult();
@@ -43,7 +46,6 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.LearningAimReference
                 .Received(1)
                 .BulkImportAsync(Arg.Any<LearningAimReferenceStagingFileImportDto>());
         }
-
 
         [Fact]
         public void FunctionLogRepository_Create_Is_Not_Called()
