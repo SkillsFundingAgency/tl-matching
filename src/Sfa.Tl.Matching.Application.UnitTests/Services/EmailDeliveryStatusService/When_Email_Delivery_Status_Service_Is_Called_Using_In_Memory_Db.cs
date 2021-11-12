@@ -225,7 +225,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
 
             var existingData = dbContext.EmailHistory.Where(history => history.OpportunityId == opportunity.Id).ToList();
             existingData.Select(history => history.ModifiedBy).Should().Equal(new List<string> { null, null });
-            existingData.Select(history => history.ModifiedOn).Should().Equal(new List<string> { null, null });
+            existingData.Select(history => history.ModifiedOn).Should().Equal(new List<DateTime?> { null, null });
 
             await messageQueueService.DidNotReceive().PushEmailDeliveryStatusMessageAsync(Arg.Any<SendEmailDeliveryStatus>());
         }
@@ -270,7 +270,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
 
             var existingData = dbContext.EmailHistory.Where(history => history.OpportunityId == opportunity.Id).ToList();
             existingData.Select(history => history.ModifiedBy).Should().Equal(new List<string> { null, null });
-            existingData.Select(history => history.ModifiedOn).Should().Equal(new List<string> { null, null });
+            existingData.Select(history => history.ModifiedOn).Should().Equal(new List<DateTime?> { null, null });
 
             await messageQueueService.DidNotReceive().PushEmailDeliveryStatusMessageAsync(Arg.Any<SendEmailDeliveryStatus>());
         }
