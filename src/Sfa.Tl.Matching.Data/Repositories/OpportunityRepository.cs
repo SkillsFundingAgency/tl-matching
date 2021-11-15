@@ -83,7 +83,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                   Phone = op.EmployerContactPhone,
                                   CreatedBy = op.CreatedBy,
                                   WorkplaceDetails =
-                                      from oi in _dbContext.OpportunityItem
+                                      (from oi in _dbContext.OpportunityItem
                                       where oi.OpportunityId == opportunityId
                                             && itemIds.Contains(oi.Id)
                                             && oi.IsSaved
@@ -126,8 +126,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                 SecondaryContactPhone = p.SecondaryContactPhone,
                                                 Town = pv.Town,
                                                 Postcode = pv.Postcode
-                                            })
-                                      }
+                                            }).ToList()
+                                      }).ToList()
                               }).SingleOrDefaultAsync();
 
             return data;
