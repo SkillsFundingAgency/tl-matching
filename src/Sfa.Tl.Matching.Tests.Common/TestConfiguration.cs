@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Tests.Common
     {
         public static MatchingConfiguration MatchingConfiguration { get; }
 
-        public static bool IsMockedHttpClient;
+        public static bool IsMockedHttpClient { get; }
 
         static TestConfiguration()
         {
