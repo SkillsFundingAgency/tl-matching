@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             if(!HttpContext.User.HasValidRole())
             {
-                _logger.LogInformation($"PostSignIn - User '{HttpContext.User.Identity.Name}' does not have a valid role");
+                _logger.LogInformation($"PostSignIn - User '{HttpContext.User.Identity?.Name}' does not have a valid role");
                 foreach (var cookie in Request.Cookies.Keys)
                 {
                     if(string.Equals(cookie, "seen_cookie_message", StringComparison.InvariantCultureIgnoreCase)) continue;
@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<SignOutResult> SignOut()
+        public new async Task<SignOutResult> SignOut()
         {
             var callbackUrl = Url.Action(nameof(SignedOut), "Account", null, Request.Scheme);
 
