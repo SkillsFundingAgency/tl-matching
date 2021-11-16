@@ -222,7 +222,10 @@ namespace Sfa.Tl.Matching.Application.Services
 
             if (isAupaMissing)
             {
-                var existingReferrals = await _opportunityRepository.GetFirstOrDefaultAsync(o => o.EmployerCrmId == employerData.AccountId.ToGuid() && o.OpportunityItem.Count(oi => oi.Referral.Any()) > 0);
+                var existingReferrals = 
+                    await _opportunityRepository.GetFirstOrDefaultAsync(o => 
+                        o.EmployerCrmId == employerData.AccountId.ToGuid() && 
+                        o.OpportunityItem.Any(oi => oi.Referral.Any()));
 
                 if (existingReferrals == null) return -1;
                 await AddMessageToQueueAsync(employerData);

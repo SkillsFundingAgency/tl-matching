@@ -268,7 +268,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 {
                     sb.Append($"Email: {email}");
                 }
-                sb.Append(")");
+                sb.Append(')');
             }
 
             return sb.ToString();
