@@ -306,3 +306,6 @@ __pycache__/
 **/Frontend/src/stylesheets/css/main.css
 
 *ncrunch*
+
+# Azurite working files
+__azurite_db_*
