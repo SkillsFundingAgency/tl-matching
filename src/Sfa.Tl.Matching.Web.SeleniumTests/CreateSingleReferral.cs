@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
     public class CreateSingleReferral : IClassFixture<SeleniumWebApplicationFactory<Startup>>, IDisposable
     {
         private readonly StartPage _startPage;
-        private IWebDriver Driver { get; }
+        private IWebDriver Driver { get; set; }
 
         public CreateSingleReferral(SeleniumWebApplicationFactory<Startup> server)
         {
@@ -66,8 +66,12 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
 
         public void Dispose()
         {
-            Driver.Dispose();
+            Driver.Close();
             Driver.Quit();
+            Driver.Dispose();
+            Driver = null;
+
+            GC.SuppressFinalize(this);
         }
     }
 }
