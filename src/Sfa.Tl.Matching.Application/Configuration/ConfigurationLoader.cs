@@ -7,8 +7,11 @@ namespace Sfa.Tl.Matching.Application.Configuration
 {
     public static class ConfigurationLoader
     {
-        public static MatchingConfiguration Load(string environment, string storageConnectionString,
-            string version, string serviceName)
+        public static MatchingConfiguration Load(
+            string environment, 
+            string storageConnectionString,
+            string serviceName,
+            string version)
         {
             try
             {

@@ -187,8 +187,7 @@ namespace Sfa.Tl.Matching.Web
             MatchingConfiguration = ConfigurationLoader.Load(
                 Configuration[Constants.EnvironmentNameConfigKey],
                 Configuration[Constants.ConfigurationStorageConnectionStringConfigKey],
-                Configuration[Constants.VersionConfigKey],
-                Configuration[Constants.ServiceNameConfigKey]);
+                Configuration[Constants.ServiceNameConfigKey], Configuration[Constants.VersionConfigKey]);
         }
 
         protected virtual bool ConfigurationIsLocalOrDev()

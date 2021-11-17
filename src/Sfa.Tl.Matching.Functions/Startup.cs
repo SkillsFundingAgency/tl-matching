@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Functions
     public class Startup : FunctionsStartup
     {
         private MatchingConfiguration _configuration;
-        
+
         public override void Configure(IFunctionsHostBuilder builder)
         {
             RegisterWebJobServices(builder.Services);
@@ -58,10 +58,10 @@ namespace Sfa.Tl.Matching.Functions
         private void RegisterServices(IServiceCollection services)
         {
             _configuration = ConfigurationLoader.Load(
-                    Environment.GetEnvironmentVariable("EnvironmentName"),
-                    Environment.GetEnvironmentVariable("ConfigurationStorageConnectionString"),
-                    Environment.GetEnvironmentVariable("Version"),
-                    Environment.GetEnvironmentVariable("ServiceName"));
+                    Environment.GetEnvironmentVariable(Constants.EnvironmentNameConfigKey),
+                    Environment.GetEnvironmentVariable(Constants.ConfigurationStorageConnectionStringConfigKey), //Environment.GetEnvironmentVariable("Version"),
+                    Environment.GetEnvironmentVariable(Constants.ServiceNameConfigKey),
+                    Environment.GetEnvironmentVariable(Constants.VersionConfigKey));
 
             services.AddLogging(logging =>
             {

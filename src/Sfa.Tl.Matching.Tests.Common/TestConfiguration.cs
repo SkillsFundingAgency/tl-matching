@@ -29,10 +29,9 @@ namespace Sfa.Tl.Matching.Tests.Common
             }
 
             MatchingConfiguration = ConfigurationLoader.Load(
-                configuration["EnvironmentName"],
-                configuration["ConfigurationStorageConnectionString"],
-                configuration["Version"],
-                configuration["ServiceName"]);
+                configuration[Constants.EnvironmentNameConfigKey],
+                configuration[Constants.ConfigurationStorageConnectionStringConfigKey],
+                configuration[Constants.ServiceNameConfigKey], configuration[Constants.VersionConfigKey]);
 
             IsMockedHttpClient = bool.Parse(configuration["IsMockedHttpClient"]);
         }
