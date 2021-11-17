@@ -67,11 +67,15 @@ namespace Sfa.Tl.Matching.Functions
 
             services.AddLogging(logging =>
             {
-                logging.AddConsole();
-                logging.AddDebug();
-                logging.AddApplicationInsights();
-                logging.AddFilter((category, level) =>
-                    level >= (category == "Microsoft" ? LogLevel.Error : LogLevel.Information));
+                logging
+                    .AddConsole()
+                    .AddDebug()
+                    .AddApplicationInsights()
+                    .AddFilter((category, level) =>
+                        level >= (category.StartsWith("Microsoft") ||
+                                  category.StartsWith("Azure.Core")
+                            ? LogLevel.Error
+                            : LogLevel.Information));
             });
 
             services.AddHttpContextAccessor();
