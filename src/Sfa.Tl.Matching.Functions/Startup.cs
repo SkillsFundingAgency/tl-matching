@@ -61,7 +61,9 @@ namespace Sfa.Tl.Matching.Functions
                     Environment.GetEnvironmentVariable(Constants.EnvironmentNameConfigKey),
                     Environment.GetEnvironmentVariable(Constants.ConfigurationStorageConnectionStringConfigKey), //Environment.GetEnvironmentVariable("Version"),
                     Environment.GetEnvironmentVariable(Constants.ServiceNameConfigKey),
-                    Environment.GetEnvironmentVariable(Constants.VersionConfigKey));
+                    //NOTE: workaround issues with "Version" in local "Values" with .NET 6
+                    Environment.GetEnvironmentVariable(Constants.VersionConfigKey)
+                    ?? Environment.GetEnvironmentVariable(Constants.ServiceVersionConfigKey));
 
             services.AddLogging(logging =>
             {
