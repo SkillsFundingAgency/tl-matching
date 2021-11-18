@@ -7,6 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Factories\Data\TestBankHolidays.json" />
+    <None Remove="Factories\Data\TestGooglePlacesResult.json" />
+    <None Remove="Factories\Data\TestGooglePlacesResultWithNotFoundStatus.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Factories\Data\TestGooglePlacesResultWithNotFoundStatus.json" />
+    <EmbeddedResource Include="Factories\Data\TestGooglePlacesResult.json" />
+    <EmbeddedResource Include="Factories\Data\TestBankHolidays.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <PackageReference Include="NSubstitute" Version="4.2.2" />
