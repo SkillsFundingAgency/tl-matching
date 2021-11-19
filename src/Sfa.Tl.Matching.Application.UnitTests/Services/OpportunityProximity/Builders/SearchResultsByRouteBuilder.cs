@@ -8,12 +8,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.OpportunityProximity.Bu
         public IList<OpportunityProximitySearchResultByRouteViewModelItem> Build() =>
             new List<OpportunityProximitySearchResultByRouteViewModelItem>
             {
-                new OpportunityProximitySearchResultByRouteViewModelItem
+                new()
                 {
                     NumberOfResults = 1,
                     RouteName = "digital"
                 },
-                new OpportunityProximitySearchResultByRouteViewModelItem
+                new()
                 {
                     NumberOfResults = 2,
                     RouteName = "health and beauty"

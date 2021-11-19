@@ -4,7 +4,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailHistory.Builders
 {
     public class ValidEmailHistoryBuilder
     {
-        public Domain.Models.EmailHistory Build() => new Domain.Models.EmailHistory
+        public Domain.Models.EmailHistory Build() => new()
         {
             Id = 1,
             OpportunityId = 1,

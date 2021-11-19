@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                 Source = "Test",
                 Routes = new List<RouteSummaryViewModel>
                 {
-                    new RouteSummaryViewModel
+                    new()
                     {
                         Id = 1,
                         Name = "Route 1",

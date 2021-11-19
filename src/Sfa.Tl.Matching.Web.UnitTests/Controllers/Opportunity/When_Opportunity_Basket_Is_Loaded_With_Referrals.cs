@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 ProvisionGapItems = null,
                 ReferralItems = new List<BasketReferralItemViewModel>
                 {
-                    new BasketReferralItemViewModel
+                    new()
                     {
                         OpportunityType = "Referral",
                         OpportunityItemId = 5

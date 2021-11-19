@@ -10,10 +10,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Providers.DateTimeProvider
         public static IEnumerable<object[]> Data =>
             new List<object[]>
             {
-                new object[] { new DateTime(2019, 11, 1), 1, new List<DateTime> { new DateTime(2019, 12, 25), new DateTime(2019, 12, 26) }, new DateTime(2019, 11, 1) },
-                new object[] { new DateTime(2019, 12, 26), 1, new List<DateTime> { new DateTime(2019, 12, 25), new DateTime(2019, 12, 26) }, new DateTime(2019, 12, 2) },
-                new object[] { new DateTime(2019, 12, 26), 10, new List<DateTime> { new DateTime(2019, 12, 25), new DateTime(2019, 12, 26) }, new DateTime(2019, 12, 13) },
-                new object[] { new DateTime(2019, 5, 5), 10, new List<DateTime> { new DateTime(2019, 5, 6), new DateTime(2019, 12, 26) }, new DateTime(2019, 5, 15) }
+                new object[] { new DateTime(2019, 11, 1), 1, new List<DateTime> { new(2019, 12, 25), new(2019, 12, 26) }, new DateTime(2019, 11, 1) },
+                new object[] { new DateTime(2019, 12, 26), 1, new List<DateTime> { new(2019, 12, 25), new(2019, 12, 26) }, new DateTime(2019, 12, 2) },
+                new object[] { new DateTime(2019, 12, 26), 10, new List<DateTime> { new(2019, 12, 25), new(2019, 12, 26) }, new DateTime(2019, 12, 13) },
+                new object[] { new DateTime(2019, 5, 5), 10, new List<DateTime> { new(2019, 5, 6), new(2019, 12, 26) }, new DateTime(2019, 5, 15) }
             };
 
         [Theory(DisplayName = "DateTimeProvider.GetNthWorkingDayDate Data Tests")]

@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
     {
         private readonly IActionResult _result;
         private readonly IProviderService _providerService;
-        private readonly ProviderDetailViewModel _viewModel = new ProviderDetailViewModel
+        private readonly ProviderDetailViewModel _viewModel = new()
         {
             SubmitAction = "SaveSection",
             IsCdfProvider = false

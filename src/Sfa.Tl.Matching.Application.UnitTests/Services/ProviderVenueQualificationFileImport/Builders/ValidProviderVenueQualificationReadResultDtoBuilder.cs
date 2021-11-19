@@ -4,7 +4,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
 {
     public class ValidProviderVenueQualificationReadResultDtoBuilder
     {
-        public ProviderVenueQualificationReadResultDto Build() => new ProviderVenueQualificationReadResultDto
+        public ProviderVenueQualificationReadResultDto Build() => new()
         {
             Error = null,
             ProviderVenueQualifications = new ValidProviderVenueQualificationDtoListBuilder().Build()   

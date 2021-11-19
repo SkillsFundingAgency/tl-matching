@@ -4,6 +4,19 @@ namespace Sfa.Tl.Matching.Models.ViewModel
 {
     public class ProviderProximitySearchResultViewModelItem
     {
+        public ProviderProximitySearchResultViewModelItem()
+        {
+        }
+
+        public ProviderProximitySearchResultViewModelItem(int providerVenueId, string providerName, string providerVenuePostcode, double? distance, IEnumerable<RouteAndQualificationsViewModel> routes)
+        {
+            ProviderVenueId = providerVenueId;
+            ProviderName = providerName;
+            ProviderVenuePostcode = providerVenuePostcode;
+            Distance = distance;
+            Routes = routes;
+        }
+
         public int ProviderVenueId { get; set; }
         public string ProviderVenueTown { get; set; }
         public string ProviderVenuePostcode { get; set; }

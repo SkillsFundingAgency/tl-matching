@@ -7,7 +7,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Path.Builders
     {
         public IList<Domain.Models.Path> Build() => new List<Domain.Models.Path>
         {
-            new Domain.Models.Path
+            new()
             {
                 Id = 1,
                 Name = "Path 1",
@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Path.Builders
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,
                 ModifiedOn = EntityCreationConstants.ModifiedOn
             },
-            new Domain.Models.Path
+            new()
             {
                 Id = 2,
                 Name = "Path 2",

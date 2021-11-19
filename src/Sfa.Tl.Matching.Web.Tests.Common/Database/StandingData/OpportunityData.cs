@@ -52,22 +52,21 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
         private const int OpportunityItemProviderMultipleId = 1061;
         private const int ProviderReferral1Id = 1062;
         private const int ProviderReferral2Id = 1063;
-
-
+        
         internal static Opportunity CreateReferralSingle()
         {
-            return new Opportunity
+            return new()
             {
                 Id = OpportunityReferralSingleId,
                 EmployerCrmId = new Guid("11111111-1111-1111-1111-111111111111"),
                 EmployerContact = "Employer Contact",
                 EmployerContactEmail = "employer-contact@email.com",
                 EmployerContactPhone = "01474 787878",
-                CreatedOn = new DateTime(2019, 1, 1),
+                CreatedOn = new(2019, 1, 1),
                 CreatedBy = "Dev Surname",
                 OpportunityItem = new List<OpportunityItem>
                 {
-                    new OpportunityItem
+                    new()
                     {
                         Id = OpportunityItemReferralSingleId,
                         OpportunityId = OpportunityReferralSingleId,
@@ -83,16 +82,16 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                         IsSelectedForReferral = false,
                         IsCompleted = false,
                         RouteId = 1,
-                        CreatedOn = new DateTime(2019, 1, 1),
+                        CreatedOn = new(2019, 1, 1),
                         CreatedBy = "Dev Surname",
                         Referral = new List<Referral>
                         {
-                            new Referral
+                            new()
                             {
                                 Id = ReferralSingleId,
                                 ProviderVenueId = 1,
                                 DistanceFromEmployer = 1.23m,
-                                CreatedOn = new DateTime(2019, 1, 1),
+                                CreatedOn = new(2019, 1, 1),
                                 CreatedBy = "Dev Surname",
                             }
                         }
@@ -103,18 +102,18 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
 
         internal static Opportunity CreateReferralMultiple()
         {
-            return new Opportunity
+            return new()
             {
                 Id = OpportunityReferralMultipleId,
                 EmployerCrmId = new Guid("11111111-1111-1111-1111-111111111111"),
                 EmployerContact = "Employer Contact",
                 EmployerContactEmail = "employer-contact@email.com",
                 EmployerContactPhone = "01474 787878",
-                CreatedOn = new DateTime(2019, 1, 2),
+                CreatedOn = new(2019, 1, 2),
                 CreatedBy = "Dev Surname",
                 OpportunityItem = new List<OpportunityItem>
                 {
-                    new OpportunityItem
+                    new()
                     {
                         Id = OpportunityItemReferralMultiple1Id,
                         OpportunityId = OpportunityReferralMultipleId,
@@ -130,29 +129,29 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                         IsSelectedForReferral = false,
                         IsCompleted = false,
                         RouteId = 1,
-                        CreatedOn = new DateTime(2019, 1, 2),
+                        CreatedOn = new(2019, 1, 2),
                         CreatedBy = "Dev Surname",
                         Referral = new List<Referral>
                         {
-                            new Referral
+                            new()
                             {
                                 Id = ReferralMultiple1Id,
                                 ProviderVenueId = 1,
                                 DistanceFromEmployer = 1.23m,
-                                CreatedOn = new DateTime(2019, 1, 2),
+                                CreatedOn = new(2019, 1, 2),
                                 CreatedBy = "Dev Surname",
                             },
-                            new Referral
+                            new()
                             {
                                 Id = ReferralMultiple3Id,
                                 ProviderVenueId = 2,
                                 DistanceFromEmployer = 2.5m,
-                                CreatedOn = new DateTime(2019, 1, 2),
+                                CreatedOn = new(2019, 1, 2),
                                 CreatedBy = "Dev Surname",
                             }
                         }
                     },
-                    new OpportunityItem
+                    new()
                     {
                         Id = OpportunityItemReferralMultiple2Id,
                         OpportunityId = OpportunityReferralMultipleId,
@@ -168,16 +167,16 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                         IsSelectedForReferral = false,
                         IsCompleted = false,
                         RouteId = 1,
-                        CreatedOn = new DateTime(2019, 1, 3),
+                        CreatedOn = new(2019, 1, 3),
                         CreatedBy = "Dev Surname",
                         Referral = new List<Referral>
                         {
-                            new Referral
+                            new()
                             {
                                 Id = ReferralMultiple2Id,
                                 ProviderVenueId = 1,
                                 DistanceFromEmployer = 1.23m,
-                                CreatedOn = new DateTime(2019, 1, 3),
+                                CreatedOn = new(2019, 1, 3),
                                 CreatedBy = "Dev Surname",
                             }
                         }
@@ -188,18 +187,18 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
 
         internal static Opportunity CreateProvisionGapSingle()
         {
-            return new Opportunity
+            return new()
             {
                 Id = OpportunityProvisionGapSingleId,
                 EmployerCrmId = new Guid("11111111-1111-1111-1111-111111111111"),
                 EmployerContact = "Employer Contact",
                 EmployerContactEmail = "employer-contact@email.com",
                 EmployerContactPhone = "01474 787878",
-                CreatedOn = new DateTime(2019, 1, 4),
+                CreatedOn = new(2019, 1, 4),
                 CreatedBy = "Dev Surname",
                 OpportunityItem = new List<OpportunityItem>
                 {
-                    new OpportunityItem
+                    new()
                     {
                         Id = OpportunityItemProvisionGapSingleId,
                         OpportunityId = OpportunityProvisionGapSingleId,
@@ -215,15 +214,15 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                         IsSelectedForReferral = false,
                         IsCompleted = false,
                         RouteId = 1,
-                        CreatedOn = new DateTime(2019, 1, 4),
+                        CreatedOn = new(2019, 1, 4),
                         CreatedBy = "Dev Surname",
                         ProvisionGap = new List<ProvisionGap>
                         {
-                            new ProvisionGap
+                            new()
                             {
                                 Id = ProvisionGapSingleId,
                                 HadBadExperience = true,
-                                CreatedOn = new DateTime(2019, 1, 4),
+                                CreatedOn = new(2019, 1, 4),
                                 CreatedBy = "Dev Surname",
                             }
                         }
@@ -234,18 +233,18 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
 
         internal static Opportunity CreateReferralSingleAndProvisionGap()
         {
-            return new Opportunity
+            return new()
             {
                 Id = OpportunityReferralSingleAndProvisionGapId,
                 EmployerCrmId = new Guid("11111111-1111-1111-1111-111111111111"),
                 EmployerContact = "Employer Contact",
                 EmployerContactEmail = "employer-contact@email.com",
                 EmployerContactPhone = "01474 787878",
-                CreatedOn = new DateTime(2018, 11, 5, 16, 22, 11),
+                CreatedOn = new(2018, 11, 5, 16, 22, 11),
                 CreatedBy = "Dev Surname",
                 OpportunityItem = new List<OpportunityItem>
                 {
-                    new OpportunityItem
+                    new()
                     {
                         Id = OpportunityItemReferralSingleAndProvisionGap1Id,
                         OpportunityId = OpportunityReferralSingleAndProvisionGapId,
@@ -261,21 +260,21 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                         IsSelectedForReferral = false,
                         IsCompleted = false,
                         RouteId = 1,
-                        CreatedOn = new DateTime(2018, 11, 5, 16, 22, 11),
+                        CreatedOn = new(2018, 11, 5, 16, 22, 11),
                         CreatedBy = "Dev Surname",
                         Referral = new List<Referral>
                         {
-                            new Referral
+                            new()
                             {
                                 Id = ReferralSingle1Id,
                                 ProviderVenueId = 1,
                                 DistanceFromEmployer = 1.23m,
-                                CreatedOn = new DateTime(2018, 11, 5, 16, 22, 11),
+                                CreatedOn = new(2018, 11, 5, 16, 22, 11),
                                 CreatedBy = "Dev Surname",
                             }
                         }
                     },
-                    new OpportunityItem
+                    new()
                     {
                         Id = OpportunityItemReferralSingleAndProvisionGap2Id,
                         OpportunityId = OpportunityReferralSingleAndProvisionGapId,
@@ -291,15 +290,15 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                         IsSelectedForReferral = false,
                         IsCompleted = false,
                         RouteId = 1,
-                        CreatedOn = new DateTime(2019, 1, 6),
+                        CreatedOn = new(2019, 1, 6),
                         CreatedBy = "Dev Surname",
                         ProvisionGap = new List<ProvisionGap>
                         {
-                            new ProvisionGap
+                            new()
                             {
                                 Id = ProvisionGapSingle1Id,
                                 ProvidersTooFarAway = true,
-                                CreatedOn = new DateTime(2019, 1, 6),
+                                CreatedOn = new(2019, 1, 6),
                                 CreatedBy = "Dev Surname",
                             }
                         }
@@ -310,18 +309,18 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
 
         internal static Opportunity CreateReferralMultipleAndProvisionGap()
         {
-            return new Opportunity
+            return new()
             {
                 Id = OpportunityMultipleReferralAndProvisionGapId,
                 EmployerCrmId = new Guid("11111111-1111-1111-1111-111111111111"),
                 EmployerContact = "Employer Contact",
                 EmployerContactEmail = "employer-contact@email.com",
                 EmployerContactPhone = "01474 787878",
-                CreatedOn = new DateTime(2019, 4, 7, 22, 59, 0),
+                CreatedOn = new(2019, 4, 7, 22, 59, 0),
                 CreatedBy = "Dev Surname",
                 OpportunityItem = new List<OpportunityItem>
                 {
-                    new OpportunityItem
+                    new()
                     {
                         Id = OpportunityItemMultipleReferralAndProvisionGap1Id,
                         OpportunityId = OpportunityMultipleReferralAndProvisionGapId,
@@ -337,21 +336,21 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                         IsSelectedForReferral = false,
                         IsCompleted = false,
                         RouteId = 1,
-                        CreatedOn = new DateTime(2019, 4, 7, 22, 59, 0),
+                        CreatedOn = new(2019, 4, 7, 22, 59, 0),
                         CreatedBy = "Dev Surname",
                         Referral = new List<Referral>
                         {
-                            new Referral
+                            new()
                             {
                                 Id = ReferralAndProvisionGapMultiple1Id,
                                 ProviderVenueId = 1,
                                 DistanceFromEmployer = 1.23m,
-                                CreatedOn = new DateTime(2019, 4, 7, 22, 59, 0),
+                                CreatedOn = new(2019, 4, 7, 22, 59, 0),
                                 CreatedBy = "Dev Surname",
                             }
                         }
                     },
-                    new OpportunityItem
+                    new()
                     {
                         Id = OpportunityItemMultipleReferralAndProvisionGap2Id,
                         OpportunityId = OpportunityMultipleReferralAndProvisionGapId,
@@ -367,21 +366,21 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                         IsSelectedForReferral = false,
                         IsCompleted = false,
                         RouteId = 1,
-                        CreatedOn = new DateTime(2019, 1, 8),
+                        CreatedOn = new(2019, 1, 8),
                         CreatedBy = "Dev Surname",
                         Referral = new List<Referral>
                         {
-                            new Referral
+                            new()
                             {
                                 Id = ReferralAndProvisionGapMultiple2Id,
                                 ProviderVenueId = 1,
                                 DistanceFromEmployer = 1.23m,
-                                CreatedOn = new DateTime(2019, 1, 8),
+                                CreatedOn = new(2019, 1, 8),
                                 CreatedBy = "Dev Surname",
                             }
                         }
                     },
-                    new OpportunityItem
+                    new()
                     {
                         Id = OpportunityItemMultipleReferralAndProvisionGap3Id,
                         OpportunityId = OpportunityMultipleReferralAndProvisionGapId,
@@ -397,15 +396,15 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                         IsSelectedForReferral = false,
                         IsCompleted = false,
                         RouteId = 1,
-                        CreatedOn = new DateTime(2019, 1, 9),
+                        CreatedOn = new(2019, 1, 9),
                         CreatedBy = "Dev Surname",
                         ProvisionGap = new List<ProvisionGap>
                         {
-                            new ProvisionGap
+                            new()
                             {
                                 Id = ProvisionGapMultipleReferralAndProvisionGap1Id,
                                 HadBadExperience = true,
-                                CreatedOn = new DateTime(2019, 1, 9),
+                                CreatedOn = new(2019, 1, 9),
                                 CreatedBy = "Dev Surname",
                             }
                         }
@@ -418,18 +417,18 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
         {
             return new List<Opportunity>
             {
-                new Opportunity
+                new()
                 {
                     Id = Opportunity1Id,
                     EmployerCrmId = new Guid("11111111-1111-1111-1111-111111111111"),
                     EmployerContact = "Employer Contact",
                     EmployerContactEmail = "employer-contact@email.com",
                     EmployerContactPhone = "01474 787878",
-                    CreatedOn = new DateTime(2019, 1, 10),
+                    CreatedOn = new(2019, 1, 10),
                     CreatedBy = "Dev Surname",
                     OpportunityItem = new List<OpportunityItem>
                     {
-                        new OpportunityItem
+                        new()
                         {
                             Id = OpportunityItem1Id,
                             OpportunityId = Opportunity1Id,
@@ -445,21 +444,21 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                             IsSelectedForReferral = false,
                             IsCompleted = false,
                             RouteId = 1,
-                            CreatedOn = new DateTime(2019, 1, 10),
+                            CreatedOn = new(2019, 1, 10),
                             CreatedBy = "Dev Surname",
                             Referral = new List<Referral>
                             {
-                                new Referral
+                                new()
                                 {
                                     Id = Referral1Id,
                                     ProviderVenueId = 1,
                                     DistanceFromEmployer = 1.23m,
-                                    CreatedOn = new DateTime(2019, 1, 10),
+                                    CreatedOn = new(2019, 1, 10),
                                     CreatedBy = "Dev Surname",
                                 }
                             }
                         },
-                        new OpportunityItem
+                        new()
                         {
                             Id = OpportunityItem2Id,
                             OpportunityId = Opportunity1Id,
@@ -475,16 +474,16 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                             IsSelectedForReferral = false,
                             IsCompleted = false,
                             RouteId = 1,
-                            CreatedOn = new DateTime(2019, 1, 11),
+                            CreatedOn = new(2019, 1, 11),
                             CreatedBy = "Dev Surname",
                             Referral = new List<Referral>
                             {
-                                new Referral
+                                new()
                                 {
                                     Id = Referral2Id,
                                     ProviderVenueId = 1,
                                     DistanceFromEmployer = 1.23m,
-                                    CreatedOn = new DateTime(2019, 1, 11),
+                                    CreatedOn = new(2019, 1, 11),
                                     CreatedBy = "Dev Surname",
                                 }
                             }
@@ -496,18 +495,18 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
 
         internal static Opportunity CreateProvidersMultiple()
         {
-            return new Opportunity
+            return new()
             {
                 Id = OpportunityProviderMultipleId,
                 EmployerCrmId = new Guid("11111111-1111-1111-1111-111111111111"),
                 EmployerContact = "Employer Contact",
                 EmployerContactEmail = "employer-contact@email.com",
                 EmployerContactPhone = "01474 787878",
-                CreatedOn = new DateTime(2019, 1, 12),
+                CreatedOn = new(2019, 1, 12),
                 CreatedBy = "Dev Surname",
                 OpportunityItem = new List<OpportunityItem>
                 {
-                    new OpportunityItem
+                    new()
                     {
                         Id = OpportunityItemProviderMultipleId,
                         OpportunityId = OpportunityProviderMultipleId,
@@ -523,24 +522,24 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                         IsSelectedForReferral = false,
                         IsCompleted = false,
                         RouteId = 1,
-                        CreatedOn = new DateTime(2019, 1, 12),
+                        CreatedOn = new(2019, 1, 12),
                         CreatedBy = "Dev Surname",
                         Referral = new List<Referral>
                         {
-                            new Referral
+                            new()
                             {
                                 Id = ProviderReferral1Id,
                                 ProviderVenueId = 1,
                                 DistanceFromEmployer = 1.23m,
-                                CreatedOn = new DateTime(2019, 1, 12),
+                                CreatedOn = new(2019, 1, 12),
                                 CreatedBy = "Dev Surname",
                             },
-                            new Referral
+                            new()
                             {
                                 Id = ProviderReferral2Id,
                                 ProviderVenueId = 2,
                                 DistanceFromEmployer = 2.93m,
-                                CreatedOn = new DateTime(2019, 1, 12),
+                                CreatedOn = new(2019, 1, 12),
                                 CreatedBy = "Dev Surname",
                             }
                         }
@@ -574,16 +573,16 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                     IsSelectedForReferral = false,
                     IsCompleted = false,
                     RouteId = 1,
-                    CreatedOn = new DateTime(2019, 1, 2),
+                    CreatedOn = new(2019, 1, 2),
                     CreatedBy = "Dev Surname",
                     Referral = new List<Referral>
                     {
-                        new Referral
+                        new()
                         {
                             Id = referralId,
                             ProviderVenueId = 1,
                             DistanceFromEmployer = 1.23m,
-                            CreatedOn = new DateTime(2019, 1, 2),
+                            CreatedOn = new(2019, 1, 2),
                             CreatedBy = "Dev Surname",
                         }
                     }
@@ -602,7 +601,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                 EmployerContact = "Employer Contact",
                 EmployerContactEmail = "employer-contact@email.com",
                 EmployerContactPhone = "01474 787878",
-                CreatedOn = new DateTime(2019, 1, 2),
+                CreatedOn = new(2019, 1, 2),
                 CreatedBy = "Dev Surname",
                 OpportunityItem = items
             };

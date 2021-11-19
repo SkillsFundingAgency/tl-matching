@@ -162,7 +162,7 @@ namespace Sfa.Tl.Matching.Application.Extensions
             };
 
             var inlineString = new InlineString();
-            var t = new Text { Text = cellValue?.ToString() };
+            var t = new Text { Text = cellValue?.ToString() ?? string.Empty };
 
             inlineString.AppendChild(t);
             cell.AppendChild(inlineString);

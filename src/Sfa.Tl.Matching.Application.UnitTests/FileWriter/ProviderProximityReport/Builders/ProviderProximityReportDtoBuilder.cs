@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.ProviderProximityRepo
                 SecondaryContactPhone = "Secondary contact telephone",
                 Routes = new List<RouteAndQualificationsDto>
                 {
-                    new RouteAndQualificationsDto
+                    new()
                     {
                         RouteId = 6,
                         RouteName = "Digital",

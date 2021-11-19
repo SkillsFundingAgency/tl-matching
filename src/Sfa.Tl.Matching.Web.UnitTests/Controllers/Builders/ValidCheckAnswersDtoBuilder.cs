@@ -5,7 +5,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
 {
     internal class ValidCheckAnswersDtoBuilder
     {
-        public CheckAnswersViewModel Build() => new CheckAnswersViewModel
+        public CheckAnswersViewModel Build() => new()
         {
             OpportunityId = 1,
             OpportunityItemId = 2,
@@ -17,9 +17,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
             CompanyNameAka = "AlsoKnownAs",
             RouteName = "RouteName",
             Providers = new List<ReferralsViewModel>
-            {                 
-                new ReferralsViewModel { Name = "Provider1", DistanceFromEmployer = 1.3m, Postcode = "AA1 1AA" },
-                new ReferralsViewModel { Name = "Provider2", DistanceFromEmployer = 31.6m, Postcode = "BB1 1BB" }
+            {
+                new() { Name = "Provider1", DistanceFromEmployer = 1.3m, Postcode = "AA1 1AA" },
+                new() { Name = "Provider2", DistanceFromEmployer = 31.6m, Postcode = "BB1 1BB" }
             }
         };
     }

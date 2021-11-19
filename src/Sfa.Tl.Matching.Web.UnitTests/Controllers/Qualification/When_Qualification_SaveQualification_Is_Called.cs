@@ -25,14 +25,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 
             var routes = new List<SelectListItem>
             {
-                new SelectListItem {Text = "1", Value = "Route 1"},
-                new SelectListItem {Text = "2", Value = "Route 2"}
+                new() { Text = "1", Value = "Route 1" },
+                new() { Text = "2", Value = "Route 2" }
             };
 
             var routeDictionary = new Dictionary<int, string>
             {
-                {1, "Route 1" },
-                {2, "Route 2" }
+                { 1, "Route 1" },
+                { 2, "Route 2" }
             };
 
             routePathService.GetRouteSelectListItemsAsync().Returns(routes);
@@ -63,7 +63,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                 Source = "Test",
                 Routes = new List<RouteSummaryViewModel>
                 {
-                    new RouteSummaryViewModel
+                    new()
                     {
                         Id = 1,
                         Name = "Route 1",
@@ -87,8 +87,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             _result.Should().NotBeNull();
             var result = _result as JsonResult;
             result.Should().NotBeNull();
-
-            result?.Value.ToString().Should().Contain("success = True");
+            result?.Value.Should().NotBeNull();
+            result?.Value?.ToString().Should().Contain("success = True");
         }
     }
 }

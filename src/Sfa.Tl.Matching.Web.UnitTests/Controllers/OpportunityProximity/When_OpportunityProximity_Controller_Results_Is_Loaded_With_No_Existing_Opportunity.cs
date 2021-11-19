@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
         {
             var providerSearchResultDto = new List<OpportunityProximitySearchResultViewModelItem>
             {
-                new OpportunityProximitySearchResultViewModelItem
+                new()
                 {
                     ProviderVenuePostcode = Postcode,
                     Distance = 1.5d

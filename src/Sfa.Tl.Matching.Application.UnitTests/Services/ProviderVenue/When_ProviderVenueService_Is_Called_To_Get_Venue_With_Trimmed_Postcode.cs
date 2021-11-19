@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 
             var mockProviderVenueDbSet = new List<Domain.Models.ProviderVenue>
                 {
-                    new Domain.Models.ProviderVenue
+                    new()
                     {
                         Id = ProviderVenueId,
                         ProviderId = ProviderId,

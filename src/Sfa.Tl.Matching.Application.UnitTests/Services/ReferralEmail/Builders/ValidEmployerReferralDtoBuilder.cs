@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail.Builders
 
         public ValidEmployerReferralDtoBuilder()
         {
-            _dto = new EmployerReferralDto
+            _dto = new()
             {
                 OpportunityId = 1,
                 CompanyName = "Employer",
@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail.Builders
                 Email = "employer.contact@employer.co.uk",
                 WorkplaceDetails = new List<WorkplaceDto>
                 {
-                    new WorkplaceDto
+                    new()
                     {
                         Placements = 2,
                         JobRole = "Job Role",
@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail.Builders
                         WorkplacePostcode = "WorkplacePostcode",
                         ProviderAndVenueDetails = new List<ProviderReferralDto>
                         {
-                            new ProviderReferralDto
+                            new()
                             {
                                 ProviderName = "Test Provider",
                                 DisplayName = "Display Name",

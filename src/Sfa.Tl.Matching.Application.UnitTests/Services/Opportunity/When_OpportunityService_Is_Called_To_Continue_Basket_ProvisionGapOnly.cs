@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(httpContextAccessor) :
+                            new LoggedInUserNameResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(dateTimeProvider) :
                                 null);
@@ -67,13 +67,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             {
                 SelectedOpportunity = new List<SelectedOpportunityItemViewModel>
                 {
-                    new SelectedOpportunityItemViewModel
+                    new()
                     {
                         Id = 1,
                         IsSelected = true,
                         OpportunityType = OpportunityType.ProvisionGap.ToString()
                     },
-                    new SelectedOpportunityItemViewModel
+                    new()
                     {
                         Id = 2,
                         IsSelected = true,

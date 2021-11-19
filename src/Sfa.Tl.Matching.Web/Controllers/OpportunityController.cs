@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
                 opportunityItemDto.ProvisionGap = new List<ProvisionGapDto>
                 {
-                    new ProvisionGapDto()
+                    new()
                 };
 
                 var opportunityItemId = await _opportunityService.CreateOpportunityItemAsync(opportunityItemDto);

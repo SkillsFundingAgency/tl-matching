@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 CompanyNameAka = "Also Known As",
                 ProvisionGapItems = new List<BasketProvisionGapItemViewModel>()
                 {
-                    new BasketProvisionGapItemViewModel
+                    new()
                     {
                         OpportunityType = "ProvisionGap",
                         OpportunityItemId = 10

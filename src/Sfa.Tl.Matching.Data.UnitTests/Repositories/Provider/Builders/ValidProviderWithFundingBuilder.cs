@@ -5,7 +5,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider.Builders
 {
     public class ValidProviderWithFundingBuilder
     {
-        public Domain.Models.Provider Build() => new Domain.Models.Provider
+        public Domain.Models.Provider Build() => new()
         {
             Id = 1,
             UkPrn = 10000546,
@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider.Builders
             ModifiedOn = EntityCreationConstants.ModifiedOn,
             ProviderVenue = new List<Domain.Models.ProviderVenue>
             {
-                new Domain.Models.ProviderVenue
+                new()
                 {
                     Id = 1,
                     ProviderId = 1,
@@ -44,7 +44,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider.Builders
                     CreatedOn = EntityCreationConstants.CreatedOn,
                     ProviderQualification = new List<Domain.Models.ProviderQualification>
                     {
-                        new Domain.Models.ProviderQualification
+                        new()
                         {
                             Id = 1,
                             ProviderVenueId = 1,
@@ -61,7 +61,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider.Builders
                                 CreatedOn = EntityCreationConstants.CreatedOn
                             }
                         },
-                        new Domain.Models.ProviderQualification
+                        new()
                         {
                             Id = 2,
                             ProviderVenueId = 1,
@@ -78,7 +78,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider.Builders
                                 CreatedOn = EntityCreationConstants.CreatedOn
                             }
                         },
-                        new Domain.Models.ProviderQualification
+                        new()
                         {
                             Id = 3,
                             ProviderVenueId = 1,
@@ -100,7 +100,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider.Builders
             }
         };
 
-        public Domain.Models.Provider BuildWithRemovedProviderVenue() => new Domain.Models.Provider
+        public Domain.Models.Provider BuildWithRemovedProviderVenue() => new()
         {
             Id = 1,
             UkPrn = 10000546,
@@ -121,7 +121,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider.Builders
             ModifiedOn = EntityCreationConstants.ModifiedOn,
             ProviderVenue = new List<Domain.Models.ProviderVenue>
             {
-                new Domain.Models.ProviderVenue
+                new()
                 {
                     Id = 1,
                     ProviderId = 1,
@@ -136,7 +136,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider.Builders
                     CreatedBy = EntityCreationConstants.CreatedByUser,
                     CreatedOn = EntityCreationConstants.CreatedOn
                 },
-                new Domain.Models.ProviderVenue
+                new()
                 {
                     Id = 2,
                     ProviderId = 2,
@@ -152,7 +152,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider.Builders
                     CreatedOn = EntityCreationConstants.CreatedOn,
                     ProviderQualification = new List<Domain.Models.ProviderQualification>
                     {
-                        new Domain.Models.ProviderQualification
+                        new()
                         {
                             Id = 1,
                             ProviderVenueId = 1,

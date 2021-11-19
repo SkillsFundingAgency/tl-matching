@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Web.Authentication
     {
         public virtual ClaimsIdentity Identity { get; set; } 
         public bool IsAdminUser { get; set; }
-        public ClaimsIdentity ClaimsIdentity => new ClaimsIdentity(new[]
+        public ClaimsIdentity ClaimsIdentity => new(new[]
         {
             new Claim(ClaimTypes.GivenName, "Dev"),
             new Claim(ClaimTypes.Surname, "Surname"),

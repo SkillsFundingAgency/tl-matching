@@ -9,7 +9,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
     internal class ClaimsBuilder<T> where T : ControllerBase
     {
         private readonly T _controller;
-        private readonly List<Claim> _claimList = new List<Claim>();
+        private readonly List<Claim> _claimList = new();
 
         internal ClaimsBuilder(T controller)
         {

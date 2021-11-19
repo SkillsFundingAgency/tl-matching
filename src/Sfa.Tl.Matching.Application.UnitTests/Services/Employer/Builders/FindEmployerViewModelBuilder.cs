@@ -5,7 +5,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders
 {
     internal class FindEmployerViewModelBuilder
     {
-        public FindEmployerViewModel BuildWithEmployer() => new FindEmployerViewModel
+        public FindEmployerViewModel BuildWithEmployer() => new()
         {
             OpportunityItemId = 1,
             OpportunityId = 2,

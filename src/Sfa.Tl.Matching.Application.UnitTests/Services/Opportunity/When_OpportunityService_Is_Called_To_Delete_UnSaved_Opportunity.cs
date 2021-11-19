@@ -86,7 +86,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             return new List<OpportunityItem>
             {
-                new OpportunityItem
+                new()
                 {
                     Id = 1,
                     OpportunityId = OpportunityId,
@@ -96,7 +96,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     CreatedBy = "CreatedBy",
                     IsSaved = false
                 },
-                new OpportunityItem
+                new()
                 {
                     Id = 2,
                     OpportunityId = OpportunityId,
@@ -113,7 +113,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             return new List<Domain.Models.Referral>
             {
-                new Domain.Models.Referral
+                new()
                 {
                     Id = 1,
                     OpportunityItemId = OpportunityItemId
@@ -125,7 +125,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             return new List<ProvisionGap>
             {
-                new ProvisionGap
+                new()
                 {
                     Id = 1,
                     OpportunityItemId = OpportunityItemId

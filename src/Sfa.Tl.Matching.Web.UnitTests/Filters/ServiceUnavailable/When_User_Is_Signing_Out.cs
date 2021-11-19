@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Filters.ServiceUnavailable
         {
             var claimsList = new List<Claim>
             {
-                new Claim(ClaimTypes.Role, RolesExtensions.StandardUser)
+                new(ClaimTypes.Role, RolesExtensions.StandardUser)
             };
 
             var user = new ClaimsPrincipal(new ClaimsIdentity(claimsList, "AuthenticationType"));
@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Filters.ServiceUnavailable
                 actionContext,
                 new List<IFilterMetadata>(),
                 new Dictionary<string, object>(),
-                null);
+                null!);
 
             var serviceStatusHistoryService = Substitute.For<IServiceStatusHistoryService>();
             var filterAttribute = new ServiceUnavailableFilterAttribute(serviceStatusHistoryService);

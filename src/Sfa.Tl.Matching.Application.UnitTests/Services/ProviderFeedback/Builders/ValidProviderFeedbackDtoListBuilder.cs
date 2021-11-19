@@ -12,7 +12,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback.Builde
         {
             _providerFeedbackDtoList = new List<ProviderFeedbackDto>
             {
-                new ProviderFeedbackDto
+                new()
                 {
                     ProviderId = 1,
                     ProviderName = "Provider",

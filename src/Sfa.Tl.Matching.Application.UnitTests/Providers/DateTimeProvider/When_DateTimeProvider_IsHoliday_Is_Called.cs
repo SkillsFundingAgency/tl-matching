@@ -12,8 +12,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Providers.DateTimeProvider
             {
                 new object[] { new DateTime(2019, 8, 20, 16, 50, 55, DateTimeKind.Utc), null, false },
                 new object[] { new DateTime(2019, 8, 20, 16, 50, 55, DateTimeKind.Utc), new List<DateTime>(), false },
-                new object[] { new DateTime(2019, 8, 26, 16, 50, 55, DateTimeKind.Utc), new List<DateTime> { new DateTime(2019, 8, 26), new DateTime(2019, 12, 25)}, true },
-                new object[] { new DateTime(2019, 8, 27, 16, 50, 55, DateTimeKind.Utc), new List<DateTime> { new DateTime(2019, 8, 26), new DateTime(2019, 12, 25)}, false }
+                new object[] { new DateTime(2019, 8, 26, 16, 50, 55, DateTimeKind.Utc), new List<DateTime> { new(2019, 8, 26), new(2019, 12, 25)}, true },
+                new object[] { new DateTime(2019, 8, 27, 16, 50, 55, DateTimeKind.Utc), new List<DateTime> { new(2019, 8, 26), new(2019, 12, 25)}, false }
             };
 
         [Theory(DisplayName = "DateTimeProvider.IsHoliday Data Tests")]

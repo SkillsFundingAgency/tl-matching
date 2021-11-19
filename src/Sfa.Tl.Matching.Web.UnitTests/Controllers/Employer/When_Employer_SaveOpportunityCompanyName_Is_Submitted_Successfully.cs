@@ -21,12 +21,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         private readonly IOpportunityService _opportunityService;
         private const string CompanyName = "CompanyName";
         private const string ModifiedBy = "ModifiedBy";
-        private readonly FindEmployerViewModel _viewModel = new FindEmployerViewModel();
+        private readonly FindEmployerViewModel _viewModel = new();
         private readonly IActionResult _result;
 
         private const int OpportunityId = 1;
         private const int OpportunityItemId = 2;
-        private readonly Guid _employerCrmId = new Guid("33333333-3333-3333-3333-333333333333");
+        private readonly Guid _employerCrmId = new("33333333-3333-3333-3333-333333333333");
 
         public When_Employer_SaveOpportunityCompanyName_Is_Submitted_Successfully()
         {
@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<FindEmployerViewModel, CompanyNameDto>(httpContextAccessor) :
                             type.Name.Contains("LoggedInUserNameResolver") ?
-                                (object)new LoggedInUserNameResolver<FindEmployerViewModel, CompanyNameDto>(httpContextAccessor) :
+                                new LoggedInUserNameResolver<FindEmployerViewModel, CompanyNameDto>(httpContextAccessor) :
                                     type.Name.Contains("UtcNowResolver") ?
                                         new UtcNowResolver<FindEmployerViewModel, CompanyNameDto>(new DateTimeProvider()) :
                                             null);

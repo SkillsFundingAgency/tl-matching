@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
 
             if (serverAddresses == null)
             {
-                throw new InvalidOperationException($"Could not get instance of IServerAddressFeature.");
+                throw new InvalidOperationException("Could not get instance of IServerAddressFeature.");
             }
 
             var addresses = serverAddresses.Addresses;

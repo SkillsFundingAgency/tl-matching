@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
     {
         private readonly IEmailService _emailService;
         private readonly IOpportunityRepository _opportunityRepository;
-        private readonly Guid _notificationId = new Guid("a8de2d8c-23ae-4c2f-980a-0a8a3231938f");
+        private readonly Guid _notificationId = new("a8de2d8c-23ae-4c2f-980a-0a8a3231938f");
         public const int OpportunityId = 1;
         public const int OpportunityItemId = 2;
         private const string SupportEmailAddress = "support@service.com";

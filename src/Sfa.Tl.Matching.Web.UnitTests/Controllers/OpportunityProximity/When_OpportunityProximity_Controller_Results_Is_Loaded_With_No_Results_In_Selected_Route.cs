@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 
             var providerSearchResultForOtherRoutesDto = new List<OpportunityProximitySearchResultByRouteViewModelItem>
             {
-                new OpportunityProximitySearchResultByRouteViewModelItem
+                new()
                 {
                     NumberOfResults = 1,
                     RouteName = "another route"

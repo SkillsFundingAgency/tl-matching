@@ -28,14 +28,14 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderProximity
 
             var routes = new List<SelectListItem>
             {
-                new SelectListItem {Text = "1", Value = "Route 1"},
-                new SelectListItem {Text = "2", Value = "Route 2"}
+                new() { Text = "1", Value = "Route 1" },
+                new() { Text = "2", Value = "Route 2" }
             };
 
             var routeDictionary = new Dictionary<int, string>
             {
-                {1, "Route 1" },
-                {2, "Route 2" }
+                { 1, "Route 1" },
+                { 2, "Route 2" }
             };
 
             var locationService = new LocationService(

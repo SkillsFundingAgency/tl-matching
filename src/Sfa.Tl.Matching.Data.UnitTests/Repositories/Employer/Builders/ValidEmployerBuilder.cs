@@ -5,7 +5,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Employer.Builders
 {
     public class ValidEmployerBuilder
     {
-        public Domain.Models.Employer Build() => new Domain.Models.Employer
+        public Domain.Models.Employer Build() => new()
         {
             Id = 1,
             CrmId = new Guid("55555555-5555-5555-5555-555555555555"),

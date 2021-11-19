@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Filters.ServiceUnavailable
                 actionContext,
                 new List<IFilterMetadata>(),
                 new Dictionary<string, object>(),
-                null);
+                null!);
 
             var filterAttribute = new ServiceUnavailableFilterAttribute(serviceStatusHistoryService);
 

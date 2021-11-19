@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<CreateProviderDetailViewModel, Domain.Models.Provider>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<CreateProviderDetailViewModel, Domain.Models.Provider>(httpContextAccessor) :
+                            new LoggedInUserNameResolver<CreateProviderDetailViewModel, Domain.Models.Provider>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<CreateProviderDetailViewModel, Domain.Models.Provider>(new DateTimeProvider()) :
                                 null);

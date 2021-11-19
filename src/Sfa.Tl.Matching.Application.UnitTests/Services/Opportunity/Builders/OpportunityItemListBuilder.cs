@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
     {
         public IList<OpportunityItem> Build() => new List<OpportunityItem>
             {
-                new OpportunityItem
+                new()
                 {
                     Id = 1,
                     OpportunityId = 2,
@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
                     IsCompleted = false,
                     CreatedBy = "CreatedBy"
                 },
-                new OpportunityItem
+                new()
                 {
                     Id = 2,
                     OpportunityId = 2,

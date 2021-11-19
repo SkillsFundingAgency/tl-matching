@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<CheckAnswersViewModel, CheckAnswersDto>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<CheckAnswersViewModel, CheckAnswersDto>(httpContextAccessor) :
+                            new LoggedInUserNameResolver<CheckAnswersViewModel, CheckAnswersDto>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<CheckAnswersViewModel, CheckAnswersDto>(new DateTimeProvider()) :
                                 null);

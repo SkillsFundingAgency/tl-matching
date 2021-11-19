@@ -4,7 +4,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Route.Builders
 {
     public class ValidRouteBuilder
     {
-        public Domain.Models.Route Build() => new Domain.Models.Route
+        public Domain.Models.Route Build() => new()
         {
             Id = 1,
             Name = "Route 1",

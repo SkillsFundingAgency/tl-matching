@@ -7,7 +7,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProvisionGap.Builders
     {
         public IList<Domain.Models.ProvisionGap> Build() => new List<Domain.Models.ProvisionGap>
         {
-            new Domain.Models.ProvisionGap
+            new()
             {
                 Id = 1,
                 NoSuitableStudent = true,
@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProvisionGap.Builders
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,
                 ModifiedOn = EntityCreationConstants.ModifiedOn
             },
-            new Domain.Models.ProvisionGap
+            new()
             {
                 Id = 2,
                 NoSuitableStudent = false,

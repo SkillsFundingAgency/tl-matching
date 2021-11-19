@@ -44,7 +44,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<SaveQualificationViewModel, Domain.Models.Qualification>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<SaveQualificationViewModel, Domain.Models.Qualification>(httpContextAccessor) :
+                            new LoggedInUserNameResolver<SaveQualificationViewModel, Domain.Models.Qualification>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<SaveQualificationViewModel, Domain.Models.Qualification>(dateTimeProvider) :
                                 null);
@@ -63,13 +63,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                 .GetManyAsync(Arg.Any<Expression<Func<QualificationRouteMapping, bool>>>())
                 .Returns(new List<QualificationRouteMapping>
                 {
-                    new QualificationRouteMapping
+                    new()
                     {
                         Id = 101,
                         QualificationId = 1,
                         RouteId = 1
                     },
-                    new QualificationRouteMapping
+                    new()
                     {
                         Id = 102,
                         QualificationId = 1,
@@ -92,19 +92,19 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                 Source = "Test",
                 Routes = new List<RouteSummaryViewModel>
                 {
-                    new RouteSummaryViewModel
+                    new()
                     {
                         Id = 1,
                         Name = "Route 1",
                         IsSelected = false
                     },
-                    new RouteSummaryViewModel
+                    new()
                     {
                         Id = 2,
                         Name = "Route 2",
                         IsSelected = true
                     },
-                    new RouteSummaryViewModel
+                    new()
                     {
                         Id = 3,
                         Name = "Route 1",

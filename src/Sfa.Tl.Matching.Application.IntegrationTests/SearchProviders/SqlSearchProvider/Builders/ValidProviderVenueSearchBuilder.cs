@@ -75,7 +75,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
 
             return new List<ProviderVenue>
             {
-                new ProviderVenue
+                new()
                 {
                     Provider = BuildProvider(true),
                     Postcode = "CV1 2WT",
@@ -88,7 +88,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                     Source = "Test",
                     ProviderQualification = BuildProviderQualifications()
                 },
-                new ProviderVenue
+                new()
                 {
                     Provider = BuildProvider(true),
                     Postcode = "CV1 2WT",
@@ -111,7 +111,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
 
             return new List<ProviderVenue>
             {
-                new ProviderVenue
+                new()
                 {
                     Provider = BuildProvider(true),
                     Postcode = "CV1 2WT",
@@ -125,7 +125,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                     Source = "Test",
                     ProviderQualification = BuildProviderQualifications()
                 },
-                new ProviderVenue
+                new()
                 {
                     Provider = BuildProvider(true),
                     Postcode = "CV1 2WT",
@@ -166,7 +166,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
         {
             return new List<ProviderQualification>
             {
-                new ProviderQualification
+                new()
                 {
                     Qualification = new Qualification
                     {
@@ -175,7 +175,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                         ShortTitle = "Short Title",
                         QualificationRouteMapping = new List<QualificationRouteMapping>
                         {
-                            new QualificationRouteMapping
+                            new()
                             {
                                 RouteId = 7,
                                 Source = "Test"
