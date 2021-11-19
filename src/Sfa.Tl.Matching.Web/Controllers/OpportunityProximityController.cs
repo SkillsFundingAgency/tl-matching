@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
@@ -103,7 +103,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 viewModel.SelectedProvider = viewModel.SelectedProvider.Where(p => p.IsSelected).ToArray();
 
-                TempData["SelectedProviders"] = JsonConvert.SerializeObject(viewModel);
+                TempData["SelectedProviders"] = JsonSerializer.Serialize(viewModel);
 
                 return RedirectToRoute("SaveReferral");
             }

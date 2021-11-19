@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -190,21 +191,33 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<int> HandleEmployerCreatedAsync(string payload)
         {
-            var createdEvent = JsonConvert.DeserializeObject<CrmEmployerCreatedEvent>(payload, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
+            var createdEvent = JsonSerializer.Deserialize<CrmEmployerCreatedEvent>(payload,
+                new JsonSerializerOptions
+                {
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+                });
 
             return await CreateOrUpdateEmployerAsync(createdEvent);
         }
 
         public async Task<int> HandleEmployerUpdatedAsync(string payload)
         {
-            var updatedEvent = JsonConvert.DeserializeObject<CrmEmployerUpdatedEvent>(payload, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
+            var updatedEvent = JsonSerializer.Deserialize<CrmEmployerUpdatedEvent>(payload,
+                new JsonSerializerOptions
+                {
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+                });
 
             return await CreateOrUpdateEmployerAsync(updatedEvent);
         }
 
         public async Task<int> HandleContactUpdatedAsync(string payload)
         {
-            var createdEvent = JsonConvert.DeserializeObject<CrmContactUpdatedEvent>(payload, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
+            var createdEvent = JsonSerializer.Deserialize<CrmContactUpdatedEvent>(payload,
+                new JsonSerializerOptions
+                {
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+                });
 
             return await CreateOrUpdateContactAsync(createdEvent);
         }

@@ -1,32 +1,32 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Sfa.Tl.Matching.Models.EmailDeliveryStatus
 {
     public class EmailDeliveryStatusPayLoad
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public Guid Id { get; set; }
 
-        [JsonProperty("reference")]
+        [JsonPropertyName("reference")]
         public string Reference { get; set; }
         
-        [JsonProperty("to")]
+        [JsonPropertyName("to")]
         public string To { get; set; }
 
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public string Status { get; set; }
 
-        [JsonProperty("created_at")]
+        [JsonPropertyName("created_at")]
         public DateTime CreatedAt { get; set; }
 
-        [JsonProperty("completed_at")]
+        [JsonPropertyName("completed_at")]
         public DateTime? CompletedAt { get; set; }
 
-        [JsonProperty("sent_at")]
+        [JsonPropertyName("sent_at")]
         public DateTime? SentAt { get; set; }
 
-        [JsonProperty("notification_type")]
+        [JsonPropertyName("notification_type")]
         public string NotificationType { get; set; }
         public string EmailDeliveryStatus => string.IsNullOrEmpty(Status) ? "unknown-failure" : Status;
 

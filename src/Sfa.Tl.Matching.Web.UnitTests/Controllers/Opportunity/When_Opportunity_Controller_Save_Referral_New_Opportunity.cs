@@ -1,9 +1,9 @@
-﻿using AutoMapper;
+﻿using System.Text.Json;
+using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Newtonsoft.Json;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
@@ -84,7 +84,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 }
             };
 
-            var serializeObject = JsonConvert.SerializeObject(viewModel);
+            var serializeObject = JsonSerializer.Serialize(viewModel);
             var tempDataProvider = Substitute.For<ITempDataProvider>();
             var tempDataDictionaryFactory = new TempDataDictionaryFactory(tempDataProvider);
             var tempData = tempDataDictionaryFactory.GetTempData(new DefaultHttpContext());
@@ -133,7 +133,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             result.Should().NotBeNull();
 
             result?.RouteName.Should().Be("GetPlacementInformation");
-            result?.RouteValues["opportunityItemId"].Should().Be(2);
+            result?.RouteValues?["opportunityItemId"].Should().Be(2);
         }
     }
 }

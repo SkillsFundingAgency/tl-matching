@@ -1,58 +1,58 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Sfa.Tl.Matching.Models.Event
 {
     public class CrmContactEventBase
     {
-        [JsonProperty("contactid")]
+        [JsonPropertyName("contactid")]
         public string ContactId { get; set; }
         
-        [JsonProperty("parentcustomerid")]
+        [JsonPropertyName("parentcustomerid")]
         public ParentCustomerId ParentCustomerId { get; set; }
 
-        [JsonProperty("customertypecode")]
+        [JsonPropertyName("customertypecode")]
         public Customertypecode CustomerTypeCode { get; set; }
 
-        [JsonProperty("fullname")]
+        [JsonPropertyName("fullname")]
         public string Fullname { get; set; }
 
-        [JsonProperty("mobilephone")]
+        [JsonPropertyName("mobilephone")]
         public object MobilePhone { get; set; }
         
-        [JsonProperty("telephone1")]
+        [JsonPropertyName("telephone1")]
         public string Telephone { get; set; }
 
-        [JsonProperty("emailaddress1")]
+        [JsonPropertyName("emailaddress1")]
         public string EmailAddress { get; set; }
 
-        [JsonProperty("address1_city")]
+        [JsonPropertyName("address1_city")]
         public string City { get; set; }
 
-        [JsonProperty("address1_county")]
+        [JsonPropertyName("address1_county")]
         public string County { get; set; }
 
-        [JsonProperty("address1_line1")]
+        [JsonPropertyName("address1_line1")]
         public string AddressLine1 { get; set; }
 
-        [JsonProperty("address1_line2")]
+        [JsonPropertyName("address1_line2")]
         public string AddressLine2 { get; set; }
 
-        [JsonProperty("address1_line3")]
+        [JsonPropertyName("address1_line3")]
         public object AddressLine3 { get; set; }
 
-        [JsonProperty("address1_postalcode")]
+        [JsonPropertyName("address1_postalcode")]
         public string PostCode { get; set; }
     }
 
     public class ParentCustomerId
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("logicalname")]
+        [JsonPropertyName("logicalname")]
         public string LogicalName { get; set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
     }
 }

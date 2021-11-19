@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;                                                                                                                                               
+using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
@@ -66,7 +66,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> SaveReferralAsync()
         {
             var selectedProviders = TempData["SelectedProviders"] as string;
-            var saveReferralViewModel = JsonConvert.DeserializeObject<SaveReferralViewModel>(selectedProviders!);
+            var saveReferralViewModel = JsonSerializer.Deserialize<SaveReferralViewModel>(selectedProviders!);
 
             var opportunityDto = _mapper.Map<OpportunityDto>(saveReferralViewModel);
             var opportunityItemDto = _mapper.Map<OpportunityItemDto>(saveReferralViewModel);

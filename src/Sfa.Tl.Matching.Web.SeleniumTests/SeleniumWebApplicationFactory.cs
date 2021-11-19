@@ -143,6 +143,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
             {
                 _webHost?.Dispose();
                 _process?.CloseMainWindow();
+                _process?.Close();
                 _process?.Dispose();
             }
 
