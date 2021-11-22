@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Application.Services
         public IEnumerable<EmployerSearchResultDto> Search(string companyName)
         {
             var searchResults = _employerRepository
-                .GetManyAsync(e => EF.Functions.Like(e.CompanyNameSearch, $"%{companyName.ToLetterOrDigit()}%"))
+                .GetMany(e => EF.Functions.Like(e.CompanyNameSearch, $"%{companyName.ToLetterOrDigit()}%"))
                 .OrderBy(e => e.CompanyName)
                 .ProjectTo<EmployerSearchResultDto>(_mapper.ConfigurationProvider);
 
@@ -154,7 +154,7 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<SavedEmployerOpportunityViewModel> GetSavedEmployerOpportunitiesAsync(string username)
         {
             var employerOpportunities = await _opportunityRepository
-                .GetManyAsync(o => o.OpportunityItem.Any(oi => oi.IsSaved && !oi.IsCompleted) && o.CreatedBy == username)
+                .GetMany(o => o.OpportunityItem.Any(oi => oi.IsSaved && !oi.IsCompleted) && o.CreatedBy == username)
                 .ProjectTo<EmployerOpportunityViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
@@ -169,7 +169,7 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<RemoveEmployerDto> GetConfirmDeleteEmployerOpportunityAsync(int opportunityId, string username)
         {
             var opportunityCount = _opportunityRepository.GetEmployerOpportunityCount(opportunityId);
-            var employerCount = _opportunityRepository.GetManyAsync(o => o.OpportunityItem.Any(oi => oi.IsSaved && !oi.IsCompleted) && o.CreatedBy == username).ToList();
+            var employerCount = _opportunityRepository.GetMany(o => o.OpportunityItem.Any(oi => oi.IsSaved && !oi.IsCompleted) && o.CreatedBy == username).ToList();
 
             var removeEmployerDto = await _opportunityRepository.GetSingleOrDefaultAsync(
                     op => op.Id == opportunityId,

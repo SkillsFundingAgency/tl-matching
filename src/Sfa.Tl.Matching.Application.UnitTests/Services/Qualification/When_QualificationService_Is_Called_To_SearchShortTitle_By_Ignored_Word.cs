@@ -44,7 +44,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
         {
             _repository
                 .DidNotReceive()
-                .GetManyAsync(Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>());
+                .GetMany(Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>());
         }
     }
 }

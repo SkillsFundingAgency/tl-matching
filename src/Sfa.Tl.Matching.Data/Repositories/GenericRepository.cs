@@ -253,7 +253,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             }
         }
 
-        public IQueryable<T> GetManyAsync(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] navigationPropertyPath)
+        public IQueryable<T> GetMany(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] navigationPropertyPath)
         {
             var queryable = GetQueryableWithIncludes(predicate, null, true, navigationPropertyPath);
 

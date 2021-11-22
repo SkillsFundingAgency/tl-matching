@@ -25,23 +25,23 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<IDictionary<int, string>> GetRouteDictionaryAsync()
         {
-            return await _routeRepository.GetManyAsync().OrderBy(r => r.Name).ToDictionaryAsync(r => r.Id, r => r.Name);
+            return await _routeRepository.GetMany().OrderBy(r => r.Name).ToDictionaryAsync(r => r.Id, r => r.Name);
         }
 
         public async Task<IList<int>> GetRouteIdsAsync()
         {
-            return await _routeRepository.GetManyAsync().Select(r => r.Id).OrderBy(r => r).ToListAsync();
+            return await _routeRepository.GetMany().Select(r => r.Id).OrderBy(r => r).ToListAsync();
         }
 
         public async Task<IList<SelectListItem>> GetRouteSelectListItemsAsync()
         {
-            return await _routeRepository.GetManyAsync().OrderBy(r => r.Name).ProjectTo<SelectListItem>(_mapper.ConfigurationProvider).ToListAsync();
+            return await _routeRepository.GetMany().OrderBy(r => r.Name).ProjectTo<SelectListItem>(_mapper.ConfigurationProvider).ToListAsync();
         }
 
         public async Task<IList<RouteSummaryViewModel>> GetRouteSummaryAsync()
         {
             return await _routeRepository
-                .GetManyAsync()
+                .GetMany()
                 .OrderBy(r => r.Name)
                 .ProjectTo<RouteSummaryViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();

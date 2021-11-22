@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
 
             _qualificationRouteMappingRepository = Substitute.For<IRepository<QualificationRouteMapping>>();
             _qualificationRouteMappingRepository
-                .GetManyAsync(Arg.Any<Expression<Func<QualificationRouteMapping, bool>>>())
+                .GetMany(Arg.Any<Expression<Func<QualificationRouteMapping, bool>>>())
                 .Returns(new List<QualificationRouteMapping>
                 {
                     new()
@@ -145,7 +145,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
         {
             _qualificationRouteMappingRepository
                 .Received(1)
-                .GetManyAsync(Arg.Any<Expression<Func<QualificationRouteMapping, bool>>>());
+                .GetMany(Arg.Any<Expression<Func<QualificationRouteMapping, bool>>>());
         }
         
         [Fact]

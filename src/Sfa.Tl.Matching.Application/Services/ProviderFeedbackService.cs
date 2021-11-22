@@ -189,7 +189,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var today = _dateTimeProvider.UtcNow().Date;
             var holidays = _bankHolidayRepository
-                .GetManyAsync(h => h.Date.Month == today.Month)
+                .GetMany(h => h.Date.Month == today.Month)
                 .Select(h => h.Date)
                 .ToList();
 

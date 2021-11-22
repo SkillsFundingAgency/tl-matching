@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
             var opportunityItems = new ValidOpportunityItemListBuilder().Build();
 
             _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
-            _opportunityItemRepository.GetManyAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
+            _opportunityItemRepository.GetMany(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
                 .Returns(opportunityItems
                     .AsQueryable());
 

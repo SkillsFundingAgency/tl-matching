@@ -124,7 +124,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
-                var result = await _employerRepository.GetManyAsync().CountAsync();
+                var result = await _employerRepository.GetMany().CountAsync();
 
                 stopwatch.Stop();
 

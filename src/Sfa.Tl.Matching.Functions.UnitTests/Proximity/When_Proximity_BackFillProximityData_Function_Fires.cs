@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
                 .AsQueryable()
                 .BuildMockDbSet();
 
-            _providerVenueRepository.GetManyAsync(Arg.Any<Expression<Func<ProviderVenue, bool>>>())
+            _providerVenueRepository.GetMany(Arg.Any<Expression<Func<ProviderVenue, bool>>>())
                 .Returns(mockProviderVenueDbSet);
 
             _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();

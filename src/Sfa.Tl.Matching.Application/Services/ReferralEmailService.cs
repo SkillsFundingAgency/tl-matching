@@ -276,7 +276,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task CompleteRemainingProvisionGapsAsync(int opportunityId, string username)
         {
-            var remainingOpportunities = _opportunityItemRepository.GetManyAsync(oi => oi.Opportunity.Id == opportunityId
+            var remainingOpportunities = _opportunityItemRepository.GetMany(oi => oi.Opportunity.Id == opportunityId
                                                                                   && oi.IsSaved
                                                                                   && !oi.IsCompleted);
 

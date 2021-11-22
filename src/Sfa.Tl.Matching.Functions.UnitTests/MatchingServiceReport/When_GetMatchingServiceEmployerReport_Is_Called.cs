@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.MatchingServiceReport
                 .BuildMockDbSet();
 
             var employerRepository = Substitute.For<IRepository<Domain.Models.Employer>>();
-            employerRepository.GetManyAsync().Returns(mockEmployerDbSet);
+            employerRepository.GetMany().Returns(mockEmployerDbSet);
 
             var opportunityRepository = Substitute.For< IOpportunityRepository > ();
 

@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
             var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
 
             _providerVenueRepository = Substitute.For<IRepository<ProviderVenue>>();
-            _providerVenueRepository.GetManyAsync(Arg.Any<Expression<Func<ProviderVenue, bool>>>())
+            _providerVenueRepository.GetMany(Arg.Any<Expression<Func<ProviderVenue, bool>>>())
                 .Returns(new List<ProviderVenue>{ new ProviderVenue
                 {
                     Postcode = "CV1 2WT",

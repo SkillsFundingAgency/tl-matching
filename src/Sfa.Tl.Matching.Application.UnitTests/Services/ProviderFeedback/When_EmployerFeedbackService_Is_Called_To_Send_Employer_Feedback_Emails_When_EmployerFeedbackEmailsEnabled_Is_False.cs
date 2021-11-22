@@ -49,11 +49,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         }
 
         [Fact]
-        public void BankHolidayRepository_GetManyAsync_Is_Not_Called()
+        public void BankHolidayRepository_GetMany_Is_Not_Called()
         {
             _bankHolidayRepository
                 .DidNotReceive()
-                .GetManyAsync(Arg.Any<Expression<Func<BankHoliday, bool>>>());
+                .GetMany(Arg.Any<Expression<Func<BankHoliday, bool>>>());
         }
 
         [Fact]

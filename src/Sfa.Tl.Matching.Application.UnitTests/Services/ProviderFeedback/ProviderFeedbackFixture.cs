@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 
             BankHolidayRepository = Substitute.For<IRepository<BankHoliday>>();
             BankHolidayRepository
-                .GetManyAsync(Arg.Any<Expression<Func<BankHoliday, bool>>>())
+                .GetMany(Arg.Any<Expression<Func<BankHoliday, bool>>>())
                 .Returns(new List<BankHoliday>().AsQueryable());
         }
 

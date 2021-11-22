@@ -87,7 +87,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         {
             _testFixture.BankHolidayRepository
                 .Received(1)
-                .GetManyAsync(Arg.Any<Expression<Func<BankHoliday, bool>>>());
+                .GetMany(Arg.Any<Expression<Func<BankHoliday, bool>>>());
         }
 
         [Fact]

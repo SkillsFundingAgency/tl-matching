@@ -86,7 +86,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
 
             var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo, functionLogRepository);
 
-            var itemIds = itemRepo.GetManyAsync(oi => oi.Opportunity.Id == opportunity.Id
+            var itemIds = itemRepo.GetMany(oi => oi.Opportunity.Id == opportunity.Id
                                                  && oi.IsSaved
                                                  && oi.IsSelectedForReferral
                                                  && !oi.IsCompleted).Select(oi => oi.Id);

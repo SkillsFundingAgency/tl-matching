@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task RemoveProviderQualificationAsync(int providerVenueId, int qualificationId)
         {
-            var providerQualifications = await _providerQualificationRepository.GetManyAsync(
+            var providerQualifications = await _providerQualificationRepository.GetMany(
                 pq => pq.ProviderVenueId == providerVenueId
                       && pq.QualificationId == qualificationId).ToListAsync();
 

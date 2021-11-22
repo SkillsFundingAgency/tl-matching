@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping
             dbContext.SaveChanges();
 
             var repository = new QualificationRouteMappingRepository(logger, dbContext);
-            _result = repository.GetManyAsync().ToList();
+            _result = repository.GetMany().ToList();
         }
 
         [Fact]

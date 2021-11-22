@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification
                 .BuildMockDbSet();
 
             _providerQualificationRepository = Substitute.For<IRepository<Domain.Models.ProviderQualification>>();
-            _providerQualificationRepository.GetManyAsync(Arg.Any<Expression<Func<Domain.Models.ProviderQualification, bool>>>()).Returns(mockDbSet);
+            _providerQualificationRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.ProviderQualification, bool>>>()).Returns(mockDbSet);
 
             var providerQualificationService = new ProviderQualificationService(mapper, _providerQualificationRepository);
 
