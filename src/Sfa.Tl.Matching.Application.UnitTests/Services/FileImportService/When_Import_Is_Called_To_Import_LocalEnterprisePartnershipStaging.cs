@@ -88,7 +88,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
             _fileReaderResults.Count.Should().Be(_result);
         }
 
-        public IList<LocalEnterprisePartnershipStagingDto> Build(int numberOfItems)
+        private IList<LocalEnterprisePartnershipStagingDto> Build(int numberOfItems)
         {
             var learningAimReferenceDtos = new List<LocalEnterprisePartnershipStagingDto>();
 
