@@ -124,7 +124,6 @@ namespace Sfa.Tl.Matching.Application.Services
                     ShortTitle = grp.Key.ShortTitle,
                     LarId = grp.Key.LarId,
                     RouteIds = grp.Select(g => g.RouteId).ToList()
-
                 })
                 .OrderBy(q => q.Title.IndexOf(qualificationSearch, StringComparison.Ordinal))
                 .ToList();
@@ -137,22 +136,23 @@ namespace Sfa.Tl.Matching.Application.Services
             };
         }
 
-        public async Task<IList<QualificationShortTitleSearchResultViewModel>> SearchShortTitleAsync(string shortTitle)
+        public IList<QualificationShortTitleSearchResultViewModel> SearchShortTitle(string shortTitle)
         {
             var shortTitleSearch = shortTitle.ToQualificationSearch();
 
             if (string.IsNullOrEmpty(shortTitleSearch))
                 return new List<QualificationShortTitleSearchResultViewModel>();
 
-            var searchResults = await _qualificationRepository
+            var searchResults = _qualificationRepository
                 .GetManyAsync(q => EF.Functions.Like(q.ShortTitleSearch, $"%{shortTitleSearch}%"))
                 .Select(q => new QualificationShortTitleSearchResultViewModel
                 {
                     ShortTitle = q.ShortTitle
                 })
                 .Distinct()
+                .AsEnumerable()
                 .OrderBy(q => q.ShortTitle.IndexOf(shortTitleSearch, StringComparison.Ordinal))
-                .ToListAsync();
+                .ToList();
 
             return searchResults;
         }

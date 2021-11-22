@@ -113,9 +113,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("search-short-title", Name = "SearchShortTitle")]
-        public async Task<IActionResult> SearchShortTitleAsync(string query)
+        public IActionResult SearchShortTitle(string query)
         {
-            var shortTitles = await _qualificationService.SearchShortTitleAsync(query);
+            var shortTitles = _qualificationService.SearchShortTitle(query);
 
             return Ok(shortTitles);
         }
@@ -128,9 +128,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                var errorList = ModelState.Where(e => e.Value.Errors.Any()).ToDictionary(
-                    kvp => kvp.Key,
-                    kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                var errorList = ModelState
+                    .Where(e => e.Value != null && e.Value.Errors.Any())
+                    .ToDictionary(
+                        kvp => kvp.Key,
+                        kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage).ToArray()
                 );
 
                 var errors = JsonSerializer.Serialize(errorList);

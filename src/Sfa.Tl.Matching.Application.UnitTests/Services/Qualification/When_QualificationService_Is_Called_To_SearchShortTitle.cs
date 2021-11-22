@@ -55,7 +55,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
 
             var service = new QualificationService(mapper, qualificationRepo, routeMappingRepo, learningAimReferenceRepository);
 
-            _searchResults = service.SearchShortTitleAsync("sport").GetAwaiter().GetResult();
+            _searchResults = service.SearchShortTitle("sport");
         }
 
         [Fact]
