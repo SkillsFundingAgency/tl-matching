@@ -2,43 +2,32 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Sfa.Tl.Matching.Web;
 
-namespace Sfa.Tl.Matching.Web
+try
 {
-    public class Program
-    {
-        public static void Main(string[] args)
+    Host.CreateDefaultBuilder(args)
+        .ConfigureLogging(logging =>
         {
-            try
-            {
-                CreateHostBuilder(args)
-                    .Build()
-                    .Run();
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
-            }
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureLogging(logging =>
+            logging.AddConsole();
+            logging.AddDebug();
+            logging.AddAzureWebAppDiagnostics();
+            logging.AddFilter((category, level) =>
+                level >= (category == "Microsoft" ? LogLevel.Error : LogLevel.Information));
+        })
+        .ConfigureWebHostDefaults(webBuilder =>
+        {
+            webBuilder
+                .ConfigureKestrel(serverOptions =>
                 {
-                    logging.AddConsole();
-                    logging.AddDebug();
-                    logging.AddAzureWebAppDiagnostics();
-                    logging.AddFilter((category, level) =>
-                        level >= (category == "Microsoft" ? LogLevel.Error : LogLevel.Information));
+                    serverOptions.Limits.MaxRequestBodySize = null;
                 })
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder
-                        .ConfigureKestrel(serverOptions =>
-                        {
-                            serverOptions.Limits.MaxRequestBodySize = null;
-                        })
-                        .UseStartup<Startup>();
-                });
-    }
+                .UseStartup<Startup>();
+        })
+        .Build()
+        .Run();
+}
+catch (Exception exception)
+{
+    Console.WriteLine(exception);
 }
