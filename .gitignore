@@ -309,3 +309,6 @@ __pycache__/
 
 # Azurite working files
 __azurite_db_*
+
+# Benchmark.Net folder
+BenchmarkDotNet.Artifacts/
