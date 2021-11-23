@@ -53,10 +53,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 pq => pq.ProviderVenueId == providerVenueId
                       && pq.QualificationId == qualificationId).ToListAsync();
 
-            if (providerQualifications != null)
-            {
-                await _providerQualificationRepository.DeleteManyAsync(providerQualifications);
-            }
+            await _providerQualificationRepository.DeleteManyAsync(providerQualifications);
         }
     }
 }
