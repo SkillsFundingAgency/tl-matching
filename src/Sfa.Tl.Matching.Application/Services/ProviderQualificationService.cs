@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 .GetSingleOrDefaultAsync(p => p.ProviderVenueId == providerVenueId && 
                                               p.QualificationId == qualificationId);
 
-            return providerQualification != null && !providerQualification.IsDeleted 
+            return providerQualification is { IsDeleted: false } 
                 ? _mapper.Map<ProviderQualificationDto>(providerQualification)
                 : null;
         }

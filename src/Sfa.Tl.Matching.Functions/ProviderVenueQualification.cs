@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 var createdByUser = await blobClient.GetCreatedByMetadata();
 
-                if (_httpContextAccessor != null && _httpContextAccessor.HttpContext == null)
+                if (_httpContextAccessor is { HttpContext: null })
                 {
                     _httpContextAccessor.HttpContext = new DefaultHttpContext
                     {

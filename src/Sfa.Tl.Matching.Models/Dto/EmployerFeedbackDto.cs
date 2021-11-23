@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Models.Dto
         public DateTime? ModifiedOn { get; set; }
         private string StudentsDetail =>
             PlacementsDetail == "At least 1" 
-            || (PlacementsKnown.GetValueOrDefault() && Placements.HasValue && Placements.Value == 1)
+            || (PlacementsKnown.GetValueOrDefault() && Placements is 1)
                 ? "student"
                 : "students";
     }

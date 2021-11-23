@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
             _providerVenueRepository = Substitute.For<IRepository<ProviderVenue>>();
             var mockProviderVenueDbSet = new List<ProviderVenue>
                 {
-                    new ProviderVenue
+                    new()
                     {
                         Postcode = "CV1 2WT",
                         Town = null

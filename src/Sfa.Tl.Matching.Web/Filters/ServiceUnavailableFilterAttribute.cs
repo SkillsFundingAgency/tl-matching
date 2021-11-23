@@ -72,16 +72,18 @@ namespace Sfa.Tl.Matching.Web.Filters
 
         private static bool IsSignOut(ActionContext context)
         {
-            return context.ActionDescriptor is ControllerActionDescriptor controllerActionDescriptor
-                   && controllerActionDescriptor.ControllerName == "Account"
-                   && controllerActionDescriptor.ActionName == nameof(AccountController.SignOut);
+            return context.ActionDescriptor is ControllerActionDescriptor
+            {
+                ControllerName: "Account", ActionName: nameof(AccountController.SignOut)
+            };
         }
 
         private static bool IsServiceUnavailable(ActionContext context)
         {
-            return context.ActionDescriptor is ControllerActionDescriptor controllerActionDescriptor
-                   && controllerActionDescriptor.ControllerName == "Home"
-                   && controllerActionDescriptor.ActionName == nameof(HomeController.ServiceUnavailable);
+            return context.ActionDescriptor is ControllerActionDescriptor
+            {
+                ControllerName: "Home", ActionName: nameof(HomeController.ServiceUnavailable)
+            };
         }
     }
 }

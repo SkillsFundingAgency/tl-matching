@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderReference
         private readonly IReferenceDataService _referenceDataService;
         private readonly IRepository<FunctionLog> _functionLogRepository;
 
-        private readonly DateTime _minValue = new DateTime(0001, 1, 1, 0, 0, 0);
+        private readonly DateTime _minValue = new(0001, 1, 1, 0, 0, 0);
 
         public When_ImportProviderReference_Function_Http_Trigger_Is_Called()
         {

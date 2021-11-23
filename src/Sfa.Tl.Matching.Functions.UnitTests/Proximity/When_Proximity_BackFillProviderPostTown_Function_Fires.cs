@@ -26,11 +26,14 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
 
             _providerVenueRepository = Substitute.For<IRepository<ProviderVenue>>();
             _providerVenueRepository.GetMany(Arg.Any<Expression<Func<ProviderVenue, bool>>>())
-                .Returns(new List<ProviderVenue>{ new ProviderVenue
+                .Returns(new List<ProviderVenue>
                 {
-                    Postcode = "CV1 2WT",
-                    Town = null
-                }}.AsQueryable());
+                    new()
+                    {
+                        Postcode = "CV1 2WT",
+                        Town = null
+                    }
+                }.AsQueryable());
 
             _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
@@ -38,7 +41,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
             _googleMapsApiClient.GetAddressDetailsAsync("CV1 2WT").Returns("Coventry");
 
             var locationApiClient = Substitute.For<ILocationApiClient>();
-            
+
             var proximityFunctions = new Functions.Proximity(
                 locationApiClient,
                 _googleMapsApiClient,
@@ -47,9 +50,9 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
                 _functionLogRepository);
 
             proximityFunctions.BackFillProviderPostTownAsync(
-                new TimerInfo(new ConstantSchedule(TimeSpan.Zero), null), 
-                new ExecutionContext(), 
-                new NullLogger<Functions.Proximity>() 
+                new TimerInfo(new ConstantSchedule(TimeSpan.Zero), null),
+                new ExecutionContext(),
+                new NullLogger<Functions.Proximity>()
                 ).GetAwaiter().GetResult();
         }
 

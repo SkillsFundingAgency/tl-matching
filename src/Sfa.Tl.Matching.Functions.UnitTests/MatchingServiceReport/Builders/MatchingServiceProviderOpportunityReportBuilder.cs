@@ -7,7 +7,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.MatchingServiceReport.Builders
     {
         public IList<MatchingServiceProviderOpportunityReport> BuildList() => new List<MatchingServiceProviderOpportunityReport>
         {
-            new MatchingServiceProviderOpportunityReport
+            new()
             {
                 OpportunityItemCount = 1,
                 RouteName = "Digital",
@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.MatchingServiceReport.Builders
                 LepCode = "E1234567",
                 LepName = "Test LEP"
             },
-            new MatchingServiceProviderOpportunityReport
+            new()
             {
                 OpportunityItemCount = 2,
                 RouteName = "Digital",

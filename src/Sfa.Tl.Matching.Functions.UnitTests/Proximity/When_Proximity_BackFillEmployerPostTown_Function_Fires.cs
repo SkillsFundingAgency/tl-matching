@@ -25,11 +25,14 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
         {
             _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             _opportunityItemRepository.GetMany(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
-                .Returns(new List<OpportunityItem>{ new OpportunityItem
-                {
-                    Postcode = "CV1 2WT",
-                    Town = null
-                }}.AsQueryable());
+                .Returns(new List<OpportunityItem>
+                { 
+                    new()
+                    {
+                        Postcode = "CV1 2WT",
+                        Town = null
+                    }
+                }.AsQueryable());
 
             var providerVenueRepository = Substitute.For<IRepository<ProviderVenue>>();
 

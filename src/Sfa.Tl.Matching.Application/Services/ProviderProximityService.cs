@@ -38,9 +38,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var searchResults = await _searchProvider.SearchProvidersByPostcodeProximityAsync(searchParameters);
 
-            if (searchParameters.SelectedRoutes != null
-                && searchParameters.SelectedRoutes.Count > 0
-                && searchResults != null)
+            if (searchParameters.SelectedRoutes is { Count: > 0 } && searchResults != null)
             {
                 var filteredResults = searchResults
                     .Where(s => s.Routes.Any(r => searchParameters.SelectedRoutes.Contains(r.RouteId)))
@@ -91,9 +89,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var searchResults = await _searchProvider.SearchProvidersByPostcodeProximityForReportAsync(searchParameters);
 
-            if (searchParameters.SelectedRouteNames != null
-                && searchParameters.SelectedRouteNames.Count > 0
-                && searchResults != null)
+            if (searchParameters.SelectedRouteNames is { Count: > 0 } && searchResults != null)
             {
                 var routes = await _routePathService.GetRouteDictionaryAsync();
 
