@@ -44,7 +44,7 @@ namespace Sfa.Tl.Matching.Web
         protected MatchingConfiguration MatchingConfiguration;
         protected bool IsTestAdminUser { get; set; } = true;
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
@@ -55,7 +55,7 @@ namespace Sfa.Tl.Matching.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            ConfigureConfiguration(services);
+            LoadConfiguration();
 
             var isConfigLocalOrDev = ConfigurationIsLocalOrDev();
 
@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Web
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
+                options.CheckConsentNeeded = _ => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
@@ -182,7 +182,7 @@ namespace Sfa.Tl.Matching.Web
             });
         }
 
-        protected virtual void ConfigureConfiguration(IServiceCollection services)
+        protected virtual void LoadConfiguration()
         {
             MatchingConfiguration = ConfigurationLoader.Load(
                 Configuration[Constants.EnvironmentNameConfigKey],
@@ -247,7 +247,7 @@ namespace Sfa.Tl.Matching.Web
 
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddTransient<IMessageQueueService, MessageQueueService>();
-            services.AddTransient<IAsyncNotificationClient, NotificationClient>(provider => new NotificationClient(apiKey));
+            services.AddTransient<IAsyncNotificationClient, NotificationClient>(_ => new NotificationClient(apiKey));
 
             RegisterRepositories(services);
             RegisterApplicationServices(services);
