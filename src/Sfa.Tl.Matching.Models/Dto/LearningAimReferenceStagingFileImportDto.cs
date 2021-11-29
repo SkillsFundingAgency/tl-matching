@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Models.Dto
         [Column(Order = 0)] public string LarId { get; set; }
         [Column(Order = 3)] public string Title { get; set; }
         [Column(Order = 7)] public string AwardOrgLarId { get; set; }
-        [Column(Order = 55)] public string SourceCreatedOn { get; set; }
-        [Column(Order = 57)] public string SourceModifiedOn { get; set; }
+        [Column(Order = 56)] public string SourceCreatedOn { get; set; }
+        [Column(Order = 58)] public string SourceModifiedOn { get; set; }
     }
 }
