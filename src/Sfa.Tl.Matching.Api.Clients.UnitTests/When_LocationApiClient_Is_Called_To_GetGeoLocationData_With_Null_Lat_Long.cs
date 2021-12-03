@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Globalization;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Api.Clients.UnitTests.Factories;
@@ -7,14 +8,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Api.Clients.UnitTests
 {
-    public class When_LocationApiClient_Is_Called_To_GetGeoLocationData
+    public class When_LocationApiClient_Is_Called_To_GetGeoLocationData_With_Null_Lat_Long
     {
         private readonly LocationApiClient _locationApiClient;
 
-        public When_LocationApiClient_Is_Called_To_GetGeoLocationData()
+        public When_LocationApiClient_Is_Called_To_GetGeoLocationData_With_Null_Lat_Long()
         {
             var httpClient = new PostcodesTestHttpClientFactory()
-                .Get("CV1 2WT", 50.001, -1.234);
+                .Get("GY1 4NS", null, null);
 
             _locationApiClient = new LocationApiClient(httpClient,
                 new MatchingConfiguration
@@ -27,12 +28,12 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
         public async Task Then_Postcode_Is_Returned_Correctly()
         {
             var postcodeData = await _locationApiClient
-                .GetGeoLocationDataAsync("CV12WT");
+                .GetGeoLocationDataAsync("GY14NS");
 
             postcodeData.Should().NotBeNull();
-            postcodeData.Postcode.Should().Be("CV1 2WT");
-            postcodeData.Latitude.Should().Be("50.001");
-            postcodeData.Longitude.Should().Be("-1.234");
+            postcodeData.Postcode.Should().Be("GY1 4NS");
+            postcodeData.Latitude.Should().Be(LocationApiClient.DefaultLatitude.ToString(CultureInfo.InvariantCulture));
+            postcodeData.Longitude.Should().Be(LocationApiClient.DefaultLongitude.ToString(CultureInfo.InvariantCulture));
         }
     }
 }

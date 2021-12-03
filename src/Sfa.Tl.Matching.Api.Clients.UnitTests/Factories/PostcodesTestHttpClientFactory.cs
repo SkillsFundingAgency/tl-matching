@@ -1,19 +1,23 @@
 using System.Net.Http;
-using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Api.Clients.UnitTests.Factories
 {
     public class PostcodesTestHttpClientFactory : TestHttpClientFactory
     {
-        public HttpClient Get(string requestPostcode, PostcodeLookupResultDto responseData)
+        public HttpClient Get(string postcode, double? latitude, double? longitude)
         {
-            var response = new PostcodeLookupResponse
-            {
-                Result = responseData,
-                Status = "OK"
-            };
+            var latitudestring = latitude?.ToString() ?? "null";
+            var json =
+                "{ " +
+                "  \"status\": \"OK\"," +
+                "  \"result\": { " +
+               $"    \"postcode\":  \"{postcode}\"," +
+               $"    \"latitude\":  {latitude?.ToString() ?? "null"}, " +
+               $"    \"longitude\":  {longitude?.ToString() ?? "null"} " +
+               "  }" +
+               "}";
 
-            return CreateClient(response, $"https://example.com/postcodes/{requestPostcode.Replace(" ", "")}");
+            return CreateClient(json, $"https://example.com/postcodes/{postcode.Replace(" ", "")}");
         }
     }
 }
