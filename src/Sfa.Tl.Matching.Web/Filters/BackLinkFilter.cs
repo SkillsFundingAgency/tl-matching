@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
@@ -12,7 +13,6 @@ namespace Sfa.Tl.Matching.Web.Filters
         private readonly ILogger<BackLinkFilter> _logger;
         private readonly INavigationService _navigationService;
 
-
         public BackLinkFilter(ILogger<BackLinkFilter> logger, INavigationService navigationService)
         {
             _logger = logger;
@@ -23,6 +23,12 @@ namespace Sfa.Tl.Matching.Web.Filters
         {
             try
             {
+                if (!context.HttpContext.User.Identity.IsAuthenticated)
+                {
+                    await next();
+                    return;
+                }
+
                 if (context.HttpContext.Request.Method == "GET")
                 {
                     var path = context.HttpContext.Request.Path.ToString();
@@ -32,7 +38,6 @@ namespace Sfa.Tl.Matching.Web.Filters
                 }
 
                 await next();
-
             }
             catch (Exception exception)
             {

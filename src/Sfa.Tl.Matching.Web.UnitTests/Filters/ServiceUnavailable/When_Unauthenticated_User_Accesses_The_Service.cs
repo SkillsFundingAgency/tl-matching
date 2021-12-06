@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Filters.ServiceUnavailable
             var defaultHttpContext = Substitute.For<HttpContext>();
             var serviceStatusHistoryService = Substitute.For<IServiceStatusHistoryService>();
 
-            defaultHttpContext.User.Identity.IsAuthenticated.Returns(false);
+            defaultHttpContext.User.Identity!.IsAuthenticated.Returns(false);
 
             var routeData = new RouteData();
             var actionContext = new ActionContext(defaultHttpContext, routeData, new ActionDescriptor());
