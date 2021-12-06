@@ -50,11 +50,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Filters.ServiceUnavailable
                 null!);
 
             var serviceStatusHistoryService = Substitute.For<IServiceStatusHistoryService>();
-            var filterAttribute = new ServiceUnavailableFilterAttribute(serviceStatusHistoryService);
+            var filter = new ServiceUnavailableFilter(serviceStatusHistoryService);
 
             var actionExecutionDelegate = Substitute.For<ActionExecutionDelegate>();
 
-            filterAttribute.OnActionExecutionAsync(_actionExecutingContext, actionExecutionDelegate).GetAwaiter().GetResult();
+            filter.OnActionExecutionAsync(_actionExecutingContext, actionExecutionDelegate).GetAwaiter().GetResult();
         }
 
         [Fact]

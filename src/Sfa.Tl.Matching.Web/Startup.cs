@@ -103,7 +103,7 @@ namespace Sfa.Tl.Matching.Web
                     });
 
                     config.Filters.Add<CustomExceptionFilterAttribute>();
-                    config.Filters.Add<ServiceUnavailableFilterAttribute>();
+                    config.Filters.Add<ServiceUnavailableFilter>();
                     config.Filters.Add<BackLinkFilter>();
                 });
 

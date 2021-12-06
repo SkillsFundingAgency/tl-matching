@@ -9,11 +9,11 @@ using Sfa.Tl.Matching.Web.Controllers;
 
 namespace Sfa.Tl.Matching.Web.Filters
 {
-    public class ServiceUnavailableFilterAttribute : IAsyncActionFilter
+    public class ServiceUnavailableFilter : IAsyncActionFilter
     {
         private readonly IServiceStatusHistoryService _serviceStatusHistoryService;
 
-        public ServiceUnavailableFilterAttribute(IServiceStatusHistoryService serviceStatusHistoryService)
+        public ServiceUnavailableFilter(IServiceStatusHistoryService serviceStatusHistoryService)
         {
             _serviceStatusHistoryService = serviceStatusHistoryService;
         }

@@ -32,11 +32,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Filters.ServiceUnavailable
                 new Dictionary<string, object>(),
                 null!);
 
-            var filterAttribute = new ServiceUnavailableFilterAttribute(serviceStatusHistoryService);
+            var filter = new ServiceUnavailableFilter(serviceStatusHistoryService);
 
             var actionExecutionDelegate = Substitute.For<ActionExecutionDelegate>();
 
-            filterAttribute.OnActionExecutionAsync(_actionExecutingContext, actionExecutionDelegate).GetAwaiter().GetResult();
+            filter.OnActionExecutionAsync(_actionExecutingContext, actionExecutionDelegate).GetAwaiter().GetResult();
         }
 
         [Fact]
