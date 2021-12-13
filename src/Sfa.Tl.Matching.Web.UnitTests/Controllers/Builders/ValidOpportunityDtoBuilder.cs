@@ -5,7 +5,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
 {
     internal class ValidOpportunityDtoBuilder
     {
-        public OpportunityDto Build() => new OpportunityDto
+        public OpportunityDto Build() => new()
         {
             Id = 1,
             CompanyName = "CompanyName",

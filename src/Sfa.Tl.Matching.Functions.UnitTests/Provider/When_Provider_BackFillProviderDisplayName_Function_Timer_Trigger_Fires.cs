@@ -27,13 +27,13 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Provider
             using var dbContext = InMemoryDbContext.Create();
             dbContext.AddRange(new List<Domain.Models.Provider>
             {
-                new Domain.Models.Provider
+                new()
                 {
                     Id = 1,
                     Name = "War and Peace College",
                     DisplayName = null
                 },
-                new Domain.Models.Provider
+                new()
                 {
                     Id = 2,
                     Name = "Provider 2",

@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
     {
         private readonly IActionResult _result;
 
-        private readonly PlacementInformationSaveDto _dto = new PlacementInformationSaveDto();
+        private readonly PlacementInformationSaveDto _dto = new();
         private const bool PlacementsKnown = false;
         private const int Placements = 5;
         private const int OpportunityId = 1;

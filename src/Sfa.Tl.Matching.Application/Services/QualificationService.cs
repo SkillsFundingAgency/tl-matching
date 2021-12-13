@@ -98,11 +98,11 @@ namespace Sfa.Tl.Matching.Application.Services
                 };
 
             var qualifications = await _qualificationRepository
-                .GetManyAsync(q => EF.Functions.Like(q.QualificationSearch, $"%{qualificationSearch}%"))
+                .GetMany(q => EF.Functions.Like(q.QualificationSearch, $"%{qualificationSearch}%"))
                 .ToListAsync(); //Force results back to the client; needed due to EF Core 3.0 breaking change
 
             var results = qualifications
-                .Join(_qualificationRouteMappingRepository.GetManyAsync(), qualification => qualification.Id,
+                .Join(_qualificationRouteMappingRepository.GetMany(), qualification => qualification.Id,
                     qualificationRouteMapping => qualificationRouteMapping.QualificationId,
                     (qualification, qualificationRouteMapping) => new { qualification, qualificationRouteMapping })
                 .Select(q => new
@@ -124,7 +124,6 @@ namespace Sfa.Tl.Matching.Application.Services
                     ShortTitle = grp.Key.ShortTitle,
                     LarId = grp.Key.LarId,
                     RouteIds = grp.Select(g => g.RouteId).ToList()
-
                 })
                 .OrderBy(q => q.Title.IndexOf(qualificationSearch, StringComparison.Ordinal))
                 .ToList();
@@ -137,22 +136,23 @@ namespace Sfa.Tl.Matching.Application.Services
             };
         }
 
-        public async Task<IList<QualificationShortTitleSearchResultViewModel>> SearchShortTitleAsync(string shortTitle)
+        public IList<QualificationShortTitleSearchResultViewModel> SearchShortTitle(string shortTitle)
         {
             var shortTitleSearch = shortTitle.ToQualificationSearch();
 
             if (string.IsNullOrEmpty(shortTitleSearch))
                 return new List<QualificationShortTitleSearchResultViewModel>();
 
-            var searchResults = await _qualificationRepository
-                .GetManyAsync(q => EF.Functions.Like(q.ShortTitleSearch, $"%{shortTitleSearch}%"))
+            var searchResults = _qualificationRepository
+                .GetMany(q => EF.Functions.Like(q.ShortTitleSearch, $"%{shortTitleSearch}%"))
                 .Select(q => new QualificationShortTitleSearchResultViewModel
                 {
                     ShortTitle = q.ShortTitle
                 })
                 .Distinct()
+                .AsEnumerable()
                 .OrderBy(q => q.ShortTitle.IndexOf(shortTitleSearch, StringComparison.Ordinal))
-                .ToListAsync();
+                .ToList();
 
             return searchResults;
         }
@@ -164,7 +164,7 @@ namespace Sfa.Tl.Matching.Application.Services
             await _qualificationRepository.UpdateAsync(qualification);
 
             var existingMappings = _qualificationRouteMappingRepository
-                .GetManyAsync(r => r.QualificationId == viewModel.QualificationId)
+                .GetMany(r => r.QualificationId == viewModel.QualificationId)
                 .ToList();
 
             var comparer = new QualificationRouteMappingEqualityComparer();
@@ -200,7 +200,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<int> UpdateQualificationsSearchColumnsAsync()
         {
-            var qualificationsFromDb = _qualificationRepository.GetManyAsync()
+            var qualificationsFromDb = _qualificationRepository.GetMany()
                 .Where(q => string.IsNullOrEmpty(q.ShortTitleSearch) || string.IsNullOrEmpty(q.QualificationSearch))
                 .ToList();
 

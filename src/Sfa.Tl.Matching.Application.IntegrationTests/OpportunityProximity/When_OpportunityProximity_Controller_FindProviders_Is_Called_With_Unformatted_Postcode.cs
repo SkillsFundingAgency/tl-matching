@@ -43,8 +43,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.OpportunityProximity
             {
                 RoutesSelectList = new List<SelectListItem>
                 {
-                    new SelectListItem { Text = "1", Value = "Route 1" },
-                    new SelectListItem { Text = "2", Value = "Route 2" }
+                    new() { Text = "1", Value = "Route 1" },
+                    new() { Text = "2", Value = "Route 2" }
                 },
                 SelectedRouteId = 1,
                 Postcode = requestPostcode

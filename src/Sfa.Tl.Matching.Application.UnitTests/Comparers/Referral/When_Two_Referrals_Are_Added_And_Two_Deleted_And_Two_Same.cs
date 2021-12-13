@@ -13,18 +13,18 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Comparers.Referral
         {
             var viewModelReferrals = new List<Domain.Models.Referral>
             {
-                new Domain.Models.Referral { ProviderVenueId = 1, DistanceFromEmployer = 1 },
-                new Domain.Models.Referral { ProviderVenueId = 3, DistanceFromEmployer = 3 },
-                new Domain.Models.Referral { ProviderVenueId = 6, DistanceFromEmployer = 6 },
-                new Domain.Models.Referral { ProviderVenueId = 7, DistanceFromEmployer = 7 }
+                new() { ProviderVenueId = 1, DistanceFromEmployer = 1 },
+                new() { ProviderVenueId = 3, DistanceFromEmployer = 3 },
+                new() { ProviderVenueId = 6, DistanceFromEmployer = 6 },
+                new() { ProviderVenueId = 7, DistanceFromEmployer = 7 }
             };
 
             var databaseReferrals = new List<Domain.Models.Referral>
             {
-                new Domain.Models.Referral { ProviderVenueId = 4, DistanceFromEmployer = 4 },
-                new Domain.Models.Referral { ProviderVenueId = 5, DistanceFromEmployer = 5 },
-                new Domain.Models.Referral { ProviderVenueId = 6, DistanceFromEmployer = 6 },
-                new Domain.Models.Referral { ProviderVenueId = 7, DistanceFromEmployer = 7 }
+                new() { ProviderVenueId = 4, DistanceFromEmployer = 4 },
+                new() { ProviderVenueId = 5, DistanceFromEmployer = 5 },
+                new() { ProviderVenueId = 6, DistanceFromEmployer = 6 },
+                new() { ProviderVenueId = 7, DistanceFromEmployer = 7 }
             };
 
             var referralDifference = new ReferralDifference(new ReferralEqualityComparer());

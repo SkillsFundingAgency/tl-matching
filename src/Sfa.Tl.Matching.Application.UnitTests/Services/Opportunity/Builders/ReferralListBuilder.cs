@@ -6,7 +6,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
     {
         public IList<Domain.Models.Referral> Build() => new List<Domain.Models.Referral>
         {
-            new Domain.Models.Referral
+            new()
             {
                 ProviderVenue = new Domain.Models.ProviderVenue
                 {

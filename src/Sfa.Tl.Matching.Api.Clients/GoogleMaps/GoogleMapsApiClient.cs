@@ -1,9 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Sfa.Tl.Matching.Api.Clients.Extensions;
 using Sfa.Tl.Matching.Models.Configuration;
 
@@ -31,78 +30,33 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleMaps
             var responseMessage = await _httpClient.GetAsync(lookupUrl);
 
             responseMessage.EnsureSuccessStatusCode();
-
-            var response = await responseMessage.Content.ReadAsAsync<GooglePlacesResult>();
             
-            //Google return "StreetName, Town Postcode" therefore below , Please note this will not work if input postcode is in lowercase and or does not have Space between segments
-            return response.Status != "OK" ? string.Empty : response.Results.First().FormattedAddress.Split(",").Last().Replace(postcode, string.Empty).Trim();
+            var jsonDocument = await JsonDocument.ParseAsync(await responseMessage.Content.ReadAsStreamAsync());
+
+            var documentRoot = jsonDocument
+                .RootElement;
+
+            var status = 
+                documentRoot
+                .GetProperty("status")
+                .GetString();
+
+            if (status != "OK") 
+                return string.Empty;
+
+            var town = 
+                documentRoot
+                .GetProperty("results")
+                .EnumerateArray()
+                .First()
+                .GetProperty("formatted_address")
+                .GetString()
+                ?.Split(",")
+                .Last()
+                .Replace(postcode, string.Empty)
+                .Trim();
+
+            return town ?? string.Empty;
         }
     }
-
-    public class GooglePlacesResult
-    {
-        [JsonProperty("html_attributions")]
-        public object[] HtmlAttributions { get; set; }
-
-        [JsonProperty("results")]
-        public Result[] Results { get; set; }
-
-        [JsonProperty("status")]
-        public string Status { get; set; }
-    }
-
-    public class Result
-    {
-        [JsonProperty("formatted_address")]
-        public string FormattedAddress { get; set; }
-
-        [JsonProperty("geometry")]
-        public Geometry Geometry { get; set; }
-
-        [JsonProperty("icon")]
-        public Uri Icon { get; set; }
-
-        [JsonProperty("id")]
-        public string Id { get; set; }
-
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("place_id")]
-        public string PlaceId { get; set; }
-
-        [JsonProperty("reference")]
-        public string Reference { get; set; }
-
-        [JsonProperty("types")]
-        public string[] Types { get; set; }
-    }
-
-    public class Geometry
-    {
-        [JsonProperty("location")]
-        public Location Location { get; set; }
-
-        [JsonProperty("viewport")]
-        public Viewport Viewport { get; set; }
-    }
-
-    public class Location
-    {
-        [JsonProperty("lat")]
-        public double Lat { get; set; }
-
-        [JsonProperty("lng")]
-        public double Lng { get; set; }
-    }
-
-    public class Viewport
-    {
-        [JsonProperty("northeast")]
-        public Location Northeast { get; set; }
-
-        [JsonProperty("southwest")]
-        public Location Southwest { get; set; }
-    }
-
 }

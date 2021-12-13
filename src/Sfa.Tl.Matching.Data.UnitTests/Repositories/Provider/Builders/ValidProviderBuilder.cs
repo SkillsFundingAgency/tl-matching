@@ -4,7 +4,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider.Builders
 {
     public class ValidProviderBuilder
     {
-        public Domain.Models.Provider Build() => new Domain.Models.Provider
+        public Domain.Models.Provider Build() => new()
         {
             Id = 1,
             UkPrn = 10000546,

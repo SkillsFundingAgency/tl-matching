@@ -6,8 +6,8 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Qualification.Builders
     public class ValidQualificationListBuilder
     {
         public IList<Domain.Models.Qualification> Build() => new List<Domain.Models.Qualification>
-        { 
-            new Domain.Models.Qualification
+        {
+            new()
             {
                 Id = 1,
                 LarId = "1000",
@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Qualification.Builders
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,
                 ModifiedOn = EntityCreationConstants.ModifiedOn
             },
-            new Domain.Models.Qualification
+            new()
             {
                 Id = 2,
                 LarId = "1001",

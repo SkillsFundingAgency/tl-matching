@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         private readonly IEmployerService _employerService;
         private const int OpportunityId = 1;
         private const int OpportunityItemId = 12;
-        private readonly Guid _employerCrmId = new Guid("11111111-1111-1111-1111-111111111111");
+        private readonly Guid _employerCrmId = new("11111111-1111-1111-1111-111111111111");
 
         private const string CompanyName = "CompanyName";
 

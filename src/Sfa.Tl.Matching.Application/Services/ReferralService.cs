@@ -63,7 +63,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private IEnumerable<int> GetOpportunityItemIds(int opportunityId)
         {
-            var itemIds = _opportunityItemRepository.GetManyAsync(oi => oi.Opportunity.Id == opportunityId
+            var itemIds = _opportunityItemRepository.GetMany(oi => oi.Opportunity.Id == opportunityId
                                                                    && oi.IsSaved
                                                                    && oi.IsSelectedForReferral
                                                                    && !oi.IsCompleted)

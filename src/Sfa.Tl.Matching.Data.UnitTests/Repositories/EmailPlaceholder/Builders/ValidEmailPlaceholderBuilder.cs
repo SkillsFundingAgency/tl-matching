@@ -4,7 +4,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailPlaceholder.Builders
 {
     public class ValidEmailPlaceholderBuilder
     {
-        public Domain.Models.EmailPlaceholder Build() => new Domain.Models.EmailPlaceholder
+        public Domain.Models.EmailPlaceholder Build() => new()
         {
             Id = 1,
             EmailHistoryId = 1,

@@ -4,7 +4,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Path.Builders
 {
     public class ValidPathBuilder
     {
-        public Domain.Models.Path Build() => new Domain.Models.Path
+        public Domain.Models.Path Build() => new()
         {
             Id = 1,
             Name = "Path 1",

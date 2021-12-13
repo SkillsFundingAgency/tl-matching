@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                 ShortTitle = new string("Short Title"),
                 Routes = new List<RouteSummaryViewModel>
                 {
-                    new RouteSummaryViewModel
+                    new()
                     {
                         Id = 1,
                         Name = "Route 1",
@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             viewResult?.Model.Should().BeOfType<MissingQualificationViewModel>();
             
             viewResult?.ViewData.ModelState.IsValid.Should().BeFalse();
-            viewResult?.ViewData.ModelState["Routes"]
+            viewResult?.ViewData.ModelState["Routes"]!
                 .Errors
                 .Should()
                 .ContainSingle(error =>

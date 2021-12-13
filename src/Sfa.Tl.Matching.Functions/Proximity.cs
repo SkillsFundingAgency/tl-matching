@@ -55,7 +55,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 var providerVenues = new List<ProviderVenue>();
 
-                foreach (var providerVenue in _providerVenueRepository.GetManyAsync(pv => pv.Town == null ||
+                foreach (var providerVenue in _providerVenueRepository.GetMany(pv => pv.Town == null ||
                                                                                                                pv.Town == "" || 
                                                                                                                pv.Town == " "))
                 {
@@ -107,7 +107,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 var opportunityItems = new List<OpportunityItem>();
 
-                foreach (var opportunityItem in _opportunityItemRepository.GetManyAsync(io => io.Town == null || 
+                foreach (var opportunityItem in _opportunityItemRepository.GetMany(io => io.Town == null || 
                                                                                                                      io.Town == "" || 
                                                                                                                      io.Town == " "))
                 {
@@ -172,7 +172,7 @@ namespace Sfa.Tl.Matching.Functions
                 var stopwatch = Stopwatch.StartNew();
 
                 logger.LogInformation($"Function {context.FunctionName} triggered");
-                var providerVenues = await _providerVenueRepository.GetManyAsync(venue => venue.Location == null ||
+                var providerVenues = await _providerVenueRepository.GetMany(venue => venue.Location == null ||
                                                                                     venue.Longitude == null ||
                                                                                     venue.Latitude == null ||
                                                                                     !EF.Functions.Like(venue.Postcode, "% %") ||

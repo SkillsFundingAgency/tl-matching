@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<AddProviderVenueViewModel, Domain.Models.ProviderVenue>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<AddProviderVenueViewModel, Domain.Models.ProviderVenue>(httpContextAccessor) :
+                            new LoggedInUserNameResolver<AddProviderVenueViewModel, Domain.Models.ProviderVenue>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<AddProviderVenueViewModel, Domain.Models.ProviderVenue>(new DateTimeProvider()) :
                                 null);

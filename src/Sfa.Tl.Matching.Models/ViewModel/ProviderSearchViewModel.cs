@@ -5,7 +5,7 @@
         public bool IsAuthorisedUser { get; set; }
 
         public ProviderSearchParametersViewModel SearchParameters { get; }
-        public ProviderSearchResultsViewModel SearchResults { get; set; } = new ProviderSearchResultsViewModel();
+        public ProviderSearchResultsViewModel SearchResults { get; set; } = new();
 
         public ProviderSearchViewModel(ProviderSearchParametersViewModel searchParameters)
         {

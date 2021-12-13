@@ -24,12 +24,15 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
         public When_Proximity_BackFillEmployerPostTown_Function_Fires()
         {
             _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
-            _opportunityItemRepository.GetManyAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
-                .Returns(new List<OpportunityItem>{ new OpportunityItem
-                {
-                    Postcode = "CV1 2WT",
-                    Town = null
-                }}.AsQueryable());
+            _opportunityItemRepository.GetMany(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
+                .Returns(new List<OpportunityItem>
+                { 
+                    new()
+                    {
+                        Postcode = "CV1 2WT",
+                        Town = null
+                    }
+                }.AsQueryable());
 
             var providerVenueRepository = Substitute.For<IRepository<ProviderVenue>>();
 

@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.OpportunityProximity
 
             var routes = new List<SelectListItem>
             {
-                new SelectListItem {Text = "1", Value = "Route 1"}
+                new() { Text = "1", Value = "Route 1" }
             };
 
             var locationService = new LocationService(new LocationApiClient(httpClient, new MatchingConfiguration
@@ -68,7 +68,9 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.OpportunityProximity
         public void Then_Model_Contains_Postcode_Error()
         {
             _opportunityProximityController.ViewData.ModelState.IsValid.Should().BeFalse();
-            _opportunityProximityController.ViewData.ModelState["Postcode"].Errors.Should().ContainSingle(error => error.ErrorMessage == "You must enter a real postcode");
+            _opportunityProximityController.ViewData.ModelState["Postcode"].Should().NotBeNull();
+            _opportunityProximityController.ViewData.ModelState["Postcode"]?.Errors.Should().NotBeNull();
+            _opportunityProximityController.ViewData.ModelState["Postcode"]?.Errors.Should().ContainSingle(error => error.ErrorMessage == "You must enter a real postcode");
         }
     }
 }

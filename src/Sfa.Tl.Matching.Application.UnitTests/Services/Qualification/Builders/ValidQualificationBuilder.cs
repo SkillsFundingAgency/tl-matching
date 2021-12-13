@@ -2,7 +2,7 @@
 {
     public class ValidQualificationBuilder
     {
-        public Domain.Models.Qualification Build() => new Domain.Models.Qualification
+        public Domain.Models.Qualification Build() => new()
         {
             Id = 1,
             LarId = "10042982",

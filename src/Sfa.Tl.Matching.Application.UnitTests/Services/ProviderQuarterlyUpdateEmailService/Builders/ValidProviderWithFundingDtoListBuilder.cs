@@ -7,7 +7,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
     {
         public IList<ProviderWithFundingDto> Build() => new List<ProviderWithFundingDto>
         {
-            new ProviderWithFundingDto
+            new()
             {
                 Id = 1,
                 Name = "Provider Name",
@@ -19,17 +19,17 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
                 SecondaryContactPhone = "01234559999",
                 ProviderVenues = new List<ProviderVenueQualificationsInfoDto>
                 {
-                    new ProviderVenueQualificationsInfoDto
+                    new()
                     {
                         Postcode = "AA1 1AA",
                         Qualifications = new List<QualificationInfoDto>
                         {
-                            new QualificationInfoDto
+                            new()
                             {
                                 LarId = "10042982",
                                 Title = "Qualification 1"
                             },
-                            new QualificationInfoDto
+                            new()
                             {
                                 LarId = "60165522",
                                 Title = "Qualification 2"
@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
 
         public IList<ProviderWithFundingDto> BuildWithNoQualifications() => new List<ProviderWithFundingDto>
         {
-            new ProviderWithFundingDto
+            new()
             {
                 Id = 1,
                 Name = "Provider Name",
@@ -54,7 +54,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
                 SecondaryContactPhone = "01234559999",
                 ProviderVenues = new List<ProviderVenueQualificationsInfoDto>
                 {
-                    new ProviderVenueQualificationsInfoDto
+                    new()
                     {
                         Postcode = "AA1 1AA",
                         Qualifications = new List<QualificationInfoDto>()
@@ -65,7 +65,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
 
         public IList<ProviderWithFundingDto> BuildWithNoVenues() => new List<ProviderWithFundingDto>
         {
-            new ProviderWithFundingDto
+            new()
             {
                 Id = 1,
                 Name = "Provider Name",

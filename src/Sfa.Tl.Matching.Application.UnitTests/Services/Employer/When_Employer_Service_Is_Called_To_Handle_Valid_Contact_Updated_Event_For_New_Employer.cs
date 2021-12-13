@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Linq.Expressions;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using AutoMapper;
-using Newtonsoft.Json;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -30,7 +31,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             var employerEventBase = new CrmEmployerEventBaseBuilder()
                 .WithValidAupaStatus().Build();
 
-            var data = JsonConvert.SerializeObject(employerEventBase, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
+            var data = JsonSerializer.Serialize(employerEventBase,
+                new JsonSerializerOptions
+                {
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+                });
 
             employerService.HandleContactUpdatedAsync(data).GetAwaiter().GetResult();
         }

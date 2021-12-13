@@ -7,7 +7,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.LocalEnterprisePartnership
     {
         public IList<Domain.Models.LocalEnterprisePartnership> Build() => new List<Domain.Models.LocalEnterprisePartnership>
         {
-            new Domain.Models.LocalEnterprisePartnership
+            new()
             {
                 Id = 1,
                 Code = "E37000012",
@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.LocalEnterprisePartnership
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,
                 ModifiedOn = EntityCreationConstants.ModifiedOn
             },
-            new Domain.Models.LocalEnterprisePartnership
+            new()
             {
                 Id = 2,
                 Code = "E37000027",

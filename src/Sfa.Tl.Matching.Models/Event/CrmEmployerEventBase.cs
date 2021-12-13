@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Sfa.Tl.Matching.Models.Event
 {
@@ -9,55 +9,55 @@ namespace Sfa.Tl.Matching.Models.Event
         public string Name { get; set; }
         public PrimaryContactId PrimaryContactId { get; set; }
 
-        [JsonProperty("accountid")]
+        [JsonPropertyName("accountid")]
         public string AccountId { get; set; }
 
-        [JsonProperty("address1_line1")]
+        [JsonPropertyName("address1_line1")]
         public string AddressLine { get; set; }
 
-        [JsonProperty("address1_postalcode")]
+        [JsonPropertyName("address1_postalcode")]
         public string PostCode { get; set; }
 
-        [JsonProperty("customertypecode")]
+        [JsonPropertyName("customertypecode")]
         public Customertypecode CustomerTypeCode { get; set; }
 
-        [JsonProperty("emailaddress1")]
+        [JsonPropertyName("emailaddress1")]
         public object EmailAddress { get; set; }
 
-        [JsonProperty("owneremail")]
+        [JsonPropertyName("owneremail")]
         public string OwnerEmail { get; set; }
 
-        [JsonProperty("owneridname")]
+        [JsonPropertyName("owneridname")]
         public string OwnerIdName { get; set; }
 
-        [JsonProperty("sfa_alias")]
+        [JsonPropertyName("sfa_alias")]
         public string Alias { get; set; }
 
-        [JsonProperty("sfa_aupa")]
+        [JsonPropertyName("sfa_aupa")]
         // ReSharper disable once InconsistentNaming
 #pragma warning disable IDE1006 // Naming Styles
         public SfaAupa sfa_aupa { get; set; }
 #pragma warning restore IDE1006 // Naming Styles
 
-        [JsonProperty("sfa_ceasedtrading")]
+        [JsonPropertyName("sfa_ceasedtrading")]
         public int CeasedTrading { get; set; }
 
-        [JsonProperty("sfa_employermanagement")]
+        [JsonPropertyName("sfa_employermanagement")]
         public object EmployerManagement { get; set; }
 
-        [JsonProperty("telephone1")]
+        [JsonPropertyName("telephone1")]
         public string Phone { get; set; }
     }
 
     public class PrimaryContactId
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
         
-        [JsonProperty("logicalname")]
+        [JsonPropertyName("logicalname")]
         public string LogicalName { get; set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
     }
 

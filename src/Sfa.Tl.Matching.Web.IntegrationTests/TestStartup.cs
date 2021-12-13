@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
         {
         }
 
-        protected override void ConfigureConfiguration(IServiceCollection services)
+        protected override void LoadConfiguration()
         {
             MatchingConfiguration = new MatchingConfiguration
             {

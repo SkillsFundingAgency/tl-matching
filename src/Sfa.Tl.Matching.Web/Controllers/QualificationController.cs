@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -113,9 +113,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("search-short-title", Name = "SearchShortTitle")]
-        public async Task<IActionResult> SearchShortTitleAsync(string query)
+        public IActionResult SearchShortTitle(string query)
         {
-            var shortTitles = await _qualificationService.SearchShortTitleAsync(query);
+            var shortTitles = _qualificationService.SearchShortTitle(query);
 
             return Ok(shortTitles);
         }
@@ -128,12 +128,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                var errorList = ModelState.Where(e => e.Value.Errors.Any()).ToDictionary(
-                    kvp => kvp.Key,
-                    kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                var errorList = ModelState
+                    .Where(e => e.Value != null && e.Value.Errors.Any())
+                    .ToDictionary(
+                        kvp => kvp.Key,
+                        kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage).ToArray()
                 );
 
-                var errors = JsonConvert.SerializeObject(errorList);
+                var errors = JsonSerializer.Serialize(errorList);
 
                 return Json(new { success = false, response = errors });
             }

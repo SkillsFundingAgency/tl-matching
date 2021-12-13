@@ -5,7 +5,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
 {
     public class BackgroundProcessHistoryBuilder
     {
-        public BackgroundProcessHistory Build() => new BackgroundProcessHistory
+        public BackgroundProcessHistory Build() => new()
         {
                 Id = 1,
                 RecordCount = 0,

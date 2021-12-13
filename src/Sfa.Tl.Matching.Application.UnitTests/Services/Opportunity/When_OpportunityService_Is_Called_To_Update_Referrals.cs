@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<ReferralDto, Domain.Models.Referral>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<ReferralDto, Domain.Models.Referral>(httpContextAccessor) :
+                            new LoggedInUserNameResolver<ReferralDto, Domain.Models.Referral>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<ReferralDto, Domain.Models.Referral>(new DateTimeProvider()) :
                                 null);
@@ -61,7 +61,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             {
                 Referral = new List<ReferralDto>
                 {
-                    new ReferralDto
+                    new()
                     {
                         ProviderVenueId = 1,
                         DistanceFromEmployer = 3.5M

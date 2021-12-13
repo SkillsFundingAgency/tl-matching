@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
     public class CreateSingleProvisionGap : IClassFixture<SeleniumWebApplicationFactory<Startup>>, IDisposable
     {
         private readonly StartPage _startPage;
-        private IWebDriver Driver { get; }
+        private IWebDriver Driver { get; set; }
 
         public CreateSingleProvisionGap(SeleniumWebApplicationFactory<Startup> server)
         {
@@ -53,8 +53,12 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
 
         public void Dispose()
         {
-            Driver.Dispose();
+            Driver.Close();
             Driver.Quit();
+            Driver.Dispose();
+            Driver = null;
+
+            GC.SuppressFinalize(this);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.OpportunityItem.Builders
     {
         public IList<Domain.Models.OpportunityItem> Build() => new List<Domain.Models.OpportunityItem>
         {
-            new Domain.Models.OpportunityItem
+            new()
             {
                 Id = 1,
                 RouteId = 1,
@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.OpportunityItem.Builders
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,
                 ModifiedOn = EntityCreationConstants.ModifiedOn
             },
-            new Domain.Models.OpportunityItem
+            new()
             {
                 Id = 2,
                 RouteId = 2,

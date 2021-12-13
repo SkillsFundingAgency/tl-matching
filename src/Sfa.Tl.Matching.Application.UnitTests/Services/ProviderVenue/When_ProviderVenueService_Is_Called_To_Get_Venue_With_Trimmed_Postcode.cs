@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 
             var mockProviderVenueDbSet = new List<Domain.Models.ProviderVenue>
                 {
-                    new Domain.Models.ProviderVenue
+                    new()
                     {
                         Id = ProviderVenueId,
                         ProviderId = ProviderId,
@@ -50,7 +50,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
                 .BuildMockDbSet();
             
             _providerVenueRepository = Substitute.For<IProviderVenueRepository>();
-            _providerVenueRepository.GetManyAsync(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())
+            _providerVenueRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())
                 .Returns(mockProviderVenueDbSet);
 
             var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         [Fact]
         public void Then_ProviderVenueRepository_GetMany_Is_Called_Exactly_Once()
         {
-            _providerVenueRepository.Received(1).GetManyAsync(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>());
+            _providerVenueRepository.Received(1).GetMany(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>());
         }
         
         [Fact]

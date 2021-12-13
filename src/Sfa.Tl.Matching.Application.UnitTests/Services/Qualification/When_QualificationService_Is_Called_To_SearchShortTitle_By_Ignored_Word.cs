@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
 
             var service = new QualificationService(mapper, _repository, qualificationRouteMappingRepository, learningAimReferenceRepository);
 
-            _searchResults = service.SearchShortTitleAsync("the").GetAwaiter().GetResult();
+            _searchResults = service.SearchShortTitle("the");
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
         {
             _repository
                 .DidNotReceive()
-                .GetManyAsync(Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>());
+                .GetMany(Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>());
         }
     }
 }

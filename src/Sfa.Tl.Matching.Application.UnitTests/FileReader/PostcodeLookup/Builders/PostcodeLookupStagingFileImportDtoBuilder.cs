@@ -4,7 +4,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.PostcodeLookup.Builde
 {
     public class ValidPostcodeLookupStagingFileImportDtoBuilder
     {
-        public PostcodeLookupStagingFileImportDto Build() => new PostcodeLookupStagingFileImportDto
+        public PostcodeLookupStagingFileImportDto Build() => new()
         {
             Postcode = "CA1 1AA",
             PrimaryLepCode = "E37000007",

@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<PlacementInformationSaveDto, ProvisionGap>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<PlacementInformationSaveDto, ProvisionGap>(httpContextAccessor) :
+                            new LoggedInUserNameResolver<PlacementInformationSaveDto, ProvisionGap>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<PlacementInformationSaveDto, ProvisionGap>(new DateTimeProvider()) :
                                 null);

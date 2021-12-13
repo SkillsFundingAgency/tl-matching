@@ -13,13 +13,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Comparers.Referral
         {
             var viewModelReferrals = new List<Domain.Models.Referral>
             {
-                new Domain.Models.Referral { ProviderVenueId = 1, DistanceFromEmployer = 1 },
-                new Domain.Models.Referral { ProviderVenueId = 3, DistanceFromEmployer = 3 }
+                new() { ProviderVenueId = 1, DistanceFromEmployer = 1 },
+                new() { ProviderVenueId = 3, DistanceFromEmployer = 3 }
             };
 
             var databaseReferrals = new List<Domain.Models.Referral>
             {
-                new Domain.Models.Referral { ProviderVenueId = 2, DistanceFromEmployer = 2 }
+                new() { ProviderVenueId = 2, DistanceFromEmployer = 2 }
             };
 
             var referralDifference = new ReferralDifference(new ReferralEqualityComparer());

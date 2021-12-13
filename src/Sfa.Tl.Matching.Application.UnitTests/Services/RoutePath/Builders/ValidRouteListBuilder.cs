@@ -7,14 +7,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath.Builders
     {
         public IList<Route> Build() => new List<Route>
         {
-            new Route
+            new()
             {
                 Id = 1,
                 Name = "Route 1",
                 Keywords = "Keyword1",
                 Summary = "Route 1 summary"
             },
-            new Route
+            new()
             {
                 Id = 2,
                 Name = "Route 2",

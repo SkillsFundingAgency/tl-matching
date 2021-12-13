@@ -8,15 +8,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderProximity.Build
         public IList<ProviderProximitySearchResultViewModelItem> Build() =>
             new List<ProviderProximitySearchResultViewModelItem>
             {
-                new ProviderProximitySearchResultViewModelItem
-                {
-                    ProviderVenueId = 1,
-                    ProviderName = "The WKCIC Group",
-                    ProviderVenuePostcode = "NW1 3HB",
-                    Distance = 2.5d,
-                    Routes = new List<RouteAndQualificationsViewModel>
+                new(providerVenueId: 1, providerName: "The WKCIC Group",
+                    providerVenuePostcode: "NW1 3HB", distance: 2.5d, routes: new List<RouteAndQualificationsViewModel>
                     {
-                        new RouteAndQualificationsViewModel
+                        new()
                         {
                             RouteId = 7,
                             RouteName = "health and science",
@@ -26,9 +21,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderProximity.Build
                                 "health and physiotherapy"
                             }
                         }
-                    }
-                },
-                new ProviderProximitySearchResultViewModelItem
+                    }),
+                new()
                 {
                     ProviderVenueId = 2,
                     ProviderName = "Lambeth College",
@@ -36,7 +30,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderProximity.Build
                     Distance = 2.5d,
                     Routes = new List<RouteAndQualificationsViewModel>
                     {
-                        new RouteAndQualificationsViewModel
+                        new()
                         {
                             RouteId = 12,
                             RouteName = "care services",

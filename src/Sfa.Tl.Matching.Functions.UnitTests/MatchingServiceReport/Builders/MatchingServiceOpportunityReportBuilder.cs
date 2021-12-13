@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.MatchingServiceReport.Builders
     {
         public IList<MatchingServiceOpportunityReport> BuildList() => new List<MatchingServiceOpportunityReport>
         {
-            new MatchingServiceOpportunityReport
+            new()
             {
                 OpportunityItemId = 1,
                 OpportunityType = "Referral",
@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.MatchingServiceReport.Builders
                 UserName = "Test User",
                 CreatedOn = DateTime.UtcNow
             },
-            new MatchingServiceOpportunityReport
+            new()
             {
                 OpportunityItemId = 2,
                 //OpportunityType = "ProvisionGap",

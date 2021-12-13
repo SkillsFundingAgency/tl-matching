@@ -1,12 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Sfa.Tl.Matching.Models.Dto
 {
     public class PostcodeLookupResponse
     {
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public string Status { get; set; }
-        [JsonProperty("result")]
+
+        [JsonPropertyName("result")]
         public PostcodeLookupResultDto Result { get; set; }
     }
 }

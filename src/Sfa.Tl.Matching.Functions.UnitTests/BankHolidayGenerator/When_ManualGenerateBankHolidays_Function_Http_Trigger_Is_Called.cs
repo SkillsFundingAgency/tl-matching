@@ -25,12 +25,12 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.BankHolidayGenerator
         {
             var dto = new List<BankHolidayResultDto>
             {
-                new BankHolidayResultDto
+                new()
                 {
                     Title = "August Summer Holiday",
                     Date = DateTime.Parse("2019-08-26")
                 },
-                new BankHolidayResultDto
+                new()
                 {
                     Title = "New Year",
                     Date = DateTime.Parse("2020-01-01")

@@ -12,7 +12,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback.Builde
         {
             _employerFeedbackDtos = new List<EmployerFeedbackDto>
             {
-                new EmployerFeedbackDto
+                new()
                 {
                     OpportunityItemId = 1,
                     EmployerContact = "Employer Contact",
@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback.Builde
                     Town = "Town",
                     ModifiedOn = new DateTime(2019, 12, 12)
                 },
-                new EmployerFeedbackDto
+                new()
                 {
                     OpportunityItemId = 2,
                     EmployerContact = "Old Employer Contact",
@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback.Builde
                     Town = "Another Town",
                     ModifiedOn = new DateTime(2019, 12, 1)
                 },
-                new EmployerFeedbackDto
+                new()
                 {
                     OpportunityItemId = 3,
                     EmployerContact = "Old Employer Contact",
@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback.Builde
                     Town = "And Another Town",
                     ModifiedOn = new DateTime(2019, 12, 2)
                 },
-                new EmployerFeedbackDto
+                new()
                 {
                     OpportunityItemId = 4,
                     EmployerContact = "Old Employer Contact",
@@ -67,7 +67,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback.Builde
                     ModifiedOn = new DateTime(2019, 12, 7)
                 }
                 ,
-                new EmployerFeedbackDto
+                new()
                 {
                     OpportunityItemId = 5,
                     EmployerContact = "Old Employer Contact",

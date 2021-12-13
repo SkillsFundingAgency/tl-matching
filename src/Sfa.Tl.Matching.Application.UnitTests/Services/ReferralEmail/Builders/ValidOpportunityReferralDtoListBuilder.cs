@@ -7,7 +7,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail.Builders
     {
         public IList<OpportunityReferralDto> BuildWithOneReferral() => new List<OpportunityReferralDto>
         {
-            new OpportunityReferralDto
+            new()
             {
                 OpportunityId = 1,
                 ReferralId = 1,
@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail.Builders
 
         public IList<OpportunityReferralDto> BuildWithMultipleReferrals() => new List<OpportunityReferralDto>
         {
-            new OpportunityReferralDto
+            new()
             {
                 OpportunityId = 1,
                 OpportunityItemId = 1,
@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail.Builders
                 Postcode =  "Postcode",
                 Placements =  1
             },
-            new OpportunityReferralDto
+            new()
             {
                 OpportunityId = 1,
                 OpportunityItemId = 2,
@@ -76,7 +76,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail.Builders
                 Postcode =  "Postcode",
                 Placements =  1
             },
-            new OpportunityReferralDto
+            new()
             {
                 OpportunityId = 1,
                 OpportunityItemId = 3,
@@ -95,7 +95,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail.Builders
                 Postcode =  "Postcode",
                 Placements =  1
             },
-            new OpportunityReferralDto
+            new()
             {
                 OpportunityId = 1,
                 OpportunityItemId = 4,

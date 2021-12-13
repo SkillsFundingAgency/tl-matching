@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public async Task<IList<ProviderWithFundingDto>> GetProvidersWithFundingAsync()
         {
-            return await GetManyAsync(p => p.IsCdfProvider)
+            return await GetMany(p => p.IsCdfProvider)
                 .Select(provider => new ProviderWithFundingDto
                 {
                     Id = provider.Id,

@@ -7,7 +7,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailPlaceholder.Builders
     {
         public IList<Domain.Models.EmailPlaceholder> Build() => new List<Domain.Models.EmailPlaceholder>
         {
-            new Domain.Models.EmailPlaceholder
+            new()
             {
                 Id = 1,
                 EmailHistoryId = 1,
@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailPlaceholder.Builders
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,
                 ModifiedOn = EntityCreationConstants.ModifiedOn
             },
-            new Domain.Models.EmailPlaceholder
+            new()
             {
                 Id = 2,
                 EmailHistoryId = 1,

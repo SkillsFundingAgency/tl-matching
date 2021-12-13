@@ -7,7 +7,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Route.Builders
     {
         public IList<Domain.Models.Route> Build() => new List<Domain.Models.Route>
         {
-            new Domain.Models.Route
+            new()
             {
                 Id = 1,
                 Name = "Route 1",
@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Route.Builders
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,
                 ModifiedOn = EntityCreationConstants.ModifiedOn
             },
-            new Domain.Models.Route
+            new()
             {
                 Id = 2,
                 Name = "Route 2",

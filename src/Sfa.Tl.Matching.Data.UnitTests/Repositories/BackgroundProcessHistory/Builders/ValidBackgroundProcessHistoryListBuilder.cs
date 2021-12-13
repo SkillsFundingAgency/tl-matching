@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.BackgroundProcessHistory.B
     {
         public IList<Domain.Models.BackgroundProcessHistory> Build() => new List<Domain.Models.BackgroundProcessHistory>
         { 
-            new Domain.Models.BackgroundProcessHistory
+            new()
             {
                 Id = 1,
                 RecordCount = 5,
@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.BackgroundProcessHistory.B
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,
                 ModifiedOn = EntityCreationConstants.ModifiedOn
             },
-            new Domain.Models.BackgroundProcessHistory
+            new()
             {
                 Id = 2,
                 RecordCount = 10,

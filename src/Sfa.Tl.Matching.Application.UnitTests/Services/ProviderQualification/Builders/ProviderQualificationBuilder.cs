@@ -3,7 +3,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification.B
 {
     public class ProviderQualificationBuilder
     {
-        public Domain.Models.ProviderQualification Build(bool isDeleted = false) => new Domain.Models.ProviderQualification
+        public Domain.Models.ProviderQualification Build(bool isDeleted = false) => new()
         {
             Id = 101,
             ProviderVenueId = 1,

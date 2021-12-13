@@ -40,9 +40,9 @@ namespace Sfa.Tl.Matching.Functions
 
                 var providers = new List<Domain.Models.Provider>();
 
-                if (_providerRepository.GetManyAsync(p => string.IsNullOrWhiteSpace(p.DisplayName)).Any())
+                if (_providerRepository.GetMany(p => string.IsNullOrWhiteSpace(p.DisplayName)).Any())
                 {
-                    foreach (var provider in _providerRepository.GetManyAsync(p => true))
+                    foreach (var provider in _providerRepository.GetMany(p => true))
                     {
                         var displayName =
                             string.IsNullOrWhiteSpace(provider.DisplayName)

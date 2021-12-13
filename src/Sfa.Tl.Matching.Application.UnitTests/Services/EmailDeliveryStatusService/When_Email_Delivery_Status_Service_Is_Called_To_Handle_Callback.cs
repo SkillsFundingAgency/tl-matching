@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq.Expressions;
+using System.Text.Json;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
                 emailService, opportunityRepository, messageQueueService, logger);
 
             payload.Status = status;
-            var serializedPayLoad = JsonConvert.SerializeObject(payload);
+            var serializedPayLoad = JsonSerializer.Serialize(payload);
 
             emailService.UpdateEmailStatus(Arg.Any<EmailDeliveryStatusPayLoad>()).Returns(1);
 
@@ -72,7 +72,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
                 emailService, opportunityRepository, messageQueueService, logger);
 
             payload.Status = status;
-            var serializedPayLoad = JsonConvert.SerializeObject(payload);
+            var serializedPayLoad = JsonSerializer.Serialize(payload);
             
             emailService.UpdateEmailStatus(Arg.Any<EmailDeliveryStatusPayLoad>()).Returns(1);
 
@@ -107,7 +107,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var sut = new Application.Services.EmailDeliveryStatusService(configuration,
                 emailService, opportunityRepository, messageQueueService, logger);
 
-            var serializedPayLoad = JsonConvert.SerializeObject(payload);
+            var serializedPayLoad = JsonSerializer.Serialize(payload);
 
             //Act
             await sut.HandleEmailDeliveryStatusAsync(serializedPayLoad);
@@ -138,7 +138,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var sut = new Application.Services.EmailDeliveryStatusService(configuration,
                 emailService, opportunityRepository, messageQueueService, logger);
 
-            var serializedPayLoad = JsonConvert.SerializeObject(payload);
+            var serializedPayLoad = JsonSerializer.Serialize(payload);
 
             emailService.UpdateEmailStatus(Arg.Any<EmailDeliveryStatusPayLoad>()).Returns(-1);
 

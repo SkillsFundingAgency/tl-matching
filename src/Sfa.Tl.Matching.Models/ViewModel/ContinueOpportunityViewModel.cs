@@ -9,7 +9,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public int OpportunityId { get; set; }
         public int OpportunityItemId { get; set; }
         public string SubmitAction { get; set; }
-        public List<SelectedOpportunityItemViewModel> SelectedOpportunity { get; set; } = new List<SelectedOpportunityItemViewModel>();
+        public List<SelectedOpportunityItemViewModel> SelectedOpportunity { get; init; } = new();
 
         public bool IsReferralSelected
         {

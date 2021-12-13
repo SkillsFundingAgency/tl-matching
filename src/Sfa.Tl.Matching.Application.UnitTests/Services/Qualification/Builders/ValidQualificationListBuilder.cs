@@ -6,7 +6,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification.Builders
     {
         public IList<Domain.Models.Qualification> Build() => new List<Domain.Models.Qualification>
         {
-            new Domain.Models.Qualification
+            new()
             {
                 Id = 1,
                 LarId = "10042982",
@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification.Builders
                 QualificationSearch = "SportEnterpriseCommunitysportenterprisecommunity",
                 ShortTitleSearch = "sportenterprisecommunity"
             },
-            new Domain.Models.Qualification
+            new()
             {
                 Id = 2,
                 LarId = "10017884",
@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification.Builders
                 QualificationSearch = "SportEnterpriseCommunitysportenterprisecommunity",
                 ShortTitleSearch = "sportenterprisecommunity"
             },
-            new Domain.Models.Qualification
+            new()
             {
                 Id = 3,
                 LarId = "60163239",

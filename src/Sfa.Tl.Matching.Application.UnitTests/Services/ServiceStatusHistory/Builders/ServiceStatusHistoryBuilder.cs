@@ -6,7 +6,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ServiceStatusHistory.Bu
     {
         public IList<Domain.Models.ServiceStatusHistory> Build() => new List<Domain.Models.ServiceStatusHistory>
         {
-            new Domain.Models.ServiceStatusHistory
+            new()
             {
                 Id = 1,
                 IsOnline = false

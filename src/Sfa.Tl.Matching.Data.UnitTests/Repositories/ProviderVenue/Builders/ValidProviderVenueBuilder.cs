@@ -4,8 +4,8 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue.Builders
 {
     public class ValidProviderVenueBuilder
     {
-        public Domain.Models.ProviderVenue Build() => new Domain.Models.ProviderVenue
-            {
+        public Domain.Models.ProviderVenue Build() => new()
+        {
                 Id = 1,
                 ProviderId = 10000546,
                 Postcode = "AA1 1AA",

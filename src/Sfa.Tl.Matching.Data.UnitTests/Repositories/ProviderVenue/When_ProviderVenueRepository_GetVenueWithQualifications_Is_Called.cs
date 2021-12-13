@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
                 },
                 ProviderQualification = new List<Domain.Models.ProviderQualification>
                 {
-                    new Domain.Models.ProviderQualification
+                    new()
                     {
                         Qualification = new Domain.Models.Qualification
                         {

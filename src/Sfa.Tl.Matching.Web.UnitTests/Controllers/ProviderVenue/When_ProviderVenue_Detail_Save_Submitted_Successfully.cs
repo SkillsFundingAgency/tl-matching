@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
                 Postcode = "CV1 2WT",
                 Qualifications = new List<QualificationDetailViewModel>
                 {
-                    new QualificationDetailViewModel
+                    new()
                     {
                         LarId = "123"
                     }

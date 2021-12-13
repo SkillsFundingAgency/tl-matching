@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Newtonsoft.Json;
+using System.Text.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Tests.Common;
@@ -37,11 +37,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.TestClients
                     Postcode = responsePostcode
                 }
             };
-            var serialized = JsonConvert.SerializeObject(response);
+            var serializedResponse = JsonSerializer.Serialize(response);
 
             var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = new StringContent(serialized)
+                Content = new StringContent(serializedResponse)
             };
             httpResponseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 

@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<bool> IsValidOfqualLarIdAsync(string larId);
         Task<string> GetLarTitleAsync(string larId);
         Task<QualificationSearchViewModel> SearchQualificationAsync(string searchTerm);
-        Task<IList<QualificationShortTitleSearchResultViewModel>> SearchShortTitleAsync(string shortTitle);
+        IList<QualificationShortTitleSearchResultViewModel> SearchShortTitle(string shortTitle);
         Task UpdateQualificationAsync(SaveQualificationViewModel viewModel);
         Task<int> UpdateQualificationsSearchColumnsAsync();
         Task<int> CreateQualificationEntityAsync(MissingQualificationViewModel viewModel);

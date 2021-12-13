@@ -4,7 +4,7 @@ namespace Sfa.Tl.Matching.Application.Configuration
 {
     public static class QualificationTerms
     {
-        public static readonly List<string> Ignored = new List<string>
+        public static readonly List<string> Ignored = new()
         {
             "&",
             "a",

@@ -6,7 +6,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification.B
     {
         public IList<Domain.Models.ProviderQualification> Build() => new List<Domain.Models.ProviderQualification>
         {
-            new Domain.Models.ProviderQualification
+            new()
             {
                 Id = 1,
                 ProviderVenueId = 1,

@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.MatchingServiceReport.Builders
     {
         public IList<MatchingServiceProviderEmployerReport> BuildList() => new List<MatchingServiceProviderEmployerReport>
         {
-            new MatchingServiceProviderEmployerReport
+            new()
             {
                 OpportunityItemId = 1,
                 ProviderName = "Provider Name",
@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.MatchingServiceReport.Builders
                 Placements = 1,
                 CreatedOn = DateTime.UtcNow
             },
-            new MatchingServiceProviderEmployerReport
+            new()
             {
                 OpportunityItemId = 2,
                 ProviderName = "Provider Name",

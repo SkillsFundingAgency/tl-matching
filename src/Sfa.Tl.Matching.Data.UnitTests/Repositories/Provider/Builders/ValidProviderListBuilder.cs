@@ -7,7 +7,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider.Builders
     {
         public IList<Domain.Models.Provider> Build() => new List<Domain.Models.Provider>
         {
-            new Domain.Models.Provider
+            new()
             {
                 Id = 1,
                 UkPrn = 10000546,
@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider.Builders
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,
                 ModifiedOn = EntityCreationConstants.ModifiedOn
             },
-            new Domain.Models.Provider
+            new()
             {
                 Id = 2,
                 UkPrn = 10000123,

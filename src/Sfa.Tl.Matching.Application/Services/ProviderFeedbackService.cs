@@ -185,18 +185,18 @@ namespace Sfa.Tl.Matching.Application.Services
             return 1;
         }
 
-        public bool IsNthWorkingDay(int workingDay)
+        private bool IsNthWorkingDay(int workingDay)
         {
             var today = _dateTimeProvider.UtcNow().Date;
             var holidays = _bankHolidayRepository
-                .GetManyAsync(h => h.Date.Month == today.Month)
+                .GetMany(h => h.Date.Month == today.Month)
                 .Select(h => h.Date)
                 .ToList();
 
             return today == _dateTimeProvider.GetNthWorkingDayDate(today, workingDay, holidays);
         }
 
-        public static bool ShouldSendSecondaryEmail(ProviderFeedbackDto provider)
+        private static bool ShouldSendSecondaryEmail(ProviderFeedbackDto provider)
         {
             return !string.IsNullOrWhiteSpace(provider.SecondaryContactEmail)
                    && !string.IsNullOrWhiteSpace(provider.SecondaryContact)

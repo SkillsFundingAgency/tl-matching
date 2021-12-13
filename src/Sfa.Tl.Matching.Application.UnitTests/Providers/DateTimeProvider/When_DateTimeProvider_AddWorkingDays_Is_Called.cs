@@ -86,7 +86,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Providers.DateTimeProvider
             var timeSpan = TimeSpan.Parse("-10.00:00:00");
             var holidays = new List<DateTime>
             {
-                new DateTime(2019, 8, 26)
+                new(2019, 8, 26)
             };
 
             var expected = new DateTime(2019, 8, 12, 23, 59, 59, DateTimeKind.Utc);

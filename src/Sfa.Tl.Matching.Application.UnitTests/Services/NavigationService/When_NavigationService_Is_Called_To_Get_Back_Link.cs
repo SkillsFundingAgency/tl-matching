@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
                 c.AddMaps(typeof(UserCacheMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserNameResolver") ?
-                        (object)new LoggedInUserNameResolver<UserCacheDto, UserCache>(httpContextAccessor) :
+                        new LoggedInUserNameResolver<UserCacheDto, UserCache>(httpContextAccessor) :
                         type.Name.Contains("UtcNowResolver") ?
                             new UtcNowResolver<UserCacheDto, UserCache>(new DateTimeProvider()) :
                             null);
@@ -78,7 +78,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
                 c.AddMaps(typeof(UserCacheMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserNameResolver") ?
-                        (object)new LoggedInUserNameResolver<UserCacheDto, UserCache>(httpContextAccessor) :
+                        new LoggedInUserNameResolver<UserCacheDto, UserCache>(httpContextAccessor) :
                         type.Name.Contains("UtcNowResolver") ?
                             new UtcNowResolver<UserCacheDto, UserCache>(new DateTimeProvider()) :
                             null);
@@ -116,7 +116,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
                 c.AddMaps(typeof(UserCacheMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserNameResolver") ?
-                        (object)new LoggedInUserNameResolver<UserCacheDto, UserCache>(httpContextAccessor) :
+                        new LoggedInUserNameResolver<UserCacheDto, UserCache>(httpContextAccessor) :
                         type.Name.Contains("UtcNowResolver") ?
                             new UtcNowResolver<UserCacheDto, UserCache>(new DateTimeProvider()) :
                             null);

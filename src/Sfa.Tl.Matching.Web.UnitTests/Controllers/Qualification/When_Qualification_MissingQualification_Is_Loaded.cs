@@ -21,8 +21,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
         {
             var routes = new List<RouteSummaryViewModel>
             {
-                new RouteSummaryViewModel { Id = 1, Name = "Route 1", Summary = "Route Summary 1" },
-                new RouteSummaryViewModel { Id = 2, Name = "Route 2", Summary = "Route Summary 2" }
+                new() { Id = 1, Name = "Route 1", Summary = "Route Summary 1" },
+                new() { Id = 2, Name = "Route 2", Summary = "Route Summary 2" }
             };
 
             _qualificationService = Substitute.For<IQualificationService>();

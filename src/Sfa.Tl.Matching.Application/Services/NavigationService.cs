@@ -130,9 +130,9 @@ namespace Sfa.Tl.Matching.Application.Services
         }
     }
 
-    public class ExcludedUrls
+    public static class ExcludedUrls
     {
-        public static List<string> ExcludedList = new List<string>
+        public static readonly List<string> ExcludedList = new()
         {
             "/page-not-found",
             "/Account/PostSignIn",

@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<ServiceStatusHistoryViewModel> GetLatestServiceStatusHistoryAsync()
         {
-            var serviceStatusHistory = await _serviceStatusHistoryRepository.GetManyAsync(ssh => true)
+            var serviceStatusHistory = await _serviceStatusHistoryRepository.GetMany(ssh => true)
                 .OrderByDescending(ssh => ssh.Id)
                 .Select(ssh => new { ssh.Id, ssh.IsOnline })
                 .FirstOrDefaultAsync();

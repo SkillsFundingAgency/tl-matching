@@ -3,7 +3,6 @@ using FluentAssertions;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Api.Clients.UnitTests.Factories;
 using Sfa.Tl.Matching.Models.Configuration;
-using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Api.Clients.UnitTests
@@ -14,15 +13,8 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
 
         public When_LocationApiClient_Is_Called_To_GetTerminatedGeoLocationData()
         {
-            var responseData = new PostcodeLookupResultDto
-            {
-                Postcode = "S70 2YW",
-                Latitude = "50.001",
-                Longitude = "-1.234"
-            };
-
             var httpClient = new TerminatedPostcodesTestHttpClientFactory()
-                .Get("S70 2YW", responseData);
+                .Get("S70 2YW", 50.001, -1.234);
 
             _locationApiClient = new LocationApiClient(httpClient,
                 new MatchingConfiguration

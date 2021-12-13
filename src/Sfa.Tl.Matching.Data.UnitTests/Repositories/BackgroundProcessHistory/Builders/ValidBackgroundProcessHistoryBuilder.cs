@@ -4,7 +4,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.BackgroundProcessHistory.B
 {
     public class ValidBackgroundProcessHistoryBuilder
     {
-        public Domain.Models.BackgroundProcessHistory Build() => new Domain.Models.BackgroundProcessHistory
+        public Domain.Models.BackgroundProcessHistory Build() => new()
         {
             Id = 1,
             RecordCount = 5,

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Humanizer;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Command;
@@ -43,17 +44,16 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             if (string.IsNullOrEmpty(payload)) return -1;
 
-            var emailDeliveryStatusPayLoad = JsonConvert.DeserializeObject<EmailDeliveryStatusPayLoad>(payload,
-                new JsonSerializerSettings
+            var emailDeliveryStatusPayLoad = JsonSerializer.Deserialize<EmailDeliveryStatusPayLoad>(payload,
+                new JsonSerializerOptions
                 {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    MissingMemberHandling = MissingMemberHandling.Ignore
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
                 });
 
             var updatedCount = await _emailService.UpdateEmailStatus(emailDeliveryStatusPayLoad);
 
-            if (emailDeliveryStatusPayLoad.EmailDeliveryStatus.ToUpper() != "DELIVERED" && updatedCount != -1)
-                await PushEmailDeliveryStatusAsync(emailDeliveryStatusPayLoad.Id);
+            if (emailDeliveryStatusPayLoad?.EmailDeliveryStatus.ToUpper() != "DELIVERED" && updatedCount != -1)
+                await PushEmailDeliveryStatusAsync(emailDeliveryStatusPayLoad!.Id);
 
             return updatedCount;
         }

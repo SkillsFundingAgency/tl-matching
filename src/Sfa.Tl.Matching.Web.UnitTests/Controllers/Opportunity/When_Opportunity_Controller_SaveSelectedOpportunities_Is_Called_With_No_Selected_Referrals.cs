@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 SubmitAction = "SaveSelectedOpportunities",
                 SelectedOpportunity = new List<SelectedOpportunityItemViewModel>
                 {
-                    new SelectedOpportunityItemViewModel
+                    new()
                     {
                         IsSelected = false,
                         OpportunityType = OpportunityType.Referral.ToString()

@@ -12,7 +12,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
         {
             _providerVenueQualificationDtoList = new List<ProviderVenueQualificationDto>
             {
-                new ProviderVenueQualificationDto
+                new()
                 {
                     UkPrn = 10000001,
                     ProviderName = "Test Provider Name",

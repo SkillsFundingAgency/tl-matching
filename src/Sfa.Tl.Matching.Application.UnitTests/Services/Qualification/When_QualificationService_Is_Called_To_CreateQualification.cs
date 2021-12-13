@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<MissingQualificationViewModel, Domain.Models.Qualification>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<MissingQualificationViewModel, Domain.Models.Qualification>(httpContextAccessor) :
+                            new LoggedInUserNameResolver<MissingQualificationViewModel, Domain.Models.Qualification>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<MissingQualificationViewModel, Domain.Models.Qualification>(new DateTimeProvider()) :
                                 null);
@@ -66,7 +66,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                 Source = "Test",
                 Routes = new List<RouteSummaryViewModel>
                 {
-                    new RouteSummaryViewModel
+                    new()
                     {
                         Id = 1,
                         Name = "Route 1",

@@ -4,7 +4,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
 {
     internal class ValidRemoveProviderVenueViewModelBuilder
     {
-        public RemoveProviderVenueViewModel Build() => new RemoveProviderVenueViewModel
+        public RemoveProviderVenueViewModel Build() => new()
         {
             ProviderId = 1,
             ProviderVenueId = 1,

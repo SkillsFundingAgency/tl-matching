@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
                         CreatedBy = "Sfa.Tl.Matching.Application.IntegrationTests",
                         ProviderQualification = new List<ProviderQualification>
                         {
-                            new ProviderQualification
+                            new()
                             {
                                 CreatedBy = "Sfa.Tl.Matching.Application.IntegrationTests",
                                 Source = "test",
@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
                                     Title = "test title",
                                     QualificationRouteMapping = new List<QualificationRouteMapping>
                                     {
-                                        new QualificationRouteMapping
+                                        new()
                                         {
                                             RouteId = 1,
                                             CreatedBy = "Sfa.Tl.Matching.Application.IntegrationTests",

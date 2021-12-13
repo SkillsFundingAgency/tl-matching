@@ -6,7 +6,7 @@ using Sfa.Tl.Matching.Application.Constants;
 
 namespace Sfa.Tl.Matching.Application.Extensions
 {
-    public static class BlobExtensions
+    public static class BlobClientExtensions
     {
         public static async Task<string> GetCreatedByMetadata(this BlobClient blobClient)
         {

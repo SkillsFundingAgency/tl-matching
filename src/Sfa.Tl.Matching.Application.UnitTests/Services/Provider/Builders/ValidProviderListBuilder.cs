@@ -6,7 +6,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
     {
         public IList<Domain.Models.Provider> Build() => new List<Domain.Models.Provider>
         {
-            new Domain.Models.Provider
+            new()
             {
                 Id = 1,
                 UkPrn = 10000546,
@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
                 CreatedBy = "CreatedBy",
                 ModifiedBy = "ModifiedBy"
             },
-            new Domain.Models.Provider
+            new()
             {
                 Id = 2,
                 UkPrn = 10000123,

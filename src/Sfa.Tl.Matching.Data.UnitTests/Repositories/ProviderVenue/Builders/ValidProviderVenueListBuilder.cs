@@ -7,7 +7,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue.Builders
     {
         public IList<Domain.Models.ProviderVenue> Build() => new List<Domain.Models.ProviderVenue>
         { 
-            new Domain.Models.ProviderVenue
+            new()
             {
                 Id = 1,
                 ProviderId = 10000546,
@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue.Builders
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,
                 ModifiedOn = EntityCreationConstants.ModifiedOn
             },
-            new Domain.Models.ProviderVenue
+            new()
             {
                 Id = 2,
                 ProviderId = 10000123,

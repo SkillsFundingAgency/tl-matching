@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<TSource, TDest>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<TSource, TDest>(httpContextAccessor) :
+                            new LoggedInUserNameResolver<TSource, TDest>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<TSource, TDest>(dateTimeProvider) :
                                 null);

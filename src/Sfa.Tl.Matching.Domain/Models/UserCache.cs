@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace Sfa.Tl.Matching.Domain.Models
 {
@@ -11,8 +11,8 @@ namespace Sfa.Tl.Matching.Domain.Models
         [NotMapped]
         public List<CurrentUrl> Value
         {
-            get => UrlHistory == null ? null : JsonConvert.DeserializeObject<List<CurrentUrl>>(UrlHistory);
-            set => UrlHistory = JsonConvert.SerializeObject(value);
+            get => UrlHistory == null ? null : JsonSerializer.Deserialize<List<CurrentUrl>>(UrlHistory);
+            set => UrlHistory = JsonSerializer.Serialize(value);
         }
 
         public string Key { get; set; }

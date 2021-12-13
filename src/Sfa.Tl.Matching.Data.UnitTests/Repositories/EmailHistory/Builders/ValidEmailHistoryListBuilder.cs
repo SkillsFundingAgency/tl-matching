@@ -7,7 +7,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailHistory.Builders
     {
         public IList<Domain.Models.EmailHistory> Build() => new List<Domain.Models.EmailHistory>
         {
-            new Domain.Models.EmailHistory
+            new()
             {
                 Id = 1,
                 OpportunityId = 1,
@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailHistory.Builders
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,
                 ModifiedOn = EntityCreationConstants.ModifiedOn
             },
-            new Domain.Models.EmailHistory
+            new()
             {
                 Id = 2,
                 OpportunityId = 3,
