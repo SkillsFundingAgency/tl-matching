@@ -17,6 +17,7 @@ trigger:
     - bugs/*
 pr:
   - master
+  - develop
 
 variables:
   applicationName: matching
