@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Functions
     public class Startup : FunctionsStartup
     {
         private MatchingConfiguration _configuration;
-        
+
         public override void Configure(IFunctionsHostBuilder builder)
         {
             RegisterWebJobServices(builder.Services);
@@ -49,27 +49,33 @@ namespace Sfa.Tl.Matching.Functions
         private void RegisterWebJobServices(IServiceCollection services)
         {
             //https://stackoverflow.com/questions/57564396/how-do-i-mix-custom-parameter-binding-with-dependency-injection-in-azure-functio
-            var webJobsBuilder = services.AddWebJobs(x => { });
-            webJobsBuilder
-                .AddAzureStorage()
+            var webJobsBuilder = services
+                .AddWebJobs(_ => { })
+                //.AddAzureStorage()
                 .AddAzureStorageCoreServices();
         }
 
         private void RegisterServices(IServiceCollection services)
         {
             _configuration = ConfigurationLoader.Load(
-                    Environment.GetEnvironmentVariable("EnvironmentName"),
-                    Environment.GetEnvironmentVariable("ConfigurationStorageConnectionString"),
-                    Environment.GetEnvironmentVariable("Version"),
-                    Environment.GetEnvironmentVariable("ServiceName"));
+                    Environment.GetEnvironmentVariable(Constants.EnvironmentNameConfigKey),
+                    Environment.GetEnvironmentVariable(Constants.ConfigurationStorageConnectionStringConfigKey), //Environment.GetEnvironmentVariable("Version"),
+                    Environment.GetEnvironmentVariable(Constants.ServiceNameConfigKey),
+                    //NOTE: workaround issues with "Version" in local "Values" with .NET 6
+                    Environment.GetEnvironmentVariable(Constants.VersionConfigKey)
+                    ?? Environment.GetEnvironmentVariable(Constants.ServiceVersionConfigKey));
 
             services.AddLogging(logging =>
             {
-                logging.AddConsole();
-                logging.AddDebug();
-                logging.AddApplicationInsights();
-                logging.AddFilter((category, level) =>
-                    level >= (category == "Microsoft" ? LogLevel.Error : LogLevel.Information));
+                logging
+                    .AddConsole()
+                    .AddDebug()
+                    .AddApplicationInsights()
+                    .AddFilter((category, level) =>
+                        level >= (category.StartsWith("Microsoft") ||
+                                  category.StartsWith("Azure.Core")
+                            ? LogLevel.Error
+                            : LogLevel.Information));
             });
 
             services.AddHttpContextAccessor();
@@ -170,7 +176,7 @@ namespace Sfa.Tl.Matching.Functions
 
         private static void RegisterNotificationsApi(IServiceCollection services, string apiKey)
         {
-            services.AddTransient<IAsyncNotificationClient, NotificationClient>(provider => new NotificationClient(apiKey));
+            services.AddTransient<IAsyncNotificationClient, NotificationClient>(_ => new NotificationClient(apiKey));
         }
 
         private static void RegisterApiClient(IServiceCollection services)
@@ -179,7 +185,7 @@ namespace Sfa.Tl.Matching.Functions
             services.AddHttpClient<ILocationApiClient, LocationApiClient>();
             services.AddHttpClient<ICalendarApiClient, CalendarApiClient>();
 
-            services.AddTransient<IProviderQueryPortTypeClient>(svcProvider =>
+            services.AddTransient<IProviderQueryPortTypeClient>(_ =>
             {
                 var client = new ProviderQueryPortTypeClient();
 

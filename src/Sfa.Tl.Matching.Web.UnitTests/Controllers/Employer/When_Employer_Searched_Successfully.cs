@@ -24,12 +24,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             _employerService.Search(query).Returns(new List<EmployerSearchResultDto>
             {
-                new EmployerSearchResultDto
+                new()
                 {
                     CompanyName = "CompanyName1",
                     AlsoKnownAs = "AlsoKnownAs1"
                 },
-                new EmployerSearchResultDto
+                new()
                 {
                     CompanyName = "CompanyName2",
                     AlsoKnownAs = "AlsoKnownAs2"

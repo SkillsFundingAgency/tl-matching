@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
             {
                 ProviderNames = new List<ProviderNameViewModel>
                 {
-                    new ProviderNameViewModel
+                    new()
                     {
                         DisplayName = "Provider Display Name",
                         Postcode = "CV1 2WT",

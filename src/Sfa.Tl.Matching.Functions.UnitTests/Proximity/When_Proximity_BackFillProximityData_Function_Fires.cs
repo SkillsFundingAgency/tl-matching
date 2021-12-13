@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
             _providerVenueRepository = Substitute.For<IRepository<ProviderVenue>>();
             var mockProviderVenueDbSet = new List<ProviderVenue>
                 {
-                    new ProviderVenue
+                    new()
                     {
                         Postcode = "CV1 2WT",
                         Town = null
@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
                 .AsQueryable()
                 .BuildMockDbSet();
 
-            _providerVenueRepository.GetManyAsync(Arg.Any<Expression<Func<ProviderVenue, bool>>>())
+            _providerVenueRepository.GetMany(Arg.Any<Expression<Func<ProviderVenue, bool>>>())
                 .Returns(mockProviderVenueDbSet);
 
             _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();

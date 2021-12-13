@@ -10,19 +10,19 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders
         {
             _searchResults = new List<Domain.Models.Employer>
             {
-                new Domain.Models.Employer
+                new()
                 {
                     Id = 1,
                     CompanyName = "Z Company",
                     AlsoKnownAs = "Z Also Known As"
                 },
-                new Domain.Models.Employer
+                new()
                 {
                     Id = 2,
                     CompanyName = "Company",
                     AlsoKnownAs = "Also Known As"
                 },
-                new Domain.Models.Employer
+                new()
                 {
                     Id = 3,
                     CompanyName = "Another Company",

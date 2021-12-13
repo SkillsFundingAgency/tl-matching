@@ -28,9 +28,9 @@ namespace Sfa.Tl.Matching.Application.Extensions
 
         public static string GetUserName(this ClaimsPrincipal user)
         {
-            var userNames = user.Claims.Where(c => c.Type == ClaimTypes.GivenName || c.Type == ClaimTypes.Surname)
-                    .Select(c => c.Value);
-            return string.Join(" ", userNames);
+            var firstName = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
+            var surname = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
+            return $"{firstName}{(firstName is not null && surname is not null ? " " : null)}{surname}";
         }
 
         public static string GetUserEmail(this ClaimsPrincipal user)

@@ -4,7 +4,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.LocalEnterprisePartne
 {
     public class ValidLocalEnterprisePartnershipStagingFileImportDtoBuilder
     {
-        public LocalEnterprisePartnershipStagingFileImportDto Build() => new LocalEnterprisePartnershipStagingFileImportDto
+        public LocalEnterprisePartnershipStagingFileImportDto Build() => new()
         {
             Code = "E37000007",
             Name = "Cumbria",

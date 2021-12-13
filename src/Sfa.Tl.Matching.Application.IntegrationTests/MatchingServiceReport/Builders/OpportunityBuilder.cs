@@ -85,7 +85,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
                 CreatedBy = "Sfa.Tl.Matching.Application.IntegrationTests",
                 ProvisionGap = new List<ProvisionGap>
                 {
-                    new ProvisionGap
+                    new()
                     {
                         HadBadExperience = true,
                         NoSuitableStudent = true,

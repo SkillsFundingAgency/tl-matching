@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.OpportunityProximity.Bu
         public IList<OpportunityProximitySearchResultViewModelItem> Build() =>
             new List<OpportunityProximitySearchResultViewModelItem>
             {
-                new OpportunityProximitySearchResultViewModelItem
+                new()
                 {
                     ProviderVenueId = 1,
                     ProviderName = "The WKCIC Group",
@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.OpportunityProximity.Bu
                         "health and physiotherapy"
                     }
                 },
-                new OpportunityProximitySearchResultViewModelItem
+                new()
                 {
                     ProviderVenueId = 2,
                     ProviderName = "Lambeth College",

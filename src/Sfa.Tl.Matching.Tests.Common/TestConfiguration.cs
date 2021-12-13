@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Tests.Common
     {
         public static MatchingConfiguration MatchingConfiguration { get; }
 
-        public static bool IsMockedHttpClient;
+        public static bool IsMockedHttpClient { get; }
 
         static TestConfiguration()
         {
@@ -29,10 +29,9 @@ namespace Sfa.Tl.Matching.Tests.Common
             }
 
             MatchingConfiguration = ConfigurationLoader.Load(
-                configuration["EnvironmentName"],
-                configuration["ConfigurationStorageConnectionString"],
-                configuration["Version"],
-                configuration["ServiceName"]);
+                configuration[Constants.EnvironmentNameConfigKey],
+                configuration[Constants.ConfigurationStorageConnectionStringConfigKey],
+                configuration[Constants.ServiceNameConfigKey], configuration[Constants.VersionConfigKey]);
 
             IsMockedHttpClient = bool.Parse(configuration["IsMockedHttpClient"]);
         }
@@ -52,7 +51,7 @@ namespace Sfa.Tl.Matching.Tests.Common
 
         public static string GetTestExecutionDirectory()
         {
-            var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().CodeBase!);
+            var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().Location!);
             var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
             return Path.GetDirectoryName(codeBasePath);
         }

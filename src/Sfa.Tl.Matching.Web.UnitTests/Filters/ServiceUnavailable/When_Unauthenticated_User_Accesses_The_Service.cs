@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Filters.ServiceUnavailable
             var defaultHttpContext = Substitute.For<HttpContext>();
             var serviceStatusHistoryService = Substitute.For<IServiceStatusHistoryService>();
 
-            defaultHttpContext.User.Identity.IsAuthenticated.Returns(false);
+            defaultHttpContext.User.Identity!.IsAuthenticated.Returns(false);
 
             var routeData = new RouteData();
             var actionContext = new ActionContext(defaultHttpContext, routeData, new ActionDescriptor());
@@ -30,13 +30,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Filters.ServiceUnavailable
                 actionContext,
                 new List<IFilterMetadata>(),
                 new Dictionary<string, object>(),
-                null);
+                null!);
 
-            var filterAttribute = new ServiceUnavailableFilterAttribute(serviceStatusHistoryService);
+            var filter = new ServiceUnavailableFilter(serviceStatusHistoryService);
 
             var actionExecutionDelegate = Substitute.For<ActionExecutionDelegate>();
 
-            filterAttribute.OnActionExecutionAsync(_actionExecutingContext, actionExecutionDelegate).GetAwaiter().GetResult();
+            filter.OnActionExecutionAsync(_actionExecutingContext, actionExecutionDelegate).GetAwaiter().GetResult();
         }
 
         [Fact]

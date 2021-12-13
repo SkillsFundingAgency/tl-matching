@@ -229,7 +229,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private static bool IsValidProviderSearch(ProviderSearchResultDto searchResult)
         {
-            return searchResult != null && searchResult.Id > 0;
+            return searchResult is { Id: > 0 };
         }
     }
 }

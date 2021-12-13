@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Employer.Builders
     {
         public IList<Domain.Models.Employer> Build() => new List<Domain.Models.Employer>
         {
-            new Domain.Models.Employer
+            new()
             {
                 Id = 1,
                 CrmId = new Guid("55555555-5555-5555-5555-555555555555"),
@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Employer.Builders
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,
                 ModifiedOn = EntityCreationConstants.ModifiedOn
             },
-            new Domain.Models.Employer
+            new()
             {
                 Id = 2,
                 CrmId = new Guid("66666666-6666-6666-6666-666666666666"),

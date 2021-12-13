@@ -4,7 +4,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.PostcodeLookup.Builders
 {
     public class ValidPostcodeLookupBuilder
     {
-        public Domain.Models.PostcodeLookup Build() => new Domain.Models.PostcodeLookup
+        public Domain.Models.PostcodeLookup Build() => new()
         {
             Id = 1,
             Postcode = "CV1 2WT",

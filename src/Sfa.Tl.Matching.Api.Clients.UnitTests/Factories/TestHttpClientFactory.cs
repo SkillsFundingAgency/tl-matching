@@ -2,7 +2,7 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace Sfa.Tl.Matching.Api.Clients.UnitTests.Factories
 {
@@ -10,11 +10,15 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests.Factories
     {
         protected HttpClient CreateClient(object response, string uri, string contentType = "application/json")
         {
-            var serialized = JsonConvert.SerializeObject(response);
+            var serializedResponse = JsonSerializer.Serialize(response);
+            return CreateClient(serializedResponse, uri, contentType);
+        }
 
+        protected HttpClient CreateClient(string serializedResponse, string uri, string contentType = "application/json")
+        {
             var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = new StringContent(serialized)
+                Content = new StringContent(serializedResponse)
             };
             httpResponseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
 

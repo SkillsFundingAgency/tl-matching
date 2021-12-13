@@ -5,7 +5,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Qualification.Builders
     public class ValidQualificationBuilder
     {
         public Domain.Models.Qualification Build() =>
-            new Domain.Models.Qualification
+            new()
             {
                 Id = 1,
                 LarId = "1000",

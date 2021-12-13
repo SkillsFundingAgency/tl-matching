@@ -5,7 +5,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.OpportunityItem.Builders
 {
     public class ValidOpportunityItemBuilder
     {
-        public Domain.Models.OpportunityItem Build() => new Domain.Models.OpportunityItem
+        public Domain.Models.OpportunityItem Build() => new()
         {
             Id = 1,
             RouteId = 1,

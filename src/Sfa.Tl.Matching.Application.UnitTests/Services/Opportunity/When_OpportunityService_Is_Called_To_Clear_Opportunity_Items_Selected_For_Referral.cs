@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<OpportunityItemIsSelectedForReferralDto, OpportunityItem>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<OpportunityItemIsSelectedForReferralDto, OpportunityItem>(httpContextAccessor) :
+                            new LoggedInUserNameResolver<OpportunityItemIsSelectedForReferralDto, OpportunityItem>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<OpportunityItemIsSelectedForReferralDto, OpportunityItem>(dateTimeProvider) :
                                 null);
@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             _opportunityItemRepository
-                .GetManyAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
+                .GetMany(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
                 .Returns(new OpportunityItemListBuilder().Build().AsQueryable());
 
             var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
@@ -77,7 +77,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _opportunityItemRepository
                 .Received(1)
-                .GetManyAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>());
+                .GetMany(Arg.Any<Expression<Func<OpportunityItem, bool>>>());
         }
 
         [Fact]

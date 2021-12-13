@@ -8,11 +8,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.LearningAimReference.
         public const string Title = "LearningAimReference";
         public const string LarId = "12345678";
         public const string AwardOrgLarId = "12345678";
-        public static DateTime SourceCreatedOn = new DateTime(2019, 1, 1);
-        public static DateTime SourceModifiedOn = new DateTime(2019, 1, 1);
+        public static DateTime SourceCreatedOn = new(2019, 1, 1);
+        public static DateTime SourceModifiedOn = new(2019, 1, 1);
         public const string CreatedBy = "CreatedBy";
 
-        public LearningAimReferenceStagingFileImportDto Build() => new LearningAimReferenceStagingFileImportDto
+        public LearningAimReferenceStagingFileImportDto Build() => new()
         {
             Title = "LearningAimReference",
             LarId = "12345678",

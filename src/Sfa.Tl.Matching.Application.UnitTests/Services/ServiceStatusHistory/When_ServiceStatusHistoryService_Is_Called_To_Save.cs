@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ServiceStatusHistory
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<ServiceStatusHistoryViewModel, Domain.Models.ServiceStatusHistory>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<ServiceStatusHistoryViewModel, Domain.Models.ServiceStatusHistory>(httpContextAccessor) :
+                            new LoggedInUserNameResolver<ServiceStatusHistoryViewModel, Domain.Models.ServiceStatusHistory>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<OpportunityDto, Domain.Models.Opportunity>(new DateTimeProvider()) :
                                 null);

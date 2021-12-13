@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
         {
             var providerSearchResultDto = new List<OpportunityProximitySearchResultViewModelItem>
             {
-                new OpportunityProximitySearchResultViewModelItem
+                new()
                 {
                     ProviderVenuePostcode = Postcode,
                     Distance = 1.5d,
@@ -69,7 +69,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 
             _opportunityService.GetReferralsAsync(OpportunityItemId).Returns(new List<ReferralDto>
             {
-                new ReferralDto
+                new()
                 {
                     ProviderVenueId = ProviderVenueId,
                     Name = "Referral"

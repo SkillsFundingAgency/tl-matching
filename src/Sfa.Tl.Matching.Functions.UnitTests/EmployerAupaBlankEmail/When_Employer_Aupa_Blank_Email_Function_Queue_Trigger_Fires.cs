@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmployerAupaBlankEmail
         private const string EmployerOwner = "Test Owner";
 
         private const string SupportEmailAddress = "support@service.com";
-        private readonly Guid _employerCrmId = new Guid("8C8E2207-7137-4E60-AF60-1202123F05C9");
+        private readonly Guid _employerCrmId = new("8C8E2207-7137-4E60-AF60-1202123F05C9");
 
         public When_Employer_Aupa_Blank_Email_Function_Queue_Trigger_Fires()
         {

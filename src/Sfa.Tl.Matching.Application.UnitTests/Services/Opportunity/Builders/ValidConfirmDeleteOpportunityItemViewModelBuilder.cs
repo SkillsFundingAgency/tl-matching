@@ -4,7 +4,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
 {
     internal class ValidConfirmDeleteOpportunityItemViewModelBuilder
     {
-        public ConfirmDeleteOpportunityItemViewModel Build(int basketcount = 1, bool hasPlacement = true) => new ConfirmDeleteOpportunityItemViewModel
+        public ConfirmDeleteOpportunityItemViewModel Build(int basketcount = 1, bool hasPlacement = true) => new()
         {
             OpportunityId = 1,
             OpportunityItemId = 2,
@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
             Postcode = "Postcode",
             JobRole = "JobRole",
             BasketItemCount = basketcount,
-            Placements = hasPlacement ? 1 : (int?)null,
+            Placements = hasPlacement ? 1 : null,
         };
     }
 }

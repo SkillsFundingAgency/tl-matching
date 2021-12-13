@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq.Expressions;
+using System.Text.Json;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
-using Newtonsoft.Json;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
         )
         {
             //Arrange
-            var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
+            var serializedPayLoad = JsonSerializer.Serialize(payLoad);
             var notificationService = new EmailDeliveryStatusService(matchingConfiguration, emailService,
                 opportunityRepository, messageQueueService, logger);
 
@@ -79,7 +79,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
         )
         {
             //Arrange
-            var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
+            var serializedPayLoad = JsonSerializer.Serialize(payLoad);
             var notificationService = new EmailDeliveryStatusService(matchingConfiguration, emailService,
                 opportunityRepository, messageQueueService, logger);
             
@@ -124,7 +124,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
         {
             //Arrange
             matchingConfiguration.EmailDeliveryStatusToken = Guid.NewGuid();
-            var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
+            var serializedPayLoad = JsonSerializer.Serialize(payLoad);
             var notificationService = new EmailDeliveryStatusService(matchingConfiguration, emailService,
                 opportunityRepository, messageQueueService, logger);
 
@@ -179,7 +179,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
         {
             //Arrange
             payLoad.Status = status;
-            var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
+            var serializedPayLoad = JsonSerializer.Serialize(payLoad);
             var notificationService = new EmailDeliveryStatusService(matchingConfiguration, emailService,
                 opportunityRepository, messageQueueService, logger);
 

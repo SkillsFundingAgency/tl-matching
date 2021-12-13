@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Tests.Common.Extensions
         {
             var mock = Substitute.For<DbSet<TEntity>, IQueryable<TEntity>, IAsyncEnumerable<TEntity>>();
             var enumerable = new TestAsyncEnumerableEfCore<TEntity>(data);
-            mock.ConfigureAsyncEnumerableCalls(enumerable);
+            ((IAsyncEnumerable<TEntity>)mock).ConfigureAsyncEnumerableCalls(enumerable);
             mock.ConfigureQueryableCalls(enumerable, data);
             return mock;
         }
@@ -38,14 +38,14 @@ namespace Sfa.Tl.Matching.Tests.Common.Extensions
             mock.Provider.Returns(queryProvider);
             mock.Expression.Returns(data?.Expression);
             mock.ElementType.Returns(data?.ElementType);
-            mock.GetEnumerator().Returns(info => data?.GetEnumerator());
+            mock.GetEnumerator().Returns(_ => data?.GetEnumerator());
         }
 
         private static void ConfigureAsyncEnumerableCalls<TEntity>(
             this IAsyncEnumerable<TEntity> mock,
             IAsyncEnumerable<TEntity> enumerable)
         {
-            mock.GetAsyncEnumerator(Arg.Any<CancellationToken>()).Returns(args => enumerable.GetAsyncEnumerator());
+            mock.GetAsyncEnumerator(Arg.Any<CancellationToken>()).Returns(_ => enumerable.GetAsyncEnumerator());
         }
     }
 }

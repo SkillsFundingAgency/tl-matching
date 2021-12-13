@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         private readonly IRepository<Domain.Models.Employer> _employerRepository;
         private readonly bool _employerResult;
 
-        private readonly Guid _employerCrmId = new Guid("11111111-1111-1111-1111-111111111111");
+        private readonly Guid _employerCrmId = new("11111111-1111-1111-1111-111111111111");
         private const string CompanyName = "CompanyName";
 
         public When_EmployerService_Is_Called_For_Valid_CompanyNameAndId()

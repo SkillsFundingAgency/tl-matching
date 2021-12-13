@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Tests.Common.Extensions
                     type.Name.Contains("LoggedInUserNameResolver")
                         ? new LoggedInUserNameResolver<ProviderDetailViewModel, Provider>(httpContextAccessor)
                         : type.Name.Contains("UtcNowResolver")
-                            ? (object)new UtcNowResolver<OpportunityItemIsSelectedWithUsernameForCompleteDto, OpportunityItem>(dateTimeProvider)
+                            ? new UtcNowResolver<OpportunityItemIsSelectedWithUsernameForCompleteDto, OpportunityItem>(dateTimeProvider)
                             : type.Name.Contains("UtcNowResolver")
                                 ? new UtcNowResolver<ProviderDetailViewModel, Provider>(dateTimeProvider)
                                 : null);

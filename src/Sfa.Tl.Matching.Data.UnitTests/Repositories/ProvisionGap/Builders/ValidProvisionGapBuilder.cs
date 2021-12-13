@@ -4,7 +4,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProvisionGap.Builders
 {
     public class ValidProvisionGapBuilder
     {
-        public Domain.Models.ProvisionGap Build() => new Domain.Models.ProvisionGap
+        public Domain.Models.ProvisionGap Build() => new()
         {
             Id = 1,
             NoSuitableStudent = true,

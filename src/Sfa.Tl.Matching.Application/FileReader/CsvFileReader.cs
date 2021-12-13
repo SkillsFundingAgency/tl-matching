@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using CsvHelper;
+using CsvHelper.Configuration;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
@@ -42,13 +43,21 @@ namespace Sfa.Tl.Matching.Application.FileReader
 
             var columnInfos = fileImportDto.GetType().GetProperties()
                 .Where(pr => pr.GetCustomAttribute<ColumnAttribute>(false) != null)
-                .Select(prop => new { ColumnInfo = prop, Index = prop.GetCustomAttribute<ColumnAttribute>(false).Order })
+                .Select(prop =>
+                    new
+                    {
+                        ColumnInfo = prop,
+                        Index = prop.GetCustomAttribute<ColumnAttribute>(false)!.Order
+                    })
                 .ToList();
 
             using var streamReader = new StreamReader(fileImportDto.FileDataStream);
-            using var reader = new CsvReader(streamReader, CultureInfo.CurrentCulture);
-            //Manually skip header rows 
-            reader.Configuration.HasHeaderRecord = false;
+            using var reader = new CsvReader(streamReader,
+                new CsvConfiguration(CultureInfo.CurrentCulture)
+                {
+                    HasHeaderRecord = false
+                });
+
             if (fileImportDto.NumberOfHeaderRows.HasValue)
             {
                 for (var i = 0; i < fileImportDto.NumberOfHeaderRows; i++)
@@ -62,7 +71,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
 
             while (await reader.ReadAsync())
             {
-                var columnValues = reader.Context.Record;
+                var columnValues = reader.Context.Parser.Record;
 
                 ValidationResult validationResult;
 

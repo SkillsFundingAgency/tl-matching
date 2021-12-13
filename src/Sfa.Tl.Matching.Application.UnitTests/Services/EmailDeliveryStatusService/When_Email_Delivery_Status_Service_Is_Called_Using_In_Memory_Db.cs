@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AutoFixture.Xunit2;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Notify.Interfaces;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var sut = SutSetUp(dbContext, opportunityRepoLogger, emailTemplateLogger, emailHistoryLogger, functionLogLogger,
                 emailDeliveryServiceStatusLogger, emailServiceLogger, notificationClient, configuration, messageQueueService);
 
-            var serializedPayLoad = JsonConvert.SerializeObject(payload);
+            var serializedPayLoad = JsonSerializer.Serialize(payload);
 
             //Act
             await sut.HandleEmailDeliveryStatusAsync(serializedPayLoad);
@@ -110,7 +110,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var sut = SutSetUp(dbContext, opportunityRepoLogger, emailTemplateLogger, emailHistoryLogger, functionLogLogger,
                 emailDeliveryServiceStatusLogger, emailServiceLogger, notificationClient, configuration, messageQueueService);
 
-            var serializedPayLoad = JsonConvert.SerializeObject(payload);
+            var serializedPayLoad = JsonSerializer.Serialize(payload);
 
             //Act
             await sut.HandleEmailDeliveryStatusAsync(serializedPayLoad);
@@ -162,7 +162,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var sut = SutSetUp(dbContext, opportunityRepoLogger, emailTemplateLogger, emailHistoryLogger, functionLogLogger,
                 emailDeliveryServiceStatusLogger, emailServiceLogger, notificationClient, configuration, messageQueueService);
 
-            var serializedPayLoad = JsonConvert.SerializeObject(payload);
+            var serializedPayLoad = JsonSerializer.Serialize(payload);
 
             //Act
             await sut.HandleEmailDeliveryStatusAsync(serializedPayLoad);
@@ -214,7 +214,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var sut = SutSetUp(dbContext, opportunityRepoLogger, emailTemplateLogger, emailHistoryLogger, functionLogLogger, 
                 emailDeliveryServiceStatusLogger, emailServiceLogger, notificationClient, configuration, messageQueueService);
 
-            var serializedPayLoad = JsonConvert.SerializeObject(payload);
+            var serializedPayLoad = JsonSerializer.Serialize(payload);
 
             //Act
             await sut.HandleEmailDeliveryStatusAsync(serializedPayLoad);
@@ -225,7 +225,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
 
             var existingData = dbContext.EmailHistory.Where(history => history.OpportunityId == opportunity.Id).ToList();
             existingData.Select(history => history.ModifiedBy).Should().Equal(new List<string> { null, null });
-            existingData.Select(history => history.ModifiedOn).Should().Equal(new List<string> { null, null });
+            existingData.Select(history => history.ModifiedOn).Should().Equal(new List<DateTime?> { null, null });
 
             await messageQueueService.DidNotReceive().PushEmailDeliveryStatusMessageAsync(Arg.Any<SendEmailDeliveryStatus>());
         }
@@ -270,13 +270,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
 
             var existingData = dbContext.EmailHistory.Where(history => history.OpportunityId == opportunity.Id).ToList();
             existingData.Select(history => history.ModifiedBy).Should().Equal(new List<string> { null, null });
-            existingData.Select(history => history.ModifiedOn).Should().Equal(new List<string> { null, null });
+            existingData.Select(history => history.ModifiedOn).Should().Equal(new List<DateTime?> { null, null });
 
             await messageQueueService.DidNotReceive().PushEmailDeliveryStatusMessageAsync(Arg.Any<SendEmailDeliveryStatus>());
         }
 
         [Theory, AutoDomainData]
-        public async Task Then_Do_Not_Update_Email_History_If_Does_Not_Exsits(
+        public async Task Then_Do_Not_Update_Email_History_If_Does_Not_Exists(
             MatchingDbContext dbContext,
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
@@ -300,7 +300,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var sut = SutSetUp(dbContext, opportunityRepoLogger, emailTemplateLogger, emailHistoryLogger, functionLogLogger,
                 emailDeliveryServiceStatusLogger, emailServiceLogger, notificationClient, configuration, messageQueueService);
 
-            var serializedPayLoad = JsonConvert.SerializeObject(payload);
+            var serializedPayLoad = JsonSerializer.Serialize(payload);
 
             //Act
             var result = await sut.HandleEmailDeliveryStatusAsync(serializedPayLoad);

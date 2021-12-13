@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
     {
         private readonly IEmailService _emailService;
         private readonly IOpportunityRepository _opportunityRepository;
-        private readonly Guid _notificationId = new Guid("a8de2d8c-23ae-4c2f-980a-0a8a3231938f");
+        private readonly Guid _notificationId = new("a8de2d8c-23ae-4c2f-980a-0a8a3231938f");
         private const string SupportEmailAddress = "support@service.com";
 
         public When_EmailDeliveryStatusService_Is_Called_To_Send_Email_With_Invalid_Email_And_No_Opportunity()

@@ -76,7 +76,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public virtual async Task UpdateManyAsync(IList<T> entities)
         {
-            if (entities.Count == 0) return;
+            if (entities is null || entities.Count == 0) return;
 
             _dbContext.UpdateRange(entities);
 
@@ -93,7 +93,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public virtual async Task BulkUpdateManyAsync(IList<T> entities)
         {
-            if (entities.Count == 0) return;
+            if (entities is null || entities.Count == 0) return;
 
             var strategy = _dbContext.Database.CreateExecutionStrategy();
 
@@ -238,7 +238,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public virtual async Task DeleteManyAsync(IList<T> entities)
         {
-            if (entities.Count == 0) return;
+            if (entities is null || entities.Count == 0) return;
 
             _dbContext.RemoveRange(entities);
 
@@ -253,7 +253,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             }
         }
 
-        public IQueryable<T> GetManyAsync(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] navigationPropertyPath)
+        public IQueryable<T> GetMany(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] navigationPropertyPath)
         {
             var queryable = GetQueryableWithIncludes(predicate, null, true, navigationPropertyPath);
 

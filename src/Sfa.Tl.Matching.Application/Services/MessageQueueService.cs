@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Text.Json;
+using System.Threading.Tasks;
 using Azure.Storage.Queues;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Command;
 using Sfa.Tl.Matching.Models.Configuration;
@@ -23,34 +23,34 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task PushProviderQuarterlyRequestMessageAsync(SendProviderQuarterlyUpdateEmail providerRequest)
         {
             await PushMessageAsync(
-                JsonConvert.SerializeObject(providerRequest),
+                JsonSerializer.Serialize(providerRequest),
                 QueueName.ProviderQuarterlyRequestQueue);
         }
 
         public async Task PushEmployerReferralEmailMessageAsync(SendEmployerReferralEmail employerReferralEmail)
         {
             await PushMessageAsync(
-                JsonConvert.SerializeObject(employerReferralEmail),
+                JsonSerializer.Serialize(employerReferralEmail),
                 QueueName.EmployerReferralEmailQueue);
         }
 
         public async Task PushProviderReferralEmailMessageAsync(SendProviderReferralEmail providerReferralEmail)
         {
             await PushMessageAsync(
-                JsonConvert.SerializeObject(providerReferralEmail),
+                JsonSerializer.Serialize(providerReferralEmail),
                 QueueName.ProviderReferralEmailQueue);
         }
 
         public async Task PushEmployerAupaBlankEmailMessageAsync(SendEmployerAupaBlankEmail employerAupaBlankEmail)
         {
             await PushMessageAsync(
-                JsonConvert.SerializeObject(employerAupaBlankEmail),
+                JsonSerializer.Serialize(employerAupaBlankEmail),
                 QueueName.EmployerAupaBlankEmailQueue);
         }
 
         public async Task PushEmailDeliveryStatusMessageAsync(SendEmailDeliveryStatus emailDeliveryStatus)
         {
-            await PushMessageAsync(JsonConvert.SerializeObject(emailDeliveryStatus),
+            await PushMessageAsync(JsonSerializer.Serialize(emailDeliveryStatus),
                 QueueName.EmailDeliveryStatusQueue);
         }
 

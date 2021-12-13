@@ -7,7 +7,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping.
     {
         public IList<Domain.Models.QualificationRouteMapping> Build() => new List<Domain.Models.QualificationRouteMapping>
         {
-            new Domain.Models.QualificationRouteMapping
+            new()
             {
                 Id = 1,
                 RouteId = 2,
@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping.
                     ShortTitle = "Short Title"
                 }
             },
-            new Domain.Models.QualificationRouteMapping
+            new()
             {
                 Id = 2,
                 RouteId = 3,

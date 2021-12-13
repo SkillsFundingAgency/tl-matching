@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
                 c.AddMaps(typeof(ProviderMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserNameResolver") ?
-                        (object)new LoggedInUserNameResolver<RemoveProviderVenueViewModel, Domain.Models.ProviderVenue>(httpContextAccessor) :
+                        new LoggedInUserNameResolver<RemoveProviderVenueViewModel, Domain.Models.ProviderVenue>(httpContextAccessor) :
                         type.Name.Contains("UtcNowResolver") ?
                             new UtcNowResolver<RemoveProviderVenueViewModel, Domain.Models.ProviderVenue>(new DateTimeProvider()) :
                                 null);

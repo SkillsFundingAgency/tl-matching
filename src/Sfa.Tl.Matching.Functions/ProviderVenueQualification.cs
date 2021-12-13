@@ -2,14 +2,14 @@ using System;
 using System.Diagnostics;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using Microsoft.Azure.Storage.Blob;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Functions.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Functions
@@ -33,22 +33,22 @@ namespace Sfa.Tl.Matching.Functions
         [FunctionName("ImportProviderVenueQualification")]
         public async Task ImportProviderVenueQualification(
             [BlobTrigger("providervenuequalification/{name}", Connection = "BlobStorageConnectionString")] 
-            ICloudBlob blockBlob,
+            BlobClient blobClient,
             string name,
             ExecutionContext context,
             ILogger logger)
         {
             try
             {
-                var stream = await blockBlob.OpenReadAsync(null, null, null);
+                var stream = await blobClient.OpenReadAsync();
 
                 logger.LogInformation($"Function {context.FunctionName} processing blob\n" +
                                       $"\tName:{name}\n" +
                                       $"\tSize: {stream.Length} Bytes");
 
-                var createdByUser = blockBlob.GetCreatedByMetadata();
+                var createdByUser = await blobClient.GetCreatedByMetadata();
 
-                if (_httpContextAccessor != null && _httpContextAccessor.HttpContext == null)
+                if (_httpContextAccessor is { HttpContext: null })
                 {
                     _httpContextAccessor.HttpContext = new DefaultHttpContext
                     {

@@ -7,7 +7,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.PostcodeLookup.Builders
     {
         public IList<Domain.Models.PostcodeLookup> Build() => new List<Domain.Models.PostcodeLookup>
         {
-            new Domain.Models.PostcodeLookup
+            new()
             {
                 Id = 1,
                 Postcode = "CV1 2WT",
@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.PostcodeLookup.Builders
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,
                 ModifiedOn = EntityCreationConstants.ModifiedOn
             },
-            new Domain.Models.PostcodeLookup
+            new()
             {
                 Id = 2,
                 Postcode = "OX2 9EG",

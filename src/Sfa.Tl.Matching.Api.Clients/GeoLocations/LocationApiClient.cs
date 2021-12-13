@@ -1,5 +1,7 @@
-﻿using System.Net.Http;
+﻿using System.Globalization;
+using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Sfa.Tl.Matching.Api.Clients.Extensions;
 using Sfa.Tl.Matching.Models.Configuration;
@@ -11,6 +13,9 @@ namespace Sfa.Tl.Matching.Api.Clients.GeoLocations
     {
         private readonly HttpClient _httpClient;
         private readonly string _postcodeRetrieverBaseUrl;
+
+        public const double DefaultLatitude = 51.477928;
+        public const double DefaultLongitude = 0;
 
         public LocationApiClient(HttpClient httpClient, MatchingConfiguration matchingConfiguration)
         {
@@ -81,9 +86,7 @@ namespace Sfa.Tl.Matching.Api.Clients.GeoLocations
             
             responseMessage.EnsureSuccessStatusCode();
 
-            var response = await responseMessage.Content.ReadAsAsync<PostcodeLookupResponse>();
-
-            return response.Result;
+            return await ReadPostcodeLocationFromResponse(responseMessage);
         }
 
         public async Task<PostcodeLookupResultDto> GetTerminatedPostcodeGeoLocationDataAsync(string postcode)
@@ -94,9 +97,21 @@ namespace Sfa.Tl.Matching.Api.Clients.GeoLocations
 
             responseMessage.EnsureSuccessStatusCode();
 
-            var response = await responseMessage.Content.ReadAsAsync<PostcodeLookupResponse>();
+            return await ReadPostcodeLocationFromResponse(responseMessage);
+        }
 
-            return response.Result;
+        private static async Task<PostcodeLookupResultDto> ReadPostcodeLocationFromResponse(HttpResponseMessage responseMessage)
+        {
+            var s = await responseMessage.Content.ReadAsStringAsync();
+            using var jsonDocument = await JsonDocument.ParseAsync(await responseMessage.Content.ReadAsStreamAsync());
+            var resultElement = jsonDocument.RootElement.GetProperty("result");
+
+            return new PostcodeLookupResultDto
+            {
+                Postcode = resultElement.SafeGetString("postcode"),
+                Latitude = resultElement.SafeGetDouble("latitude", DefaultLatitude).ToString(CultureInfo.InvariantCulture),
+                Longitude = resultElement.SafeGetDouble("longitude", DefaultLongitude).ToString(CultureInfo.InvariantCulture)
+            };
         }
     }
 }

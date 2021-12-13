@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<OpportunityItemIsSelectedForReferralDto, OpportunityItem>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<OpportunityItemIsSelectedForReferralDto, OpportunityItem>(httpContextAccessor) :
+                            new LoggedInUserNameResolver<OpportunityItemIsSelectedForReferralDto, OpportunityItem>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<OpportunityItemIsSelectedForReferralDto, OpportunityItem>(dateTimeProvider) :
                                 null);
@@ -67,13 +67,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             {
                 SelectedOpportunity = new List<SelectedOpportunityItemViewModel>
                 {
-                    new SelectedOpportunityItemViewModel
+                    new()
                     {
                         Id = 1,
                         IsSelected = true,
                         OpportunityType = OpportunityType.Referral.ToString()
                     },
-                    new SelectedOpportunityItemViewModel
+                    new()
                     {
                         Id = 2,
                         IsSelected = true,

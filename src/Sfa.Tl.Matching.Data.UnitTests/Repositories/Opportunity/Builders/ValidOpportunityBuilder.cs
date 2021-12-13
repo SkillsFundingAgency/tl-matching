@@ -68,7 +68,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                     },
                     Referral = new List<Referral>
                     {
-                        new Referral
+                        new()
                         {
                             ProviderVenueId = 1,
                             DistanceFromEmployer = 3.5M,
@@ -144,7 +144,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                     },
                     Referral = new List<Referral>
                     {
-                        new Referral
+                        new()
                         {
                             ProviderVenueId = 1,
                             DistanceFromEmployer = 3.5M,
@@ -213,7 +213,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                     },
                     Referral = new List<Referral>
                     {
-                        new Referral
+                        new()
                         {
                             ProviderVenueId = 2,
                             DistanceFromEmployer = 5.0M,
@@ -276,7 +276,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                     IsCompleted = false,
                     ProvisionGap = new List<Domain.Models.ProvisionGap>
                     {
-                        new Domain.Models.ProvisionGap
+                        new()
                         {
                             Id = 1,
 

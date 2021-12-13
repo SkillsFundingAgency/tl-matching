@@ -4,7 +4,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping.
 {
     public class ValidQualificationRouteMappingBuilder
     {
-        public Domain.Models.QualificationRouteMapping Build() => new Domain.Models.QualificationRouteMapping
+        public Domain.Models.QualificationRouteMapping Build() => new()
         {
             Id = 1,
             RouteId = 2,

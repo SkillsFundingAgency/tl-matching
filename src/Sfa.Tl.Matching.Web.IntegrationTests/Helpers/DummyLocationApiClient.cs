@@ -7,28 +7,24 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Helpers
 {
     public class DummyLocationApiClient : ILocationApiClient
     {
-        private readonly Dictionary<string, PostcodeLookupResultDto> _postcodeLookupData = new Dictionary<string, PostcodeLookupResultDto>
+        private readonly Dictionary<string, PostcodeLookupResultDto> _postcodeLookupData = new()
         {
-            {"SW1A2AA", new PostcodeLookupResultDto {
+            {
+                "SW1A2AA",
+                new PostcodeLookupResultDto
+                {
                     Postcode = "SW1A 2AA",
-                    Country = "England",
-                    Region = "Region",
-                    AdminCounty = null,
-                    AdminDistrict = "Westminster",
                     Latitude = "51.50354",
-                    Longitude = "-0.127695",
-                    Outcode = "SW1A"
+                    Longitude = "-0.127695"
                 }
             },
-            {"CV12WT", new PostcodeLookupResultDto {
+            {
+                "CV12WT",
+                new PostcodeLookupResultDto
+                {
                     Postcode = "CV1 2WT",
-                    Country = "England",
-                    Region = "Region",
-                    AdminCounty = null,
-                    AdminDistrict = "Coventry",
                     Latitude = "52.400997",
-                    Longitude = "-1.508122",
-                    Outcode = "CV1"
+                    Longitude = "-1.508122"
                 }
             }
         };

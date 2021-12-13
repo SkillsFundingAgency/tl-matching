@@ -1,12 +1,11 @@
-﻿using System.IO;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using Microsoft.Azure.Storage.Blob;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Functions.UnitTests.Builders;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
@@ -19,8 +18,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderVenueQualification
 
         public When_ImportProviderVenueQualification_Function_Blob_Trigger_Fires()
         {
-            var blobStream = Substitute.For<ICloudBlob>();
-            blobStream.OpenReadAsync(null, null, null).Returns(new MemoryStream());
+            var blobClient = new BlobClientBuilder().Build();
+
             var context = new ExecutionContext();
             var logger = Substitute.For<ILogger>();
             var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
@@ -33,7 +32,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderVenueQualification
                 _functionLogRepository, httpContextAccessor);
 
             providerVenueQualification.ImportProviderVenueQualification(
-                blobStream,
+                blobClient,
                 "test",
                 context,
                 logger

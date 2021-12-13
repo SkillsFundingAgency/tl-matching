@@ -4,7 +4,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderQualification.Buil
 {
     public class ValidProviderQualificationBuilder
     {
-        public Domain.Models.ProviderQualification Build() => new Domain.Models.ProviderQualification
+        public Domain.Models.ProviderQualification Build() => new()
         {
             Id = 1,
             ProviderVenueId = 1,

@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                 ShortTitle = new string('X', 100),
                 Routes = new List<RouteSummaryViewModel>
                 {
-                    new RouteSummaryViewModel
+                    new()
                     {
                         Id = 1,
                         Name = "Route 1",

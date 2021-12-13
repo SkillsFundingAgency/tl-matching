@@ -5,14 +5,7 @@ jobs:
       vmImage: 'windows-2019'
   workspace:
     clean: all
-  steps:        
-    - task: UseDotNet@2
-      displayName: 'Use .NET Core SDK 2.x LTS'
-      inputs:
-        packageType: sdk
-        version: 2.x
-        installationPath: $(Agent.ToolsDirectory)/dotnet
-
+  steps:
     - task: GitVersion@5
       displayName: GitVersion
       inputs:
@@ -20,7 +13,7 @@ jobs:
         updateAssemblyInfo: true
     
     - task: UseDotNet@2
-      displayName: 'Use .NET Core SDK $(dotnetVersion)'
+      displayName: 'Use .NET SDK $(dotnetVersion)'
       inputs:
         packageType: sdk
         version: $(dotnetVersion)
@@ -32,6 +25,10 @@ jobs:
         command: restore
         projects: 'src/**/*.csproj'
         noCache: false
+
+    - task: NodeTool@0 
+      inputs:
+        versionSpec: '14.x'
     
     - task: Npm@1
       displayName: 'npm install'

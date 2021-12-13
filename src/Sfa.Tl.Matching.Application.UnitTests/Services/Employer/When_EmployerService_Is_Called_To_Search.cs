@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             var employerRepository = Substitute.For<IRepository<Domain.Models.Employer>>();
             var opportunityRepository = Substitute.For<IOpportunityRepository>();
 
-            employerRepository.GetManyAsync(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
+            employerRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
                 .Returns(new SearchResultsBuilder().Build().AsQueryable());
 
             var employerService = new EmployerService(employerRepository, opportunityRepository, AutoMapperExtension.GetRealMapper(), Substitute.For<IValidator<CrmEmployerEventBase>>(),

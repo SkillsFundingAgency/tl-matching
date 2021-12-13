@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Text.Json;
 using Microsoft.Azure.Cosmos.Table;
-using Newtonsoft.Json;
 using Sfa.Tl.Matching.Models.Configuration;
 
 namespace Sfa.Tl.Matching.Application.Configuration
 {
     public static class ConfigurationLoader
     {
-        public static MatchingConfiguration Load(string environment, string storageConnectionString,
-            string version, string serviceName)
+        public static MatchingConfiguration Load(
+            string environment, 
+            string storageConnectionString,
+            string serviceName,
+            string version)
         {
             try
             {
@@ -27,7 +30,12 @@ namespace Sfa.Tl.Matching.Application.Configuration
                     throw new NullReferenceException("Configuration data was null.");
                 }
 
-                return JsonConvert.DeserializeObject<MatchingConfiguration>(data);
+                return JsonSerializer.Deserialize<MatchingConfiguration>(data,
+                    new JsonSerializerOptions
+                    {
+                        ReadCommentHandling = JsonCommentHandling.Skip,
+                        AllowTrailingCommas = true
+                    });
             }
             catch (Exception ex)
             {

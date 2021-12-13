@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
         public SeleniumWebApplicationFactory()
         {
             ClientOptions.BaseAddress = new Uri(_baseAddress);
-            
+
             // ReSharper disable VirtualMemberCallInConstructor
             CreateServer(CreateWebHostBuilder());
             // ReSharper restore VirtualMemberCallInConstructor
@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
 
             if (serverAddresses == null)
             {
-                throw new InvalidOperationException($"Could not get instance of IServerAddressFeature.");
+                throw new InvalidOperationException("Could not get instance of IServerAddressFeature.");
             }
 
             var addresses = serverAddresses.Addresses;
@@ -84,7 +84,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
             TestServer = returnValue;
             return returnValue;
         }
-        
+
         protected override IWebHostBuilder CreateWebHostBuilder()
         {
             var configuration = new ConfigurationBuilder()
@@ -95,13 +95,13 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
                 .UseWebRoot(@"..\..\..\..\Sfa.Tl.Matching.Web\wwwroot")
                 .UseConfiguration(configuration)
                 .UseStartup<TStartup>();
-            
+
             ConfigureWebHost(builder);
 
             return builder;
         }
 
-       
+
         private IServiceScope _scope;
         private IServiceScope Scope
         {
@@ -123,7 +123,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
                 return _scope;
             }
         }
-        
+
         public T CreateInstance<T>()
         {
             var provider = Scope.ServiceProvider;
@@ -138,15 +138,17 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
             _scope?.Dispose();
             _scope = null;
 
-            _webHost?.Dispose();
-            _webHost = null;
-
             base.Dispose(disposing);
             if (disposing)
             {
                 _webHost?.Dispose();
                 _process?.CloseMainWindow();
+                _process?.Close();
+                _process?.Dispose();
             }
+
+            _webHost = null;
+            _process = null;
         }
     }
 }

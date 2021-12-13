@@ -8,6 +8,7 @@ namespace Sfa.Tl.Matching.Data
     {
         private readonly bool _applyQueryFilters;
 
+        // ReSharper disable once IntroduceOptionalParameters.Global - will cause errors in tests
         public MatchingDbContext(DbContextOptions options) : this(options, true)
         {
         }

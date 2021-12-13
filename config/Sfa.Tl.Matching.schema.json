@@ -27,10 +27,10 @@
       "type": "string",
       "environmentVariable": "AuthorisedAdminUserEmail"
     },
-    "PostCodeRetrieverBaseUrl": {
+    "PostcodeRetrieverBaseUrl": {
       "minLength": 1,
       "type": "string",
-      "environmentVariable": "PostCodeRetrieverBaseUrl"
+      "environmentVariable": "PostcodeRetrieverBaseUrl"
     },
     "GovNotifyApiKey": {
       "type": "string",

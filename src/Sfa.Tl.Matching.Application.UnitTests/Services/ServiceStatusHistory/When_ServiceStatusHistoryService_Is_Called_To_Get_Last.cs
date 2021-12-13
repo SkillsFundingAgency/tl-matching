@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ServiceStatusHistory
                 .BuildMockDbSet();
 
             var serviceStatusHistoryRepository = Substitute.For<IRepository<Domain.Models.ServiceStatusHistory>>();
-            serviceStatusHistoryRepository.GetManyAsync(Arg.Any<Expression<Func<Domain.Models.ServiceStatusHistory, bool>>>()).Returns(mockDbSet);
+            serviceStatusHistoryRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.ServiceStatusHistory, bool>>>()).Returns(mockDbSet);
 
             var serviceStatusHistoryService = new ServiceStatusHistoryService(mapper, serviceStatusHistoryRepository);
             _result = serviceStatusHistoryService.GetLatestServiceStatusHistoryAsync()

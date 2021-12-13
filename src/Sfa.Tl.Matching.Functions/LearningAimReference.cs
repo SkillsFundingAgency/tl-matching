@@ -1,13 +1,13 @@
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Azure.Storage.Blobs;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using Microsoft.Azure.Storage.Blob;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Functions.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Functions
@@ -27,25 +27,26 @@ namespace Sfa.Tl.Matching.Functions
 
         [FunctionName("ImportLearningAimReference")]
         public async Task ImportLearningAimReferenceAsync(
-            [BlobTrigger("learningaimreference/{name}", Connection = "BlobStorageConnectionString")] ICloudBlob blockBlob,
+            [BlobTrigger("learningaimreference/{name}", Connection = "BlobStorageConnectionString")]
+            BlobClient blobClient,
             string name,
             ExecutionContext context,
             ILogger logger)
         {
             try
             {
-                var stream = await blockBlob.OpenReadAsync(null, null, null);
+                var stream = await blobClient.OpenReadAsync();
 
                 logger.LogInformation($"Function {context.FunctionName} processing blob\n" +
                                       $"\tName:{name}\n" +
                                       $"\tSize: {stream.Length} Bytes");
 
                 var stopwatch = Stopwatch.StartNew();
-
+var temp = await blobClient.GetCreatedByMetadata();
                 var createdRecords = await _fileImportService.BulkImportAsync(new LearningAimReferenceStagingFileImportDto
                 {
                     FileDataStream = stream,
-                    CreatedBy = blockBlob.GetCreatedByMetadata()
+                    CreatedBy = await blobClient.GetCreatedByMetadata()
                 });
 
                 stopwatch.Stop();

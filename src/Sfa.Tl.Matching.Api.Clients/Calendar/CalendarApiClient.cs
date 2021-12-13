@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
 
@@ -32,24 +32,39 @@ namespace Sfa.Tl.Matching.Api.Clients.Calendar
 
             responseMessage.EnsureSuccessStatusCode();
 
-            await using var stream = await responseMessage.Content.ReadAsStreamAsync();
-            using var reader = new StreamReader(stream);
-            using var jsonReader = new JsonTextReader(reader);
+            return await DeserializeBankHolidayList(responseMessage.Content);
+        }
 
-            var json = await JObject.LoadAsync(jsonReader);
-            var englandAndWalesHolidays = json
-                .SelectTokens(
-                    "$.divisions.england-and-wales..[?(@.date)]");
+        private async Task<IList<BankHolidayResultDto>> DeserializeBankHolidayList(HttpContent content)
+        {
+            var jsonDoc = await JsonDocument.ParseAsync(await content.ReadAsStreamAsync());
 
-            var serializer = new JsonSerializer
+            var allHolidays = new List<BankHolidayResultDto>();
+
+            foreach (var holidayYear
+                     in jsonDoc
+                         .RootElement
+                         .GetProperty("divisions")
+                         .GetProperty("england-and-wales")
+                         .EnumerateObject()
+                         .Where(y => short.TryParse(y.Name, out _)))
             {
-                DateFormatString = "dd/MM/yyyy"
-            };
+                var holidays = holidayYear.Value
+                    .EnumerateArray()
+                    .Select(x =>
+                        new BankHolidayResultDto
+                        {
+                            Title = x.GetProperty("title").GetString(),//?.Replace("bank_holidays.", "").Replace('_', ' '),
+                                                                       //DateString = x.GetString("date"),
+                            Date = DateTime.TryParseExact(x.GetProperty("date").GetString(), "dd/MM/yyyy", CultureInfo.CurrentCulture, DateTimeStyles.None, out var dt)
+                                ? dt : DateTime.MinValue
+                        })
+                    .ToList();
 
-            var allResults = englandAndWalesHolidays
-                .Select(x => x.ToObject<BankHolidayResultDto>(serializer))
-                .ToList();
-            return allResults;
+                allHolidays.AddRange(holidays);
+            }
+
+            return allHolidays.OrderBy(h => h.Date).ToList();
         }
     }
 }

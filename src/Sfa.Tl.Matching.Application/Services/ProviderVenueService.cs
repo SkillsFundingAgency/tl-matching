@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<ProviderVenueDetailViewModel> GetVenueWithTrimmedPostcodeAsync(int providerId, string postcode)
         {
             //Query split because it uses client-side evaluation
-            var venues = await _providerVenueRepository.GetManyAsync(pv =>
+            var venues = await _providerVenueRepository.GetMany(pv =>
                     pv.ProviderId == providerId)
                 .AsNoTracking()
                 .ToListAsync();

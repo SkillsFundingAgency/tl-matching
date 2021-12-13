@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
+using Sfa.Tl.Matching.Tests.Common.Extensions;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Xunit;
@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                 Source = "Test",
                 Routes = new List<RouteSummaryViewModel>
                 {
-                    new RouteSummaryViewModel
+                    new()
                     {
                         Id = 1,
                         Name = "Route 1",
@@ -55,21 +55,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             var result = _result as JsonResult;
             result.Should().NotBeNull();
 
-            var validJson = result?.Value.ToString()?
-                .Replace("=", ":")
-                .Replace(" False", "\"False\"")
-                .Replace(" True", "\"True\"");
-            
-            validJson.Should().NotBeNull();
+            var success = result.GetValue<bool>("success");
+            var response = result.GetValue<string>("response");
 
-            dynamic responseObject = JsonConvert.DeserializeObject(validJson!);
-
-            Assert.NotNull(responseObject);
-            Assert.True(responseObject.success == "False");
-
-            var responseString = responseObject.response.ToString() as string;
-            responseString.Should().Contain("ShortTitle");
-            responseString.Should().Contain("You must enter a short title that is 100 characters or fewer");
+            success.Should().BeFalse();
+            response.Should().Contain("ShortTitle");
+            response.Should().Contain("You must enter a short title that is 100 characters or fewer");
         }
     }
 }

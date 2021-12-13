@@ -35,15 +35,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             _referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
             _opportunityItemRepository
-                .GetManyAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
+                .GetMany(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
                 .Returns(SetOpportunityItem().AsQueryable());
 
             _referralRepository
-                .GetManyAsync(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>())
+                .GetMany(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>())
                 .Returns(SetReferrals().AsQueryable());
 
             _provisionGapRepository
-                .GetManyAsync(Arg.Any<Expression<Func<ProvisionGap, bool>>>())
+                .GetMany(Arg.Any<Expression<Func<ProvisionGap, bool>>>())
                 .Returns(SetProvisionGaps().AsQueryable());
 
             var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
@@ -86,7 +86,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             return new List<OpportunityItem>
             {
-                new OpportunityItem
+                new()
                 {
                     Id = 1,
                     OpportunityId = OpportunityId,
@@ -96,7 +96,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     CreatedBy = "CreatedBy",
                     IsSaved = false
                 },
-                new OpportunityItem
+                new()
                 {
                     Id = 2,
                     OpportunityId = OpportunityId,
@@ -113,7 +113,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             return new List<Domain.Models.Referral>
             {
-                new Domain.Models.Referral
+                new()
                 {
                     Id = 1,
                     OpportunityItemId = OpportunityItemId
@@ -125,7 +125,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             return new List<ProvisionGap>
             {
-                new ProvisionGap
+                new()
                 {
                     Id = 1,
                     OpportunityItemId = OpportunityItemId

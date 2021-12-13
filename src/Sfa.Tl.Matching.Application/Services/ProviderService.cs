@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<IList<ProviderSearchResultItemViewModel>> SearchProvidersWithFundingAsync(ProviderSearchParametersViewModel searchParameters)
         {
-            return await _repository.GetManyAsync(p => searchParameters.UkPrn == null || p.UkPrn == searchParameters.UkPrn.Value)
+            return await _repository.GetMany(p => searchParameters.UkPrn == null || p.UkPrn == searchParameters.UkPrn.Value)
                                     .OrderBy(p => p.Name)
                                     .ProjectTo<ProviderSearchResultItemViewModel>(_mapper.ConfigurationProvider)
                                     .ToListAsync();
@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<int> GetProvidersWithFundingCountAsync()
         {
             return await _repository
-                .GetManyAsync(p => p.IsCdfProvider)
+                .GetMany(p => p.IsCdfProvider)
                 .CountAsync();
         }
 

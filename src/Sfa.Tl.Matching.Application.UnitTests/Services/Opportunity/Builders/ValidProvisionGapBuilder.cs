@@ -4,7 +4,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
 {
     internal class ValidProvisionGapBuilder
     {
-        public ProvisionGap Build() => new ProvisionGap
+        public ProvisionGap Build() => new()
         {
             Id = 1,
             OpportunityItemId = 1,

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -56,7 +57,7 @@ namespace Sfa.Tl.Matching.Application.Services
         public IEnumerable<EmployerSearchResultDto> Search(string companyName)
         {
             var searchResults = _employerRepository
-                .GetManyAsync(e => EF.Functions.Like(e.CompanyNameSearch, $"%{companyName.ToLetterOrDigit()}%"))
+                .GetMany(e => EF.Functions.Like(e.CompanyNameSearch, $"%{companyName.ToLetterOrDigit()}%"))
                 .OrderBy(e => e.CompanyName)
                 .ProjectTo<EmployerSearchResultDto>(_mapper.ConfigurationProvider);
 
@@ -153,7 +154,7 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<SavedEmployerOpportunityViewModel> GetSavedEmployerOpportunitiesAsync(string username)
         {
             var employerOpportunities = await _opportunityRepository
-                .GetManyAsync(o => o.OpportunityItem.Any(oi => oi.IsSaved && !oi.IsCompleted) && o.CreatedBy == username)
+                .GetMany(o => o.OpportunityItem.Any(oi => oi.IsSaved && !oi.IsCompleted) && o.CreatedBy == username)
                 .ProjectTo<EmployerOpportunityViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
@@ -168,7 +169,7 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<RemoveEmployerDto> GetConfirmDeleteEmployerOpportunityAsync(int opportunityId, string username)
         {
             var opportunityCount = _opportunityRepository.GetEmployerOpportunityCount(opportunityId);
-            var employerCount = _opportunityRepository.GetManyAsync(o => o.OpportunityItem.Any(oi => oi.IsSaved && !oi.IsCompleted) && o.CreatedBy == username).ToList();
+            var employerCount = _opportunityRepository.GetMany(o => o.OpportunityItem.Any(oi => oi.IsSaved && !oi.IsCompleted) && o.CreatedBy == username).ToList();
 
             var removeEmployerDto = await _opportunityRepository.GetSingleOrDefaultAsync(
                     op => op.Id == opportunityId,
@@ -190,21 +191,33 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<int> HandleEmployerCreatedAsync(string payload)
         {
-            var createdEvent = JsonConvert.DeserializeObject<CrmEmployerCreatedEvent>(payload, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
+            var createdEvent = JsonSerializer.Deserialize<CrmEmployerCreatedEvent>(payload,
+                new JsonSerializerOptions
+                {
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+                });
 
             return await CreateOrUpdateEmployerAsync(createdEvent);
         }
 
         public async Task<int> HandleEmployerUpdatedAsync(string payload)
         {
-            var updatedEvent = JsonConvert.DeserializeObject<CrmEmployerUpdatedEvent>(payload, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
+            var updatedEvent = JsonSerializer.Deserialize<CrmEmployerUpdatedEvent>(payload,
+                new JsonSerializerOptions
+                {
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+                });
 
             return await CreateOrUpdateEmployerAsync(updatedEvent);
         }
 
         public async Task<int> HandleContactUpdatedAsync(string payload)
         {
-            var createdEvent = JsonConvert.DeserializeObject<CrmContactUpdatedEvent>(payload, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
+            var createdEvent = JsonSerializer.Deserialize<CrmContactUpdatedEvent>(payload,
+                new JsonSerializerOptions
+                {
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+                });
 
             return await CreateOrUpdateContactAsync(createdEvent);
         }
@@ -222,7 +235,10 @@ namespace Sfa.Tl.Matching.Application.Services
 
             if (isAupaMissing)
             {
-                var existingReferrals = await _opportunityRepository.GetFirstOrDefaultAsync(o => o.EmployerCrmId == employerData.AccountId.ToGuid() && o.OpportunityItem.Count(oi => oi.Referral.Any()) > 0);
+                var existingReferrals = 
+                    await _opportunityRepository.GetFirstOrDefaultAsync(o => 
+                        o.EmployerCrmId == employerData.AccountId.ToGuid() && 
+                        o.OpportunityItem.Any(oi => oi.Referral.Any()));
 
                 if (existingReferrals == null) return -1;
                 await AddMessageToQueueAsync(employerData);

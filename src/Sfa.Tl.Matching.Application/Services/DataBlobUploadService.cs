@@ -50,8 +50,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var blobContainerClient = await GetContainerAsync(containerName);
 
-            var blobClient = blobContainerClient.GetBlobClient(fileName);
-            return blobClient;
+            return blobContainerClient.GetBlobClient(fileName);
         }
 
         private async Task<BlobContainerClient> GetContainerAsync(string containerName)

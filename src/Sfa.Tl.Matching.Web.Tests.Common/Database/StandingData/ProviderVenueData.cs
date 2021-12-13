@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
 
             return new List<ProviderVenue>
             {
-                new ProviderVenue
+                new()
                 {
                     Id = 1,
                     Name = "Venue 1 Name",
@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                     Source = "Test",
                     ProviderQualification = BuildProviderQualifications(qualifications.First())
                 },
-                new ProviderVenue
+                new()
                 {
                     Id = 2,
                     Name = "Venue 2 Name",
@@ -78,7 +78,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
         {
             return new List<Qualification>
             {
-                new Qualification
+                new()
                 {
                     Id = 1,
                     LarId = "12345678",
@@ -86,7 +86,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                     ShortTitle = "Short Title",
                     QualificationRouteMapping = new List<QualificationRouteMapping>
                     {
-                        new QualificationRouteMapping
+                        new()
                         {
                             RouteId = 1,
                             Source = "Test"
@@ -100,7 +100,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
         {
             return new List<ProviderQualification>
             {
-                new ProviderQualification
+                new()
                 {
                     Qualification = qualification,
                     Source = "Test"

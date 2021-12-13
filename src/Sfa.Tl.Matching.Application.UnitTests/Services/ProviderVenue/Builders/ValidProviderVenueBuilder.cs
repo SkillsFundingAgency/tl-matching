@@ -2,7 +2,7 @@
 {
     public class ValidProviderVenueBuilder
     {
-        public Domain.Models.ProviderVenue Build() => new Domain.Models.ProviderVenue
+        public Domain.Models.ProviderVenue Build() => new()
         {
             Id = 1,
             Postcode = "CV1 2WT",
@@ -14,7 +14,7 @@
             ModifiedBy = "ModifiedBy"
         };
 
-        public Domain.Models.ProviderVenue Build(string postcode) => new Domain.Models.ProviderVenue
+        public Domain.Models.ProviderVenue Build(string postcode) => new()
         {
             Id = 1,
             Postcode = postcode,

@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
                 SubmitAction = "SaveAndFinish",
                 ProviderVenues = new List<ProviderVenueViewModel>
                 {
-                    new ProviderVenueViewModel
+                    new()
                     {
                         Postcode = "CV1 2WT"
                     }

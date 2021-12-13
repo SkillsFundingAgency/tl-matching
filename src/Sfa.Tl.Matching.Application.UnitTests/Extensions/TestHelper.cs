@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
     {
         public static string GetTestExecutionDirectory()
         {
-            var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().CodeBase!);
+            var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().Location!);
             var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
             return Path.GetDirectoryName(codeBasePath);
         }

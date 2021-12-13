@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         private const string ContactEmail = "EmployerContactEmail";
         private const string ModifiedBy = "ModifiedBy";
         
-        private readonly EmployerDetailsViewModel _viewModel = new EmployerDetailsViewModel
+        private readonly EmployerDetailsViewModel _viewModel = new()
         {
             OpportunityItemId = OpportunityItemId,
             OpportunityId = OpportunityId,
@@ -51,7 +51,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                     type.Name.Contains("LoggedInUserEmailResolver") ? 
                         new LoggedInUserEmailResolver<EmployerDetailsViewModel, EmployerDetailDto>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ? 
-                            (object) new LoggedInUserNameResolver<EmployerDetailsViewModel, EmployerDetailDto>(httpContextAccessor) :
+                            new LoggedInUserNameResolver<EmployerDetailsViewModel, EmployerDetailDto>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ? 
                                 new UtcNowResolver<EmployerDetailsViewModel, EmployerDetailDto>(new DateTimeProvider()) :
                                 null);

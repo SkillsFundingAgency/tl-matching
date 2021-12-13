@@ -4,7 +4,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.LocalEnterprisePartnership
 {
     public class ValidLocalEnterprisePartnershipBuilder
     {
-        public Domain.Models.LocalEnterprisePartnership Build() => new Domain.Models.LocalEnterprisePartnership
+        public Domain.Models.LocalEnterprisePartnership Build() => new()
         {
             Id = 1,
             Code = "E37000012",

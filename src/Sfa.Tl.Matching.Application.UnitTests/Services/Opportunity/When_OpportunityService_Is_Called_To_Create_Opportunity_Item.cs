@@ -43,7 +43,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<OpportunityItemDto, OpportunityItem>(httpContextAccessor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<OpportunityItemDto, OpportunityItem>(httpContextAccessor) :
+                            new LoggedInUserNameResolver<OpportunityItemDto, OpportunityItem>(httpContextAccessor) :
                             type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<OpportunityItemDto, OpportunityItem>(new DateTimeProvider()) :
                                 null);

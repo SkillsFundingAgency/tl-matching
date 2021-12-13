@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                     CreatedBy = "Dev Surname",
                     Path = new List<Path>
                     {
-                        new Path
+                        new()
                         {
                             Id = 1,
                             RouteId = 1,
@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                             CreatedOn = new DateTime(2019, 1, 1),
                             CreatedBy = "Dev Surname",
                         },
-                        new Path
+                        new()
                         {
                             Id = 2,
                             RouteId = 1,
@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                     CreatedBy = "Dev Surname",
                     Path = new List<Path>
                     {
-                        new Path
+                        new()
                         {
                             Id = 3,
                             RouteId = 2,
@@ -54,7 +54,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                             CreatedOn = new DateTime(2019, 1, 1),
                             CreatedBy = "Dev Surname",
                         },
-                        new Path
+                        new()
                         {
                             Id = 4,
                             RouteId = 2,

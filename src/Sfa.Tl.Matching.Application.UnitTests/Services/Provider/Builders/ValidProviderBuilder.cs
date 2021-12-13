@@ -41,7 +41,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
                 Provider = _provider,
                 ProviderQualification = new List<Domain.Models.ProviderQualification>
                 {
-                    new Domain.Models.ProviderQualification
+                    new()
                     {
                         Qualification = new Domain.Models.Qualification
                         {
@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
                 Provider = _provider,
                 ProviderQualification = new List<Domain.Models.ProviderQualification>
                 {
-                    new Domain.Models.ProviderQualification
+                    new()
                     {
                         Qualification = new Domain.Models.Qualification
                         {
@@ -74,7 +74,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
                             ShortTitle = "Qualification 2 Short Title"
                         }
                     },
-                    new Domain.Models.ProviderQualification
+                    new()
                     {
                         Qualification = new Domain.Models.Qualification
                         {

@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 SubmitAction = "CompleteProvisionGaps",
                 SelectedOpportunity = new List<SelectedOpportunityItemViewModel>
                 {
-                    new SelectedOpportunityItemViewModel
+                    new()
                     {
                         IsSelected = false,
                         OpportunityType = OpportunityType.ProvisionGap.ToString()

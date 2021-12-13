@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
                 .SearchProvidersWithFundingAsync(Arg.Any<ProviderSearchParametersViewModel>())
                 .Returns(new List<ProviderSearchResultItemViewModel>
                 {
-                    new ProviderSearchResultItemViewModel
+                    new()
                     {
                         Id = 1,
                         UkPrn = 10000546,

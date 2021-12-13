@@ -7,7 +7,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.MatchingServiceReport.Builders
     {
         public IList<Domain.Models.Employer> BuildList() => new List<Domain.Models.Employer>
         {
-            new Domain.Models.Employer
+            new()
             {
                 Id = 1,
                 CrmId = Guid.Parse("2007979A-D731-4944-8A63-CD5238DC81A8"),
@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.MatchingServiceReport.Builders
                 CreatedBy = "Sfa.Tl.Matching.Functions.UnitTests",
                 CreatedOn = DateTime.UtcNow
             },
-            new Domain.Models.Employer
+            new()
             {
                 Id = 2,
                 CrmId = Guid.Parse("838E711C-1BA0-4106-B3C1-56EE8AC99E8A"),

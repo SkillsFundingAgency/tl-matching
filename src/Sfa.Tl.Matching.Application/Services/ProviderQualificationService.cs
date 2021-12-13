@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 .GetSingleOrDefaultAsync(p => p.ProviderVenueId == providerVenueId && 
                                               p.QualificationId == qualificationId);
 
-            return providerQualification != null && !providerQualification.IsDeleted 
+            return providerQualification is { IsDeleted: false } 
                 ? _mapper.Map<ProviderQualificationDto>(providerQualification)
                 : null;
         }
@@ -49,14 +49,11 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task RemoveProviderQualificationAsync(int providerVenueId, int qualificationId)
         {
-            var providerQualifications = await _providerQualificationRepository.GetManyAsync(
+            var providerQualifications = await _providerQualificationRepository.GetMany(
                 pq => pq.ProviderVenueId == providerVenueId
                       && pq.QualificationId == qualificationId).ToListAsync();
 
-            if (providerQualifications != null)
-            {
-                await _providerQualificationRepository.DeleteManyAsync(providerQualifications);
-            }
+            await _providerQualificationRepository.DeleteManyAsync(providerQualifications);
         }
     }
 }
