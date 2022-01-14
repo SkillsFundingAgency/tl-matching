@@ -26,6 +26,9 @@
         "sqlDatabaseTier": {
             "type": "string"
         },
+        "sqlserverlessAutoPauseDelay": {
+            "type": "string"
+        },
         "configurationStorageConnectionString": {
             "type": "securestring"
         },
@@ -280,6 +283,9 @@
                     },
                     "databaseTier": {
                         "value": "[parameters('sqlDatabaseTier')]"
+                    },
+                    "serverlessAutoPauseDelay": {
+                        "value": "[parameters('sqlserverlessAutoPauseDelay')]"
                     }
                 }
             }
