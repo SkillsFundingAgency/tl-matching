@@ -70,6 +70,7 @@
     <None Include="Sfa.Tl.Matching.Database.Local.publish.xml" />
     <None Include="PostDeployment\Seed UserProfile.sql" />
     <None Include="Indexes\IX_OpportunityBaskekItem.sql" />
+    <None Include="PostDeployment\Fix Incorrectly Capitalised Provider Names.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Employer.sql" />

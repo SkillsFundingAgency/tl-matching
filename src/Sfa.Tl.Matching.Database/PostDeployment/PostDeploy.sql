@@ -10,3 +10,4 @@ DECLARE @TicketNo VARCHAR(32)
 :r ".\Seed Paths.sql"
 :r ".\Seed Email Templates.sql"
 :r ".\Seed UserProfile.sql"
+:r ".\Fix Incorrectly Capitalised Provider Names.sql"
