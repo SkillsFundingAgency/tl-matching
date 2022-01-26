@@ -29,15 +29,16 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.BankHoliday
         [Fact]
         public void Then_Result_Should_Be_As_Expected()
         {
-            _results.Should().NotBeNull();
-            //_results.Count.Should().Be(2);
+            _results.Should().NotBeNullOrEmpty();
 
             _results.Any(r => r.Date == new DateTime(2019, 8, 26)).Should().BeTrue();
-            var christmas = _results.SingleOrDefault(r => r.Date == new DateTime(2019, 12, 25));
+
+            var christmas = _results.SingleOrDefault(
+                r => r.Date == new DateTime(2019, 12, 25));
 
             christmas.Should().NotBeNull();
-            christmas?.Title.Should().Be("bank_holidays.christmas");
-            _results[0].Date.Should().BeSameDateAs(new DateTime(2019, 8, 26));
+            christmas!.Title.Should().Be("Christmas Day");
+            christmas.Date.Should().BeSameDateAs(new DateTime(2019, 12, 25));
         }
     }
 }

@@ -35,8 +35,9 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
             bankHolidaysData.Should().NotBeEmpty();
             
             var veDay2020 = bankHolidaysData.SingleOrDefault(r => r.Date == new DateTime(2020, 05, 08));
+            
             veDay2020.Should().NotBeNull();
-            veDay2020?.Title.Should().Be("bank_holidays.early_may_ve");
+            veDay2020?.Title.Should().Be("Early May bank holiday (VE day)");
         }
     }
 }
