@@ -22,7 +22,6 @@ namespace Sfa.Tl.Matching.Web.Mappers
                     o => o.MapFrom(s => true))
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom<LoggedInUserNameResolver<CheckAnswersViewModel, CheckAnswersDto>>())
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom<UtcNowResolver<CheckAnswersViewModel, CheckAnswersDto>>())
-                .ForAllOtherMembers(config => config.Ignore())
                 ;
 
             CreateMap<ReferralDto, ReferralsViewModel>()

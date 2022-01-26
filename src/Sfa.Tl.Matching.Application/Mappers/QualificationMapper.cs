@@ -64,26 +64,33 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.ShortTitleSearch, config => config.MapFrom(s => GetSearchTerm(s.ShortTitle.ToLower())))
                 .ForMember(m => m.ModifiedBy, config => config.MapFrom<LoggedInUserNameResolver<SaveQualificationViewModel, Qualification>>())
                 .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<SaveQualificationViewModel, Qualification>>())
-                .ForAllOtherMembers(o => o.Ignore())
+                .ForMember(m => m.IsDeleted, config => config.Ignore())
+                .ForMember(m => m.CreatedBy, config => config.Ignore())
+                .ForMember(m => m.CreatedOn, config => config.Ignore())
+                .ForMember(m => m.ModifiedBy, config => config.Ignore())
+                .ForMember(m => m.ModifiedOn, config => config.Ignore())
+                .ForPath(m => m.ProviderQualification, config => config.Ignore())
+                .ForPath(m => m.QualificationRouteMapping, config => config.Ignore())
                 ;
-
+            
             CreateMap<SaveQualificationViewModel, IList<QualificationRouteMapping>>()
                 .ConstructUsing((m, context) =>
                 {
                     var userNameResolver = context.Options.ServiceCtor(typeof(LoggedInUserNameResolver<SaveQualificationViewModel, Qualification>))
                         as LoggedInUserNameResolver<SaveQualificationViewModel, Qualification>;
 
-                    return m.Routes == null ? 
+                    return m.Routes == null ?
                         new List<QualificationRouteMapping>() :
-                        m.Routes.Where(r => r.IsSelected)
-                        .Select(route => new QualificationRouteMapping
-                        {
-                            QualificationId = m.QualificationId,
-                            RouteId = route.Id,
-                            Source = m.Source,
-                            CreatedBy = userNameResolver?.Resolve(m, null, "CreatedBy", context)
-                        })
-                        .ToList();
+                        m.Routes
+                            .Where(r => r.IsSelected)
+                            .Select(route => new QualificationRouteMapping
+                            {
+                                QualificationId = m.QualificationId,
+                                RouteId = route.Id,
+                                Source = m.Source,
+                                CreatedBy = userNameResolver?.Resolve(m, null, "CreatedBy", context)
+                            })
+                            .ToList();
                 })
                 ;
 
@@ -94,7 +101,9 @@ namespace Sfa.Tl.Matching.Application.Mappers
         {
             var searchTerm = new StringBuilder();
             foreach (var term in searchTerms)
+            {
                 searchTerm.Append(term.ToQualificationSearch());
+            }
 
             return searchTerm.ToString();
         }

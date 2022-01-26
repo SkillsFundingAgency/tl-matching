@@ -12,7 +12,12 @@ namespace Sfa.Tl.Matching.Application.Mappers
         {
             CreateMap<OpportunityItemDto, ProvisionGap>()
                 .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<OpportunityItemDto, ProvisionGap>>())
-                .ForAllOtherMembers(config => config.Ignore())
+                .ForMember(m => m.Id, config => config.Ignore())
+                .ForMember(m => m.NoSuitableStudent, config => config.Ignore())
+                .ForMember(m => m.HadBadExperience, config => config.Ignore())
+                .ForMember(m => m.ProvidersTooFarAway, config => config.Ignore())
+                .ForMember(m => m.CreatedOn, config => config.Ignore())
+                .ForPath(m => m.OpportunityItem, config => config.Ignore())
                 ;
 
             CreateMap<PlacementInformationSaveDto, ProvisionGap>()
@@ -21,7 +26,11 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.ProvidersTooFarAway, o => o.MapFrom(s => s.ProvidersTooFarAway))
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))
-                .ForAllOtherMembers(config => config.Ignore());
+                .ForMember(m => m.Id, config => config.Ignore())
+                .ForMember(m => m.CreatedOn, config => config.Ignore())
+                .ForMember(m => m.CreatedBy, config => config.Ignore())
+                .ForPath(m => m.OpportunityItem, config => config.Ignore())
+                ;
         }
     }
 }
