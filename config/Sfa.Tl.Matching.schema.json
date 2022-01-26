@@ -54,10 +54,10 @@
       "type": "string",
       "environmentVariable": "GoogleMapsApiKey"
     },
-    "CalendarJsonUrl": {
+    "BankHolidaysJsonUrl": {
       "minLength": 1,
       "type": "string",
-      "environmentVariable": "CalendarJsonUrl"
+      "environmentVariable": "BankHolidaysJsonUrl"
     },
     "EmployerFeedbackEmailsEnabled": {
       "type": "boolean",
@@ -78,7 +78,7 @@
     "BlobStorageConnectionString": {
       "type": "string",
       "environmentVariable": "BlobStorageConnectionString"
-    },    
+    },
     "SqlConnectionString": {
       "minLength": 1,
       "type": "string",

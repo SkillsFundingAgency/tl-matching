@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
 
-namespace Sfa.Tl.Matching.Api.Clients.Calendar
+namespace Sfa.Tl.Matching.Api.Clients.BankHolidays
 {
-    public class CalendarApiClient : ICalendarApiClient
+    public class BankHolidaysApiClient : IBankHolidaysApiClient
     {
         private readonly HttpClient _httpClient;
         private readonly MatchingConfiguration _matchingConfiguration;
 
-        public CalendarApiClient(HttpClient httpClient, MatchingConfiguration matchingConfiguration)
+        public BankHolidaysApiClient(HttpClient httpClient, MatchingConfiguration matchingConfiguration)
         {
             _httpClient = httpClient;
             _matchingConfiguration = matchingConfiguration;
@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Api.Clients.Calendar
 
         public async Task<IList<BankHolidayResultDto>> GetBankHolidaysAsync()
         {
-            var url = _matchingConfiguration.CalendarJsonUrl;
+            var url = _matchingConfiguration.BankHolidaysJsonUrl;
 
             var responseMessage = await _httpClient.GetAsync(url);
 

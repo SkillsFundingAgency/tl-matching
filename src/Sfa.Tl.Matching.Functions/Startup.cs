@@ -9,7 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Notify.Client;
 using Notify.Interfaces;
-using Sfa.Tl.Matching.Api.Clients.Calendar;
+using Sfa.Tl.Matching.Api.Clients.BankHolidays;
 using Sfa.Tl.Matching.Api.Clients.Connected_Services.Sfa.Tl.Matching.UkRlp.Api.Client;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
@@ -183,7 +183,7 @@ namespace Sfa.Tl.Matching.Functions
         {
             services.AddHttpClient<IGoogleMapApiClient, GoogleMapApiClient>();
             services.AddHttpClient<ILocationApiClient, LocationApiClient>();
-            services.AddHttpClient<ICalendarApiClient, CalendarApiClient>();
+            services.AddHttpClient<IBankHolidaysApiClient, BankHolidaysApiClient>();
 
             services.AddTransient<IProviderQueryPortTypeClient>(_ =>
             {
