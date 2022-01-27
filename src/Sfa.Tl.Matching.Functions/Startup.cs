@@ -85,8 +85,12 @@ namespace Sfa.Tl.Matching.Functions
                 options.UseSqlServer(_configuration.SqlConnectionString,
                     builder =>
                         builder
-                            .EnableRetryOnFailure()
-                            .UseNetTopologySuite()));
+                            .UseNetTopologySuite()
+                            .EnableRetryOnFailure(
+                                10,
+                                TimeSpan.FromSeconds(60),
+                                null)),
+                ServiceLifetime.Transient);
 
             services.AddSingleton(_configuration);
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
