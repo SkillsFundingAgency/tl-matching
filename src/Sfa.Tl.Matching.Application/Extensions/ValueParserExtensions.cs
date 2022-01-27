@@ -42,6 +42,8 @@ namespace Sfa.Tl.Matching.Application.Extensions
                        : " " + input));                   // Otherwise return the valid word.
 
             result = Regex.Replace(result, @"(?!^Out)(Out\s+Of)", "out of");
+            //Fix S after apostrophe, if it is before space or at end of string
+            result = Regex.Replace(result, @"(['’])S(\s|$)", "$1s$2");
 
             return result;
         }
