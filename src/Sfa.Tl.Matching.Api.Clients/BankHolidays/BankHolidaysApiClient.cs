@@ -49,9 +49,7 @@ namespace Sfa.Tl.Matching.Api.Clients.BankHolidays
                 .Select(x =>
                     new BankHolidayResultDto
                     {
-                        Title = x.SafeGetString("title")?
-                            .Replace("bank_holidays.", "")
-                            .Replace('_', ' '),
+                        Title = x.SafeGetString("title"),
                         Date = DateTime.TryParseExact(x.SafeGetString("date"),
                             "yyyy-MM-dd",
                             CultureInfo.CurrentCulture,
