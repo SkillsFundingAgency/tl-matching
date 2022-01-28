@@ -74,7 +74,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
                         {
                             await transaction.CommitAsync();
                         }
-                        // ReSharper disable once RedundantIfElseBlock
                         else
                         {
                             await transaction.RollbackAsync();
@@ -127,7 +126,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
                         {
                             await transaction.CommitAsync();
                         }
-                        // ReSharper disable once RedundantIfElseBlock
                         else
                         {
                             await transaction.RollbackAsync();
