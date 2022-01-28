@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Notify.Client;
 using Notify.Interfaces;
+using Polly.Registry;
 using Sfa.Tl.Matching.Api.Clients.BankHolidays;
 using Sfa.Tl.Matching.Api.Clients.Connected_Services.Sfa.Tl.Matching.UkRlp.Api.Client;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
@@ -24,6 +25,7 @@ using Sfa.Tl.Matching.Application.FileReader.ProviderVenueQualification;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
+using Sfa.Tl.Matching.Data.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.SearchProviders;
@@ -46,10 +48,10 @@ namespace Sfa.Tl.Matching.Functions
             RegisterServices(builder.Services);
         }
 
-        private void RegisterWebJobServices(IServiceCollection services)
+        private static void RegisterWebJobServices(IServiceCollection services)
         {
             //https://stackoverflow.com/questions/57564396/how-do-i-mix-custom-parameter-binding-with-dependency-injection-in-azure-functio
-            var webJobsBuilder = services
+            services
                 .AddWebJobs(_ => { })
                 //.AddAzureStorage()
                 .AddAzureStorageCoreServices();
@@ -105,6 +107,8 @@ namespace Sfa.Tl.Matching.Functions
             RegisterNotificationsApi(services, _configuration.GovNotifyApiKey);
 
             RegisterApiClient(services);
+
+            RegisterPollySqlRetryPolicy(services);
         }
 
         private static void RegisterFileReaders(IServiceCollection services)
@@ -202,6 +206,17 @@ namespace Sfa.Tl.Matching.Functions
             });
 
             services.AddTransient<IProviderReferenceDataClient, ProviderReferenceDataClient>();
+        }
+
+        private static void RegisterPollySqlRetryPolicy(IServiceCollection services)
+        {
+            var registry = new PolicyRegistry();
+
+            services.AddSingleton<IConcurrentPolicyRegistry<string>>(registry);
+            services.AddSingleton<IPolicyRegistry<string>>(registry);
+            services.AddSingleton<IReadOnlyPolicyRegistry<string>>(registry);
+            
+            registry.AddSqlRetryPolicy();
         }
     }
 }

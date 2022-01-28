@@ -11,6 +11,7 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
+using Sfa.Tl.Matching.Data.Extensions;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
@@ -34,7 +35,10 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.PostcodeLookup
             MatchingDbContext = testConfig.GetDbContext();
             var matchingConfiguration = TestConfiguration.MatchingConfiguration;
 
-            var repository = new SqlBulkInsertRepository<PostcodeLookupStaging>(loggerRepository, matchingConfiguration);
+            var policyRegistry = new Polly.Registry.PolicyRegistry();
+            policyRegistry.AddSqlRetryPolicy();
+
+            var repository = new SqlBulkInsertRepository<PostcodeLookupStaging>(loggerRepository, matchingConfiguration, policyRegistry);
             var functionLogRepository = new GenericRepository<FunctionLog>(new NullLogger<GenericRepository<FunctionLog>>(), MatchingDbContext);
             
             var dataValidator = new PostcodeLookupStagingDataValidator();
