@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Models.Extensions
             return null;
         }
 
-        public static string GetFileExtensionErrorMessage(this string fileContentType)
+        public static string GetFileExtensionErrorMessage(this string fileContentType, string foundFileContentType)
         {
             string fileExtensionType;
             string fileType;
@@ -54,7 +54,8 @@ namespace Sfa.Tl.Matching.Models.Extensions
                     throw new ArgumentException($"Unexpected file content type '{fileContentType}'.");
             }
             
-            return $"You must upload {article} {fileType} file with the {fileExtensionType} file extension";
+            return $"You must upload {article} {fileType} file with the {fileExtensionType} file extension. " +
+                   $"Expected content type {fileContentType} but found {foundFileContentType}.";
         }
     }
 }

@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (viewModel.File?.ContentType != fileContentType)
             {
-                ModelState.AddModelError("file", fileContentType.GetFileExtensionErrorMessage());
+                ModelState.AddModelError("file", fileContentType.GetFileExtensionErrorMessage(viewModel.File?.ContentType));
             }
         }
     }
