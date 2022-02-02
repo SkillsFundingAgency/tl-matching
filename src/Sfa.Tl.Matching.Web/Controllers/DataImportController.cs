@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -55,7 +56,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var fileContentType = viewModel.SelectedImportType.GetFileExtensionType();
 
-            if (viewModel.File?.ContentType != fileContentType)
+            var fileContentTypes = fileContentType?.Split(',');
+
+            if (fileContentTypes is not null && 
+                fileContentTypes.All(f => f != viewModel.File?.ContentType))
             {
                 ModelState.AddModelError("file", fileContentType.GetFileExtensionErrorMessage(viewModel.File?.ContentType));
             }

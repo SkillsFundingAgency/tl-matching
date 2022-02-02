@@ -10,6 +10,8 @@ namespace Sfa.Tl.Matching.Models.Extensions
     {
         public const string Excel = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
         public const string Csv = "application/vnd.ms-excel";
+        public const string CsvText = "text/csv";
+        public const string AllCsv = $"{Csv},{CsvText}";
         public const string Zip = "application/x-zip-compressed";
 
         public static string GetFileExtensionType(this DataImportType importFileType)
@@ -17,7 +19,7 @@ namespace Sfa.Tl.Matching.Models.Extensions
             var memInfo = importFileType.GetType().GetTypeInfo().GetDeclaredField(importFileType.ToString());
 
             var attribute = memInfo?.GetCustomAttributes(true).Single(attributeType => attributeType is FileExtensionsAttribute);
-            
+
             if (attribute != null)
                 return typeof(FileExtensionsAttribute)
                 .GetProperty("Extensions")
@@ -29,33 +31,17 @@ namespace Sfa.Tl.Matching.Models.Extensions
 
         public static string GetFileExtensionErrorMessage(this string fileContentType, string foundFileContentType)
         {
-            string fileExtensionType;
-            string fileType;
-            string article;
-
-            switch (fileContentType)
+            var (fileExtensionType, fileType, article) = fileContentType switch
             {
-                case Csv:
-                    fileExtensionType = "CSV";
-                    fileType = "CSV";
-                    article = "a";
-                    break;
-                case Excel:
-                    fileExtensionType = "XLSX";
-                    fileType = "Excel";
-                    article = "an";
-                    break;
-                case Zip:
-                    fileExtensionType = "ZIP";
-                    fileType = "Zip";
-                    article = "a";
-                    break;
-                default:
-                    throw new ArgumentException($"Unexpected file content type '{fileContentType}'.");
-            }
-            
+                Csv or CsvText or AllCsv => ("CSV", "CSV", "a"),
+                Excel => ("XLSX", "Excel", "an"),
+                Zip => ("ZIP", "Zip", "a"),
+                _ => throw new ArgumentException($"Unexpected file content type '{fileContentType}'.")
+            };
+
             return $"You must upload {article} {fileType} file with the {fileExtensionType} file extension. " +
-                   $"Expected content type {fileContentType} but found {foundFileContentType}.";
+                   $"Expected content type {fileContentType.Replace(",", " or ")} " +
+                   $"but found {foundFileContentType}.";
         }
     }
 }

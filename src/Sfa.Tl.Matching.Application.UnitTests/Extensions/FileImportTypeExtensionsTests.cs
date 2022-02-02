@@ -9,8 +9,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
     public class FileImportTypeExtensionsTests
     {
         [Theory(DisplayName = "GetFileExtensionType Data Tests")]
-        [InlineData(DataImportType.LearningAimReference, FileImportTypeExtensions.Csv)]
-        [InlineData(DataImportType.LocalEnterprisePartnership, FileImportTypeExtensions.Csv)]
+        [InlineData(DataImportType.LearningAimReference, FileImportTypeExtensions.AllCsv)]
+        [InlineData(DataImportType.LocalEnterprisePartnership, FileImportTypeExtensions.AllCsv)]
         [InlineData(DataImportType.Postcodes, FileImportTypeExtensions.Zip)]
         [InlineData(DataImportType.ProviderVenueQualification, FileImportTypeExtensions.Excel)]
         public void GetFileExtensionTypeDataTests(DataImportType importType, string result)
@@ -28,6 +28,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
             FileImportTypeExtensions.Excel, 
             "You must upload a CSV file with the CSV file extension. " +
             "Expected content type application/vnd.ms-excel but found application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.")]
+        [InlineData(FileImportTypeExtensions.CsvText,
+            FileImportTypeExtensions.Excel,
+            "You must upload a CSV file with the CSV file extension. " +
+            "Expected content type text/csv but found application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.")]
+        [InlineData(FileImportTypeExtensions.AllCsv,
+            FileImportTypeExtensions.Excel,
+            "You must upload a CSV file with the CSV file extension. " +
+            "Expected content type application/vnd.ms-excel or text/csv but found application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.")]
         [InlineData(FileImportTypeExtensions.Zip, 
             FileImportTypeExtensions.Csv, 
             "You must upload a Zip file with the ZIP file extension. " +
