@@ -12,7 +12,7 @@
     <PackageReference Include="System.ServiceModel.Http" Version="4.9.0" />
     <PackageReference Include="System.ServiceModel.NetTcp" Version="4.9.0" />
     <PackageReference Include="System.ServiceModel.Security" Version="4.9.0" />
-    <PackageReference Include="Humanizer.Core.uk" Version="2.13.14" />
+    <PackageReference Include="Humanizer.Core.uk" Version="2.14.1" />
   </ItemGroup>
 
   <ItemGroup>
