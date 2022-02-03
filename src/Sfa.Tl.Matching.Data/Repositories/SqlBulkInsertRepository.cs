@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Transactions;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
+using Polly.Registry;
 using Sfa.Tl.Matching.Data.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain;
@@ -21,101 +22,119 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         private readonly ILogger<SqlBulkInsertRepository<T>> _logger;
         private readonly MatchingConfiguration _matchingConfiguration;
+        private readonly IReadOnlyPolicyRegistry<string> _policyRegistry;
 
-        public SqlBulkInsertRepository(ILogger<SqlBulkInsertRepository<T>> logger, MatchingConfiguration matchingConfiguration)
+        public SqlBulkInsertRepository(
+            ILogger<SqlBulkInsertRepository<T>> logger,
+            MatchingConfiguration matchingConfiguration,
+            IReadOnlyPolicyRegistry<string> policyRegistry)
         {
             _logger = logger;
             _matchingConfiguration = matchingConfiguration;
+            _policyRegistry = policyRegistry;
         }
 
         public async Task BulkInsertAsync(IEnumerable<T> entities)
         {
             var dataTable = entities.ToDataTable();
 
-            using var transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
-            await using (var connection = new SqlConnection(_matchingConfiguration.SqlConnectionString))
+            var (retryPolicy, retryPolicyContext) = _policyRegistry.GetRetryPolicy(_logger);
+
+            await retryPolicy.ExecuteAsync(async _ =>
             {
-                connection.Open();
-
-                await using var transaction = connection.BeginTransaction();
-                var truncateCommand = new SqlCommand($"TRUNCATE TABLE {typeof(T).Name};", connection, transaction);
-                truncateCommand.ExecuteNonQuery();
-
-                using var bulkCopy = CreateSqlBulkCopy(connection, transaction, dataTable);
-                var isSuccessful = false;
-                try
+                using var transactionScope = new TransactionScope(
+                    TransactionScopeOption.Required,
+                    TransactionScopeAsyncFlowOption.Enabled);
+                await using (var connection = new SqlConnection(_matchingConfiguration.SqlConnectionString))
                 {
-                    await bulkCopy.WriteToServerAsync(dataTable);
+                    connection.Open();
 
-                    isSuccessful = true;
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"{typeof(GenericRepository<T>).Name} - Error inserting {typeof(T).Name} data into the database. Internal Exception : {ex} ");
-                    throw;
-                }
-                finally
-                {
-                    if (isSuccessful)
+                    await using var transaction = connection.BeginTransaction();
+                    var truncateCommand =
+                        new SqlCommand($"TRUNCATE TABLE {typeof(T).Name};", connection, transaction);
+                    truncateCommand.ExecuteNonQuery();
+
+                    using var bulkCopy = CreateSqlBulkCopy(connection, transaction, dataTable);
+                    var isSuccessful = false;
+                    try
                     {
-                        await transaction.CommitAsync();
+                        await bulkCopy.WriteToServerAsync(dataTable);
+
+                        isSuccessful = true;
                     }
-                    // ReSharper disable once RedundantIfElseBlock
-                    else
+                    catch (Exception ex)
                     {
-                        await transaction.RollbackAsync();
+                        _logger.LogError(
+                            $"{typeof(GenericRepository<T>).Name} - Error inserting {typeof(T).Name} data into the database. Internal Exception : {ex} ");
+                        throw;
                     }
-                    connection.Close();
+                    finally
+                    {
+                        if (isSuccessful)
+                        {
+                            await transaction.CommitAsync();
+                        }
+                        else
+                        {
+                            await transaction.RollbackAsync();
+                        }
+
+                        connection.Close();
+                    }
                 }
-            }
-            transactionScope.Complete();
+                transactionScope.Complete();
+            }, retryPolicyContext);
         }
 
         public async Task<int> MergeFromStagingAsync(bool deleteMissingRows = true)
         {
-            int numberOfRecordsAffected;
+            var numberOfRecordsAffected = 0;
 
-            using var transactionScope = new TransactionScope(TransactionScopeOption.Required, TimeSpan.FromSeconds(DefaultCommandTimeout), TransactionScopeAsyncFlowOption.Enabled);
-            await using (var connection = new SqlConnection(_matchingConfiguration.SqlConnectionString))
+            var (retryPolicy, retryPolicyContext) = _policyRegistry.GetRetryPolicy(_logger);
+
+            await retryPolicy.ExecuteAsync(async _ =>
             {
-                connection.Open();
-
-                await using var transaction = connection.BeginTransaction();
-                var isSuccessful = false;
-                try
+                using var transactionScope = new TransactionScope(TransactionScopeOption.Required, TimeSpan.FromSeconds(DefaultCommandTimeout), TransactionScopeAsyncFlowOption.Enabled);
+                await using (var connection = new SqlConnection(_matchingConfiguration.SqlConnectionString))
                 {
-                    var mergeSql = GetMergeSql(deleteMissingRows);
+                    connection.Open();
 
-                    var mergeCommand = new SqlCommand(mergeSql, connection, transaction)
+                    await using var transaction = connection.BeginTransaction();
+                    var isSuccessful = false;
+                    try
                     {
-                        CommandTimeout = DefaultCommandTimeout
-                    };
+                        var mergeSql = GetMergeSql(deleteMissingRows);
 
-                    numberOfRecordsAffected = await mergeCommand.ExecuteNonQueryAsync();
+                        var mergeCommand = new SqlCommand(mergeSql, connection, transaction)
+                        {
+                            CommandTimeout = DefaultCommandTimeout
+                        };
 
-                    isSuccessful = true;
-                }
-                catch (Exception ex)
-                {
-                    isSuccessful = false;
-                    _logger.LogError($"{typeof(GenericRepository<T>).Name} - Error inserting {typeof(T).Name} data into the database. Internal Exception : {ex} ");
-                    throw;
-                }
-                finally
-                {
-                    if (isSuccessful)
-                    {
-                        await transaction.CommitAsync();
+                        numberOfRecordsAffected = await mergeCommand.ExecuteNonQueryAsync();
+
+                        isSuccessful = true;
                     }
-                    // ReSharper disable once RedundantIfElseBlock
-                    else
+                    catch (Exception ex)
                     {
-                        await transaction.RollbackAsync();
+                        isSuccessful = false;
+                        _logger.LogError($"{typeof(GenericRepository<T>).Name} - Error inserting {typeof(T).Name} data into the database. Internal Exception : {ex} ");
+                        throw;
                     }
-                    connection.Close();
+                    finally
+                    {
+                        if (isSuccessful)
+                        {
+                            await transaction.CommitAsync();
+                        }
+                        else
+                        {
+                            await transaction.RollbackAsync();
+                        }
+                        connection.Close();
+                    }
                 }
-            }
-            transactionScope.Complete();
+                transactionScope.Complete();
+            }, retryPolicyContext);
 
             return numberOfRecordsAffected;
         }

@@ -5,7 +5,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Timers;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
-using Sfa.Tl.Matching.Api.Clients.Calendar;
+using Sfa.Tl.Matching.Api.Clients.BankHolidays;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.BankHolidayGenerator
 {
     public class When_GenerateBankHolidays_Function_Timer_Trigger_Fires
     {
-        private readonly ICalendarApiClient _calendarApiClient;
+        private readonly IBankHolidaysApiClient _bankHolidaysApiClient;
         private readonly IBulkInsertRepository<BankHoliday> _bankHolidayBulkInsertRepository;
         private readonly IRepository<FunctionLog> _functionLogRepository;
 
@@ -36,8 +36,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.BankHolidayGenerator
                 }
             };
 
-            _calendarApiClient = Substitute.For<ICalendarApiClient>();
-            _calendarApiClient.GetBankHolidaysAsync()
+            _bankHolidaysApiClient = Substitute.For<IBankHolidaysApiClient>();
+            _bankHolidaysApiClient.GetBankHolidaysAsync()
                 .Returns(dto);
 
             var timerSchedule = Substitute.For<TimerSchedule>();
@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.BankHolidayGenerator
 
             _bankHolidayBulkInsertRepository = Substitute.For<IBulkInsertRepository<BankHoliday>>();
 
-            var bankHolidayGeneratorFunctions = new Functions.BankHolidayGenerator(_calendarApiClient, mapper, _bankHolidayBulkInsertRepository, _functionLogRepository);
+            var bankHolidayGeneratorFunctions = new Functions.BankHolidayGenerator(_bankHolidaysApiClient, mapper, _bankHolidayBulkInsertRepository, _functionLogRepository);
             bankHolidayGeneratorFunctions.GenerateBankHolidaysAsync(
                     new TimerInfo(timerSchedule, new ScheduleStatus()),
                     new ExecutionContext(),
@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.BankHolidayGenerator
         [Fact]
         public void GetBankHolidays_Is_Called_Exactly_Once()
         {
-            _calendarApiClient
+            _bankHolidaysApiClient
                 .Received(1)
                 .GetBankHolidaysAsync();
         }

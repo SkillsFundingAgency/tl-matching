@@ -231,7 +231,10 @@ namespace Sfa.Tl.Matching.Web
                     .UseSqlServer(MatchingConfiguration.SqlConnectionString,
                         builder => builder
                             .UseNetTopologySuite()
-                            .EnableRetryOnFailure())
+                            .EnableRetryOnFailure(
+                                10, 
+                                TimeSpan.FromSeconds(60), 
+                                null))
 #if DEBUG
                     //Logging to identify issues in EF Core 3.x change tracking
                     .EnableSensitiveDataLogging()

@@ -8,11 +8,11 @@ using Sfa.Tl.Matching.Tests.Common;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.BankHoliday
 {
-    public class TestCalendarHttpClient
+    public class TestBankHolidaysHttpClient
     {
         private readonly bool _isMockedHttpClient;
 
-        public TestCalendarHttpClient()
+        public TestBankHolidaysHttpClient()
         {
             _isMockedHttpClient = TestConfiguration.IsMockedHttpClient;
         }
@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.BankHoliday
 
         private static HttpClient GetMockedHttpClient(string responseData = null)
         {
-            var json = string.IsNullOrEmpty(responseData) 
+            var json = string.IsNullOrEmpty(responseData)
                 ? GetTestJson()
                 : responseData;
 
@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.BankHoliday
             httpResponseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             var fakeResponseHandler = new FakeResponseHandler();
-            fakeResponseHandler.AddFakeResponse(new Uri("https://raw.githubusercontent.com/alphagov/calendars/master/lib/data/bank-holidays.json"),
+            fakeResponseHandler.AddFakeResponse(new Uri("https://www.gov.uk/bank-holidays.json"),
                 httpResponseMessage);
 
             var httpClient = new HttpClient(fakeResponseHandler);
@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.BankHoliday
 
         private static string GetTestJson()
         {
-            var resourceName = $"{typeof(TestCalendarHttpClient).Namespace}.TestBankHolidays.json";
+            var resourceName = $"{typeof(TestBankHolidaysHttpClient).Namespace}.TestBankHolidays.json";
             using var templateStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
             using var streamReader = new StreamReader(templateStream ?? throw new InvalidOperationException("Could not find json test file"));
             return streamReader.ReadToEnd();

@@ -9,8 +9,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
     public class FileImportTypeExtensionsTests
     {
         [Theory(DisplayName = "GetFileExtensionType Data Tests")]
-        [InlineData(DataImportType.LearningAimReference, FileImportTypeExtensions.Csv)]
-        [InlineData(DataImportType.LocalEnterprisePartnership, FileImportTypeExtensions.Csv)]
+        [InlineData(DataImportType.LearningAimReference, FileImportTypeExtensions.AllCsv)]
+        [InlineData(DataImportType.LocalEnterprisePartnership, FileImportTypeExtensions.AllCsv)]
         [InlineData(DataImportType.Postcodes, FileImportTypeExtensions.Zip)]
         [InlineData(DataImportType.ProviderVenueQualification, FileImportTypeExtensions.Excel)]
         public void GetFileExtensionTypeDataTests(DataImportType importType, string result)
@@ -20,21 +20,40 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
         }
 
         [Theory(DisplayName = "GetFileExtensionErrorMessage Data Tests")]
-        [InlineData(FileImportTypeExtensions.Excel, "You must upload an Excel file with the XLSX file extension")]
-        [InlineData(FileImportTypeExtensions.Csv, "You must upload a CSV file with the CSV file extension")]
-        [InlineData(FileImportTypeExtensions.Zip, "You must upload a Zip file with the ZIP file extension")]
-        public void GetFileExtensionErrorMessageDataTests(string fileContentType, string result)
+        [InlineData(FileImportTypeExtensions.Excel, 
+            FileImportTypeExtensions.Csv, 
+            "You must upload an Excel file with the XLSX file extension. " +
+            "Expected content type application/vnd.openxmlformats-officedocument.spreadsheetml.sheet but found application/vnd.ms-excel.")]
+        [InlineData(FileImportTypeExtensions.Csv, 
+            FileImportTypeExtensions.Excel, 
+            "You must upload a CSV file with the CSV file extension. " +
+            "Expected content type application/vnd.ms-excel but found application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.")]
+        [InlineData(FileImportTypeExtensions.CsvText,
+            FileImportTypeExtensions.Excel,
+            "You must upload a CSV file with the CSV file extension. " +
+            "Expected content type text/csv but found application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.")]
+        [InlineData(FileImportTypeExtensions.AllCsv,
+            FileImportTypeExtensions.Excel,
+            "You must upload a CSV file with the CSV file extension. " +
+            "Expected content type application/vnd.ms-excel or text/csv but found application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.")]
+        [InlineData(FileImportTypeExtensions.Zip, 
+            FileImportTypeExtensions.Csv, 
+            "You must upload a Zip file with the ZIP file extension. " +
+            "Expected content type application/x-zip-compressed but found application/vnd.ms-excel.")]
+        public void GetFileExtensionErrorMessageDataTests(string expectedFileContentType, string actualFileContentType, string result)
         {
-            var extensionType = fileContentType.GetFileExtensionErrorMessage();
+            var extensionType = expectedFileContentType.GetFileExtensionErrorMessage(actualFileContentType);
             extensionType.Should().Be(result);
         }
 
         [Fact]
         public void GetFileExtensionErrorMessage_Throws_Exception_For_Unknown_File_Type()
         {
-            var fileContentType = "jpeg";
+            const string fileContentType = "jpeg";
+            const string expectedfileContentType = FileImportTypeExtensions.Csv;
 
-            var ex = Assert.Throws<ArgumentException>(() => fileContentType.GetFileExtensionErrorMessage());
+            var ex = Assert.Throws<ArgumentException>(() 
+                => fileContentType.GetFileExtensionErrorMessage(expectedfileContentType));
 
             Assert.Equal("Unexpected file content type 'jpeg'.", ex.Message);
         }

@@ -9,6 +9,5 @@ DECLARE @TicketNo VARCHAR(32)
 :r ".\Seed Routes.sql"
 :r ".\Seed Paths.sql"
 :r ".\Seed Email Templates.sql"
-:r ".\Remove Obsolete Tables.sql"
 :r ".\Seed UserProfile.sql"
-:r ".\CDF 2021 Cleanup.sql"
+:r ".\Fix Incorrectly Capitalised Provider Names.sql"
