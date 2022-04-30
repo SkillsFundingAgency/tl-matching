@@ -47,6 +47,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
         [InlineData("war and peace", "War and Peace")]
         [InlineData("Sentence with an ACRONYM.", "Sentence With an Acronym.")]
         [InlineData("Kensington And Chelsea College", "Kensington and Chelsea College")]
+        [InlineData("new year’s day", "New Year’s Day")]
+        [InlineData("new year's day", "New Year's Day")]
+        [InlineData("NEW YEAR'S DAY", "New Year's Day")]
+        [InlineData("CHILDRENS'S SCHOOL", "Childrens's School")]
+        [InlineData("CHILDRENS’S SCHOOL", "Childrens’s School")]
+        [InlineData("Bob’s Burger’s", "Bob’s Burger’s")]
+        [InlineData("QUEEN ELIZABETH'S GRAMMAR SCHOOL", "Queen Elizabeth's Grammar School")]
+        [InlineData("BRIGHT & BROTHERS ACADEMY", "Bright & Brothers Academy")]
         public void ToTitleCaseDataTests(string input, string result)
         {
             input.ToTitleCase().Should().Be(result);

@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using Sfa.Tl.Matching.Api.Clients.Calendar;
+using Sfa.Tl.Matching.Api.Clients.BankHolidays;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
@@ -19,18 +19,18 @@ namespace Sfa.Tl.Matching.Functions
 {
     public class BankHolidayGenerator
     {
-        private readonly ICalendarApiClient _calendarApiClient;
+        private readonly IBankHolidaysApiClient _bankHolidaysApiClient;
         private readonly IMapper _mapper;
         private readonly IBulkInsertRepository<BankHoliday> _bankHolidayBulkInsertRepository;
         private readonly IRepository<FunctionLog> _functionLogRepository;
 
         public BankHolidayGenerator(
-                ICalendarApiClient calendarApiClient,
+                IBankHolidaysApiClient bankHolidaysApiClient,
                 IMapper mapper,
                 IBulkInsertRepository<BankHoliday> bankHolidayBulkInsertRepository,
                 IRepository<FunctionLog> functionLogRepository)
         {
-            _calendarApiClient = calendarApiClient;
+            _bankHolidaysApiClient = bankHolidaysApiClient;
             _mapper = mapper;
             _bankHolidayBulkInsertRepository = bankHolidayBulkInsertRepository;
             _functionLogRepository = functionLogRepository;
@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Functions
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
                 var stopwatch = Stopwatch.StartNew();
-                var holidays = await _calendarApiClient.GetBankHolidaysAsync();
+                var holidays = await _bankHolidaysApiClient.GetBankHolidaysAsync();
                 var createdRecords = await SaveHolidaysAsync(holidays);
                 stopwatch.Stop();
 
@@ -85,7 +85,7 @@ namespace Sfa.Tl.Matching.Functions
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
                 var stopwatch = Stopwatch.StartNew();
-                var holidays = await _calendarApiClient.GetBankHolidaysAsync();
+                var holidays = await _bankHolidaysApiClient.GetBankHolidaysAsync();
                 var createdRecords = await SaveHolidaysAsync(holidays);
                 stopwatch.Stop();
 
