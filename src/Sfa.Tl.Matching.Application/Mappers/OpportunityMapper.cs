@@ -212,6 +212,9 @@ namespace Sfa.Tl.Matching.Application.Mappers
                         s.PlacementsKnown.HasValue && s.PlacementsKnown.Value
                             ? s.Placements
                             : 1))
+                .ForMember(m => m.RouteId, config => config.Ignore())
+                .ForMember(m => m.Postcode, config => config.Ignore())
+                .ForMember(m => m.SearchRadius, config => config.Ignore())
                 .ForMember(m => m.Town, config => config.Ignore())
                 .ForMember(m => m.IsSelectedForReferral, config => config.Ignore())
                 .ForMember(m => m.IsCompleted, config => config.Ignore())

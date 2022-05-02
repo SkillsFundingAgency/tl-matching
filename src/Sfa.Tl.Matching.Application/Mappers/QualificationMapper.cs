@@ -67,11 +67,9 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.IsDeleted, config => config.Ignore())
                 .ForMember(m => m.CreatedBy, config => config.Ignore())
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
-                .ForMember(m => m.ModifiedBy, config => config.Ignore())
-                .ForMember(m => m.ModifiedOn, config => config.Ignore())
                 .ForPath(m => m.ProviderQualification, config => config.Ignore())
                 .ForPath(m => m.QualificationRouteMapping, config => config.Ignore())
-                ;
+            ;
             
             CreateMap<SaveQualificationViewModel, IList<QualificationRouteMapping>>()
                 .ConstructUsing((m, context) =>
