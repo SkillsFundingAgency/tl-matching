@@ -70,9 +70,9 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForPath(m => m.ProviderQualification, config => config.Ignore())
                 .ForPath(m => m.QualificationRouteMapping, config => config.Ignore())
             ;
-            
+
             CreateMap<SaveQualificationViewModel, IList<QualificationRouteMapping>>()
-                .ConstructUsing((m, context) =>
+                .ConvertUsing((m, _, context) =>
                 {
                     var userNameResolver = context.Options.ServiceCtor(typeof(LoggedInUserNameResolver<SaveQualificationViewModel, Qualification>))
                         as LoggedInUserNameResolver<SaveQualificationViewModel, Qualification>;
@@ -89,8 +89,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                                 CreatedBy = userNameResolver?.Resolve(m, null, "CreatedBy", context)
                             })
                             .ToList();
-                })
-                ;
+                });
 
             CreateMap<Qualification, QualificationDetailViewModel>();
         }
