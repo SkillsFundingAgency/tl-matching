@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using AutoMapper;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
@@ -16,8 +15,15 @@ namespace Sfa.Tl.Matching.Application.Mappers
         {
             CreateMap<QualificationDto, Qualification>()
                 .ForMember(m => m.Id, config => config.Ignore())
-                .ForMember(m => m.QualificationSearch, config => config.MapFrom(s => GetSearchTerm(s.Title, s.ShortTitle.ToLower())))
-                .ForMember(m => m.ShortTitleSearch, config => config.MapFrom(s => GetSearchTerm(s.ShortTitle.ToLower())))
+                .ForMember(m => m.QualificationSearch, config => config.MapFrom(s => new[]
+                {
+                    s.Title,
+                    s.ShortTitle.ToLower()
+                }.GetSearchTerm()))
+                .ForMember(m => m.ShortTitleSearch, config => config.MapFrom(s => new[]
+                {
+                    s.ShortTitle.ToLower()
+                }.GetSearchTerm()))
                 .ForMember(m => m.ProviderQualification, config => config.Ignore())
                 .ForMember(m => m.QualificationRouteMapping, config => config.Ignore())
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
@@ -46,8 +52,15 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.Id, config => config.Ignore())
                 .ForMember(m => m.LarId, config => config.MapFrom(s => s.LarId))
                 .ForMember(m => m.ShortTitle, config => config.MapFrom(s => s.ShortTitle.ToLower()))
-                .ForMember(m => m.QualificationSearch, config => config.MapFrom(s => GetSearchTerm(s.Title, s.ShortTitle.ToLower())))
-                .ForMember(m => m.ShortTitleSearch, config => config.MapFrom(s => GetSearchTerm(s.ShortTitle.ToLower())))
+                .ForMember(m => m.QualificationSearch, config => config.MapFrom(s => new[]
+                {
+                    s.Title,
+                    s.ShortTitle.ToLower()
+                }.GetSearchTerm()))
+                .ForMember(m => m.ShortTitleSearch, config => config.MapFrom(s => new[]
+                {
+                    s.ShortTitle.ToLower()
+                }.GetSearchTerm()))
                 .ForMember(m => m.ProviderQualification, config => config.Ignore())
                 .ForMember(m => m.QualificationRouteMapping, config => config.Ignore())
                 .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<MissingQualificationViewModel, Qualification>>())
@@ -60,8 +73,15 @@ namespace Sfa.Tl.Matching.Application.Mappers
             CreateMap<SaveQualificationViewModel, Qualification>()
                 .ForMember(m => m.Id, config => config.MapFrom(s => s.QualificationId))
                 .ForMember(m => m.ShortTitle, config => config.MapFrom(s => s.ShortTitle.ToLower()))
-                .ForMember(m => m.QualificationSearch, config => config.MapFrom(s => GetSearchTerm(s.Title, s.ShortTitle.ToLower())))
-                .ForMember(m => m.ShortTitleSearch, config => config.MapFrom(s => GetSearchTerm(s.ShortTitle.ToLower())))
+                .ForMember(m => m.QualificationSearch, config => config.MapFrom(s => new[]
+                {
+                    s.Title, 
+                    s.ShortTitle.ToLower()
+                }.GetSearchTerm()))
+                .ForMember(m => m.ShortTitleSearch, config => config.MapFrom(s => new[]
+                {
+                    s.ShortTitle.ToLower()
+                }.GetSearchTerm()))
                 .ForMember(m => m.ModifiedBy, config => config.MapFrom<LoggedInUserNameResolver<SaveQualificationViewModel, Qualification>>())
                 .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<SaveQualificationViewModel, Qualification>>())
                 .ForMember(m => m.IsDeleted, config => config.Ignore())
@@ -92,17 +112,6 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 });
 
             CreateMap<Qualification, QualificationDetailViewModel>();
-        }
-
-        private static string GetSearchTerm(params string[] searchTerms)
-        {
-            var searchTerm = new StringBuilder();
-            foreach (var term in searchTerms)
-            {
-                searchTerm.Append(term.ToQualificationSearch());
-            }
-
-            return searchTerm.ToString();
         }
     }
 }
