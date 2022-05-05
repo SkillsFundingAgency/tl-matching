@@ -20,6 +20,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         private const int OpportunityId = 1;
         private const int OpportunityItemId = 2;
 
+        private readonly CheckAnswersViewModel _viewModel = new()
+        {
+            OpportunityId = OpportunityId,
+            OpportunityItemId = OpportunityItemId
+        };
+
         private readonly IOpportunityService _opportunityService;
         private readonly IActionResult _result;
 
@@ -51,7 +57,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             httpContextAccessor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
-            _result = controllerWithClaims.SaveCheckAnswers(OpportunityId, OpportunityItemId).GetAwaiter().GetResult();
+            _result = controllerWithClaims.SaveCheckAnswers(_viewModel).GetAwaiter().GetResult();
         }
         
         [Fact]
