@@ -21,9 +21,11 @@ namespace Sfa.Tl.Matching.Data.Extensions
                 10);
 
             var retryPolicy = Policy
+#pragma warning disable EF1001 // Internal EF Core API usage.
                 .Handle<SqlException>(SqlServerTransientExceptionDetector.ShouldRetryOn)
                 .Or<TimeoutException>()
                 .OrInner<Win32Exception>(SqlServerTransientExceptionDetector.ShouldRetryOn)
+#pragma warning restore EF1001 // Internal EF Core API usage.
                 .WaitAndRetryAsync(backoff, (exception, sleepDuration, retryAttempt, context) =>
                     {
                         if (!context.TryGetLogger(out var logger)) return;
