@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using FluentValidation;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Azure.WebJobs;
@@ -81,7 +82,17 @@ namespace Sfa.Tl.Matching.Functions
             });
 
             services.AddHttpContextAccessor();
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            var assemblies = new[]
+            {
+                typeof(Startup).Assembly, 
+                typeof(Startup).Assembly
+                    .GetReferencedAssemblies()
+                    .Where(a => 
+                        a.FullName.Contains("Sfa.Tl.Matching.Application"))
+                    .Select(Assembly.Load).FirstOrDefault()
+            };
+
+            services.AddAutoMapper(assemblies);
 
             services.AddDbContext<MatchingDbContext>(options =>
                 options.UseSqlServer(_configuration.SqlConnectionString,
