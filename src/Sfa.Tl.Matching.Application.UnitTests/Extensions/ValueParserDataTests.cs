@@ -14,9 +14,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
         public static IEnumerable<object[]> SearchTermData =>
             new List<object[]>
             {
-                new object[] { new string[] { "test" } , "test" },
-                new object[] { new string[] { "Test" }, "Test" },
-                new object[] { new string[] { "Test", "Test2" }, "TestTest" },
+                new object[] { new [] { "test" } , "test" },
+                new object[] { new [] { "Test" }, "Test" },
+                new object[] { new [] { "Test", "Test2" }, "TestTest" },
             };
 
         [Theory(DisplayName = "GetSearchTerm Data Tests")]
