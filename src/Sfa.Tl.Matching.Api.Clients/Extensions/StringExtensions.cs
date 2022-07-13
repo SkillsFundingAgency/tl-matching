@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace Sfa.Tl.Matching.Api.Clients.Extensions
 {
@@ -8,6 +9,11 @@ namespace Sfa.Tl.Matching.Api.Clients.Extensions
         {
             return string.IsNullOrWhiteSpace(value) ? string.Empty : 
                new string(Array.FindAll(value.ToCharArray(), char.IsLetterOrDigit));
+        }
+
+        public static string NormalizeApostrophes(this string value)
+        {
+            return Regex.Replace(value, @"(['’�])", "’");
         }
     }
 }
