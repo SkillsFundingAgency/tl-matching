@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Castle.Core.Internal;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Data;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Builders
@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
         {
             var employer = _context.Employer.Where(e => e.CreatedBy == "Sfa.Tl.Matching.Application.IntegrationTests").ToList();
             if(!employer.IsNullOrEmpty()) _context.Employer.RemoveRange(employer);
-
+            
             _context.SaveChanges();
         }
     }
