@@ -16,7 +16,7 @@
     <PackageReference Include="Azure.Storage.Blobs" Version="12.13.0" />
     <PackageReference Include="Azure.Storage.Queues" Version="12.11.0" />
     <PackageReference Include="Azure.Data.Tables" Version="12.6.1" />
-    <PackageReference Include="CsvHelper" Version="28.0.0" />
+    <PackageReference Include="CsvHelper" Version="28.0.1" />
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.17.1" />
     <PackageReference Include="FluentValidation" Version="11.1.0" />
     <PackageReference Include="GovukNotify" Version="6.0.0" />
