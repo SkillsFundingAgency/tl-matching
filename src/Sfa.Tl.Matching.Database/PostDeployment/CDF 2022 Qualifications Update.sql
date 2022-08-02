@@ -79,6 +79,7 @@ BEGIN
 		UNION
 		SELECT 11, [Id] FROM [qualification] WHERE [LarId] = 'CDF00011'
 	)
+	INSERT INTO QualificationRouteMapping (RouteId, QualificationId, Source, CreatedBy)
 	SELECT	cte.RouteId,
 			cte.QualificationId,
 			'CDF_2022',
