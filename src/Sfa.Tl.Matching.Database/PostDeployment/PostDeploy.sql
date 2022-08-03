@@ -11,6 +11,6 @@ DECLARE @TicketNo VARCHAR(32)
 :r ".\Seed Email Templates.sql"
 :r ".\Seed UserProfile.sql"
 
---:r ".\CDF 2022 Opportunity Basket Cleanup.sql"
---:r ".\CDF 2022 Data Cleanup.sql"
---:r ".\CDF 2022 Qualifications Update.sql"
+:r ".\CDF 2022 Opportunity Basket Cleanup.sql"
+:r ".\CDF 2022 Data Cleanup.sql"
+:r ".\CDF 2022 Qualifications Update.sql"
