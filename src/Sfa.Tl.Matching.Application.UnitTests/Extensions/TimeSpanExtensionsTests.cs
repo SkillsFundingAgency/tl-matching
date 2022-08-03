@@ -30,16 +30,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
 
         [Theory(DisplayName = "SecondsToReadableString Data Tests")]
         [InlineData(null, null)]
-        [InlineData(0, null)]
-        [InlineData(60, "1 minute")]
-        [InlineData(3600, "1 hour")]
-        [InlineData(1200, "20 minutes")]
-        [InlineData(1228, "20 minutes")]
-        [InlineData(4461, "1 hour 14 minutes")]
-        [InlineData(6746, "1 hour 52 minutes")]
-        [InlineData(7200, "2 hours")]
-        [InlineData(7465, "2 hours 4 minutes")]
-        [InlineData(8400, "2 hours 20 minutes")]
+        [InlineData(0L, null)]
+        [InlineData(60L, "1 minute")]
+        [InlineData(3600L, "1 hour")]
+        [InlineData(1200L, "20 minutes")]
+        [InlineData(1228L, "20 minutes")]
+        [InlineData(4461L, "1 hour 14 minutes")]
+        [InlineData(6746L, "1 hour 52 minutes")]
+        [InlineData(7200L, "2 hours")]
+        [InlineData(7465L, "2 hours 4 minutes")]
+        [InlineData(8400L, "2 hours 20 minutes")]
         public void SecondsToReadableStringDataTests(long? seconds, string result)
         {
             seconds.ToReadableString().Should().Be(result);
