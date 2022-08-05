@@ -11,29 +11,18 @@ BEGIN
 	DECLARE @ids TABLE 
 	(
 		OpportunityId int
-		--OpportunityItemId int,
-		--ReferralType nvarchar(12)
 	)
 
 	--Get ids from opportunity baskets
 	INSERT INTO @ids
 	SELECT   DISTINCT o.Id AS OpportunityId
-			--,oi.Id AS OpportunityItemId
-			--,oi.OpportunityType
 	FROM Opportunity AS o 
 		INNER JOIN OpportunityItem AS OI ON o.Id = oi.OpportunityId
-		--LEFT JOIN Employer AS E ON o.EmployerCrmId = e.CrmId
-		--LEFT JOIN ProvisionGap AS PG on oi.Id = PG.OpportunityItemId
-		--LEFT JOIN Referral AS R on oi.Id = r.OpportunityItemId
-		--LEFT JOIN ProviderVenue AS PV on r.ProviderVenueId = pv.Id
-		--LEFT JOIN Provider AS P on pv.ProviderId = p.Id
 	WHERE
 		oi.IsSaved = 1 
 		AND 
 		oi.IsCompleted = 0
 		AND oi.IsDeleted = 0
-
-	--SELECT * FROM @ids
 
 	SELECT * FROM @ids ids	
 	INNER JOIN OpportunityItem oi ON oi.OpportunityId = ids.OpportunityId
@@ -90,6 +79,9 @@ BEGIN
 	WHERE NOT EXISTS (SELECT * FROM OpportunityItem oi
 					  WHERE oi.OpportunityId = o.Id
 					  AND oi.IsCompleted = 1)
+	--Workaround for issue in test environment - has an email that has no copmpleted opportunity item
+	AND NOT EXISTS (SELECT * FROM EmailHistory eh
+					  WHERE eh.OpportunityId = o.Id)
 
 	--Update deployment log
     INSERT INTO [dbo].[DBProjDeployLog]([Date], [Name], [MD5], [Revision])
