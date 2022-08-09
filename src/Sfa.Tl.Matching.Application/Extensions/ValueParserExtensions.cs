@@ -90,6 +90,7 @@ namespace Sfa.Tl.Matching.Application.Extensions
                 "no" => false,
                 "false" => false,
                 "-" => false,
+                "_" => false,
                 "" => false,
                 _ => throw new ArgumentOutOfRangeException(nameof(value),
                     $"{nameof(value)} cannot be parsed ({nameof(ToBool)})")

@@ -137,17 +137,17 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                 .UpdateVenueAsync(Arg.Any<RemoveProviderVenueViewModel>());
         }
         
-        [Fact]
-        public void Then_ProviderVenueService_UpdateVenueToNotRemovedAsync_Is_Called_To_Unremove_Venue_With_Expected_Values()
-        {
-            _providerVenueService
-                .Received(1)
-                .UpdateVenueToNotRemovedAsync(Arg.Is<RemoveProviderVenueViewModel>(
-                    p =>
-                        p.ProviderId == 1 &&
-                        p.ProviderVenueId == 1 &&
-                        p.Postcode == "CV1 2WT"));
-        }
+        //[Fact]
+        //public void Then_ProviderVenueService_UpdateVenueToNotRemovedAsync_Is_Called_To_Unremove_Venue_With_Expected_Values()
+        //{
+        //    _providerVenueService
+        //        .Received(1)
+        //        .UpdateVenueToNotRemovedAsync(Arg.Is<RemoveProviderVenueViewModel>(
+        //            p =>
+        //                p.ProviderId == 1 &&
+        //                p.ProviderVenueId == 1 &&
+        //                p.Postcode == "CV1 2WT"));
+        //}
 
         [Fact]
         public void Then_ProviderVenueService_GetRemoveProviderVenueViewModelAsync_Is_Not_Called()
