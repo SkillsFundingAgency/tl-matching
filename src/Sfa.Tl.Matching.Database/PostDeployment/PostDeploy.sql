@@ -13,4 +13,5 @@ DECLARE @TicketNo VARCHAR(32)
 
 :r ".\CDF 2022 Opportunity Basket Cleanup.sql"
 :r ".\CDF 2022 Data Cleanup.sql"
+:r ".\CDF 2022 Remove Duplicate Provider Venues.sql"
 :r ".\CDF 2022 Qualifications Update.sql"

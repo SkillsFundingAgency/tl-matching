@@ -123,6 +123,7 @@
     <Build Include="Indexes\IX_OpportunityItem_OpportunityId_IsSaved_IsCompleted_IsDeleted.sql" />
     <None Include="PostDeployment\CDF 2022 Data Cleanup.sql" />
     <None Include="PostDeployment\CDF 2022 Opportunity Basket Cleanup.sql" />
+    <None Include="PostDeployment\CDF 2022 Remove Duplicate Provider Venues.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />

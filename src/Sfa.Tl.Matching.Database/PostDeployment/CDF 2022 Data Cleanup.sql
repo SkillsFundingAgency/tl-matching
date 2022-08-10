@@ -29,7 +29,6 @@ BEGIN
 	   OR [IsEnabledForReferral] = 1
 
 	DELETE FROM [QualificationRouteMapping]
-	--DELETE FROM [Qualification]
 	UPDATE [Qualification] 
 	SET [IsDeleted] = 1,
 		[ModifiedOn] = GETDATE(),
