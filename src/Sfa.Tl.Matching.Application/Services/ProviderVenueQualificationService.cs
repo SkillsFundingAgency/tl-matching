@@ -161,10 +161,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 venueViewModel = await _providerVenueService.GetVenueAsync(venueId);
             }
-            else if (venueViewModel.IsRemoved != providerVenueQualification.VenueIsRemoved)
-            {
-                venueViewModel.IsRemoved = providerVenueQualification.VenueIsRemoved;
-            }
 
             var providerVenueValidator = ValidateProviderVenueToUpdate(venueViewModel, providerVenueQualification);
 
@@ -365,6 +361,12 @@ namespace Sfa.Tl.Matching.Application.Services
             if (providerVenueDetailViewModel.IsEnabledForReferral != providerVenueQualification.VenueIsEnabledForReferral)
             {
                 providerVenueDetailViewModel.IsEnabledForReferral = providerVenueQualification.VenueIsEnabledForReferral;
+                isUpdated = true;
+            }
+
+            if (providerVenueDetailViewModel.IsRemoved != providerVenueQualification.VenueIsRemoved)
+            {
+                providerVenueDetailViewModel.IsRemoved = providerVenueQualification.VenueIsRemoved;
                 isUpdated = true;
             }
 

@@ -126,18 +126,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
                 .GetVenueAsync(1);
         }
 
-        //[Fact]
-        //public void Then_ProviderVenueService_UpdateVenueAsync_Is_Called_To_Remove_Venue_With_Expected_Values()
-        //{
-        //    _providerVenueService
-        //        .Received(1)
-        //        .UpdateVenueAsync(Arg.Is<RemoveProviderVenueViewModel>(
-        //            p =>
-        //                p.ProviderId == 1 &&
-        //                p.ProviderVenueId == 1 &&
-        //                p.Postcode == "CV1 2WT"));
-        //}
-
         [Fact]
         public void Then_ProviderVenueService_UpdateVenueToNotRemovedAsync_Is_Not_Called()
         {
@@ -196,11 +184,24 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenueQualificat
         }
 
         [Fact]
-        public void Then_ProviderVenueService_UpdateVenueAsync_Is_Not_Called()
+        public void Then_ProviderVenueService_UpdateVenueAsync_Is_Called_To_Remove_Venue_With_Expected_Values()
+        {
+            _providerVenueService
+                .Received(1)
+                .UpdateVenueAsync(Arg.Is<ProviderVenueDetailViewModel>(
+                    p =>
+                        p.Id == 1 &&
+                        p.ProviderId == 1 &&
+                        p.Postcode == "CV1 2WT" &&
+                        p.IsRemoved));
+        }
+
+        [Fact]
+        public void Then_ProviderVenueService_UpdateVenueAsync_Is_Not_Called_With_RemoveProviderVenueViewModel()
         {
             _providerVenueService
                 .DidNotReceive()
-                .UpdateVenueAsync(Arg.Any<ProviderVenueDetailViewModel>());
+                .UpdateVenueAsync(Arg.Any<RemoveProviderVenueViewModel>());
         }
     }
 }
