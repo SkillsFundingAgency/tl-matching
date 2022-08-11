@@ -8,6 +8,7 @@ using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
@@ -107,7 +108,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             _emailService
                 .Received(2)
                 .SendEmailAsync(Arg.Is<string>(
-                        templateName => templateName == "ProviderFeedbackV2"),
+                        templateName => templateName == EmailTemplateName.ProviderFeedbackV3.ToString()),
                     Arg.Any<string>(),
                     Arg.Any<int?>(),
                     Arg.Any<int?>(), Arg.Any<IDictionary<string, string>>(), Arg.Is<string>(createdBy => createdBy == "TestUser"));

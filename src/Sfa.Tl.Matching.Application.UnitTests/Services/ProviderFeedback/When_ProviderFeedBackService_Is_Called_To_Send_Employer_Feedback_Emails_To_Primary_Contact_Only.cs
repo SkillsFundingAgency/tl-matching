@@ -105,7 +105,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Is<string>(templateName => templateName == EmailTemplateName.ProviderFeedbackV2.ToString()),
+                .SendEmailAsync(Arg.Is<string>(templateName => templateName == EmailTemplateName.ProviderFeedbackV3.ToString()),
                     Arg.Is<string>(toAddress => toAddress == "primary.contact@provider.co.uk"),
                     null, null,
                     Arg.Is<IDictionary<string, string>>(
