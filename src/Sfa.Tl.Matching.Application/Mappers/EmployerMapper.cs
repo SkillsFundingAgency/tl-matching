@@ -22,7 +22,13 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.Phone, config => config.MapFrom(s => s.ContactTelephone1))
                 .ForMember(m => m.Email, config => config.MapFrom(s => s.ContactEmail))
                 .ForMember(m => m.Owner, config => config.MapFrom(s => s.OwnerIdName))
-                .ForAllOtherMembers(c => c.Ignore())
+                .ForMember(m => m.Id, config => config.Ignore())
+                .ForMember(m => m.ChecksumCol, config => config.Ignore())
+                .ForPath(m => m.Opportunity, config => config.Ignore())
+                .ForMember(m => m.CreatedBy, config => config.Ignore())
+                .ForMember(m => m.CreatedOn, config => config.Ignore())
+                .ForMember(m => m.ModifiedBy, config => config.Ignore())
+                .ForMember(m => m.ModifiedOn, config => config.Ignore())
                 ;
         }
     }

@@ -39,16 +39,59 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             {
                 c.AddMaps(typeof(PlacementInformationSaveDtoMapper).Assembly);
                 c.ConstructServicesUsing(type =>
-                    type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<PlacementInformationSaveViewModel, PlacementInformationSaveDto>(httpContextAccessor) :
-                        type.Name.Contains("LoggedInUserNameResolver") ?
-                            new LoggedInUserNameResolver<PlacementInformationSaveViewModel, PlacementInformationSaveDto>(httpContextAccessor) :
-                            type.Name.Contains("UtcNowResolver") ?
-                                new UtcNowResolver<PlacementInformationSaveViewModel, PlacementInformationSaveDto>(new DateTimeProvider()) :
-                                null);
+                {
+                    if (type.GenericTypeArguments?.Length == 2)
+                    {
+                        var fromTypeName = type.GenericTypeArguments[0].Name;
+                        var toTypeName = type.GenericTypeArguments[1].Name;
+
+                        if (type.Name.Contains("LoggedInUserEmailResolver"))
+                        {
+                            switch (fromTypeName)
+                            {
+                                case "PlacementInformationSaveViewModel"
+                                    when toTypeName == "PlacementInformationSaveDto":
+                                    return new LoggedInUserEmailResolver<PlacementInformationSaveViewModel,
+                                        PlacementInformationSaveDto>(httpContextAccessor);
+                                case "CheckAnswersViewModel" when toTypeName == "CheckAnswersDto":
+                                    return new LoggedInUserEmailResolver<CheckAnswersViewModel, CheckAnswersDto>(
+                                        httpContextAccessor);
+                            }
+                        }
+                        else if (type.Name.Contains("LoggedInUserNameResolver"))
+                        {
+                            switch (fromTypeName)
+                            {
+                                case "PlacementInformationSaveViewModel"
+                                    when toTypeName == "PlacementInformationSaveDto":
+                                    return new LoggedInUserNameResolver<PlacementInformationSaveViewModel,
+                                        PlacementInformationSaveDto>(httpContextAccessor);
+                                case "CheckAnswersViewModel" when toTypeName == "CheckAnswersDto":
+                                    return new LoggedInUserNameResolver<CheckAnswersViewModel, CheckAnswersDto>(
+                                        httpContextAccessor);
+                            }
+                        }
+                        else if (type.Name.Contains("UtcNowResolver"))
+                        {
+                            switch (fromTypeName)
+                            {
+                                case "PlacementInformationSaveViewModel"
+                                    when toTypeName == "PlacementInformationSaveDto":
+                                    return new UtcNowResolver<PlacementInformationSaveViewModel,
+                                        PlacementInformationSaveDto>(
+                                        new DateTimeProvider());
+                                case "CheckAnswersViewModel" when toTypeName == "CheckAnswersDto":
+                                    return new UtcNowResolver<CheckAnswersViewModel, CheckAnswersDto>(
+                                        new DateTimeProvider());
+                            }
+                        }
+                    }
+
+                    return null;
+                });
             });
             var mapper = new Mapper(config);
-            
+
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetSavedOpportunityItemCountAsync(1).Returns(2);
 

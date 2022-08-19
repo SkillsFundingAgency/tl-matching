@@ -82,9 +82,9 @@ namespace Sfa.Tl.Matching.Functions
             });
 
             services.AddHttpContextAccessor();
+
             var assemblies = new[]
             {
-                typeof(Startup).Assembly, 
                 typeof(Startup).Assembly
                     .GetReferencedAssemblies()
                     .Where(a => 

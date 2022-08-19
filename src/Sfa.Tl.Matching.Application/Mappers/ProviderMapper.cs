@@ -49,8 +49,24 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.ProviderFeedbackSentOn, config => config.MapFrom<UtcNowResolver<UsernameForFeedbackSentDto, Provider>>())
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.Username))
                 .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<UsernameForFeedbackSentDto, Provider>>())
-                .ForAllOtherMembers(config => config.Ignore());
-
+                .ForMember(m => m.UkPrn, config => config.Ignore())
+                .ForMember(m => m.Name, config => config.Ignore())
+                .ForMember(m => m.DisplayName, config => config.Ignore())
+                .ForMember(m => m.OfstedRating, config => config.Ignore())
+                .ForMember(m => m.PrimaryContact, config => config.Ignore())
+                .ForMember(m => m.PrimaryContactEmail, config => config.Ignore())
+                .ForMember(m => m.PrimaryContactPhone, config => config.Ignore())
+                .ForMember(m => m.SecondaryContact, config => config.Ignore())
+                .ForMember(m => m.SecondaryContactEmail, config => config.Ignore())
+                .ForMember(m => m.SecondaryContactPhone, config => config.Ignore())
+                .ForMember(m => m.IsEnabledForReferral, config => config.Ignore())
+                .ForMember(m => m.IsCdfProvider, config => config.Ignore())
+                .ForMember(m => m.IsTLevelProvider, config => config.Ignore())
+                .ForMember(m => m.Source, config => config.Ignore())
+                .ForMember(m => m.CreatedBy, config => config.Ignore())
+                .ForMember(m => m.CreatedOn, config => config.Ignore())
+                .ForPath(m => m.ProviderVenue, config => config.Ignore())
+                ;
         }
     }
 }

@@ -12,7 +12,11 @@ namespace Sfa.Tl.Matching.Application.Mappers
             CreateMap<ServiceStatusHistoryViewModel, ServiceStatusHistory>()
                 .ForMember(m => m.IsOnline, config => config.MapFrom(s => s.IsOnline))
                 .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<ServiceStatusHistoryViewModel, ServiceStatusHistory>>())
-                .ForAllOtherMembers(config => config.Ignore());
-       }
+                .ForMember(m => m.Id, config => config.Ignore())
+                .ForMember(m => m.CreatedOn, config => config.Ignore())
+                .ForMember(m => m.ModifiedBy, config => config.Ignore())
+                .ForMember(m => m.ModifiedOn, config => config.Ignore())
+                ;
+        }
     }
 }

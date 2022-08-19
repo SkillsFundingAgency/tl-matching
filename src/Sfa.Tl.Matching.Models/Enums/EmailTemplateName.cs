@@ -6,6 +6,7 @@ namespace Sfa.Tl.Matching.Models.Enums
     {
         EmployerFeedback,
         EmployerFeedbackV2,
+        EmployerFeedbackV3,
         [Description("Employer referral confirmation")]
         EmployerReferral,
         [Description("Employer referral confirmation")]
@@ -16,6 +17,8 @@ namespace Sfa.Tl.Matching.Models.Enums
         EmployerReferralV4,
         [Description("Employer referral confirmation")]
         EmployerReferralV5,
+        [Description("Employer referral confirmation")]
+        EmployerReferralV6,
         [Description("Provider quarterly")]
         ProviderQuarterlyUpdate,
         [Description("Provider referral")]
@@ -28,8 +31,11 @@ namespace Sfa.Tl.Matching.Models.Enums
         ProviderReferralV4,
         [Description("Provider referral")]
         ProviderReferralV5,
+        [Description("Provider referral")]
+        ProviderReferralV6,
         ProviderFeedback,
         ProviderFeedbackV2,
+        ProviderFeedbackV3,
         EmployerAupaBlank,
         EmailDeliveryStatus
     }

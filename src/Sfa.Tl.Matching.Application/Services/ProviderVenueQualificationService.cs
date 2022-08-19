@@ -169,22 +169,6 @@ namespace Sfa.Tl.Matching.Application.Services
                 await _providerVenueService.UpdateVenueAsync(providerVenueValidator.ProviderVenueDetailViewModel);
             }
 
-            // Provider Venue Delete
-            if (venueViewModel.IsRemoved != providerVenueQualification.VenueIsRemoved)
-            {
-                var removeProviderVenueViewModel = new RemoveProviderVenueViewModel
-                {
-                    Postcode = venueViewModel.Postcode,
-                    ProviderId = venueViewModel.ProviderId,
-                    ProviderVenueId = venueViewModel.Id
-                };
-
-                if (providerVenueQualification.VenueIsRemoved)
-                    await _providerVenueService.UpdateVenueAsync(removeProviderVenueViewModel);
-                else
-                    await _providerVenueService.UpdateVenueToNotRemovedAsync(removeProviderVenueViewModel);
-            }
-
             return venueViewModel;
         }
 
@@ -377,6 +361,12 @@ namespace Sfa.Tl.Matching.Application.Services
             if (providerVenueDetailViewModel.IsEnabledForReferral != providerVenueQualification.VenueIsEnabledForReferral)
             {
                 providerVenueDetailViewModel.IsEnabledForReferral = providerVenueQualification.VenueIsEnabledForReferral;
+                isUpdated = true;
+            }
+
+            if (providerVenueDetailViewModel.IsRemoved != providerVenueQualification.VenueIsRemoved)
+            {
+                providerVenueDetailViewModel.IsRemoved = providerVenueQualification.VenueIsRemoved;
                 isUpdated = true;
             }
 

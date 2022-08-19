@@ -15,7 +15,10 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<UserCacheDto, UserCache>>())
                 .ForMember(m => m.Key, config => config.MapFrom(m => m.Key))
                 .ForMember(m => m.Value, config => config.MapFrom(m => m.Value))
-                .ForAllOtherMembers(config => config.Ignore());
+                .ForMember(m => m.Id, config => config.Ignore())
+                .ForMember(m => m.UrlHistory, config => config.Ignore())
+                .ForMember(m => m.CreatedOn, config => config.Ignore())
+                ;
         }
     }
 }

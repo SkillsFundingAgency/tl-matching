@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -208,8 +207,15 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 foreach (var qualification in qualificationsFromDb)
                 {
-                    qualification.ShortTitleSearch = GetSearchTerm(qualification.ShortTitle);
-                    qualification.QualificationSearch = GetSearchTerm(qualification.Title, qualification.ShortTitle);
+                    qualification.ShortTitleSearch = new[]
+                    {
+                        qualification.ShortTitle
+                    }.GetSearchTerm();
+                    qualification.QualificationSearch = new[]
+                    {
+                        qualification.Title, 
+                        qualification.ShortTitle
+                    }.GetSearchTerm();
                     qualification.ModifiedOn = DateTime.UtcNow;
                     qualification.ModifiedBy = "System";
                 }
@@ -218,15 +224,6 @@ namespace Sfa.Tl.Matching.Application.Services
             }
 
             return qualificationsFromDb.Count;
-        }
-
-        private static string GetSearchTerm(params string[] searchTerms)
-        {
-            var searchTerm = new StringBuilder();
-            foreach (var term in searchTerms)
-                searchTerm.Append(term.ToQualificationSearch());
-
-            return searchTerm.ToString();
         }
     }
 }

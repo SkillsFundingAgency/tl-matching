@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using Humanizer;
 using Sfa.Tl.Matching.Application.Configuration;
@@ -89,6 +90,7 @@ namespace Sfa.Tl.Matching.Application.Extensions
                 "no" => false,
                 "false" => false,
                 "-" => false,
+                "_" => false,
                 "" => false,
                 _ => throw new ArgumentOutOfRangeException(nameof(value),
                     $"{nameof(value)} cannot be parsed ({nameof(ToBool)})")
@@ -182,6 +184,15 @@ namespace Sfa.Tl.Matching.Application.Extensions
             {
                 return false;
             }
+        }
+
+        public static string GetSearchTerm(this string[] searchTerms)
+        {
+            var searchTerm = new StringBuilder();
+            foreach (var term in searchTerms)
+                searchTerm.Append(term.ToQualificationSearch());
+
+            return searchTerm.ToString();
         }
 
         public static string ToQualificationSearch(this string value)

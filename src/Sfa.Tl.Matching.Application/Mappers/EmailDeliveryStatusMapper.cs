@@ -14,7 +14,6 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.Subject, config => config.MapFrom(s => s.subject))
                 .ForMember(m => m.Status, config => config.MapFrom(s => s.status))
                 .ForMember(m => m.EmailDeliveryStatusType, config => config.MapFrom(s => GetEmailDeliveryStatusType(s.status)))
-                .ForAllOtherMembers(c => c.Ignore())
                 ;
         }
 

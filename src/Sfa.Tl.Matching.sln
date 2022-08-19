@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28803.202
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32804.467
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Web", "Sfa.Tl.Matching.Web\Sfa.Tl.Matching.Web.csproj", "{9D1CBE77-09C6-41A7-AB98-0CA58A3DB6EA}"
 EndProject
@@ -38,8 +38,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Web.IntegrationTests", "Sfa.Tl.Matching.Web.IntegrationTests\Sfa.Tl.Matching.Web.IntegrationTests.csproj", "{4160583A-78D6-48DC-BF87-E5D3514FFB28}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Web.Tests.Common", "Sfa.Tl.Matching.Web.Tests.Common\Sfa.Tl.Matching.Web.Tests.Common.csproj", "{9F6AAE87-6C06-412E-8651-7866693D9092}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Web.SeleniumTests", "Sfa.Tl.Matching.Web.SeleniumTests\Sfa.Tl.Matching.Web.SeleniumTests.csproj", "{57608D04-F6D4-438B-9DA6-68BA6732CDDF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -114,10 +112,6 @@ Global
 		{9F6AAE87-6C06-412E-8651-7866693D9092}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F6AAE87-6C06-412E-8651-7866693D9092}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F6AAE87-6C06-412E-8651-7866693D9092}.Release|Any CPU.Build.0 = Release|Any CPU
-		{57608D04-F6D4-438B-9DA6-68BA6732CDDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{57608D04-F6D4-438B-9DA6-68BA6732CDDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{57608D04-F6D4-438B-9DA6-68BA6732CDDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{57608D04-F6D4-438B-9DA6-68BA6732CDDF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -132,7 +126,6 @@ Global
 		{4B74E147-17DC-402B-A606-BA6325D6FD82} = {AC50D8E9-002B-4A81-B436-8D4284E023B5}
 		{4160583A-78D6-48DC-BF87-E5D3514FFB28} = {AC50D8E9-002B-4A81-B436-8D4284E023B5}
 		{9F6AAE87-6C06-412E-8651-7866693D9092} = {AC50D8E9-002B-4A81-B436-8D4284E023B5}
-		{57608D04-F6D4-438B-9DA6-68BA6732CDDF} = {AC50D8E9-002B-4A81-B436-8D4284E023B5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {59BF75E1-537C-4287-92BE-6BAB5E8C8277}

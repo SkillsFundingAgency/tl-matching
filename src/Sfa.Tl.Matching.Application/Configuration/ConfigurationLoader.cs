@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Text.Json;
-using Microsoft.Azure.Cosmos.Table;
+using Azure.Data.Tables;
 using Sfa.Tl.Matching.Models.Configuration;
 
 namespace Sfa.Tl.Matching.Application.Configuration
@@ -8,22 +9,19 @@ namespace Sfa.Tl.Matching.Application.Configuration
     public static class ConfigurationLoader
     {
         public static MatchingConfiguration Load(
-            string environment, 
+            string environment,
             string storageConnectionString,
             string serviceName,
             string version)
         {
             try
             {
-                var conn = CloudStorageAccount.Parse(storageConnectionString);
-                var tableClient = conn.CreateCloudTableClient();
-                var table = tableClient.GetTableReference("Configuration");
+                var tableClient = new TableClient(storageConnectionString, "Configuration");
+                var tableEntity = tableClient
+                    .Query<TableEntity>(
+                        filter: $"PartitionKey eq '{environment}' and RowKey eq '{serviceName}_{version}'");
 
-                var operation = TableOperation.Retrieve(environment, $"{serviceName}_{version}");
-                var result = table.ExecuteAsync(operation).GetAwaiter().GetResult();
-
-                var dynResult = result.Result as DynamicTableEntity;
-                var data = dynResult?.Properties["Data"].StringValue;
+                var data = tableEntity.FirstOrDefault()?["Data"]?.ToString();
 
                 if (data == null)
                 {
