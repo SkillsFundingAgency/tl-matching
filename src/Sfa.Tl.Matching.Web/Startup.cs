@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
+using System.Reflection;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
@@ -223,7 +225,17 @@ namespace Sfa.Tl.Matching.Web
             var apiKey = MatchingConfiguration.GovNotifyApiKey;
 
             //Inject AutoMapper
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            var assemblies = new[]
+            {
+                typeof(Startup).Assembly,
+                typeof(Startup).Assembly
+                    .GetReferencedAssemblies()
+                    .Where(a =>
+                        a.FullName.Contains("Sfa.Tl.Matching.Application"))
+                    .Select(Assembly.Load).FirstOrDefault()
+            };
+
+            services.AddAutoMapper(assemblies);
 
             //Inject DbContext
             services.AddDbContext<MatchingDbContext>(options =>

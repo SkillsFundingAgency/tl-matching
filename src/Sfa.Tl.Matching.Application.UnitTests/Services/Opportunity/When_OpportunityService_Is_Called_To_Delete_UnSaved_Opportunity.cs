@@ -6,6 +6,7 @@ using AutoMapper;
 using NSubstitute;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -27,7 +28,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
         public When_OpportunityService_Is_Called_To_Delete_UnSaved_Opportunity()
         {
-            var mapper = new Mapper(Substitute.For<IConfigurationProvider>());
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
+            var mapper = new Mapper(config);
 
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
             _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();

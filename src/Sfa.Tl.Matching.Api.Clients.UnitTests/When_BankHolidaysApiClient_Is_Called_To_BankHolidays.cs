@@ -33,11 +33,26 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
 
             bankHolidaysData.Should().NotBeNull();
             bankHolidaysData.Should().NotBeEmpty();
-            
+
             var veDay2020 = bankHolidaysData.SingleOrDefault(r => r.Date == new DateTime(2020, 05, 08));
-            
+
             veDay2020.Should().NotBeNull();
             veDay2020?.Title.Should().Be("Early May bank holiday (VE day)");
+        }
+
+        [Fact]
+        public async Task Then_Bank_Holidays_Have_Normalized_Apostrophes()
+        {
+            var bankHolidaysData = await _bankHolidaysApiClient
+                .GetBankHolidaysAsync();
+
+            bankHolidaysData.Should().NotBeNull();
+            bankHolidaysData.Should().NotBeEmpty();
+
+            var newYear20223 = bankHolidaysData.SingleOrDefault(r => r.Date == new DateTime(2023, 01, 02));
+
+            newYear20223.Should().NotBeNull();
+            newYear20223?.Title.Should().Be("New Year’s Day");
         }
     }
 }

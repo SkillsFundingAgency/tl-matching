@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using Sfa.Tl.Matching.Application.Extensions;
@@ -11,7 +12,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
         public ProviderVenueQualificationMapper()
         {
             CreateMap<ProviderVenueQualificationFileImportDto, ProviderVenueQualificationDto>()
-                .ForMember(m => m.UkPrn, o => o.MapFrom(s => s.UkPrn.ToLong()))
+                .ForMember(m => m.UkPrn, o => o.MapFrom(s => long.Parse(s.UkPrn, NumberStyles.Any)))
                 .ForMember(m => m.InMatchingService, o => o.MapFrom(s => s.InMatchingService.ToBool()))
                 .ForMember(m => m.IsCdfProvider, o => o.MapFrom(s => s.IsCdfProvider.ToBool()))
                 .ForMember(m => m.IsEnabledForReferral, o => o.MapFrom(s => s.IsEnabledForReferral.ToBool()))

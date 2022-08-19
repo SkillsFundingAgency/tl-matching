@@ -17,14 +17,28 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.Id, config => config.MapFrom(s => s.ProviderVenueId))
                 .ForMember(m => m.ModifiedBy, config => config.MapFrom<LoggedInUserNameResolver<RemoveProviderVenueViewModel, ProviderVenue>>())
                 .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<RemoveProviderVenueViewModel, ProviderVenue>>())
-                .ForAllOtherMembers(config => config.Ignore());
+                .ForMember(m => m.Name, config => config.Ignore())
+                .ForMember(m => m.Town, config => config.Ignore())
+                .ForMember(m => m.County, config => config.Ignore())
+                .ForMember(m => m.Latitude, config => config.Ignore())
+                .ForMember(m => m.Longitude, config => config.Ignore())
+                .ForMember(m => m.IsRemoved, config => config.Ignore())
+                .ForMember(m => m.IsEnabledForReferral, config => config.Ignore())
+                .ForMember(m => m.Source, config => config.Ignore())
+                .ForMember(m => m.CreatedBy, config => config.Ignore())
+                .ForMember(m => m.CreatedOn, config => config.Ignore())
+                .ForPath(m => m.Referral, config => config.Ignore())
+                .ForPath(m => m.Provider, config => config.Ignore())
+                .ForPath(m => m.ProviderQualification, config => config.Ignore())
+                .ForPath(m => m.Location, config => config.Ignore())
+                ;
 
             CreateMap<ProviderVenue, ProviderVenueViewModel>()
                 .ForMember(m => m.ProviderVenueId, config => config.MapFrom(s => s.Id))
                 .ForMember(m => m.QualificationCount, config
                     => config.MapFrom(s
                         => s.ProviderQualification.Count(pq => !pq.IsDeleted &&
-                                                                                           !pq.Qualification.IsDeleted)))
+                                                               !pq.Qualification.IsDeleted)))
                 ;
 
             CreateMap<ProviderVenue, ProviderVenueDetailViewModel>()
@@ -41,7 +55,16 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.IsRemoved, config => config.MapFrom(s => s.IsRemoved))
                 .ForMember(m => m.ModifiedBy, config => config.MapFrom<LoggedInUserNameResolver<ProviderVenueDetailViewModel, ProviderVenue>>())
                 .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<ProviderVenueDetailViewModel, ProviderVenue>>())
-                .ForAllOtherMembers(config => config.Ignore())
+                .ForMember(m => m.Town, config => config.Ignore())
+                .ForMember(m => m.County, config => config.Ignore())
+                .ForMember(m => m.Latitude, config => config.Ignore())
+                .ForMember(m => m.Longitude, config => config.Ignore())
+                .ForMember(m => m.CreatedBy, config => config.Ignore())
+                .ForMember(m => m.CreatedOn, config => config.Ignore())
+                .ForPath(m => m.Referral, config => config.Ignore())
+                .ForPath(m => m.Provider, config => config.Ignore())
+                .ForPath(m => m.ProviderQualification, config => config.Ignore())
+                .ForPath(m => m.Location, config => config.Ignore())
                 ;
 
             CreateMap<AddProviderVenueViewModel, ProviderVenue>()
@@ -50,7 +73,20 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.Source, config => config.MapFrom(s => s.Source))
                 .ForMember(m => m.IsEnabledForReferral, config => config.MapFrom(s => true))
                 .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<AddProviderVenueViewModel, ProviderVenue>>())
-                .ForAllOtherMembers(config => config.Ignore())
+                .ForMember(m => m.Name, config => config.Ignore())
+                .ForMember(m => m.Town, config => config.Ignore())
+                .ForMember(m => m.County, config => config.Ignore())
+                .ForMember(m => m.Latitude, config => config.Ignore())
+                .ForMember(m => m.Longitude, config => config.Ignore())
+                .ForMember(m => m.IsRemoved, config => config.Ignore())
+                .ForMember(m => m.Id, config => config.Ignore())
+                .ForMember(m => m.CreatedOn, config => config.Ignore())
+                .ForMember(m => m.ModifiedBy, config => config.Ignore())
+                .ForMember(m => m.ModifiedOn, config => config.Ignore())
+                .ForPath(m => m.Referral, config => config.Ignore())
+                .ForPath(m => m.Provider, config => config.Ignore())
+                .ForPath(m => m.ProviderQualification, config => config.Ignore())
+                .ForPath(m => m.Location, config => config.Ignore())
                 ;
         }
     }

@@ -10,7 +10,22 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
 {
     [Trait("ValueParser", "Data Tests")]
     public class ValueParserDataTests
-    {
+    { 
+        public static IEnumerable<object[]> SearchTermData =>
+            new List<object[]>
+            {
+                new object[] { new [] { "test" } , "test" },
+                new object[] { new [] { "Test" }, "Test" },
+                new object[] { new [] { "Test", "Test2" }, "TestTest" },
+            };
+
+        [Theory(DisplayName = "GetSearchTerm Data Tests")]
+        [MemberData(nameof(SearchTermData))]
+        public void GetSearchTermDataTests(string[] searchTerm, string result)
+        {
+            searchTerm.GetSearchTerm().Should().Be(result);
+        }
+
         [Theory(DisplayName = "QualificationSearch Data Tests")]
         [InlineData("and", "")]
         [InlineData("BTEC Level", "")]

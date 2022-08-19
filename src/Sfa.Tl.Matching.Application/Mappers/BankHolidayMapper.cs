@@ -12,7 +12,10 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.Date, config => config.MapFrom(s => s.Date))
                 .ForMember(m => m.Title, config => config.MapFrom(s => s.Title))
                 .ForMember(m => m.CreatedBy, config => config.MapFrom(s => "System"))
-                .ForAllOtherMembers(config => config.Ignore())
+                .ForMember(m => m.Id, config => config.Ignore())
+                .ForMember(m => m.CreatedOn, config => config.Ignore())
+                .ForMember(m => m.ModifiedBy, config => config.Ignore())
+                .ForMember(m => m.ModifiedOn, config => config.Ignore())
                 ;
         }
     }

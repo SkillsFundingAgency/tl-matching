@@ -128,23 +128,27 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 case EmailTemplateName.EmployerFeedback:
                 case EmailTemplateName.EmployerFeedbackV2:
+                case EmailTemplateName.EmployerFeedbackV3:
                 case EmailTemplateName.EmployerReferral:
                 case EmailTemplateName.EmployerReferralComplex:
                 case EmailTemplateName.EmployerReferralV3:
                 case EmailTemplateName.EmployerReferralV4:
                 case EmailTemplateName.EmployerReferralV5:
+                case EmailTemplateName.EmployerReferralV6:
                     emailBodyDto = await _opportunityRepository.GetEmailDeliveryStatusForEmployerAsync(
                         emailHistoryDto.OpportunityId.Value,
                         emailHistoryDto.SentTo);
                     break;
                 case EmailTemplateName.ProviderFeedback:
                 case EmailTemplateName.ProviderFeedbackV2:
+                case EmailTemplateName.ProviderFeedbackV3:
                 case EmailTemplateName.ProviderQuarterlyUpdate:
                 case EmailTemplateName.ProviderReferral:
                 case EmailTemplateName.ProviderReferralComplex:
                 case EmailTemplateName.ProviderReferralV3:
                 case EmailTemplateName.ProviderReferralV4:
                 case EmailTemplateName.ProviderReferralV5:
+                case EmailTemplateName.ProviderReferralV6:
                     emailBodyDto = await _opportunityRepository.GetEmailDeliveryStatusForProviderAsync(
                         emailHistoryDto.OpportunityId.Value,
                         emailHistoryDto.SentTo);

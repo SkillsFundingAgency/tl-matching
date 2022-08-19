@@ -1,0 +1,33 @@
+Dear ((employer_contact_name)),
+ 
+Following our conversation about ((employer_business_name))’s industry placement requirements, here’s the information we have:
+
+((placements_list))
+
+# If you have already spoken to these providers
+You do not need to do anything else. Keep this email as a confirmation of your placement requirements and the providers you wanted to connect with. 
+
+# If you have not spoken to these providers
+They will contact you within the next 2 to 3 days to discuss your industry placement requirements. Alternatively, you may also contact them yourself. 
+
+We will follow this up next month to check how your discussions are going.
+
+# Contact details for industry placements
+We have the following information about you: 
+
+* Contact name for industry placements: ((employer_contact_name))
+* Telephone: ((employer_contact_number))
+* E-mail: ((employer_contact_email))
+
+# If any of this is wrong
+Please email [support.industryplacementmatching@education.gov.uk](mailto:support.industryplacementmatching@education.gov.uk?subject=Update+from+employer) so that we can update our records.
+
+
+Industry Placements – Employer Support Team
+Department for Education Apprenticeship and Skills Team
+
+---
+
+Find out more about T Levels and industry placements here: [www.tlevels.gov.uk/employers](https://www.tlevels.gov.uk/employers)
+
+This service is provided by the Department for Education (DfE). For further details of how your data is processed and your rights, please view the full [DfE privacy notice](https://www.gov.uk/government/publications/privacy-notice-for-key-stage-5-and-adult-education).

@@ -135,7 +135,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 RedirectToRoute("GetOpportunityCompanyName", new { viewModel.OpportunityId, viewModel.OpportunityItemId })
                 : viewModel.OpportunityType == OpportunityType.Referral ?
                     RedirectToRoute("GetCheckAnswers", new { viewModel.OpportunityItemId })
-                    : await SaveCheckAnswers(viewModel.OpportunityId, viewModel.OpportunityItemId);
+                    : await SaveCheckAnswers(new CheckAnswersViewModel
+                            {
+                                OpportunityId = viewModel.OpportunityId,
+                                OpportunityItemId = viewModel.OpportunityItemId
+                            });
         }
 
         [HttpGet]
@@ -148,16 +152,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         //[HttpPost] //Removed because there is a redirect from SaveOpportunityEmployerDetails
-        public async Task<IActionResult> SaveCheckAnswers(int opportunityId, int opportunityItemId)
+        public async Task<IActionResult> SaveCheckAnswers(CheckAnswersViewModel viewModel)
         {
-            await _opportunityService.UpdateOpportunityItemAsync(new CheckAnswersDto
-            {
-                OpportunityItemId = opportunityItemId,
-                OpportunityId = opportunityId,
-                IsSaved = true
-            });
+            var dto = _mapper.Map<CheckAnswersDto>(viewModel);
 
-            return RedirectToRoute("GetOpportunityBasket", new { opportunityId, opportunityItemId });
+            await _opportunityService.UpdateOpportunityItemAsync(dto);
+
+            return RedirectToRoute("GetOpportunityBasket", new { viewModel.OpportunityId, viewModel.OpportunityItemId });
         }
 
         [HttpGet]
