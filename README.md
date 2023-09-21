@@ -1,6 +1,6 @@
 [![Build Status](https://dev.azure.com/dfe-ssp/S126-Tlevelservice/_apis/build/status/S126-TL/Matching/tl-matching?repoName=SkillsFundingAgency%2Ftl-matching&branchName=master)](https://dev.azure.com/dfe-ssp/S126-Tlevelservice/_build/latest?definitionId=801&repoName=SkillsFundingAgency%2Ftl-matching&branchName=master)
-# tl-matching
-
+# tl-matching (Archived)
+This repository is now archived. The T Levels Matching Service was decommissioned spring/summer 2023.
 
 ## Configuration
 
